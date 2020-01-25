@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              tools:background="@color/white">
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/noSensorsSelected"
+    android:gravity="center_horizontal"
+    android:textSize="15sp"
+    android:textColor="@color/bottom_sheet_text_primary"
+    android:text="@string/bottom_sheet_default_no_sensors_selected"
+    android:layout_marginBottom="18dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="18dp"
+    android:layout_marginEnd="18dp"
+    android:visibility="gone"
+    tools:visibility="visible"/>
+
+  <LinearLayout
+    android:id="@+id/hasSelectedSensors"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="18dp"
+    android:layout_marginEnd="18dp"
+    android:layout_marginStart="18dp"
+    android:gravity="center_vertical"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textSize="15sp"
+      android:textColor="@color/bottom_sheet_text_primary"
+      android:text="@string/bottom_sheet_has_sensors_selected"/>
+
+    <ImageView
+      android:id="@+id/editSelectedSensors"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_gear"
+      android:background="?selectableItemBackgroundBorderless"/>
+
+  </LinearLayout>
+
+</LinearLayout>

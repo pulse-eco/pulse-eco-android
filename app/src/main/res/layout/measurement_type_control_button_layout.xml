@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/controlButtonIcon"
+  android:background="@drawable/selectable_control_background"
+  android:layout_width="50dp"
+  android:layout_height="50dp"
+  tools:src="@drawable/ic_measurement_type_pm10_inactive"
+  android:layout_margin="5dp"
+  android:elevation="3dp"/>

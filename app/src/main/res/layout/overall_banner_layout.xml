@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/overallBannerView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:cardBackgroundColor="@android:color/holo_red_dark"
+    app:cardCornerRadius="@dimen/components_corner_radius">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/overall_banner_title_section_background"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="@dimen/component_inner_spacing"
+        android:paddingTop="2dp"
+        android:paddingEnd="@dimen/component_inner_spacing"
+        android:paddingBottom="2dp"
+        android:textColor="@color/overall_banner_text_foreground"
+        android:textSize="12sp"
+        tools:text="average"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/component_inner_spacing"
+        android:paddingTop="2dp"
+        android:paddingEnd="@dimen/component_inner_spacing"
+        android:paddingBottom="2dp">
+
+      <TextView
+          android:id="@+id/value"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="sans-serif"
+          android:textColor="@color/overall_banner_text_foreground"
+          android:textSize="30sp"
+          tools:text="500"/>
+
+      <TextView
+          android:id="@+id/valueUnit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="sans-serif-medium"
+          android:textColor="@color/overall_banner_text_foreground"
+          android:textSize="12sp"
+          tools:ignore="RtlSymmetry"
+          tools:text="ug/m3"/>
+
+      <TextView
+          android:id="@+id/description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:fontFamily="sans-serif-medium"
+          android:minLines="3"
+          android:textColor="@color/overall_banner_text_foreground"
+          android:textSize="15sp"
+          android:layout_marginStart="@dimen/component_inner_spacing"
+          tools:text="Bad air quality. Air quality is satisfactory and air pollusion poses little or no risk."
+          android:visibility="gone"/>
+    </LinearLayout>
+
+    <com.netcetera.skopjepulse.map.overallbanner.MeasurementLegendView
+        android:id="@+id/legendView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:visibility="visible"
+        android:visibility="gone"/>
+
+  </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

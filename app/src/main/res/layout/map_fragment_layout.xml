@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent">
+
+  <com.google.android.gms.maps.MapView
+    android:id="@+id/map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/mapConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <include
+      layout="@layout/simple_error_layout"
+      app:layout_constraintTop_toTopOf="parent"
+      android:id="@+id/errorView"/>
+
+    <!-- Note: overviewBannerView has some special constraints also in MapFragment -->
+    <include
+        layout="@layout/overall_banner_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/components_corner_radius"
+        android:layout_marginTop="@dimen/components_between_spacing"
+        android:layout_marginEnd="@dimen/components_corner_radius"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <!-- Note: mapLayersPick has some special constraints also in MapFragment -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mapLayersPick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/overallBannerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/components_between_spacing"
+        android:src="@drawable/ic_map_layers"
+        app:borderWidth="0dp"
+        android:backgroundTint="@color/white"
+        app:fabSize="mini"/>
+
+    <TextView
+      android:id="@+id/crowdsourcingDisclaimerText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/disclaimer_background"
+      android:text="@string/crowdsourcing_disclaimer"
+      android:textColor="#3F3F3F"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <View
+      android:id="@+id/bottomSheetBackgroundOverlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/black"
+      android:alpha="0"
+      android:clickable="true"
+      android:focusable="true"
+      android:visibility="gone"/>
+
+    <include layout="@layout/bottom_sheet"/>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+  <include layout="@layout/map_loading_indicator"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_gravity="center"/>
+
+</FrameLayout>

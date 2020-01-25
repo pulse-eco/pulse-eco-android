@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/bottomSheetNoSensorsContainer"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:gravity="center_horizontal"
+              android:layout_height="wrap_content"
+              tools:background="@color/white"
+              android:visibility="gone"
+              tools:visibility="visible">
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="14sp"
+    android:textColor="@color/bottom_sheet_text_secondary"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="@dimen/components_between_spacing"
+    android:layout_marginStart="@dimen/components_side_spacing"
+    android:layout_marginEnd="@dimen/components_side_spacing"
+    android:layout_marginBottom="@dimen/components_between_spacing"
+    android:lineSpacingExtra="3sp"
+    android:text="@string/no_sensors_selected_message"/>
+
+  <Button
+    android:id="@+id/selectSensorsButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/select_sensors"
+    android:textColor="@color/colorPrimary"
+    style="@style/Base.Widget.AppCompat.Button.Borderless"
+    android:background="@drawable/select_sensors_button_outline"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:layout_marginTop="@dimen/components_between_spacing"
+    android:layout_marginBottom="@dimen/components_between_spacing"/>
+
+  <Space
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/components_between_spacing"/>
+
+</LinearLayout>

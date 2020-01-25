@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:gravity="center_horizontal"
+  android:paddingBottom="3dp"
+  tools:padding="30dp"
+  tools:background="@color/white">
+
+  <TextView
+    android:id="@+id/markerTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/marker_info_window_background"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/white"
+    android:textSize="13sp"
+    android:fontFamily="sans-serif-medium"
+    tools:text="Centar"/>
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/marker_info_window_down_arrow"/>
+
+</LinearLayout>

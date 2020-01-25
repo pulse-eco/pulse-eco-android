@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/bottomSheetContainer"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:focusable="true"
+  android:clickable="true"
+  app:behavior_peekHeight="0dp"
+  android:background="@drawable/bottom_sheet_background"
+  app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/components_between_spacing">
+
+    <LinearLayout
+      android:id="@+id/peekContainer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <FrameLayout
+        android:id="@+id/peekPull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+          android:layout_width="30dp"
+          android:layout_height="3dp"
+          android:background="@drawable/background_pull"
+          android:layout_margin="15dp"
+          android:layout_gravity="center_horizontal"/>
+      </FrameLayout>
+
+      <include layout="@layout/bottom_sheet_default_peek"/>
+
+      <include
+        layout="@layout/bottom_sheet_sensor_overview_peek"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/bottom_sheet_content_layout"/>
+
+  <com.netcetera.skopjepulse.DisclaimerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/component_inner_spacing"/>
+
+  </LinearLayout>
+
+</FrameLayout>
