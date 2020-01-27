@@ -5,7 +5,9 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
+import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.overall_banner_layout.view.description
+import kotlinx.android.synthetic.main.overall_banner_layout.view.expandIcon
 import kotlinx.android.synthetic.main.overall_banner_layout.view.legendView
 import kotlinx.android.synthetic.main.overall_banner_layout.view.title
 import kotlinx.android.synthetic.main.overall_banner_layout.view.value
@@ -25,6 +27,7 @@ class OverallBannerView(private val overallBannerView : CardView) : Observer<Ove
       }
       overallBannerView.description.isVisible = !isOpen
       overallBannerView.legendView.isVisible = !isOpen
+      overallBannerView.expandIcon.setImageResource(if (isOpen) R.drawable.ic_overall_unfold else R.drawable.ic_overall_fold)
       listener?.invoke(!isOpen)
     }
   }

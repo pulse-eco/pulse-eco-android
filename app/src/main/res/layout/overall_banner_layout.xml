@@ -13,20 +13,38 @@
       android:layout_height="wrap_content"
       android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/overall_banner_title_section_background"
-        android:fontFamily="sans-serif-medium"
-        android:paddingStart="@dimen/component_inner_spacing"
-        android:paddingTop="2dp"
-        android:paddingEnd="@dimen/component_inner_spacing"
-        android:paddingBottom="2dp"
-        android:textColor="@color/overall_banner_text_foreground"
-        android:textSize="12sp"
-        tools:text="average"
-        />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+      <TextView
+          android:id="@+id/title"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:fontFamily="sans-serif-medium"
+          android:paddingStart="@dimen/component_inner_spacing"
+          android:paddingTop="2dp"
+          android:paddingEnd="@dimen/component_inner_spacing"
+          android:paddingBottom="2dp"
+          android:textColor="@color/overall_banner_text_foreground"
+          android:textSize="12sp"
+          tools:text="average"
+          />
+
+      <ImageView
+          android:id="@+id/expandIcon"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:src="@drawable/ic_overall_unfold"
+          tools:ignore="ContentDescription"
+          />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
