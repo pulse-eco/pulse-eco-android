@@ -1,7 +1,10 @@
 package com.netcetera.skopjepulse.map
 
 import android.animation.ValueAnimator
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionManager
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.like.LikeButton
@@ -38,6 +42,7 @@ import com.netcetera.skopjepulse.map.model.BottomSheetPeekViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
 import com.netcetera.skopjepulse.map.overallbanner.OverallBannerView
 import com.netcetera.skopjepulse.map.preferences.MapPreferencesPopup
+import com.netcetera.skopjepulse.map.preferences.MapType
 import com.netcetera.skopjepulse.showDisclaimerDialog
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
@@ -65,10 +70,13 @@ import kotlinx.android.synthetic.main.map_fragment_layout.map
 import kotlinx.android.synthetic.main.map_fragment_layout.mapConstraintLayout
 import kotlinx.android.synthetic.main.map_fragment_layout.mapLayersPick
 import kotlinx.android.synthetic.main.map_loading_indicator.loadingIndicatorContainer
+import kotlinx.android.synthetic.main.marker_info_window_layout.*
 import kotlinx.android.synthetic.main.overall_banner_layout.overallBannerView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -109,7 +117,32 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    map.onCreate(savedInstanceState)
+    //map.onCreate(savedInstanceState)
+
+
+//    mapPreferencesPopup.onPreferenceChange {
+//      val ctx: Context? = context
+//      org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+//      map.setUseDataConnection(true)
+//      if (it.mapType == MapType.DEFAULT) {
+//        map.setTileSource(TileSourceFactory.MAPNIK)
+//      } else if (it.mapType == MapType.SATELLITE)
+//        map.setTileSource(TileSourceFactory.USGS_SAT)
+//      else
+//        map.setTileSource(TileSourceFactory.USGS_TOPO)
+//
+//
+//      map.setMultiTouchControls(true)
+//      map.setBuiltInZoomControls(true)
+//    }
+
+      val ctx: Context? = context
+      org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+      map.setUseDataConnection(true)
+      map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+      map.setMultiTouchControls(true)
+      map.setBuiltInZoomControls(true)
+
 
     // Declarations and interactions
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
@@ -119,28 +152,64 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.showDataForMeasurementType(it)
     })
 
+
+    //val previousPolygons: MutableList<Polygon> = ArrayList()
+    val previousPolygons: MutableList<org.osmdroid.views.overlay.Polygon> = ArrayList()
+    viewModel.mapPolygons.observe(viewLifecycleOwner, Observer { mapPolygons ->
+      previousPolygons.forEach {
+        it.fillColor = Color.TRANSPARENT
+        it.strokeColor = Color.TRANSPARENT
+      }
+      previousPolygons.clear()
+//        mapPolygons.mapTo(previousPolygons) {
+//
+//          googleMap.addPolygon(it) }
+
+      mapPolygons.forEach({
+        val polygon = org.osmdroid.views.overlay.Polygon(map) //see note below
+
+        polygon.strokeWidth = it.strokeWidth
+        polygon.strokeColor = it.fillColor
+        polygon.getFillPaint().setColor(it.fillColor) //set fill color
+
+        polygon.setPoints(convertLatLngToGeoPoint(it.points))
+        polygon.closeInfoWindow()
+
+        polygon.setOnClickListener(org.osmdroid.views.overlay.Polygon.OnClickListener { polygon, mapView, eventPos ->  return@OnClickListener false})
+
+        map.getOverlayManager().add(polygon)
+        map.invalidate()
+        previousPolygons.add(polygon)
+      })
+
+
+
+      //  }
+
+
+    })
+
     // Data observers
     viewModel.overallData.observe(viewLifecycleOwner, overallBanner)
-    map.getMapAsync { googleMap ->
-      googleMap.applyPulseStyling(requireContext())
-      viewModel.preferences.observe(viewLifecycleOwner, Observer {
-        googleMap.pulseMapType = it.mapType
-      })
-      googleMap.updateForCity(city)
-      viewModel.mapMarkers.observe(viewLifecycleOwner, Observer { mapMarkersController.showMarkers(it ?: emptyList()) })
-
-      val previousPolygons: MutableList<Polygon> = ArrayList()
-      viewModel.mapPolygons.observe(viewLifecycleOwner, Observer { mapPolygons ->
-        previousPolygons.forEach { it.remove() }
-        previousPolygons.clear()
-        mapPolygons.mapTo(previousPolygons) { googleMap.addPolygon(it) }
-      })
+    // map.getMapAsync { googleMap ->
+//      googleMap.applyPulseStyling(requireContext())
+//      viewModel.preferences.observe(viewLifecycleOwner, Observer {
+//        googleMap.pulseMapType = it.mapType
+//      })
+    map.updateForCity(city)
+    viewModel.mapMarkers.observe(viewLifecycleOwner, Observer {
+      mapMarkersController.showMarkers(it ?: emptyList())
+    })
 
 
-      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner, GoogleMap.OnMapClickListener {
-        viewModel.deselectSensor()
-      })
-    }
+
+
+//      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner, GoogleMap.OnMapClickListener {
+//        viewModel.deselectSensor()
+//      })
+    //   }
+
+    //
     viewModel.bottomSheetPeek.observe(viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
     viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner, Observer {
@@ -217,43 +286,45 @@ class MapFragment : BaseFragment<MapViewModel>() {
     updatePeekHeight()
   }
 
-  private fun displaySensorOverview(peekViewModel: BottomSheetPeekViewModel): Boolean {
-    val sensorOverviewModel = peekViewModel.sensorOverviewModel
-    if (sensorOverviewModel != null) {
-      bottomSheetSensorOverview.visible()
-      bottomSheetSensorOverview.sensorTitle.setCompoundDrawablesWithIntrinsicBounds(
-        sensorOverviewModel.sensor.type.drawableRes ?: 0,
-        0, 0, 0)
-      bottomSheetSensorOverview.sensorTitle.text = sensorOverviewModel.sensor.description.toUpperCase()
-      bottomSheetSensorOverview.sensorMeasurement.text = sensorOverviewModel.measurement.roundToInt().toString()
-      bottomSheetSensorOverview.sensorMeasurementUnit.text = sensorOverviewModel.measurementUnit
-      bottomSheetSensorOverview.sensorMeasurementTime.text = SimpleDateFormat("HH:mm", Locale.US).format(sensorOverviewModel.timestamp)
-      bottomSheetSensorOverview.sensorMeasurementDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.US).format(sensorOverviewModel.timestamp)
 
-      bottomSheetSensorOverview.sensorFavouriteButton.isLiked = sensorOverviewModel.favourite
-      if (!peekViewModel.canAddMoreFavouriteSensors && !sensorOverviewModel.favourite) {
-        bottomSheetSensorOverview.sensorFavouriteButton.isEnabled = false
-        bottomSheetSensorOverview.sensorFavouriteButtonOverlay.visible()
+    private fun displaySensorOverview(peekViewModel: BottomSheetPeekViewModel): Boolean {
+      val sensorOverviewModel = peekViewModel.sensorOverviewModel
+      if (sensorOverviewModel != null) {
+        bottomSheetSensorOverview.visible()
+        bottomSheetSensorOverview.sensorTitle.setCompoundDrawablesWithIntrinsicBounds(
+          sensorOverviewModel.sensor.type.drawableRes ?: 0,
+          0, 0, 0)
+        bottomSheetSensorOverview.sensorTitle.text = sensorOverviewModel.sensor.description.toUpperCase()
+        bottomSheetSensorOverview.sensorMeasurement.text = sensorOverviewModel.measurement.roundToInt().toString()
+        bottomSheetSensorOverview.sensorMeasurementUnit.text = sensorOverviewModel.measurementUnit
+        bottomSheetSensorOverview.sensorMeasurementTime.text = SimpleDateFormat("HH:mm", Locale.US).format(sensorOverviewModel.timestamp)
+        bottomSheetSensorOverview.sensorMeasurementDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.US).format(sensorOverviewModel.timestamp)
+
+        bottomSheetSensorOverview.sensorFavouriteButton.isLiked = sensorOverviewModel.favourite
+        if (!peekViewModel.canAddMoreFavouriteSensors && !sensorOverviewModel.favourite) {
+          bottomSheetSensorOverview.sensorFavouriteButton.isEnabled = false
+          bottomSheetSensorOverview.sensorFavouriteButtonOverlay.visible()
+        } else {
+          bottomSheetSensorOverview.sensorFavouriteButton.isEnabled = true
+          bottomSheetSensorOverview.sensorFavouriteButtonOverlay.gone()
+          bottomSheetSensorOverview.sensorFavouriteButton.setOnLikeListener(object : OnLikeListener {
+            override fun liked(likeButton: LikeButton?) {
+              viewModel.favouriteSensor(sensorOverviewModel.sensor)
+            }
+
+            override fun unLiked(likeButton: LikeButton?) {
+              viewModel.unFavouriteSensor(sensorOverviewModel.sensor)
+            }
+          })
+        }
+        return true
       } else {
-        bottomSheetSensorOverview.sensorFavouriteButton.isEnabled = true
-        bottomSheetSensorOverview.sensorFavouriteButtonOverlay.gone()
-        bottomSheetSensorOverview.sensorFavouriteButton.setOnLikeListener(object : OnLikeListener {
-          override fun liked(likeButton: LikeButton?) {
-            viewModel.favouriteSensor(sensorOverviewModel.sensor)
-          }
-
-          override fun unLiked(likeButton: LikeButton?) {
-            viewModel.unFavouriteSensor(sensorOverviewModel.sensor)
-          }
-        })
+        bottomSheetSensorOverview.gone()
+        return false
       }
-      return true
-    } else {
-      bottomSheetSensorOverview.gone()
-      return false
     }
-  }
 
+//
   private fun showGraphData(it: GraphModel?) {
     if (it != null) {
       graphView.setGraphModel(it)
@@ -265,7 +336,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   override fun onStart() {
     super.onStart()
     viewModel.refreshData(false)
-    map.onStart()
+    //map.onStart()
   }
 
   override fun onResume() {
@@ -275,14 +346,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun updatePeekHeight() {
     peekContainer.post {
-      map.getMapAsync { googleMap ->
+      //map.getMapAsync { googleMap ->
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         ValueAnimator.ofInt(bottomSheetBehavior.peekHeight, peekContainer.height).apply {
           duration = 100
           interpolator = AccelerateDecelerateInterpolator()
           addUpdateListener {
             bottomSheetBehavior.peekHeight = it.animatedValue as Int
-            googleMap.setPadding(0, 0, 0, it.animatedValue as Int)
+            map.setPadding(0, 0, 0, it.animatedValue as Int)
             val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
             params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
             crowdsourcingDisclaimerText.layoutParams = params
@@ -291,12 +362,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
             }
           }
         }.start()
-      }
+      //}
     }
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
-    map.onSaveInstanceState(outState)
+    //map.onSaveInstanceState(outState)
     super.onSaveInstanceState(outState)
   }
 
@@ -306,9 +377,19 @@ class MapFragment : BaseFragment<MapViewModel>() {
   }
 
   override fun onStop() {
-    map.onStop()
+    //map.onStop()
     super.onStop()
   }
 }
+
+private fun convertLatLngToGeoPoint (points: List<LatLng>): List<GeoPoint> {
+  val geoPointsPolygon: MutableList<GeoPoint> = ArrayList()
+  for (i in points){
+    geoPointsPolygon.add(GeoPoint(i.latitude, i.longitude))
+  }
+  return geoPointsPolygon
+
+}
+
 
 data class MeasurementOverviewModel(val measurement: Double, val dataDefinition: DataDefinition)

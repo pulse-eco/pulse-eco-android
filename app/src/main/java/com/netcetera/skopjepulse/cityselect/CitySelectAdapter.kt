@@ -1,5 +1,7 @@
 package com.netcetera.skopjepulse.cityselect
 
+import android.content.Context
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +14,10 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.extensions.applyCitySelectPulseStyling
 import com.netcetera.skopjepulse.extensions.updateForCity
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectCityLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectCountryLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMapBackground
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureContainer
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureValue
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectOverallStatus
+import kotlinx.android.synthetic.main.city_select_item_layout.view.*
+import kotlinx.android.synthetic.main.map_fragment_layout.*
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.MapView
 import java.util.Locale
 
 typealias CitySelectListener = (city : City) -> Unit
@@ -58,23 +57,42 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
 }
 
 class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListener) : RecyclerView.ViewHolder(view) {
-  lateinit var googleMap: GoogleMap
-
+  //lateinit var googleMap: GoogleMap
+  lateinit var mapView: MapView
   var citySelectItem : CitySelectItem? = null
 
   init {
-    itemView.citySelectMapBackground.onCreate(null)
-    itemView.citySelectMapBackground.visibility = View.INVISIBLE
-    itemView.citySelectMapBackground.getMapAsync { googleMap ->
-      googleMap.applyCitySelectPulseStyling(itemView.context)
+//    itemView.citySelectMapBackground.onCreate(null)
+//    itemView.citySelectMapBackground.visibility = View.INVISIBLE
+//    itemView.citySelectMapBackground.getMapAsync { googleMap ->
+//      googleMap.applyCitySelectPulseStyling(itemView.context)
+//      itemView.citySelectMapBackground.visibility = View.VISIBLE
+//      this.googleMap = googleMap
+//      googleMap.setOnMapClickListener {
+//        citySelectListener.invoke(citySelectItem!!.city)
+//      }
+//      internalDisplayItemMap()
+//    }
+
+      val ctx: Context? = view.context
+      org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+
+      itemView.citySelectMapBackground.setUseDataConnection(true)
+      itemView.citySelectMapBackground.setTileSource(TileSourceFactory.MAPNIK)
+//    itemView.citySelectMapBackground.setMultiTouchControls(true)
+//    itemView.citySelectMapBackground.setBuiltInZoomControls(true)
+//    itemView.citySelectMapBackground.visibility = View.INVISIBLE
+
       itemView.citySelectMapBackground.visibility = View.VISIBLE
-      this.googleMap = googleMap
-      googleMap.setOnMapClickListener {
+      this.mapView = itemView.citySelectMapBackground
+      itemView.citySelectItem.setOnClickListener {
         citySelectListener.invoke(citySelectItem!!.city)
       }
       internalDisplayItemMap()
     }
-  }
+
+
+
 
   fun bind(citySelectItem: CitySelectItem) {
     this.citySelectItem = citySelectItem
@@ -96,8 +114,8 @@ class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListene
 
   private fun internalDisplayItemMap() {
     val citySelectItem = this.citySelectItem
-    if (citySelectItem != null && ::googleMap.isInitialized) {
-      googleMap.updateForCity(citySelectItem.city)
+    if (citySelectItem != null && ::mapView.isInitialized) {
+      mapView.updateForCity(citySelectItem.city)
     }
   }
 }

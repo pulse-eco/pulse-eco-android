@@ -1,7 +1,7 @@
 object ProjectProperties {
   const val compileSdkVersion = 29
   const val targetSdkVersion = compileSdkVersion
-  const val minimumSdkVersion = 21
+  const val minimumSdkVersion = 23
 }
 
 object PulseEco {

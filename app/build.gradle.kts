@@ -73,6 +73,9 @@ android {
     implementation(Libs.koinViewModel)
     implementation(Libs.timber)
     implementation(Libs.okHttpLogging)
+    implementation(Libs.osmdroid_android)
+    implementation(Libs.osmdroid_wms)
+    implementation(Libs.osmdroid_mapsforge)
 
     debugImplementation(Libs.leakcanary)
     debugImplementation(Libs.leakcanaryFragment)

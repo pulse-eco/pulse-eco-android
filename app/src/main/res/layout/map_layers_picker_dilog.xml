@@ -39,11 +39,14 @@
             android:text="@string/map_preferences_map_type_default"
             />
 
+
         <RadioButton
             android:id="@+id/mapTypeRadioItemSatellite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/map_preferences_map_type_satellite"
+
+            android:enabled="false"
             />
 
         <RadioButton
@@ -51,7 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/map_preferences_map_type_terrain"
+
+            android:enabled="false"
             />
+
 
       </RadioGroup>
 

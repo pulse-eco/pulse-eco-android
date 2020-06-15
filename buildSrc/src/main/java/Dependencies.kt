@@ -18,6 +18,11 @@ object Libs {
     const val timerKt = "1.5.1"
     const val targetTooltip = "2.0.1"
 
+
+    // osmdroid_version
+    const val osmdroid_version = "6.1.6"
+
+
     // Crashlytics
     const val playServicesFirebaseAnalytics = "17.2.1"
     const val crashlytics = "2.10.1"
@@ -52,6 +57,13 @@ object Libs {
   const val leakcanaryNoOp = "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
   const val timber = "com.github.ajalt:timberkt:${Versions.timerKt}"
   const val okHttpLogging = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttpLogging}"
+
+
+  // osmdroid
+  const val osmdroid_android = "org.osmdroid:osmdroid-android:${Versions.osmdroid_version}"
+  const val osmdroid_wms = "org.osmdroid:osmdroid-wms:${Versions.osmdroid_version}"
+  const val osmdroid_mapsforge = "org.osmdroid:osmdroid-mapsforge:${Versions.osmdroid_version}"
+
 
   // Crashlytics
   const val firebaseAnalytics = "com.google.firebase:firebase-analytics:${Versions.playServicesFirebaseAnalytics}"

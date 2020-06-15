@@ -14,31 +14,91 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.drawable.toIcon
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.base.model.Sensor
 import com.netcetera.skopjepulse.map.model.MapMarkerModel
 import org.jetbrains.anko.withAlpha
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 
-class MapMarkerProvider(val context: Context) {
+class MapMarkerProvider(val context: Context, private val mapView: org.osmdroid.views.MapView) {
 
-  fun generateMarker(mapMarkerModel: MapMarkerModel): MarkerOptions {
+//  fun generateMarker(mapMarkerModel: MapMarkerModel): MarkerOptions {
+//    val markerBackground = ContextCompat.getDrawable(context, R.drawable.ic_map_marker)!!
+//    markerBackground.colorFilter = PorterDuffColorFilter(mapMarkerModel.markerColor, PorterDuff.Mode.SRC_IN)
+//    val markerIcon = markerBackground.toBitmap()
+//      .addForegroundText(mapMarkerModel.measuredValue.toString())
+//      .addShadow()
+//
+//    val marker = MarkerOptions()
+//      .position(mapMarkerModel.sensor.position!!.let { LatLng(it.latitude, it.longitude) })
+//      .icon(BitmapDescriptorFactory.fromBitmap(markerIcon))
+//      .title(mapMarkerModel.sensor.description)
+//      .flat(true)
+//    markerIcon.recycle()
+//    return marker
+//  }
+
+
+  @RequiresApi(Build.VERSION_CODES.M)
+  fun generateMarker(mapMarkerModel: MapMarkerModel, onSensorClicked: OnSensorClicked): Marker {
     val markerBackground = ContextCompat.getDrawable(context, R.drawable.ic_map_marker)!!
     markerBackground.colorFilter = PorterDuffColorFilter(mapMarkerModel.markerColor, PorterDuff.Mode.SRC_IN)
     val markerIcon = markerBackground.toBitmap()
       .addForegroundText(mapMarkerModel.measuredValue.toString())
       .addShadow()
 
-    val marker = MarkerOptions()
-      .position(mapMarkerModel.sensor.position!!.let { LatLng(it.latitude, it.longitude) })
-      .icon(BitmapDescriptorFactory.fromBitmap(markerIcon))
-      .title(mapMarkerModel.sensor.description)
-      .flat(true)
+//    val marker1 = MarkerOptions()
+//      .position(mapMarkerModel.sensor.position!!.let { LatLng(it.latitude, it.longitude) })
+//      .icon(BitmapDescriptorFactory.fromBitmap(markerIcon))
+//      .title(mapMarkerModel.sensor.description)
+//      .flat(true)
+//    markerIcon.recycle()
+
+
+
+    val markerIconCopy = markerIcon.copy(markerIcon.config, true)
+
+    val marker = Marker(mapView)
+    marker.setPosition(GeoPoint(mapMarkerModel.sensor.position!!.latitude, mapMarkerModel.sensor.position!!.longitude))
+    marker.setTextIcon(mapMarkerModel.sensor.description)
+    marker.setTitle(mapMarkerModel.sensor.description)
+    //marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP)
+    marker.icon = markerIconCopy.toIcon().loadDrawable(context)
+    marker.title = mapMarkerModel.sensor.description
     markerIcon.recycle()
+    //marker.closeInfoWindow()
+    marker.isEnabled = true
+
+    marker.setOnMarkerClickListener(Marker.OnMarkerClickListener { markerr, mapView ->
+      markerr.title = mapMarkerModel.sensor.description
+      onSensorClicked.invoke(mapMarkerModel.sensor)
+      if (markerr.isEnabled) {
+        markerr.showInfoWindow()
+      }
+      return@OnMarkerClickListener false
+    })
+
+    mapView.getOverlays().add(marker)
+    mapView.invalidate()
     return marker
   }
+
+//        googleMap.setOnMarkerClickListener { selectedMarker ->
+//          val selectedSensor = selectedMarker.tag as Sensor
+//          onSensorClicked.invoke(selectedSensor)
+//          return@setOnMarkerClickListener false
+
+
 
   private fun Drawable.toBitmap(): Bitmap {
     val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)

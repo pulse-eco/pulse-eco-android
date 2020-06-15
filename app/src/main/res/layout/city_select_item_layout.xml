@@ -6,7 +6,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-  <com.google.android.gms.maps.MapView
+  <org.osmdroid.views.MapView
     android:id="@+id/citySelectMapBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +15,7 @@
     app:layout_constraintBottom_toBottomOf="parent"/>
 
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/citySelectItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/cityselect_item_overlay">
