@@ -1,12 +1,16 @@
 <resources>
-  <string name="app_name">pulse.eco</string>
+  <plurals name="sensor_limit_reached_message">
+    <item quantity="one">You can\'t select more than %d sensor.</item>
+    <item quantity="other">You can\'t select more than %d sensors.</item>
+  </plurals>
 
+  <string name="app_name">pulse.eco</string>
   <string name="btn_check_pm10">PM10</string>
   <string name="btn_check_pm25">PM2.5</string>
   <string name="btn_check_noise">NOISE</string>
   <string name="btn_check_temperature">TEMP</string>
-  <string name="btn_check_humidity">HUMD</string>
 
+  <string name="btn_check_humidity">HUMD</string>
   <string name="pm10Str">pm10</string>
   <string name="pm25Str">pm25</string>
   <string name="noiseStr">noise</string>
@@ -16,12 +20,12 @@
   <string name="unknwonStr">UNKNOWN</string>
   <string name="ozoneStr">ozone</string>
   <string name="carbonMonoxideStr">carbon monoxide</string>
-  <string name="sulfurDioxideStr">sulfur dioxide</string>
 
+  <string name="sulfurDioxideStr">sulfur dioxide</string>
   <string name="ok_action">OK</string>
   <string name="close_action">Close</string>
-  <string name="cancel_action">Cancel</string>
 
+  <string name="cancel_action">Cancel</string>
   <string name="soft_refresh_start">Loading new data.</string>
   <string name="soft_refresh_finish">Loading has finished.</string>
   <string name="technical_error">Technical error occurred. Please try again.</string>
@@ -62,9 +66,6 @@
   <string name="map_preferences_data_visualization_geographic">Geographic</string>
   <string name="overall_banner_title_average">average</string>
 
-  <plurals name="sensor_limit_reached_message">
-    <item quantity="one">You can\'t select more than %d sensor.</item>
-    <item quantity="other">You can\'t select more than %d sensors.</item>
-  </plurals>
+  <string name="fab_content_desc">Add city</string>
 
 </resources>
