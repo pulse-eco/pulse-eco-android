@@ -7,14 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.netcetera.skopjepulse.CustomizeCitySelectorActivity
+import com.netcetera.skopjepulse.CitySelectorActivity
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.main.MainViewModel
@@ -26,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override val viewModel: CitySelectViewModel by viewModel()
   private val mainViewModel : MainViewModel by sharedViewModel()
-  private lateinit var fabButton: FloatingActionButton
+  private lateinit var faButton: FloatingActionButton
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
@@ -46,9 +44,9 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       parentFragmentManager.popBackStack()
     }
 
-    fabButton = fab
-    fabButton.setOnClickListener{
-      val intent = Intent(activity, CustomizeCitySelectorActivity::class.java)
+    faButton = fab
+    faButton.setOnClickListener{
+      val intent = Intent(activity, CitySelectorActivity::class.java)
       startActivity(intent)
     }
 

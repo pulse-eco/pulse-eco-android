@@ -41,7 +41,7 @@
     android:layout_gravity="bottom|end"
     android:layout_margin="16dp"
     app:fabSize="normal"
-    android:contentDescription="Add city"
+    android:contentDescription="@string/fab_content_desc"
     app:srcCompat="@drawable/ic_plus_white"/>
     />
 

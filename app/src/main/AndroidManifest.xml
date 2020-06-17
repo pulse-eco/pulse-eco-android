@@ -2,6 +2,10 @@
 <manifest package="com.netcetera.skopjepulse"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET" />
+
   <application
     android:name=".base.App"
     android:allowBackup="false"
@@ -10,7 +14,10 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="false"
     android:theme="@style/AppTheme">
-    <activity android:name=".CustomizeCitySelectorActivity"></activity>
+
+    <activity android:name=".CitySelectorActivity"
+      android:screenOrientation="portrait"/>
+
     <activity
       android:name=".main.MainActivity"
       android:screenOrientation="portrait"
@@ -30,9 +37,6 @@
       android:name="org.apache.http.legacy"
       android:required="false" />
   </application>
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-  <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
