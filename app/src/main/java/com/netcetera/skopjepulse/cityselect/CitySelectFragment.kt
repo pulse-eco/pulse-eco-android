@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.netcetera.skopjepulse.CitySelectorActivity
+import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.main.MainViewModel
@@ -46,7 +46,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
 
     faButton = fab
     faButton.setOnClickListener{
-      val intent = Intent(activity, CitySelectorActivity::class.java)
+      val intent = Intent(activity, CountryCitySelectorActivity::class.java)
       startActivity(intent)
     }
 

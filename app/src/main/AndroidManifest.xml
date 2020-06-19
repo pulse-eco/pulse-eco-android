@@ -15,7 +15,7 @@
     android:supportsRtl="false"
     android:theme="@style/AppTheme">
 
-    <activity android:name=".CitySelectorActivity"
+    <activity android:name=".countryCitySelector.CountryCitySelectorActivity"
       android:screenOrientation="portrait"/>
 
     <activity

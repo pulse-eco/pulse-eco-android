@@ -1,9 +1,4 @@
 <resources>
-  <plurals name="sensor_limit_reached_message">
-    <item quantity="one">You can\'t select more than %d sensor.</item>
-    <item quantity="other">You can\'t select more than %d sensors.</item>
-  </plurals>
-
   <string name="app_name">pulse.eco</string>
   <string name="btn_check_pm10">PM10</string>
   <string name="btn_check_pm25">PM2.5</string>
@@ -67,5 +62,12 @@
   <string name="overall_banner_title_average">average</string>
 
   <string name="fab_content_desc">Add city</string>
+  <string name="search">Search</string>
+
+  <plurals name="sensor_limit_reached_message">
+    <item quantity="one">You can\'t select more than %d sensor.</item>
+    <item quantity="other">You can\'t select more than %d sensors.</item>
+  </plurals>
+
 
 </resources>
