@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModel
 
 class CountryCityViewModel: ViewModel() {
 
-  private val _countryList = MutableLiveData<ArrayList<Any>>()
-  val countryList: LiveData<ArrayList<Any>>
+  private val _countryList = MutableLiveData<ArrayList<CountryItem>>()
+  val countryList: LiveData<ArrayList<CountryItem>>
     get() = _countryList
 
   init {
-    val data = ArrayList<Any>()
-    data.add(Country("Macedonia", mutableListOf(City("Stip"), City("Skopje"), City("Bitola"))))
-    data.add(Country("Serbia", mutableListOf(City("Beograd"), City("Nish"), City("Kraguevac"))))
+    val data = ArrayList<CountryItem>()
+    data.add(CountryItem("Macedonia", mutableListOf(City("Stip"), City("Skopje"), City("Bitola"))))
+    data.add(CountryItem("Serbia", mutableListOf(City("Beograd"), City("Nish"), City("Kraguevac"))))
     _countryList.value = data
   }
 }

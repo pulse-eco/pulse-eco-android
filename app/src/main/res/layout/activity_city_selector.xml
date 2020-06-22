@@ -8,10 +8,11 @@
   <EditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:inputType="text"
+    android:id="@+id/text_search"
     android:hint="@string/search"
     android:autofillHints="@string/search"
-    android:layout_marginTop="30dp"/>
+    android:inputType="text"
+    android:layout_marginTop="35dp"/>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/countryCityRecyclerView"

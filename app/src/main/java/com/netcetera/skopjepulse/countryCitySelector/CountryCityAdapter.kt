@@ -3,16 +3,20 @@ package com.netcetera.skopjepulse.countryCitySelector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.extensions.transformData
 import kotlinx.android.synthetic.main.item_city.view.*
 import kotlinx.android.synthetic.main.item_country.view.*
+import kotlin.collections.ArrayList
 
 /**
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(data: List<Any>?) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>() {
+class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCityClickListener) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
   private var dataShow: MutableList<Any>
 
@@ -23,12 +27,7 @@ class CountryCityAdapter(data: List<Any>?) : RecyclerView.Adapter<CountryCityAda
 
   init {
     dataShow = ArrayList()
-    if (data != null) {
-      for (i in data){
-        dataShow.add(Country((i as Country).name))
-        dataShow.addAll((i as Country).listCity)
-      }
-    }
+    dataShow = data!!.transformData()
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -49,8 +48,8 @@ class CountryCityAdapter(data: List<Any>?) : RecyclerView.Adapter<CountryCityAda
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
     val element = dataShow[position]
     when(holder){
-      is CityViewHolder -> holder.bind(element as City)
-      is CountryViewHolder -> holder.bind(element as Country)
+      is CityViewHolder -> holder.bind(element as City, clickListener)
+      is CountryViewHolder -> holder.bind(element as CountryItem, clickListener)
       else -> throw IllegalArgumentException()
     }
   }
@@ -59,7 +58,7 @@ class CountryCityAdapter(data: List<Any>?) : RecyclerView.Adapter<CountryCityAda
     val comparable = dataShow[position]
     return when (comparable) {
       is City -> TYPE_CITY
-      is Country -> TYPE_COUNTRY
+      is CountryItem -> TYPE_COUNTRY
       else -> throw IllegalArgumentException("Invalid type of data " + position)
     }
 
@@ -69,30 +68,59 @@ class CountryCityAdapter(data: List<Any>?) : RecyclerView.Adapter<CountryCityAda
     return dataShow.size
   }
 
+  override fun getFilter(): Filter {
+    return object : Filter() {
+      override fun performFiltering(constraint: CharSequence?): FilterResults {
+        val filter = CountryCityFilter(constraint, data)
+        val filterResults = FilterResults()
+        filterResults.values = filter.filterCountryCity()
+        return filterResults
+      }
+
+      @Suppress("UNCHECKED_CAST")
+      override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+        dataShow = results?.values as MutableList<Any>
+        notifyDataSetChanged()
+      }
+
+    }
+  }
+
 
 
 
 
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T)
+    abstract fun bind(item: T, clickListener: OnCityClickListener)
   }
 
-  class CityViewHolder(val view: View) : BaseViewHolder<City>(view) {
+  class CityViewHolder(val view: View) : BaseViewHolder<City>(view), View.OnClickListener {
 
     private val cityTextView = view.txtCityName
 
-    override fun bind(item: City) {
+    override fun bind(item: City, clickListener: OnCityClickListener) {
       cityTextView.text = item.name
+      itemView.setOnClickListener{
+          clickListener.onCityClick(item, adapterPosition)
+       }
+    }
+
+    override fun onClick(v: View?) {
+
     }
   }
 
-  class CountryViewHolder(val view: View) : BaseViewHolder<Country>(view) {
+  class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {
 
     private val countryNameTextView = view.txtCountryName
 
-    override fun bind(item: Country) {
+    override fun bind(item: CountryItem, clickListener: OnCityClickListener) {
       countryNameTextView.text = item.name
     }
+  }
+
+  interface OnCityClickListener{
+    fun onCityClick(city: City, position: Int)
   }
 
 }
