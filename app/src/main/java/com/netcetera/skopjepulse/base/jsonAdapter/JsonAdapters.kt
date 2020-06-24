@@ -63,6 +63,12 @@ class SensorTypeAdapter {
     1 -> Sensor.Type.LORA
     2 -> Sensor.Type.WIFI
     3 -> Sensor.Type.WIFI_V2
+
+    4 -> Sensor.Type.LORA_V2
+    20001 -> Sensor.Type.PENGY_V1
+    20002 -> Sensor.Type.URAD
+    20003 -> Sensor.Type.AIR_THINGS
+    20004 -> Sensor.Type.SENSOR_COMMUNITY_CROWDSOURCED
     else -> Sensor.Type.UNKNOWN
   }
 
@@ -72,6 +78,12 @@ class SensorTypeAdapter {
     Sensor.Type.LORA -> 1
     Sensor.Type.WIFI -> 2
     Sensor.Type.WIFI_V2 -> 3
+
+    Sensor.Type.LORA_V2 -> 4
+    Sensor.Type.PENGY_V1 -> 20001
+    Sensor.Type.URAD -> 20002
+    Sensor.Type.AIR_THINGS -> 20003
+    Sensor.Type.SENSOR_COMMUNITY_CROWDSOURCED -> 20004
     Sensor.Type.UNKNOWN -> 99
   }
 
