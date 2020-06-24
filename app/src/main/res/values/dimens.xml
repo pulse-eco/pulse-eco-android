@@ -5,4 +5,25 @@
   <dimen name="components_between_spacing">8dp</dimen>
   <dimen name="component_inner_spacing">10dp</dimen>
   <dimen name="drawer_inactive_peek_height">35dp</dimen>
+
+  <dimen name="city_select_search_marginTop">35dp</dimen>
+  <dimen name="city_select_recyclerView_marginTop">10dp</dimen>
+  <dimen name="lottie_animation_view_width">200</dimen>
+  <dimen name="lottie_animation_view_height">100dp</dimen>
+  <dimen name="bottom_sheet_view_margin">15dp</dimen>
+  <dimen name="bottom_sheet_view_width">30dp</dimen>
+  <dimen name="bottom_sheet_view_height">3dp</dimen>
+  <dimen name="line_chart_height">350dp</dimen>
+  <dimen name="no_sensors_selected_text_size">15sp</dimen>
+  <dimen name="has_sensors_selected_text_size">15sp</dimen>
+  <dimen name="no_sensors_selected_text_view_margin_top">8dp</dimen>
+  <dimen name="no_sensors_selected_text_view_margin_start">18dp</dimen>
+  <dimen name="no_sensors_selected_text_view_margin_end">18dp</dimen>
+  <dimen name="no_sensors_selected_text_view_margin_bottom">18dp</dimen>
+  <dimen name="has_sensors_selected_margin_top">8dp</dimen>
+  <dimen name="has_sensors_selected_margin_start">18dp</dimen>
+  <dimen name="has_sensors_selected_margin_end">18dp</dimen>
+  <dimen name="has_sensors_selected_margin_bottom">18dp</dimen>
+
+
 </resources>

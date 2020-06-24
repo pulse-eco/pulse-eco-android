@@ -12,14 +12,14 @@
     android:hint="@string/search"
     android:autofillHints="@string/search"
     android:inputType="text"
-    android:layout_marginTop="35dp"/>
+    android:layout_marginTop="@dimen/city_select_search_marginTop"/>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/countryCityRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/city_select_recyclerView_marginTop"
     >
   </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

@@ -30,8 +30,8 @@
         android:layout_height="wrap_content">
 
         <View
-          android:layout_width="30dp"
-          android:layout_height="3dp"
+          android:layout_width="@dimen/bottom_sheet_view_width"
+          android:layout_height="@dimen/bottom_sheet_view_height"
           android:background="@drawable/background_pull"
           android:layout_margin="15dp"
           android:layout_gravity="center_horizontal"/>
