@@ -26,7 +26,7 @@ import com.squareup.moshi.JsonClass
 ) {
   // do not change, values from SkopjePulse RestApi
   @Keep
-  enum class Status { ACTIVE, INACTIVE, NOT_CLAIMED }
+  enum class Status { ACTIVE, INACTIVE, NOT_CLAIMED, REQUESTED, ACTIVE_UNCONFIRMED, NOT_CLAIMED_UNCONFIRMED, BANNED }
 
   @Keep
   enum class Type(@DrawableRes val drawableRes: Int?) {
@@ -34,6 +34,12 @@ import com.squareup.moshi.JsonClass
     WIFI(R.drawable.ic_sensor_type_wifi),
     LORA(R.drawable.ic_sensor_type_lora),
     WIFI_V2(R.drawable.ic_sensor_type_wifi),
+
+    LORA_V2(R.drawable.ic_sensor_type_lora),
+    PENGY_V1(R.drawable.ic_sensor_type_wifi),
+    URAD(R.drawable.ic_sensor_type_wifi),
+    AIR_THINGS(R.drawable.ic_sensor_type_wifi),
+    SENSOR_COMMUNITY_CROWDSOURCED(R.drawable.ic_sensor_type_wifi),
     UNKNOWN(null)
   }
 }
