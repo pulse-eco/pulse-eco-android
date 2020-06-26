@@ -77,7 +77,7 @@ private fun LineChart.applyPulseStyling() {
   xAxis.apply {
     setDrawGridLines(false)
     setDrawAxisLine(true)
-    axisLineColor = Color.parseColor("#E7E7E7")
+    axisLineColor = ContextCompat.getColor(context, R.color.axis_line_color)
     axisLineWidth = 1.5f
     position = XAxis.XAxisPosition.BOTTOM
     labelCount = 6
@@ -88,7 +88,7 @@ private fun LineChart.applyPulseStyling() {
   axisLeft.apply {
     setDrawLimitLinesBehindData(true)
     setDrawGridLines(false)
-    axisLineColor = Color.parseColor("#E7E7E7")
+    axisLineColor = ContextCompat.getColor(context, R.color.axis_line_color)
     axisLineWidth = 1.5f
   }
 

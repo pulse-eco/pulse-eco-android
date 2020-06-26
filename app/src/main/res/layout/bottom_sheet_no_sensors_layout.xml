@@ -13,7 +13,7 @@
   <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="14sp"
+    android:textSize="@dimen/bottom_sheet_text_size"
     android:textColor="@color/bottom_sheet_text_secondary"
     android:gravity="center_horizontal"
     android:layout_marginTop="@dimen/components_between_spacing"
@@ -31,8 +31,8 @@
     android:textColor="@color/colorPrimary"
     style="@style/Base.Widget.AppCompat.Button.Borderless"
     android:background="@drawable/select_sensors_button_outline"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
+    android:paddingStart="@dimen/select_sensors_btn_padding"
+    android:paddingEnd="@dimen/select_sensors_btn_padding"
     android:layout_marginTop="@dimen/components_between_spacing"
     android:layout_marginBottom="@dimen/components_between_spacing"/>
 

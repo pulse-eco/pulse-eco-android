@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <corners android:bottomLeftRadius="7dp" android:bottomRightRadius="7dp" android:topLeftRadius="7dp" android:topRightRadius="7dp"/>
-    <padding android:bottom="15dp" android:top="15dp"/>
+    <corners android:bottomLeftRadius="@dimen/disclaimer_block_bottomLeftRadius" android:bottomRightRadius="@dimen/disclaimer_block_bottomRightRadius" android:topLeftRadius="@dimen/disclaimer_block_topLeftRadius" android:topRightRadius="@dimen/disclaimer_block_topRightRadius"/>
+    <padding android:bottom="@dimen/disclaimer_block_paddingBottom" android:top="@dimen/disclaimer_block_paddingTop"/>
 </shape>

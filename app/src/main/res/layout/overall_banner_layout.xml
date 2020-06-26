@@ -27,12 +27,12 @@
           android:layout_height="wrap_content"
           android:fontFamily="sans-serif-medium"
           android:paddingStart="@dimen/component_inner_spacing"
-          android:paddingTop="2dp"
+          android:paddingTop="@dimen/banner_title_paddingTop"
           android:paddingEnd="@dimen/component_inner_spacing"
-          android:paddingBottom="2dp"
+          android:paddingBottom="@dimen/banner_title_paddingBottom"
           android:textColor="@color/overall_banner_text_foreground"
-          android:textSize="12sp"
-          tools:text="average"
+          android:textSize="@dimen/banner_title_text_size"
+          tools:text="@string/overall_banner_title_average"
           />
 
       <ImageView
@@ -51,9 +51,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingStart="@dimen/component_inner_spacing"
-        android:paddingTop="2dp"
+        android:paddingTop="@dimen/banner_value_paddingTop"
         android:paddingEnd="@dimen/component_inner_spacing"
-        android:paddingBottom="2dp">
+        android:paddingBottom="@dimen/banner_value_paddingBottom">
 
       <TextView
           android:id="@+id/value"
@@ -61,8 +61,8 @@
           android:layout_height="wrap_content"
           android:fontFamily="sans-serif"
           android:textColor="@color/overall_banner_text_foreground"
-          android:textSize="30sp"
-          tools:text="500"/>
+          android:textSize="@dimen/banner_value_text_size"
+          tools:text="@string/overall_banner_value"/>
 
       <TextView
           android:id="@+id/valueUnit"
@@ -70,9 +70,9 @@
           android:layout_height="wrap_content"
           android:fontFamily="sans-serif-medium"
           android:textColor="@color/overall_banner_text_foreground"
-          android:textSize="12sp"
+          android:textSize="@dimen/banner_value_unit_text_size"
           tools:ignore="RtlSymmetry"
-          tools:text="ug/m3"/>
+          tools:text="@string/overall_banner_value_unit"/>
 
       <TextView
           android:id="@+id/description"
@@ -82,9 +82,9 @@
           android:fontFamily="sans-serif-medium"
           android:minLines="3"
           android:textColor="@color/overall_banner_text_foreground"
-          android:textSize="15sp"
+          android:textSize="@dimen/banner_description_text_size"
           android:layout_marginStart="@dimen/component_inner_spacing"
-          tools:text="Bad air quality. Air quality is satisfactory and air pollusion poses little or no risk."
+          tools:text="@string/overall_banner_description"
           android:visibility="gone"/>
     </LinearLayout>
 

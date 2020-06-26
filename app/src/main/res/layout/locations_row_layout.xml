@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="?selectableItemBackground"
-              android:padding="5dp"
+              android:padding="@dimen/location_row_padding"
               android:gravity="center_vertical">
 
   <CheckBox
@@ -14,10 +14,10 @@
 
   <TextView
     android:id="@+id/tv_location_name"
-    android:layout_width="0dp"
+    android:layout_width="@dimen/location_name_width"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:textSize="20sp"
-    android:padding="10dp"/>
+    android:textSize="@dimen/location_name_text_size"
+    android:padding="@dimen/location_row_padding"/>
 
 </LinearLayout>

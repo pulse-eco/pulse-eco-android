@@ -6,22 +6,22 @@
               android:layout_height="wrap_content"
               tools:background="@color/black"
               android:gravity="center_vertical"
-              android:padding="5dp">
+              android:padding="@dimen/graph_legend_padding">
 
   <View
     android:id="@+id/legendColor"
-    android:layout_width="10dp"
-    android:layout_height="10dp"
+    android:layout_width="@dimen/legend_width"
+    android:layout_height="@dimen/legend_height"
     tools:background="@color/colorAccent"/>
 
   <TextView
     android:id="@+id/legendTitle"
-    android:layout_width="0dp"
+    android:layout_width="@dimen/legend_title_width"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    tools:text="Sensor aluminska 1"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    tools:text="@string/legend_title"
+    android:layout_marginStart="@dimen/legend_title_marginStart"
+    android:layout_marginEnd="@dimen/legend_title_marginEnd"
     android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse"/>
 
 </LinearLayout>

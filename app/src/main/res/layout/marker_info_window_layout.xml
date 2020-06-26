@@ -6,8 +6,8 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:gravity="center_horizontal"
-  android:paddingBottom="3dp"
-  tools:padding="30dp"
+  android:paddingBottom="@dimen/marker_info_paddingBottom"
+  tools:padding="@dimen/marker_info_padding"
   tools:background="@color/white">
 
   <TextView
@@ -15,14 +15,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/marker_info_window_background"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingTop="@dimen/marker_title_paddingTop"
+    android:paddingBottom="@dimen/marker_title_paddingBottom"
+    android:paddingStart="@dimen/marker_title_paddingStart"
+    android:paddingEnd="@dimen/marker_title_paddingEnd"
     android:textColor="@color/white"
-    android:textSize="13sp"
+    android:textSize="@dimen/marker_title_text_size"
     android:fontFamily="sans-serif-medium"
-    tools:text="Centar"/>
+    tools:text="@string/marker_title"/>
 
   <ImageView
     android:layout_width="wrap_content"

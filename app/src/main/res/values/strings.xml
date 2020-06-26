@@ -62,6 +62,26 @@
   <string name="map_preferences_data_visualization_geographic">Geographic</string>
   <string name="overall_banner_title_average">average</string>
 
+  <string name="no_connectivity_exception">No network connectivity exception.</string>
+  <string name="failed_parsing">Failed parsing measures.json from Assets.</string>
+  <string name="error_msg_unhandled_tehnical">Unhandled technical error.</string>
+
+  <string name="sensor_title">Centar</string>
+  <string name="sensor_measurement_value">170</string>
+  <string name="sensor_measurement_unit_text">ug/m3</string>
+  <string name="sensor_measurement_time_text">12:45</string>
+  <string name="sensor_measurement_date_text">24.11.2018</string>
+  <string name="city_select">SKOPJE</string>
+  <string name="city_select_country">Macedonia</string>
+  <string name="city_select_status">Good Air Quality!</string>
+  <string name="city_select_measure_value">22</string>
+  <string name="legend_title">Sensor aluminska 1</string>
+  <string name="marker_title">Centar</string>
+  <string name="overall_banner_value">500</string>
+  <string name="overall_banner_value_unit">ug/m3</string>
+  <string name="overall_banner_description">Bad air quality. Air quality is satisfactory and air pollusion poses little or no risk.</string>
+  <string name="app_bar_town">SKOPJE</string>
+
   <plurals name="sensor_limit_reached_message">
     <item quantity="one">You can\'t select more than %d sensor.</item>
     <item quantity="other">You can\'t select more than %d sensors.</item>

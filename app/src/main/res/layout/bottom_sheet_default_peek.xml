@@ -11,13 +11,13 @@
     android:layout_height="wrap_content"
     android:id="@+id/noSensorsSelected"
     android:gravity="center_horizontal"
-    android:textSize="15sp"
+    android:textSize="@dimen/sensors_selected_text_size"
     android:textColor="@color/bottom_sheet_text_primary"
     android:text="@string/bottom_sheet_default_no_sensors_selected"
-    android:layout_marginBottom="18dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginStart="18dp"
-    android:layout_marginEnd="18dp"
+    android:layout_marginBottom="@dimen/sensors_selected_textView_marginBottom"
+    android:layout_marginTop="@dimen/sensors_selected_textView_marginTop"
+    android:layout_marginStart="@dimen/sensors_selected_textView_marginStart"
+    android:layout_marginEnd="@dimen/sensors_selected_textView_marginEnd"
     android:visibility="gone"
     tools:visibility="visible"/>
 
@@ -26,19 +26,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="18dp"
-    android:layout_marginEnd="18dp"
-    android:layout_marginStart="18dp"
+    android:layout_marginTop="@dimen/sensors_selected_textView_marginTop"
+    android:layout_marginBottom="@dimen/sensors_selected_textView_marginBottom"
+    android:layout_marginEnd="@dimen/sensors_selected_textView_marginEnd"
+    android:layout_marginStart="@dimen/sensors_selected_textView_marginStart"
     android:gravity="center_vertical"
     android:visibility="gone"
     tools:visibility="visible">
 
     <TextView
-      android:layout_width="0dp"
+      android:layout_width="@dimen/graph_data_width"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:textSize="15sp"
+      android:textSize="@dimen/sensors_selected_text_size"
       android:textColor="@color/bottom_sheet_text_primary"
       android:text="@string/bottom_sheet_has_sensors_selected"/>
 

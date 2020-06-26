@@ -12,35 +12,35 @@
     android:id="@+id/sensorTitle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="12sp"
+    android:textSize="@dimen/sensor_title_text_size"
     android:textColor="@color/bottom_sheet_text_secondary"
     android:drawablePadding="@dimen/components_between_spacing"
-    tools:text="Centar"
-    android:layout_marginTop="8dp"
+    tools:text="@string/sensor_title"
+    android:layout_marginTop="@dimen/sensor_title_marginTop"
     app:layout_constraintTop_toTopOf="parent"
-    android:layout_marginStart="25dp"
+    android:layout_marginStart="@dimen/sensor_title_marginStart"
     app:layout_constraintStart_toStartOf="parent"/>
 
   <TextView
     android:id="@+id/sensorMeasurement"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="40sp"
+    android:textSize="@dimen/sensor_measurement_text_size"
     android:textColor="@color/bottom_sheet_text_primary"
-    tools:text="170"
+    tools:text="@string/sensor_measurement_value"
     app:layout_constraintStart_toStartOf="@+id/sensorTitle"
     app:layout_constraintTop_toBottomOf="@+id/sensorTitle"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="@dimen/sensor_measurement_marginBottom"
     app:layout_constraintBottom_toBottomOf="parent"/>
 
   <TextView
     android:id="@+id/sensorMeasurementUnit"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="12sp"
+    android:textSize="@dimen/sensor_measurement_unit_text_size"
     android:textColor="@color/bottom_sheet_text_secondary"
-    android:layout_marginStart="8dp"
-    tools:text="ug/m3"
+    android:layout_marginStart="@dimen/sensor_measurement_unit_marginStart"
+    tools:text="@string/sensor_measurement_unit_text"
     app:layout_constraintStart_toEndOf="@+id/sensorMeasurement"
     app:layout_constraintTop_toTopOf="@+id/sensorMeasurement"
     app:layout_constraintBottom_toBottomOf="@+id/sensorMeasurement"
@@ -60,17 +60,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="@color/bottom_sheet_text_primary"
-      android:textSize="16sp"
+      android:textSize="@dimen/sensor_measurement_time_text_size"
       android:fontFamily="sans-serif-medium"
-      tools:text="12:45"/>
+      tools:text="@string/sensor_measurement_time_text"/>
 
     <TextView
       android:id="@+id/sensorMeasurementDate"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="@color/bottom_sheet_text_secondary"
-      android:textSize="12sp"
-      tools:text="24.11.2018"/>
+      android:textSize="@dimen/sensor_measurement_date_text_size"
+      tools:text="@string/sensor_measurement_date_text"/>
 
   </LinearLayout>
 
@@ -79,19 +79,19 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:icon_type="Star"
-    app:icon_size="24dp"
+    app:icon_size="@dimen/sensor_favourite_button_icon_size"
     app:dots_primary_color="@color/colorAccent"
     app:dots_secondary_color="@color/colorPrimary"
     app:circle_start_color="@color/colorAccent"
     app:circle_end_color="@color/colorPrimary"
     app:layout_constraintBottom_toBottomOf="@+id/sensorMeasurement"
     app:layout_constraintTop_toTopOf="@+id/sensorMeasurement"
-    android:layout_marginEnd="8dp"
+    android:layout_marginEnd="@dimen/components_between_spacing"
     app:layout_constraintEnd_toEndOf="parent"/>
 
   <View
-    android:layout_width="24dp"
-    android:layout_height="24dp"
+    android:layout_width="@dimen/sensor_favourite_buttonOverlay_width"
+    android:layout_height="@dimen/sensor_favourite_buttonOverlay_height"
     android:id="@+id/sensorFavouriteButtonOverlay"
     android:clickable="true"
     android:focusable="true"

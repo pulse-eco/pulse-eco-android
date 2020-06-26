@@ -8,7 +8,7 @@
   android:layout_height="wrap_content"
   android:focusable="true"
   android:clickable="true"
-  app:behavior_peekHeight="0dp"
+  app:behavior_peekHeight="@dimen/behavior_peekHeight"
   android:background="@drawable/bottom_sheet_background"
   app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -30,10 +30,10 @@
         android:layout_height="wrap_content">
 
         <View
-          android:layout_width="30dp"
-          android:layout_height="3dp"
+          android:layout_width="@dimen/peek_view_width"
+          android:layout_height="@dimen/peek_view_height"
           android:background="@drawable/background_pull"
-          android:layout_margin="15dp"
+          android:layout_margin="@dimen/peek_view_margin"
           android:layout_gravity="center_horizontal"/>
       </FrameLayout>
 

@@ -23,9 +23,9 @@
       android:id="@+id/citySelectCityLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      tools:text="SKOPJE"
+      tools:text="@string/city_select"
       android:fontFamily="sans-serif-medium"
-      android:textSize="16sp"
+      android:textSize="@dimen/city_select_text_size"
       android:textColor="@color/cityselect_label_text_color"
       android:layout_marginTop="@dimen/components_side_spacing"
       app:layout_constraintTop_toTopOf="parent"
@@ -36,8 +36,8 @@
       android:id="@+id/citySelectCountryLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      tools:text="Macedonia"
-      android:textSize="11sp"
+      tools:text="@string/city_select_country"
+      android:textSize="@dimen/city_select_country_text_size"
       android:textColor="@color/cityselect_label_text_color"
       app:layout_constraintStart_toStartOf="@+id/citySelectCityLabel"
       app:layout_constraintTop_toBottomOf="@+id/citySelectCityLabel"/>
@@ -45,26 +45,26 @@
 
     <TextView
       android:id="@+id/citySelectOverallStatus"
-      android:layout_width="0dp"
+      android:layout_width="@dimen/city_select_status_width"
       android:layout_height="wrap_content"
-      tools:text="Good Air Quality!"
-      android:textSize="12sp"
+      tools:text="@string/city_select_status"
+      android:textSize="@dimen/city_select_status_text_size"
       android:textColor="@color/cityselect_label_text_color"
       android:layout_marginTop="@dimen/components_between_spacing"
       app:layout_constraintStart_toStartOf="@+id/citySelectCityLabel"
       app:layout_constraintTop_toBottomOf="@+id/citySelectCountryLabel"
-      android:layout_marginEnd="8dp"
+      android:layout_marginEnd="@dimen/city_select_status_marginEnd"
       android:maxLines="2"
       android:ellipsize="end"
       app:layout_constraintEnd_toStartOf="@+id/citySelectMeasureContainer"/>
 
     <androidx.cardview.widget.CardView
       android:id="@+id/citySelectMeasureContainer"
-      android:layout_width="72dp"
-      android:layout_height="72dp"
+      android:layout_width="@dimen/city_select_measure_width"
+      android:layout_height="@dimen/city_select_measure_height"
       android:layout_marginTop="@dimen/components_side_spacing"
       android:layout_marginEnd="@dimen/components_side_spacing"
-      android:layout_marginBottom="30dp"
+      android:layout_marginBottom="@dimen/city_select_measure_marginBottom"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -82,17 +82,17 @@
           android:id="@+id/citySelectMeasureValue"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="26sp"
+          android:textSize="@dimen/city_select_measure_text_size"
           android:textColor="@color/cityselect_measure_text_color"
-          tools:text="22"/>
+          tools:text="@string/city_select_measure_value"/>
 
         <TextView
           android:id="@+id/citySelectMeasureLabel"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="12sp"
+          android:textSize="@dimen/city_select_measure_unit_text_size"
           android:textColor="@color/cityselect_measure_text_color"
-          tools:text="ug/m3"/>
+          tools:text="@string/sensor_measurement_unit_text"/>
 
       </LinearLayout>
     </androidx.cardview.widget.CardView>

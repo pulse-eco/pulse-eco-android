@@ -51,7 +51,7 @@
   <color name="overall_banner_text_foreground">#E5FFFFFF</color>
 
   <!-- Old colors that need to be taken care of -->
-  <color name="pulseAppBarColor">#0E0A44</color>
+  <color name="pulseAppBarColor">@color/purple</color>
   <color name="light_bg">#eeeef3</color>
   <color name="label">#7b7b7b</color>
   <color name="graph_grid">#a1a1a1</color>
@@ -61,4 +61,20 @@
   <color name="error_background">#9e9e9e</color>
   <color name="error_text">#FFF</color>
   <color name="pulseAppBarTitleColor">#ccffffff</color>
+
+  <color name="axis_line_color">#E7E7E7</color>
+  <color name="crowdsourcing_disclaimer_text_color">#3F3F3F</color>
+
+  <!-- Drawable -->
+  <color name="background_pull">#C4C4C4</color>
+  <color name="circle_shape">#cdecec</color>
+  <color name="disclaimer_background">#E6D7D7D7</color>
+  <color name="ic_control_foreground_active">#e5ffffff</color>
+  <color name="ic_control_foreground_inactive">#b2ffffff</color>
+  <color name="ic_launcher_background_end_color">@color/purple_light</color>
+  <color name="ic_launcher_background_start_color">#FF131047</color>
+  <color name="overview_circle_background">#1A000000</color>
+  <color name="select_sensors_button_outline">#0F0A44</color>
+  <color name="star_off">@color/purple_A50</color>
+
 </resources>
