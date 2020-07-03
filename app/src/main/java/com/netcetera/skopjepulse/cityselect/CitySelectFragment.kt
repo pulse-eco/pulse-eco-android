@@ -25,21 +25,20 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override val viewModel: CitySelectViewModel by viewModel()
   private val mainViewModel : MainViewModel by sharedViewModel()
   private lateinit var faButton: FloatingActionButton
+  private lateinit var citySelectAdapter : CitySelectAdapter
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
   }
 
-  override fun onResume() {
-    super.onResume()
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
     (citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
-    val citySelectAdapter = CitySelectAdapter()
+    citySelectAdapter = CitySelectAdapter()
     citySelectRecyclerView.adapter = citySelectAdapter
-    viewModel.loadData()
-    citySelectAdapter.notifyDataSetChanged()
     viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
     citySelectAdapter.onCitySelected {
       mainViewModel.showForCity(it)
@@ -81,6 +80,13 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
       viewModel.showDataForMeasurementType(it)
     })
+  }
+
+  override fun onResume() {
+    super.onResume()
+    viewModel.loadData()
+    viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
+    citySelectAdapter.notifyDataSetChanged()
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,

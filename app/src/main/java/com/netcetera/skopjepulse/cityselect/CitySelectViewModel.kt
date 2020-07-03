@@ -1,6 +1,7 @@
 package com.netcetera.skopjepulse.cityselect
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -107,8 +108,13 @@ class CitySelectViewModel(
     }
 
     val sharedPref = context.getSharedPreferences(context.getString(R.string.selected_cities), Context.MODE_PRIVATE)
-    val selected_cities : String?  = sharedPref.getString(context.getString(R.string.selected_cities), "")?.toLowerCase(Locale.ROOT)
-    val selected_cities_list: List<String>? = selected_cities?.split(",")?.map { it.trim() }
+    val selected_cities : String  = sharedPref.getString(context.getString(R.string.selected_cities), "")?.toLowerCase(Locale.ROOT) ?: "., Skopje,"
+    if (selected_cities == ""){
+      val editor: SharedPreferences.Editor = sharedPref.edit()
+      editor.putString(context.getString(R.string.selected_cities), "., Skopje,");
+      editor.commit()
+    }
+    val selected_cities_list: List<String>? = selected_cities.split(",").map { it.trim() }
 
 
     sortedCities = Transformations.map(sortedCities) {
