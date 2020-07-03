@@ -14,9 +14,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionManager
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.like.LikeButton
 import com.like.OnLikeListener
@@ -25,13 +23,10 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.base.model.DataDefinition
-import com.netcetera.skopjepulse.extensions.applyPulseStyling
 import com.netcetera.skopjepulse.extensions.dimOnExpand
 import com.netcetera.skopjepulse.extensions.gone
-import com.netcetera.skopjepulse.extensions.lifecycleAwareOnMapClickListener
 import com.netcetera.skopjepulse.extensions.onExpanded
 import com.netcetera.skopjepulse.extensions.onStateChange
-import com.netcetera.skopjepulse.extensions.pulseMapType
 import com.netcetera.skopjepulse.extensions.toggle
 import com.netcetera.skopjepulse.extensions.updateForCity
 import com.netcetera.skopjepulse.extensions.visible
@@ -42,7 +37,6 @@ import com.netcetera.skopjepulse.map.model.BottomSheetPeekViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
 import com.netcetera.skopjepulse.map.overallbanner.OverallBannerView
 import com.netcetera.skopjepulse.map.preferences.MapPreferencesPopup
-import com.netcetera.skopjepulse.map.preferences.MapType
 import com.netcetera.skopjepulse.showDisclaimerDialog
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
@@ -70,7 +64,6 @@ import kotlinx.android.synthetic.main.map_fragment_layout.map
 import kotlinx.android.synthetic.main.map_fragment_layout.mapConstraintLayout
 import kotlinx.android.synthetic.main.map_fragment_layout.mapLayersPick
 import kotlinx.android.synthetic.main.map_loading_indicator.loadingIndicatorContainer
-import kotlinx.android.synthetic.main.marker_info_window_layout.*
 import kotlinx.android.synthetic.main.overall_banner_layout.overallBannerView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -117,29 +110,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    //map.onCreate(savedInstanceState)
-
-
-//    mapPreferencesPopup.onPreferenceChange {
-//      val ctx: Context? = context
-//      org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
-//      map.setUseDataConnection(true)
-//      if (it.mapType == MapType.DEFAULT) {
-//        map.setTileSource(TileSourceFactory.MAPNIK)
-//      } else if (it.mapType == MapType.SATELLITE)
-//        map.setTileSource(TileSourceFactory.USGS_SAT)
-//      else
-//        map.setTileSource(TileSourceFactory.USGS_TOPO)
-//
-//
-//      map.setMultiTouchControls(true)
-//      map.setBuiltInZoomControls(true)
-//    }
 
       val ctx: Context? = context
       org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
       map.setUseDataConnection(true)
       map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+    //map.setTileSource(TileSourceFactory.USGS_TOPO)
+    //map.setTileSource(TileSourceFactory.MAPNIK)
       map.setMultiTouchControls(true)
       map.setBuiltInZoomControls(true)
 
@@ -153,7 +130,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     })
 
 
-    //val previousPolygons: MutableList<Polygon> = ArrayList()
     val previousPolygons: MutableList<org.osmdroid.views.overlay.Polygon> = ArrayList()
     viewModel.mapPolygons.observe(viewLifecycleOwner, Observer { mapPolygons ->
       previousPolygons.forEach {
@@ -161,9 +137,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         it.strokeColor = Color.TRANSPARENT
       }
       previousPolygons.clear()
-//        mapPolygons.mapTo(previousPolygons) {
-//
-//          googleMap.addPolygon(it) }
 
       mapPolygons.forEach({
         val polygon = org.osmdroid.views.overlay.Polygon(map) //see note below
@@ -181,35 +154,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
         map.invalidate()
         previousPolygons.add(polygon)
       })
-
-
-
-      //  }
-
-
     })
 
     // Data observers
     viewModel.overallData.observe(viewLifecycleOwner, overallBanner)
-    // map.getMapAsync { googleMap ->
-//      googleMap.applyPulseStyling(requireContext())
-//      viewModel.preferences.observe(viewLifecycleOwner, Observer {
-//        googleMap.pulseMapType = it.mapType
-//      })
     map.updateForCity(city)
     viewModel.mapMarkers.observe(viewLifecycleOwner, Observer {
       mapMarkersController.showMarkers(it ?: emptyList())
     })
 
-
-
-
-//      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner, GoogleMap.OnMapClickListener {
-//        viewModel.deselectSensor()
-//      })
-    //   }
-
-    //
     viewModel.bottomSheetPeek.observe(viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
     viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner, Observer {
