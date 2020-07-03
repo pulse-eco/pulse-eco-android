@@ -1,16 +1,17 @@
 package com.netcetera.skopjepulse.countryCitySelector
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.activity_city_selector.*
+
 
 /**
  * Implementation of [AppCompatActivity] for displaying Country/Cities List
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_city_selector.*
 class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCityClickListener {
 
   private lateinit var mAdapter: CountryCityAdapter
+  private lateinit var faButton: FloatingActionButton
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -28,7 +30,7 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
 
     val recyclerview : RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
-    mAdapter = CountryCityAdapter(countryCityViewModel.countryList.value, this)
+    mAdapter = CountryCityAdapter(countryCityViewModel.countryList.value, this, this)
     recyclerview.adapter = mAdapter
 
     countryCityViewModel.countryList.observe(this, Observer {
@@ -49,10 +51,29 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
       }
 
     })
+
+    faButton = fab_check
+    faButton.setOnClickListener{
+      finish()
+    }
+
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        when (newState) {
+          RecyclerView.SCROLL_STATE_IDLE -> fab_check.show()
+          else -> fab_check.hide()
+        }
+        super.onScrollStateChanged(recyclerView, newState)
+      }
+    }
+    countryCityRecyclerView.clearOnScrollListeners()
+    countryCityRecyclerView.addOnScrollListener(scrollListener)
+
   }
 
-  override fun onCityClick(city: City, position: Int) {
-    Toast.makeText(this, city.name, Toast.LENGTH_SHORT).show()
+  override fun onCityClick(city: City, position: Int, isChecked : Boolean) {
+    val countryCityViewModel = ViewModelProviders.of(this).get(CountryCityViewModel::class.java)
+    countryCityViewModel.onCityCheck(city,position,isChecked, this)
   }
 
 }

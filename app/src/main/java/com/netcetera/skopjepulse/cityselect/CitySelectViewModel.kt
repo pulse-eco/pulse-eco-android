@@ -1,5 +1,6 @@
 package com.netcetera.skopjepulse.cityselect
 
+import android.content.Context
 import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,6 +8,7 @@ import androidx.lifecycle.Transformations
 import com.netcetera.skopjepulse.CurrentLocationProvider
 import com.netcetera.skopjepulse.LocationServicesDisabled
 import com.netcetera.skopjepulse.MissingLocationPermission
+import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.Event
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
@@ -21,6 +23,7 @@ import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import org.koin.ext.isInt
+import java.util.*
 
 /**
  * Implementation of [BaseViewModel] that is used for displaying of cities to select from in [CitySelectFragment].
@@ -41,60 +44,11 @@ class CitySelectViewModel(
   /**
    * The display models of the cities that once can choose from.
    */
-  val citySelectItems: LiveData<List<CitySelectItem>>
+  lateinit var citySelectItems: LiveData<List<CitySelectItem>>
 
 
   init {
-    val sortedCities = Transformations.switchMap(pulseRepository.cities) { cities ->
-      Transformations.map(locationProvider.currentLocation) { location ->
-        val locationToSortBy = when(location.status) {
-          SUCCESS, LOADING -> location.data
-          else -> null
-        }
-        if (locationToSortBy == null) {
-          cities.data?.sortedWith(City.macedoniaFirstComparator())
-        } else {
-          cities.data?.sortedBy { city -> city.location.distanceTo(location.data) }
-        } ?: emptyList()
-      }
-
-    }
-
-    val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
-      dataDefinitionProvider[it]
-    }
-
-    citySelectItems = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
-      sortedCities.combine(pulseRepository.citiesOverall) { cities, overalls ->
-        return@combine cities.mapNotNull { city ->
-          val cityOverall = overalls.data?.firstOrNull { it.cityName == city.name }
-          val measurement = cityOverall?.values?.get(dataDefinition.id)
-
-          when {
-            measurement?.isInt() == true -> {
-              val measurementBand = dataDefinition.findBandByValue(measurement.toInt())
-              CitySelectItem(
-                  city,
-                  measurementBand.grade,
-                  measurement.toInt().toString(),
-                  dataDefinition.unit,
-                  measurementBand.legendColor)
-            }
-            measurement != null ->CitySelectItem(
-                city,
-                dataDefinition.description,
-                measurement,
-                dataDefinition.unit,
-                Color.LTGRAY)
-            else -> null
-          }
-        }
-      }
-    }
-
-    loadingResources.addResource(pulseRepository.citiesOverall.toLoadingLiveDataResource())
-    errorResources.addResource(pulseRepository.citiesOverall.toErrorLiveDataResource())
-    errorResources.addResource(locationProvider.currentLocation.toErrorLiveDataResource())
+   loadData()
   }
 
   /**
@@ -134,5 +88,69 @@ class CitySelectViewModel(
 
   fun showDataForMeasurementType(measurementType: MeasurementType) {
     if (measurementType != selectedMeasurementType.value) selectedMeasurementType.value = measurementType
+  }
+
+  fun loadData(){
+    var sortedCities = Transformations.switchMap(pulseRepository.cities) { cities ->
+      Transformations.map(locationProvider.currentLocation) { location ->
+        val locationToSortBy = when(location.status) {
+          SUCCESS, LOADING -> location.data
+          else -> null
+        }
+        if (locationToSortBy == null) {
+          cities.data?.sortedWith(City.macedoniaFirstComparator())
+        } else {
+          cities.data?.sortedBy { city -> city.location.distanceTo(location.data) }
+        } ?: emptyList()
+      }
+
+    }
+
+    val sharedPref = context.getSharedPreferences(context.getString(R.string.selected_cities), Context.MODE_PRIVATE)
+    val selected_cities : String?  = sharedPref.getString(context.getString(R.string.selected_cities), "")?.toLowerCase(Locale.ROOT)
+    val selected_cities_list: List<String>? = selected_cities?.split(",")?.map { it.trim() }
+
+
+    sortedCities = Transformations.map(sortedCities) {
+      it.filter {
+        selected_cities_list!!.contains(it.name.toLowerCase(Locale.ROOT))
+      }
+    }
+
+    val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
+      dataDefinitionProvider[it]
+    }
+
+    citySelectItems = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+      sortedCities.combine(pulseRepository.citiesOverall) { cities, overalls ->
+        return@combine cities.mapNotNull { city ->
+          val cityOverall = overalls.data?.firstOrNull { it.cityName == city.name }
+          val measurement = cityOverall?.values?.get(dataDefinition.id)
+
+          when {
+            measurement?.isInt() == true -> {
+              val measurementBand = dataDefinition.findBandByValue(measurement.toInt())
+              CitySelectItem(
+                city,
+                measurementBand.grade,
+                measurement.toInt().toString(),
+                dataDefinition.unit,
+                measurementBand.legendColor)
+            }
+            measurement != null ->CitySelectItem(
+              city,
+              dataDefinition.description,
+              measurement,
+              dataDefinition.unit,
+              Color.LTGRAY)
+            else -> null
+          }
+        }
+      }
+    }
+
+    loadingResources.addResource(pulseRepository.citiesOverall.toLoadingLiveDataResource())
+    errorResources.addResource(pulseRepository.citiesOverall.toErrorLiveDataResource())
+    errorResources.addResource(locationProvider.currentLocation.toErrorLiveDataResource())
   }
 }

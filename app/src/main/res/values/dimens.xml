@@ -8,7 +8,7 @@
 
   <dimen name="city_select_search_marginTop">35dp</dimen>
   <dimen name="city_select_recyclerView_marginTop">10dp</dimen>
-  <dimen name="lottie_animation_view_width">200</dimen>
+  <dimen name="lottie_animation_view_width">200dp</dimen>
   <dimen name="lottie_animation_view_height">100dp</dimen>
   <dimen name="bottom_sheet_view_margin">15dp</dimen>
   <dimen name="bottom_sheet_view_width">30dp</dimen>

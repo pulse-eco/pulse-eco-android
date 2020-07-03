@@ -30,14 +30,16 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onResume() {
+    super.onResume()
 
     citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
     (citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
     val citySelectAdapter = CitySelectAdapter()
     citySelectRecyclerView.adapter = citySelectAdapter
+    viewModel.loadData()
+    citySelectAdapter.notifyDataSetChanged()
     viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
     citySelectAdapter.onCitySelected {
       mainViewModel.showForCity(it)
@@ -89,5 +91,4 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     }
 
   }
-
 }
