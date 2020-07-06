@@ -1,30 +1,24 @@
 package com.netcetera.skopjepulse.countryCitySelector
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.item_city.view.*
 import kotlinx.android.synthetic.main.item_country.view.*
-import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 /**
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickListener, var context : Context) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickListener, var selectedCitiesSet : HashSet<CityItem>) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
   private var dataShow: MutableList<Any>
-  val sharedPref = context.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
 
   companion object {
     private val TYPE_COUNTRY = 0
@@ -54,8 +48,8 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
     val element = dataShow[position]
     when(holder){
-      is CityViewHolder -> holder.bind(element as CityItem, clickListener, sharedPref)
-      is CountryViewHolder -> holder.bind(element as CountryItem, clickListener, sharedPref)
+      is CityViewHolder -> holder.bind(element as CityItem, clickListener, selectedCitiesSet)
+      is CountryViewHolder -> holder.bind(element as CountryItem, clickListener, selectedCitiesSet)
       else -> throw IllegalArgumentException()
     }
   }
@@ -94,22 +88,15 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
 
 
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T, clickListener: OnCityClickListener, sharedPref: SharedPreferences)
+    abstract fun bind(item: T, clickListener: OnCityClickListener, selectedCitiesSet : HashSet<CityItem>)
   }
 
   class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view), View.OnClickListener {
 
     private val cityCheckBox = view.checkBoxCity
 
-    override fun bind(item: CityItem, clickListener: OnCityClickListener, sharedPref: SharedPreferences) {
+    override fun bind(item: CityItem, clickListener: OnCityClickListener, selectedCitiesSet : HashSet<CityItem>) {
       cityCheckBox.text = item.name
-      var selectedCitiesSet = HashSet<CityItem>()
-      val gson = Gson()
-      val selectedCities = sharedPref.getString(Constants.SELECTED_CITIES, "")
-      if (selectedCities != ""){
-        val type = object: TypeToken<HashSet<CityItem>>() {}.type
-        selectedCitiesSet = gson.fromJson(selectedCities, type)
-      }
       cityCheckBox.isChecked = selectedCitiesSet.contains(item)
 
       itemView.checkBoxCity.setOnClickListener{
@@ -126,7 +113,7 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
 
     private val countryNameTextView = view.txtCountryName
 
-    override fun bind(item: CountryItem, clickListener: OnCityClickListener, sharedPref: SharedPreferences) {
+    override fun bind(item: CountryItem, clickListener: OnCityClickListener, selectedCitiesSet : HashSet<CityItem>) {
       countryNameTextView.text = item.countryName
     }
   }
