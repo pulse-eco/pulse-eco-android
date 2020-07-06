@@ -54,7 +54,7 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
     val element = dataShow[position]
     when(holder){
-      is CityViewHolder -> holder.bind(element as City, clickListener, sharedPref)
+      is CityViewHolder -> holder.bind(element as CityItem, clickListener, sharedPref)
       is CountryViewHolder -> holder.bind(element as CountryItem, clickListener, sharedPref)
       else -> throw IllegalArgumentException()
     }
@@ -63,7 +63,7 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
   override fun getItemViewType(position: Int): Int {
     val comparable = dataShow[position]
     return when (comparable) {
-      is City -> TYPE_CITY
+      is CityItem -> TYPE_CITY
       is CountryItem -> TYPE_COUNTRY
       else -> throw IllegalArgumentException("Invalid type of data " + position)
     }
@@ -97,17 +97,17 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
     abstract fun bind(item: T, clickListener: OnCityClickListener, sharedPref: SharedPreferences)
   }
 
-  class CityViewHolder(val view: View) : BaseViewHolder<City>(view), View.OnClickListener {
+  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view), View.OnClickListener {
 
     private val cityCheckBox = view.checkBoxCity
 
-    override fun bind(item: City, clickListener: OnCityClickListener, sharedPref: SharedPreferences) {
+    override fun bind(item: CityItem, clickListener: OnCityClickListener, sharedPref: SharedPreferences) {
       cityCheckBox.text = item.name
-      var selectedCitiesSet = HashSet<City>()
+      var selectedCitiesSet = HashSet<CityItem>()
       val gson = Gson()
       val selectedCities = sharedPref.getString(Constants.SELECTED_CITIES, "")
       if (selectedCities != ""){
-        val type = object: TypeToken<HashSet<City>>() {}.type
+        val type = object: TypeToken<HashSet<CityItem>>() {}.type
         selectedCitiesSet = gson.fromJson(selectedCities, type)
       }
       cityCheckBox.isChecked = selectedCitiesSet.contains(item)
@@ -132,7 +132,7 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
   }
 
   interface OnCityClickListener{
-    fun onCityClick(city: City, position: Int, isChecked: Boolean)
+    fun onCityClick(cityItem: CityItem, position: Int, isChecked: Boolean)
   }
 
 }

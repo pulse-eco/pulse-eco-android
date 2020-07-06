@@ -19,13 +19,13 @@ class CountryCityFilter (var constraint: CharSequence?, var data: List<Any>?) {
         if (country is CountryItem) {
           if (country.countryName.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
             resultList.add(country)
-            for (city in country.listCity) {
+            for (city in country.listCityItem) {
               resultList.add(city)
             }
           } else {
             var isContain = false
             resultList.add(country)
-            for (city in country.listCity) {
+            for (city in country.listCityItem) {
               if (city.name.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                 isContain = true
                 resultList.add(city)

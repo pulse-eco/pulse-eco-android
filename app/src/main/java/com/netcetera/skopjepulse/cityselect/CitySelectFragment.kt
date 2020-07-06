@@ -41,7 +41,6 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
 
     citySelectAdapter = CitySelectAdapter()
     citySelectRecyclerView.adapter = citySelectAdapter
-    viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
     citySelectAdapter.onCitySelected {
       mainViewModel.showForCity(it)
       parentFragmentManager.popBackStack()
@@ -86,13 +85,8 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
 
   override fun onResume() {
     super.onResume()
-    viewModel.updateSharedPreferences()
-    viewModel.citySelectItems.observe(this, Observer {
+    viewModel.getSelectedCities()
       viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
-      citySelectAdapter.notifyDataSetChanged()
-    })
-
-
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,

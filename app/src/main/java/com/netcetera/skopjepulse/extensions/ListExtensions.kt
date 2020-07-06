@@ -9,8 +9,8 @@ fun List<Any>.transformData() : ArrayList<Any>{
   val dataTrans: List<Any>
   dataTrans = ArrayList()
   for (i in this){
-    dataTrans.add(CountryItem((i as CountryItem).countryName, (i as CountryItem).countryCode, i.listCity))
-    dataTrans.addAll((i as CountryItem).listCity)
+    dataTrans.add(CountryItem((i as CountryItem).countryName, i.countryCode, i.listCityItem))
+    dataTrans.addAll(i.listCityItem)
   }
   return dataTrans
 }

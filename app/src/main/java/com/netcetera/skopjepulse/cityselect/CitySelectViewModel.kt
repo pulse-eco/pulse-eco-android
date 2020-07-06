@@ -8,7 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.netcetera.skopjepulse.*
+import com.netcetera.skopjepulse.Constants
+import com.netcetera.skopjepulse.CurrentLocationProvider
+import com.netcetera.skopjepulse.LocationServicesDisabled
+import com.netcetera.skopjepulse.MissingLocationPermission
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.Event
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
@@ -21,6 +24,7 @@ import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
+import com.netcetera.skopjepulse.countryCitySelector.CityItem
 import com.netcetera.skopjepulse.extensions.combine
 import org.koin.ext.isInt
 import java.util.*
@@ -56,14 +60,6 @@ class CitySelectViewModel(
 
   init {
     loadData()
-    updateSharedPreferences()
-  }
-
-  /**
-   * update (get currently) sharedPreferences and get selected cities
-   */
-  fun updateSharedPreferences(){
-    _citiesSharedPref.value = sharedPref.getString(Constants.SELECTED_CITIES, "")
     getSelectedCities()
   }
 
@@ -71,19 +67,19 @@ class CitySelectViewModel(
   /**
    * Get selected cities in [citySelectItems]
    */
-  private fun getSelectedCities(){
-    var selectedCitiesSet = HashSet<com.netcetera.skopjepulse.countryCitySelector.City>()
+  fun getSelectedCities() {
+    _citiesSharedPref.value = sharedPref.getString(Constants.SELECTED_CITIES, "")
+    var selectedCitiesSet = HashSet<CityItem>()
     val gson = Gson()
     val selectedCities = _citiesSharedPref.value
-    if (selectedCities != ""){
-      val type = object: TypeToken<HashSet<com.netcetera.skopjepulse.countryCitySelector.City>>() {}.type
+    if (!selectedCities.isNullOrEmpty()) {
+      val type = object : TypeToken<HashSet<CityItem>>() {}.type
       selectedCitiesSet = gson.fromJson(selectedCities, type)
-    }
-    else{
+    } else {
       // when loading for the first time
       val editor: SharedPreferences.Editor = sharedPref.edit()
-      selectedCitiesSet.add(com.netcetera.skopjepulse.countryCitySelector.City("TEST"))
-      selectedCitiesSet.add(com.netcetera.skopjepulse.countryCitySelector.City("Skopje"))
+      selectedCitiesSet.add(CityItem("TEST"))
+      selectedCitiesSet.add(CityItem("Skopje"))
       val jsonSelectedCities = gson.toJson(selectedCitiesSet)
       editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
       editor.commit()
@@ -91,7 +87,7 @@ class CitySelectViewModel(
 
     citySelectItems = Transformations.map(allCityItems) {
       it.filter {
-        selectedCitiesSet.map{ it.name.toLowerCase(Locale.ROOT) } .contains(it.city.name.toLowerCase(Locale.ROOT))
+        selectedCitiesSet.map { it.name.toLowerCase(Locale.ROOT) }.contains(it.city.name.toLowerCase(Locale.ROOT))
       }
     }
   }

@@ -1,7 +1,7 @@
 package com.netcetera.skopjepulse.countryCitySelector
 
 /**
- *  [City]  model
+ *  [CityItem]  model
  */
 
-data class City (val name: String)
+data class CityItem (val name: String)

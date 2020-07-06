@@ -73,8 +73,8 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
 
   }
 
-  override fun onCityClick(city: City, position: Int, isChecked : Boolean) {
-    countryCityViewModel.onCityCheck(city,isChecked)
+  override fun onCityClick(cityItem: CityItem, position: Int, isChecked : Boolean) {
+    countryCityViewModel.onCityCheck(cityItem,isChecked)
   }
 
 }

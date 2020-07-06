@@ -23,29 +23,29 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
   val countryList: LiveData<ArrayList<Any>>
     get() = _countryList
 
-  var checkedCities : HashSet<City>
+  var checkedCityItems : HashSet<CityItem>
   val sharedPref = application.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
 
   init {
     val data = ArrayList<CountryItem>()
-    data.add(CountryItem("Macedonia", "MK", mutableListOf(City("Bitola"),City("Kichevo"),City("Kumanovo"),City("Novoselo"),City("Ohrid"),City("Shtip"), City("Skopje"),City("Strumica"),City("Tetovo"))))
-    data.add(CountryItem("Serbia", "SR", mutableListOf(City("Beograd"), City("Nis"), City("Kraguevac"))))
+    data.add(CountryItem("Macedonia", "MK", mutableListOf(CityItem("Bitola"),CityItem("Kichevo"),CityItem("Kumanovo"),CityItem("Novoselo"),CityItem("Ohrid"),CityItem("Shtip"), CityItem("Skopje"),CityItem("Strumica"),CityItem("Tetovo"))))
+    data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Beograd"), CityItem("Nis"), CityItem("Kraguevac"))))
     _countryList.value = data.transformData()
 
-    checkedCities = HashSet()
+    checkedCityItems = HashSet()
     val gson = Gson()
     val selectedCities = sharedPref.getString(Constants.SELECTED_CITIES, "")
-    val type = object: TypeToken<HashSet<City>>() {}.type
-    checkedCities = gson.fromJson(selectedCities, type)
+    val type = object: TypeToken<HashSet<CityItem>>() {}.type
+    checkedCityItems = gson.fromJson(selectedCities, type)
   }
 
 
-  fun onCityCheck(city: City, isChecked : Boolean){
+  fun onCityCheck(cityItem: CityItem, isChecked : Boolean){
     if (isChecked){
-      checkedCities.add(city)
+      checkedCityItems.add(cityItem)
     }
     else{
-      checkedCities.remove(city)
+      checkedCityItems.remove(cityItem)
     }
 
   }
@@ -56,7 +56,7 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
   fun saveCheckedCities(){
     val editor: SharedPreferences.Editor = sharedPref.edit()
     val gson = Gson()
-    val jsonSelectedCities = gson.toJson(checkedCities)
+    val jsonSelectedCities = gson.toJson(checkedCityItems)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
     editor.commit()
   }
