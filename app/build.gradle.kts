@@ -74,6 +74,8 @@ android {
     implementation(Libs.timber)
     implementation(Libs.okHttpLogging)
 
+    implementation(Libs.gson)
+
     debugImplementation(Libs.leakcanary)
     debugImplementation(Libs.leakcanaryFragment)
     releaseImplementation(Libs.leakcanaryNoOp)

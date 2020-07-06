@@ -1,14 +1,17 @@
 package com.netcetera.skopjepulse.countryCitySelector
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R
-import com.netcetera.skopjepulse.extensions.transformData
 import kotlinx.android.synthetic.main.item_city.view.*
 import kotlinx.android.synthetic.main.item_country.view.*
 import java.util.*
@@ -18,9 +21,10 @@ import kotlin.collections.ArrayList
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCityClickListener, var context : Context) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickListener, var context : Context) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
   private var dataShow: MutableList<Any>
+  val sharedPref = context.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
 
   companion object {
     private val TYPE_COUNTRY = 0
@@ -29,7 +33,7 @@ class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCity
 
   init {
     dataShow = ArrayList()
-    dataShow = data!!.transformData()
+    dataShow = data as MutableList<Any>
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -50,8 +54,8 @@ class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCity
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
     val element = dataShow[position]
     when(holder){
-      is CityViewHolder -> holder.bind(element as City, clickListener, context)
-      is CountryViewHolder -> holder.bind(element as CountryItem, clickListener, context)
+      is CityViewHolder -> holder.bind(element as City, clickListener, sharedPref)
+      is CountryViewHolder -> holder.bind(element as CountryItem, clickListener, sharedPref)
       else -> throw IllegalArgumentException()
     }
   }
@@ -79,7 +83,6 @@ class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCity
         return filterResults
       }
 
-      @Suppress("UNCHECKED_CAST")
       override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
         dataShow = results?.values as MutableList<Any>
         notifyDataSetChanged()
@@ -90,22 +93,24 @@ class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCity
 
 
 
-
-
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T, clickListener: OnCityClickListener, context: Context)
+    abstract fun bind(item: T, clickListener: OnCityClickListener, sharedPref: SharedPreferences)
   }
 
   class CityViewHolder(val view: View) : BaseViewHolder<City>(view), View.OnClickListener {
 
     private val cityCheckBox = view.checkBoxCity
 
-    override fun bind(item: City, clickListener: OnCityClickListener, context: Context) {
+    override fun bind(item: City, clickListener: OnCityClickListener, sharedPref: SharedPreferences) {
       cityCheckBox.text = item.name
-      val sharedPref = context.getSharedPreferences(context.getString(R.string.selected_cities), Context.MODE_PRIVATE) ?: return
-      val selected_cities : String?  = sharedPref.getString(context.getString(R.string.selected_cities), "")?.toLowerCase(Locale.ROOT)
-      val selected_cities_list: List<String>? = selected_cities?.split(",")?.map { it.trim() }
-      cityCheckBox.isChecked = selected_cities_list?.contains(item.name.toLowerCase(Locale.ROOT))!!
+      var selectedCitiesSet = HashSet<City>()
+      val gson = Gson()
+      val selectedCities = sharedPref.getString(Constants.SELECTED_CITIES, "")
+      if (selectedCities != ""){
+        val type = object: TypeToken<HashSet<City>>() {}.type
+        selectedCitiesSet = gson.fromJson(selectedCities, type)
+      }
+      cityCheckBox.isChecked = selectedCitiesSet.contains(item)
 
       itemView.checkBoxCity.setOnClickListener{
           clickListener.onCityClick(item, adapterPosition, itemView.checkBoxCity.isChecked)
@@ -121,7 +126,7 @@ class CountryCityAdapter(var data: List<CountryItem>?, var clickListener: OnCity
 
     private val countryNameTextView = view.txtCountryName
 
-    override fun bind(item: CountryItem, clickListener: OnCityClickListener, context: Context) {
+    override fun bind(item: CountryItem, clickListener: OnCityClickListener, sharedPref: SharedPreferences) {
       countryNameTextView.text = item.countryName
     }
   }

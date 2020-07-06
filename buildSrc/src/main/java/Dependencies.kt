@@ -18,6 +18,8 @@ object Libs {
     const val timerKt = "1.5.1"
     const val targetTooltip = "2.0.1"
 
+    const val gson = "2.8.6"
+
     // Crashlytics
     const val playServicesFirebaseAnalytics = "17.2.1"
     const val crashlytics = "2.10.1"
@@ -52,6 +54,8 @@ object Libs {
   const val leakcanaryNoOp = "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
   const val timber = "com.github.ajalt:timberkt:${Versions.timerKt}"
   const val okHttpLogging = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttpLogging}"
+
+  const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
   // Crashlytics
   const val firebaseAnalytics = "com.google.firebase:firebase-analytics:${Versions.playServicesFirebaseAnalytics}"

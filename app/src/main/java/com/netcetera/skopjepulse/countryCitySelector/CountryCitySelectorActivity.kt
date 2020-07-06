@@ -21,12 +21,13 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
 
   private lateinit var mAdapter: CountryCityAdapter
   private lateinit var faButton: FloatingActionButton
+  private lateinit var countryCityViewModel: CountryCityViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_city_selector)
 
-    val countryCityViewModel = ViewModelProviders.of(this).get(CountryCityViewModel::class.java)
+    countryCityViewModel = ViewModelProviders.of(this).get(CountryCityViewModel::class.java)
 
     val recyclerview : RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
@@ -54,6 +55,7 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
 
     faButton = fab_check
     faButton.setOnClickListener{
+      countryCityViewModel.saveCheckedCities()
       finish()
     }
 
@@ -72,8 +74,7 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
   }
 
   override fun onCityClick(city: City, position: Int, isChecked : Boolean) {
-    val countryCityViewModel = ViewModelProviders.of(this).get(CountryCityViewModel::class.java)
-    countryCityViewModel.onCityCheck(city,position,isChecked, this)
+    countryCityViewModel.onCityCheck(city,isChecked)
   }
 
 }

@@ -6,10 +6,9 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.netcetera.skopjepulse.CurrentLocationProvider
-import com.netcetera.skopjepulse.LocationServicesDisabled
-import com.netcetera.skopjepulse.MissingLocationPermission
-import com.netcetera.skopjepulse.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.netcetera.skopjepulse.*
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.Event
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
@@ -36,6 +35,9 @@ class CitySelectViewModel(
 
   private val selectedMeasurementType = MutableLiveData<MeasurementType>()
   private val _requestLocationPermission = MutableLiveData<Event<Unit>>()
+
+  private val sharedPref = context.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
+
   /**
    * Emitting of [Event] when there is permission missing for access of the current user location.
    */
@@ -47,10 +49,53 @@ class CitySelectViewModel(
    */
   lateinit var citySelectItems: LiveData<List<CitySelectItem>>
 
+  lateinit var allCityItems: LiveData<List<CitySelectItem>>
+
+  private val _citiesSharedPref = MutableLiveData<String>()
+
 
   init {
-   loadData()
+    loadData()
+    updateSharedPreferences()
   }
+
+  /**
+   * update (get currently) sharedPreferences and get selected cities
+   */
+  fun updateSharedPreferences(){
+    _citiesSharedPref.value = sharedPref.getString(Constants.SELECTED_CITIES, "")
+    getSelectedCities()
+  }
+
+
+  /**
+   * Get selected cities in [citySelectItems]
+   */
+  private fun getSelectedCities(){
+    var selectedCitiesSet = HashSet<com.netcetera.skopjepulse.countryCitySelector.City>()
+    val gson = Gson()
+    val selectedCities = _citiesSharedPref.value
+    if (selectedCities != ""){
+      val type = object: TypeToken<HashSet<com.netcetera.skopjepulse.countryCitySelector.City>>() {}.type
+      selectedCitiesSet = gson.fromJson(selectedCities, type)
+    }
+    else{
+      // when loading for the first time
+      val editor: SharedPreferences.Editor = sharedPref.edit()
+      selectedCitiesSet.add(com.netcetera.skopjepulse.countryCitySelector.City("TEST"))
+      selectedCitiesSet.add(com.netcetera.skopjepulse.countryCitySelector.City("Skopje"))
+      val jsonSelectedCities = gson.toJson(selectedCitiesSet)
+      editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
+      editor.commit()
+    }
+
+    citySelectItems = Transformations.map(allCityItems) {
+      it.filter {
+        selectedCitiesSet.map{ it.name.toLowerCase(Locale.ROOT) } .contains(it.city.name.toLowerCase(Locale.ROOT))
+      }
+    }
+  }
+
 
   /**
    * Special error handling for the [CurrentLocationProvider.currentLocation].
@@ -91,8 +136,12 @@ class CitySelectViewModel(
     if (measurementType != selectedMeasurementType.value) selectedMeasurementType.value = measurementType
   }
 
+
+  /**
+   * Load all cities in [allCityItems]
+   */
   fun loadData(){
-    var sortedCities = Transformations.switchMap(pulseRepository.cities) { cities ->
+    val sortedCities = Transformations.switchMap(pulseRepository.cities) { cities ->
       Transformations.map(locationProvider.currentLocation) { location ->
         val locationToSortBy = when(location.status) {
           SUCCESS, LOADING -> location.data
@@ -107,27 +156,11 @@ class CitySelectViewModel(
 
     }
 
-    val sharedPref = context.getSharedPreferences(context.getString(R.string.selected_cities), Context.MODE_PRIVATE)
-    val selected_cities : String  = sharedPref.getString(context.getString(R.string.selected_cities), "")?.toLowerCase(Locale.ROOT) ?: "., Skopje,"
-    if (selected_cities == ""){
-      val editor: SharedPreferences.Editor = sharedPref.edit()
-      editor.putString(context.getString(R.string.selected_cities), "., Skopje,");
-      editor.commit()
-    }
-    val selected_cities_list: List<String>? = selected_cities.split(",").map { it.trim() }
-
-
-    sortedCities = Transformations.map(sortedCities) {
-      it.filter {
-        selected_cities_list!!.contains(it.name.toLowerCase(Locale.ROOT))
-      }
-    }
-
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
       dataDefinitionProvider[it]
     }
 
-    citySelectItems = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+    allCityItems = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       sortedCities.combine(pulseRepository.citiesOverall) { cities, overalls ->
         return@combine cities.mapNotNull { city ->
           val cityOverall = overalls.data?.firstOrNull { it.cityName == city.name }

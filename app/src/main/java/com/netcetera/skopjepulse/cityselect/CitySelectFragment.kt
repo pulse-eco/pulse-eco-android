@@ -20,7 +20,9 @@ import kotlinx.android.synthetic.main.city_select_fragment_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
+/**
+ * Implementation of [CitySelectFragment] that is used for displaying of selected cities
+ */
 class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override val viewModel: CitySelectViewModel by viewModel()
   private val mainViewModel : MainViewModel by sharedViewModel()
@@ -84,9 +86,13 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
 
   override fun onResume() {
     super.onResume()
-    viewModel.loadData()
-    viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
-    citySelectAdapter.notifyDataSetChanged()
+    viewModel.updateSharedPreferences()
+    viewModel.citySelectItems.observe(this, Observer {
+      viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
+      citySelectAdapter.notifyDataSetChanged()
+    })
+
+
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
