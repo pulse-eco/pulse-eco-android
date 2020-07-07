@@ -41,6 +41,7 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
 
 
   fun onCityCheck(cityItem: CityItem, isChecked : Boolean){
+    cityItem.isChecked = isChecked
     if (isChecked){
       checkedCityItems.add(cityItem)
     }
