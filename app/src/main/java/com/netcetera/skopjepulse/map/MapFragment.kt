@@ -1,10 +1,8 @@
 package com.netcetera.skopjepulse.map
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,7 +66,6 @@ import kotlinx.android.synthetic.main.overall_banner_layout.overallBannerView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -111,14 +108,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-      val ctx: Context? = context
-      org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
-      map.setUseDataConnection(true)
-      map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-    //map.setTileSource(TileSourceFactory.USGS_TOPO)
-    //map.setTileSource(TileSourceFactory.MAPNIK)
-      map.setMultiTouchControls(true)
-      map.setBuiltInZoomControls(true)
+    viewModel.loadMap(map)
+
 
 
     // Declarations and interactions
@@ -215,6 +206,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     viewModel.preferences.observe(viewLifecycleOwner, mapPreferencesPopup)
     mapPreferencesPopup.onPreferenceChange {
       viewModel.updatePreference(it)
+      viewModel.loadMap(map)
     }
     overallBanner.onToggled { isOpen ->
       TransitionManager.beginDelayedTransition(mapConstraintLayout)

@@ -12,9 +12,7 @@ import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.map.preferences.DataVisualization.MARKERS
 import com.netcetera.skopjepulse.map.preferences.DataVisualization.VORONOI
-import com.netcetera.skopjepulse.map.preferences.MapType.DEFAULT
-import com.netcetera.skopjepulse.map.preferences.MapType.SATELLITE
-import com.netcetera.skopjepulse.map.preferences.MapType.TERRAIN
+import com.netcetera.skopjepulse.map.preferences.MapType.*
 import kotlinx.android.synthetic.main.map_layers_picker_dilog.view.dataVisualizationItemGeographic
 import kotlinx.android.synthetic.main.map_layers_picker_dilog.view.dataVisualizationItemSensorMarkers
 import kotlinx.android.synthetic.main.map_layers_picker_dilog.view.mapTypeRadioGroup
@@ -48,8 +46,8 @@ class MapPreferencesPopup(context: Context) : Observer<Preferences> {
       pickerView.mapTypeRadioGroup.check(
           when (newPreferences.mapType) {
             DEFAULT -> R.id.mapTypeRadioItemDefault
-            SATELLITE -> R.id.mapTypeRadioItemSatellite
-            TERRAIN -> R.id.mapTypeRadioItemTerrain
+            HIKEBIKEMAP -> R.id.mapTypeRadioItemHikeBikeMap
+            OPENTOPO -> R.id.mapTypeRadioItemOpenTopo
           })
       pickerView.dataVisualizationItemSensorMarkers.isChecked =
           newPreferences.dataVisualization.contains(MARKERS)
@@ -59,8 +57,8 @@ class MapPreferencesPopup(context: Context) : Observer<Preferences> {
       // New listeners registration
       pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { _, mapTypeId ->
         listener?.invoke(newPreferences.copy(mapType = when (mapTypeId) {
-          R.id.mapTypeRadioItemSatellite -> SATELLITE
-          R.id.mapTypeRadioItemTerrain -> TERRAIN
+          R.id.mapTypeRadioItemHikeBikeMap -> HIKEBIKEMAP
+          R.id.mapTypeRadioItemOpenTopo -> OPENTOPO
           else -> DEFAULT
         }))
         dismiss()

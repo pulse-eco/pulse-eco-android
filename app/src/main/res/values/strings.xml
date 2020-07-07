@@ -55,8 +55,8 @@
   <string name="city_select_location_services_disabled_error_message">Location services disabled, can\'t acquire current location. Please allow in location services in phone settings.</string>
   <string name="map_preferences_map_type_title">MAP TYPE</string>
   <string name="map_preferences_map_type_default">Default</string>
-  <string name="map_preferences_map_type_satellite">Satellite</string>
-  <string name="map_preferences_map_type_terrain">Terrain</string>
+  <string name="map_preferences_map_type_hikebikemap">HIKEBIKEMAP</string>
+  <string name="map_preferences_map_type_openTopo">OpenTopo</string>
   <string name="map_preferences_data_visualization_title">DATA VISUALIZATION</string>
   <string name="map_preferences_data_visualization_sensor_marker">Sensor markers</string>
   <string name="map_preferences_data_visualization_geographic">Geographic</string>

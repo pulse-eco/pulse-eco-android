@@ -41,21 +41,17 @@
 
 
         <RadioButton
-            android:id="@+id/mapTypeRadioItemSatellite"
+            android:id="@+id/mapTypeRadioItemHikeBikeMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_preferences_map_type_satellite"
-
-            android:enabled="false"
+            android:text="@string/map_preferences_map_type_hikebikemap"
             />
 
         <RadioButton
-            android:id="@+id/mapTypeRadioItemTerrain"
+            android:id="@+id/mapTypeRadioItemOpenTopo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_preferences_map_type_terrain"
-
-            android:enabled="false"
+            android:text="@string/map_preferences_map_type_openTopo"
             />
 
 

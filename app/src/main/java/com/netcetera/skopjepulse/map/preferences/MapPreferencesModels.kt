@@ -17,7 +17,7 @@ data class Preferences(
 }
 
 enum class MapType {
-  DEFAULT, SATELLITE, TERRAIN
+  DEFAULT, HIKEBIKEMAP, OPENTOPO
 }
 
 enum class DataVisualization {

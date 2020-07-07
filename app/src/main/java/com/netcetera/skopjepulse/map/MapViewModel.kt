@@ -1,5 +1,7 @@
 package com.netcetera.skopjepulse.map
 
+import android.content.Context
+import android.preference.PreferenceManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -34,14 +36,18 @@ import com.netcetera.skopjepulse.map.overallbanner.OverallBannerData
 import com.netcetera.skopjepulse.map.preferences.DataVisualization.MARKERS
 import com.netcetera.skopjepulse.map.preferences.DataVisualization.VORONOI
 import com.netcetera.skopjepulse.map.preferences.MapPreferencesStorage
+import com.netcetera.skopjepulse.map.preferences.MapType
 import com.netcetera.skopjepulse.map.preferences.Preferences
 import com.netcetera.skopjepulse.map.preferences.filter
 import com.netcetera.skopjepulse.voronoi.voronoiCityBounds
+import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.withAlpha
 import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation
 import org.kynosarges.tektosyne.geometry.Voronoi
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.MapView
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -50,6 +56,10 @@ import kotlin.math.roundToInt
  * Implementation of [androidx.lifecycle.ViewModel] for the [MapFragment] that is used for
  * displaying of data of a single [City].
  */
+
+private const val PREFERENCES_KEY = "map-layer-picker-preferences"
+private const val PREFERENCES_KEY_MAP_TYPE = "$PREFERENCES_KEY-map-type"
+
 class MapViewModel(
     city: City,
     private val dataDefinitionProvider: DataDefinitionProvider,
@@ -309,4 +319,48 @@ class MapViewModel(
         legendBands
     )
   }
+
+  fun loadMap(map: MapView){
+    val ctx: Context = context
+    org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+    map.setUseDataConnection(true)
+    //map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+    // map.setTileSource(TileSourceFactory.USGS_SAT)  //nishto
+    //map.setTileSource(TileSourceFactory.USGS_TOPO) //nishtp
+    //map.setTileSource(TileSourceFactory.MAPNIK)
+    //map.setTileSource(TileSourceFactory.PUBLIC_TRANSPORT) //nisto
+    //map.setTileSource(TileSourceFactory.HIKEBIKEMAP) // sivo
+    //map.setTileSource(TileSourceFactory.PUBLIC_TRANSPORT) // nisto
+    //map.setTileSource(TileSourceFactory.OPEN_SEAMAP) // nishto, samo sino
+    //map.setTileSource(TileSourceFactory.ChartbundleENRH) // nisto
+    //map.setTileSource(TileSourceFactory.ChartbundleENRL) // nisto
+    //map.setTileSource(TileSourceFactory.ChartbundleWAC) // nisto
+    //map.setTileSource(TileSourceFactory.FIETS_OVERLAY_NL) // lupa nisto
+    //map.setTileSource(TileSourceFactory.OpenTopo) // belo ok
+    //map.setTileSource(TileSourceFactory.CLOUDMADESMALLTILES) // nisto
+    //map.setTileSource(TileSourceFactory.CLOUDMADESTANDARDTILES) // nisto
+    //map.setTileSource(TileSourceFactory.ROADS_OVERLAY_NL) // nisto lupi
+    val sharedPref = ctx.defaultSharedPreferences
+    val mapType = sharedPref.getString(PREFERENCES_KEY_MAP_TYPE, null)?.let {
+      MapType.valueOf(it)
+    }
+
+    //DEFAULT, SATELLITE, TERRAIN
+
+    if (mapType == MapType.DEFAULT) {
+      map.setTileSource(TileSourceFactory.MAPNIK)
+    }
+
+    if (mapType == MapType.HIKEBIKEMAP) {
+      map.setTileSource(TileSourceFactory.HIKEBIKEMAP)
+    }
+
+    if (mapType == MapType.OPENTOPO) {
+      map.setTileSource(TileSourceFactory.OpenTopo)
+    }
+
+    map.setMultiTouchControls(true)
+    map.setBuiltInZoomControls(true)
+  }
+
 }

@@ -15,29 +15,9 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.isLocationPermissionGranted
 import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.map.preferences.MapType
-import com.netcetera.skopjepulse.map.preferences.MapType.DEFAULT
-import com.netcetera.skopjepulse.map.preferences.MapType.SATELLITE
-import com.netcetera.skopjepulse.map.preferences.MapType.TERRAIN
+
 import com.netcetera.skopjepulse.utils.PulseInfoWindowAdapter
 
-var GoogleMap.pulseMapType : MapType
-  get() =
-    when(mapType) {
-      GoogleMap.MAP_TYPE_NORMAL -> DEFAULT
-      GoogleMap.MAP_TYPE_SATELLITE -> SATELLITE
-      GoogleMap.MAP_TYPE_TERRAIN -> TERRAIN
-      else -> DEFAULT
-    }
-  set(value) {
-    if (pulseMapType != value) {
-      mapType = when(value) {
-        DEFAULT -> GoogleMap.MAP_TYPE_NORMAL
-        SATELLITE -> GoogleMap.MAP_TYPE_SATELLITE
-        TERRAIN -> GoogleMap.MAP_TYPE_TERRAIN
-      }
-    }
-  }
 
 fun GoogleMap.applyPulseStyling(context: Context) {
   applyStyling(context, MapStyleOptions.loadRawResourceStyle(context, R.raw.light_pulse_eco_maps_style))
