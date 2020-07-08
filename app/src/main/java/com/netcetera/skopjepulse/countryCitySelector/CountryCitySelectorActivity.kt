@@ -31,10 +31,10 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
 
     val recyclerview : RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
-    mAdapter = CountryCityAdapter(countryCityViewModel.countryList.value, this, countryCityViewModel.checkedCityItems)
+    mAdapter = CountryCityAdapter(countryCityViewModel.countryCityList.value, this)
     recyclerview.adapter = mAdapter
 
-    countryCityViewModel.countryList.observe(this, Observer {
+    countryCityViewModel.countryCityList.observe(this, Observer {
       mAdapter.notifyDataSetChanged()
     })
 

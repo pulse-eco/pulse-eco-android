@@ -19,9 +19,9 @@ import kotlin.collections.HashSet
  */
 
 class CountryCityViewModel(application: Application) : AndroidViewModel(application) {
-  private val _countryList = MutableLiveData<ArrayList<Any>>()
-  val countryList: LiveData<ArrayList<Any>>
-    get() = _countryList
+  private val _countryCityList = MutableLiveData<ArrayList<Any>>()
+  val countryCityList: LiveData<ArrayList<Any>>
+    get() = _countryCityList
 
   var checkedCityItems : HashSet<CityItem>
   val sharedPref = application.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
@@ -30,34 +30,34 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
     val data = ArrayList<CountryItem>()
     data.add(CountryItem("Macedonia", "MK", mutableListOf(CityItem("Bitola"),CityItem("Kichevo"),CityItem("Kumanovo"),CityItem("Novoselo"),CityItem("Ohrid"),CityItem("Shtip"), CityItem("Skopje"),CityItem("Strumica"),CityItem("Tetovo"))))
     data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Beograd"), CityItem("Nis"), CityItem("Kraguevac"))))
-    _countryList.value = data.transformData()
+
 
     checkedCityItems = HashSet()
     val gson = Gson()
     val selectedCities = sharedPref.getString(Constants.SELECTED_CITIES, "")
     val type = object: TypeToken<HashSet<CityItem>>() {}.type
     checkedCityItems = gson.fromJson(selectedCities, type)
-  }
 
+    _countryCityList.value = data.transformData(checkedCityItems)
+  }
 
   fun onCityCheck(cityItem: CityItem, isChecked : Boolean){
     cityItem.isChecked = isChecked
-    if (isChecked){
-      checkedCityItems.add(cityItem)
-    }
-    else{
-      checkedCityItems.remove(cityItem)
-    }
-
   }
 
   /**
    *  When the user clicks on the floating action button, checked cities add in sharedPreferences
    */
   fun saveCheckedCities(){
+    val selectedCityItems = HashSet<CityItem>()
     val editor: SharedPreferences.Editor = sharedPref.edit()
     val gson = Gson()
-    val jsonSelectedCities = gson.toJson(checkedCityItems)
+    for (city in _countryCityList.value!!){
+      if (city is CityItem && city.isChecked){
+        selectedCityItems.add(city)
+      }
+    }
+    val jsonSelectedCities = gson.toJson(selectedCityItems)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
     editor.commit()
   }

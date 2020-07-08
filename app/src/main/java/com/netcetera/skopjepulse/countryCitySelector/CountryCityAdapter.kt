@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.item_city.view.*
 import kotlinx.android.synthetic.main.item_country.view.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 /**
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
@@ -18,7 +16,7 @@ import kotlin.collections.HashSet
 
 class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickListener) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
-  private var dataShow: MutableList<Any>
+  private var dataShow: List<Any>
 
   companion object {
     private val TYPE_COUNTRY = 0
@@ -26,7 +24,6 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
   }
 
   init {
-    dataShow = ArrayList()
     dataShow = data as MutableList<Any>
   }
 
@@ -91,7 +88,7 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
     abstract fun bind(item: T, clickListener: OnCityClickListener)
   }
 
-  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view), View.OnClickListener {
+  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
 
     private val cityCheckBox = view.checkBoxCity
 
@@ -104,9 +101,6 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
        }
     }
 
-    override fun onClick(v: View?) {
-
-    }
   }
 
   class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {
