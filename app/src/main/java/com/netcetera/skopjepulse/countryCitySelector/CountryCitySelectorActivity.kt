@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_city_selector.*
  * Implementation of [AppCompatActivity] for displaying Country/Cities List
  */
 
-class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCityClickListener {
+class CountryCitySelectorActivity : AppCompatActivity(){
 
   private lateinit var mAdapter: CountryCityAdapter
   private lateinit var faButton: FloatingActionButton
@@ -31,7 +31,7 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
 
     val recyclerview : RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
-    mAdapter = CountryCityAdapter(countryCityViewModel.countryCityList.value, this)
+    mAdapter = CountryCityAdapter(countryCityViewModel.countryCityList.value)
     recyclerview.adapter = mAdapter
 
     countryCityViewModel.countryCityList.observe(this, Observer {
@@ -71,10 +71,6 @@ class CountryCitySelectorActivity : AppCompatActivity(), CountryCityAdapter.OnCi
     countryCityRecyclerView.clearOnScrollListeners()
     countryCityRecyclerView.addOnScrollListener(scrollListener)
 
-  }
-
-  override fun onCityClick(cityItem: CityItem, position: Int, isChecked : Boolean) {
-    countryCityViewModel.onCityCheck(cityItem,isChecked)
   }
 
 }

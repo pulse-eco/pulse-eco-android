@@ -41,9 +41,6 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
     _countryCityList.value = data.transformData(checkedCityItems)
   }
 
-  fun onCityCheck(cityItem: CityItem, isChecked : Boolean){
-    cityItem.isChecked = isChecked
-  }
 
   /**
    *  When the user clicks on the floating action button, checked cities add in sharedPreferences
