@@ -11,13 +11,13 @@
     android:layout_height="wrap_content"
     android:id="@+id/noSensorsSelected"
     android:gravity="center_horizontal"
-    android:textSize="15sp"
+    android:textSize="@dimen/no_sensors_selected_text_size"
     android:textColor="@color/bottom_sheet_text_primary"
     android:text="@string/bottom_sheet_default_no_sensors_selected"
-    android:layout_marginBottom="18dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginStart="18dp"
-    android:layout_marginEnd="18dp"
+    android:layout_marginBottom="@dimen/no_sensors_selected_text_view_margin_bottom"
+    android:layout_marginTop="@dimen/no_sensors_selected_text_view_margin_top"
+    android:layout_marginStart="@dimen/no_sensors_selected_text_view_margin_start"
+    android:layout_marginEnd="@dimen/no_sensors_selected_text_view_margin_end"
     android:visibility="gone"
     tools:visibility="visible"/>
 
@@ -26,10 +26,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="18dp"
-    android:layout_marginEnd="18dp"
-    android:layout_marginStart="18dp"
+    android:layout_marginTop="@dimen/has_sensors_selected_margin_top"
+    android:layout_marginBottom="@dimen/has_sensors_selected_margin_bottom"
+    android:layout_marginEnd="@dimen/has_sensors_selected_margin_end"
+    android:layout_marginStart="@dimen/has_sensors_selected_margin_start"
     android:gravity="center_vertical"
     android:visibility="gone"
     tools:visibility="visible">
@@ -38,7 +38,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:textSize="15sp"
+      android:textSize="@dimen/has_sensors_selected_text_size"
       android:textColor="@color/bottom_sheet_text_primary"
       android:text="@string/bottom_sheet_has_sensors_selected"/>
 

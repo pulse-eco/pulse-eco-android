@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/white"
+  android:orientation="vertical"
+  android:layout_margin="@dimen/city_item_margin"
+  android:paddingTop="@dimen/city_item_padding"
+  android:paddingBottom="@dimen/city_item_padding">
+
+  <CheckBox
+    android:id="@+id/checkBoxCity"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/black"
+    android:textSize="@dimen/city_item_text_size" />
+
+</LinearLayout>
