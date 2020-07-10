@@ -2,36 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_margin="1dp"
-  android:layout_marginTop="5dp"
-  android:background="#E8E8E8"
-  android:orientation="horizontal"
-  android:padding="18dp">
+  android:layout_margin="@dimen/country_item_margin"
+  android:layout_marginTop="@dimen/country_item_margin_top"
+  android:orientation="vertical"
+  android:paddingTop="@dimen/country_item_padding_top"
+  android:paddingBottom="@dimen/country_item_padding_bottom"
+  android:paddingStart="@dimen/country_item_padding_start">
 
-  <ImageView
-    android:id="@+id/imgMail"
-    android:layout_width="26dp"
-    android:layout_height="26dp"
-    android:layout_gravity="center_vertical"
-    android:layout_margin="8dp"
-    android:src="@android:drawable/ic_dialog_map"
-    android:tint="#000000" />
-
-  <LinearLayout
+  <TextView
+    android:id="@+id/txtCountryName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:textColor="@color/colorPrimary"
+    android:textSize="@dimen/country_item_text_size"
+    android:textStyle="bold" />
 
-    <TextView
-      android:id="@+id/txtCountryName"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="1dp"
-      android:textColor="#000000"
-      android:textSize="25sp"
-      android:textStyle="bold" />
-
-  </LinearLayout>
 
 </LinearLayout>

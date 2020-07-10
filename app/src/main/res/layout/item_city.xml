@@ -2,26 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="#ffffff"
-  android:orientation="horizontal"
-  android:layout_margin="1dp"
-  android:padding="8dp">
+  android:background="@color/white"
+  android:orientation="vertical"
+  android:layout_margin="@dimen/city_item_margin"
+  android:paddingTop="@dimen/city_item_padding"
+  android:paddingBottom="@dimen/city_item_padding">
 
-  <LinearLayout
+  <CheckBox
+    android:id="@+id/checkBoxCity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <CheckBox
-      android:id="@+id/checkBoxCity"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="1dp"
-      android:textColor="#000000"
-      android:textSize="15sp" />
-
-
-  </LinearLayout>
+    android:textColor="@color/black"
+    android:textSize="@dimen/city_item_text_size" />
 
 </LinearLayout>

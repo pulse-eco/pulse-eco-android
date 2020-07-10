@@ -7,8 +7,8 @@ import kotlin.collections.ArrayList
  * Implementation of search filter in [CountryCitySelectorActivity]
  */
 
-class CountryCityFilter (var constraint: CharSequence?, var data: List<Any>?) {
-  fun filterCountryCity() : ArrayList<Any> {
+object CountryCityFilter{
+  fun filterCountryCity(constraint: CharSequence?, data: List<Any>?) : ArrayList<Any> {
     val charSearch = constraint.toString()
     var resultList = ArrayList<Any>()
     if (charSearch.isEmpty()) {

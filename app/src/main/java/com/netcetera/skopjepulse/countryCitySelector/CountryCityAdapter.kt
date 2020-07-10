@@ -3,7 +3,6 @@ package com.netcetera.skopjepulse.countryCitySelector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
@@ -69,9 +68,8 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
   override fun getFilter(): Filter {
     return object : Filter() {
       override fun performFiltering(constraint: CharSequence?): FilterResults {
-        val filter = CountryCityFilter(constraint, data)
         val filterResults = FilterResults()
-        filterResults.values = filter.filterCountryCity()
+        filterResults.values = CountryCityFilter.filterCountryCity(constraint,data)
         return filterResults
       }
 
