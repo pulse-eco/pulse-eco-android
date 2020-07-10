@@ -15,8 +15,6 @@ import org.jetbrains.anko.defaultSharedPreferences
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.Date
 
 class DataDefinitionProvider(context: Context, moshi: Moshi, pulseApiService: PulseApiService) {
@@ -26,15 +24,14 @@ class DataDefinitionProvider(context: Context, moshi: Moshi, pulseApiService: Pu
 
   init {
     val persistedMeasuresProvider = PersistedMeasuresProvider(context, moshi)
-    val assetsMeasuresProvider = AssetsMeasuresProvider(context, moshi)
 
-    val offlineDefinitions =
-        persistedMeasuresProvider.persistedDefenitions?.second ?: assetsMeasuresProvider.definitions
+    val loadDefinitions =
+        persistedMeasuresProvider.persistedDefenitions?.second
         ?: emptyList()
-    val mutableDefinitions = MutableLiveData(offlineDefinitions)
+    val mutableDefinitions = MutableLiveData(loadDefinitions)
     definitions = mutableDefinitions
 
-    offlineDefinitions.forEach {
+    loadDefinitions.forEach {
       _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
     }
 
@@ -93,23 +90,6 @@ private class PersistedMeasuresProvider(context: Context, moshi: Moshi) {
     sharedPreferences.edit {
       putLong(PERSISTED_TIMESTAMP, timestamp)
       putString(PERSISTED_DEFINITIONS, json)
-    }
-  }
-}
-
-private class AssetsMeasuresProvider(context: Context, moshi: Moshi) {
-  val definitions: List<DataDefinition>? by lazy {
-    val jsonAdapter = moshi.adapter<List<DataDefinition>>(
-        Types.newParameterizedType(List::class.java, DataDefinition::class.java))
-    BufferedReader(InputStreamReader(context.assets.open("measures.json"))).use {
-      it.readText()
-    }.let { json ->
-      try {
-        jsonAdapter.fromJson(json)
-      } catch (e: Exception) {
-        Timber.w(e) { "Failed parsing measures.json from Assets" }
-        null
-      }
     }
   }
 }
