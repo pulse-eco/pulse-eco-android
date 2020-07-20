@@ -61,4 +61,11 @@
   <color name="error_background">#9e9e9e</color>
   <color name="error_text">#FFF</color>
   <color name="pulseAppBarTitleColor">#ccffffff</color>
+
+  <color name="searchbar_color">#4DFFFFFF</color>
+  <color name="country_item_background">#1AFFFFFF</color>
+
+  <color name="delete_swipe_button">#D73F46</color>
+  <color name="item_city_countryName">#3DB7D6</color>
+
 </resources>

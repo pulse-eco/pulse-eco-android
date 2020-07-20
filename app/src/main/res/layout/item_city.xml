@@ -1,18 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="@drawable/city_item_bottom_border"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="@color/white"
+  android:layout_height="@dimen/item_city_height"
   android:orientation="vertical"
-  android:layout_margin="@dimen/city_item_margin"
-  android:paddingTop="@dimen/city_item_padding"
-  android:paddingBottom="@dimen/city_item_padding">
+  >
 
-  <CheckBox
-    android:id="@+id/checkBoxCity"
-    android:layout_width="match_parent"
+  <ImageView
+    android:id="@+id/city_icon_location"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textColor="@color/black"
-    android:textSize="@dimen/city_item_text_size" />
+    android:layout_marginBottom="@dimen/item_city_icon_location_marginBottom"
+    android:layout_marginEnd="@dimen/item_city_icon_location_marginEnd"
+    android:layout_marginStart="@dimen/item_city_icon_location_marginStart"
+    android:layout_marginTop="@dimen/item_city_icon_location_marginTop"
+    android:src="@drawable/ic_location_marker_white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/cityName"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+  <TextView
+    android:id="@+id/cityName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/item_city_name_marginBottom"
+    android:layout_marginStart="@dimen/item_city_name_marginStart"
+    android:layout_marginTop="@dimen/item_city_name_marginTop"
+    android:text="@string/city_item_cityName"
+    android:textSize="@dimen/item_city_name_textSize"
+    android:textColor="@color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/countryName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/item_city_countryName_marginBottom"
+    android:layout_marginStart="@dimen/item_city_countryName_marginStart"
+    android:layout_marginTop="@dimen/item_city_countryName_marginTop"
+    android:text="@string/city_item_countryName"
+    android:textColor="@color/item_city_countryName"
+    android:textSize="@dimen/item_city_countryName_textSize"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

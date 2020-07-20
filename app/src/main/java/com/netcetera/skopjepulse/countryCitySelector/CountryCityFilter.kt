@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 
 object CountryCityFilter{
   fun filterCountryCity(constraint: CharSequence?, data: List<Any>?) : ArrayList<Any> {
-    val charSearch = constraint.toString()
+    val charSearch = constraint.toString().trim()
     var resultList = ArrayList<Any>()
     if (charSearch.isEmpty()) {
       resultList = data as ArrayList<Any>

@@ -23,20 +23,20 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
   val countryCityList: LiveData<ArrayList<Any>>
     get() = _countryCityList
 
-  var checkedCityItems : HashSet<CityItem>
-  val sharedPref = application.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
+  private var checkedCityItems : HashSet<CityItem>
+  private val sharedPref = application.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
 
   init {
     val data = ArrayList<CountryItem>()
-    data.add(CountryItem("Macedonia", "MK", mutableListOf(CityItem("Bitola"),CityItem("Kichevo"),CityItem("Kumanovo"),CityItem("Novoselo"),CityItem("Ohrid"),CityItem("Shtip"), CityItem("Skopje"),CityItem("Strumica"),CityItem("Tetovo"))))
-    data.add(CountryItem("Bulgaria", "BG", mutableListOf(CityItem("Sofia"))))
-    data.add(CountryItem("Greece", "GR", mutableListOf(CityItem("Syros"))))
-    data.add(CountryItem("Ireland", "IR", mutableListOf(CityItem("Cork"))))
-    data.add(CountryItem("Netherlands", "NE", mutableListOf(CityItem("Delft"))))
-    data.add(CountryItem("Romania", "RO", mutableListOf(CityItem("Brasov"),CityItem("Bucharest"),CityItem("Cluj-Napoca"),CityItem("Codlea"),CityItem("Sacele"),CityItem("Targumures"))))
-    data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Nis"))))
-    data.add(CountryItem("Switzerland", "SW", mutableListOf(CityItem("Zurich"))))
-    data.add(CountryItem("USA", "USA", mutableListOf(CityItem("Grand-Rapids"))))
+    data.add(CountryItem("Macedonia", "MK", mutableListOf(CityItem("Bitola","Macedonia"),CityItem("Kichevo","Macedonia"),CityItem("Kumanovo","Macedonia"),CityItem("Novoselo","Macedonia"),CityItem("Ohrid","Macedonia"),CityItem("Shtip","Macedonia"), CityItem("Skopje","Macedonia"),CityItem("Strumica","Macedonia"),CityItem("Tetovo","Macedonia"))))
+    data.add(CountryItem("Bulgaria", "BG", mutableListOf(CityItem("Sofia","Bulgaria"))))
+    data.add(CountryItem("Greece", "GR", mutableListOf(CityItem("Syros","Greece"))))
+    data.add(CountryItem("Ireland", "IR", mutableListOf(CityItem("Cork","Ireland"))))
+    data.add(CountryItem("Netherlands", "NE", mutableListOf(CityItem("Delft", "Netherlands"))))
+    data.add(CountryItem("Romania", "RO", mutableListOf(CityItem("Brasov","Romania"),CityItem("Bucharest","Romania"),CityItem("Cluj-Napoca","Romania"),CityItem("Codlea","Romania"),CityItem("Sacele","Romania"),CityItem("Targumures","Romania"))))
+    data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Nis","Serbia"))))
+    data.add(CountryItem("Switzerland", "SW", mutableListOf(CityItem("Zurich","Switzerland"))))
+    data.add(CountryItem("USA", "USA", mutableListOf(CityItem("Grand-Rapids", "USA"))))
 
     checkedCityItems = HashSet()
     val gson = Gson()
@@ -44,23 +44,18 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
     val type = object: TypeToken<HashSet<CityItem>>() {}.type
     checkedCityItems = gson.fromJson(selectedCities, type)
 
-    _countryCityList.value = data.transformData(checkedCityItems)
+    _countryCityList.value = data.transformData()
   }
 
 
   /**
-   *  When the user clicks on the floating action button, checked cities add in sharedPreferences
+   *  When the user clicks on the city, checked city add in sharedPreferences
    */
-  fun saveCheckedCities(){
-    val selectedCityItems = HashSet<CityItem>()
+  fun saveCheckedCity(city: CityItem){
+    checkedCityItems.add(city)
     val editor: SharedPreferences.Editor = sharedPref.edit()
     val gson = Gson()
-    for (city in _countryCityList.value!!){
-      if (city is CityItem && city.isChecked){
-        selectedCityItems.add(city)
-      }
-    }
-    val jsonSelectedCities = gson.toJson(selectedCityItems)
+    val jsonSelectedCities = gson.toJson(checkedCityItems)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
     editor.commit()
   }

@@ -6,8 +6,7 @@
   <dimen name="component_inner_spacing">10dp</dimen>
   <dimen name="drawer_inactive_peek_height">35dp</dimen>
 
-  <dimen name="city_select_search_marginTop">20dp</dimen>
-  <dimen name="city_select_recyclerView_marginTop">5dp</dimen>
+  <dimen name="city_select_search_marginTop">15dp</dimen>
   <dimen name="lottie_animation_view_width">200dp</dimen>
   <dimen name="lottie_animation_view_height">100dp</dimen>
   <dimen name="bottom_sheet_view_margin">15dp</dimen>
@@ -24,15 +23,35 @@
   <dimen name="has_sensors_selected_margin_start">18dp</dimen>
   <dimen name="has_sensors_selected_margin_end">18dp</dimen>
   <dimen name="has_sensors_selected_margin_bottom">18dp</dimen>
-  <dimen name="country_item_padding_top">20dp</dimen>
-  <dimen name="country_item_padding_bottom">8dp</dimen>
-  <dimen name="country_item_text_size">25sp</dimen>
-  <dimen name="country_item_margin">1dp</dimen>
-  <dimen name="country_item_margin_top">5dp</dimen>
-  <dimen name="city_item_margin">1dp</dimen>
-  <dimen name="city_item_padding">5dp</dimen>
-  <dimen name="city_item_text_size">18sp</dimen>
-  <dimen name="city_selector_margin">16dp</dimen>
-  <dimen name="country_item_padding_start">2dp</dimen>
-
+  <dimen name="country_item_text_size">18sp</dimen>
+  <dimen name="country_item_padding">18dp</dimen>
+  <dimen name="search_margin">26dp</dimen>
+  <dimen name="country_item_height">40dp</dimen>
+  <dimen name="city_selector_search_height">46dp</dimen>
+  <dimen name="city_selector_search_padding">7dp</dimen>
+  <dimen name="city_selector_search_status_textSize">18sp</dimen>
+  <dimen name="city_selector_search_status_marginTop">39dp</dimen>
+  <dimen name="city_selector_search_status_marginBottom">16dp</dimen>
+  <dimen name="add_city_marginTop">10dp</dimen>
+  <dimen name="add_city_marginBottom">10dp</dimen>
+  <dimen name="add_city_textSize">13sp</dimen>
+  <dimen name="appbar_selector_marginTop">35dp</dimen>
+  <dimen name="appbar_selector_marginStart">8dp</dimen>
+  <dimen name="appbar_selector_marginEnd">8dp</dimen>
+  <dimen name="appbar_selector_arrow_back_marginStart">17dp</dimen>
+  <dimen name="appbar_city_selection_marginStart">23dp</dimen>
+  <dimen name="appbar_city_selection_textSize">21sp</dimen>
+  <dimen name="item_city_height">65dp</dimen>
+  <dimen name="item_city_icon_location_marginStart">22dp</dimen>
+  <dimen name="item_city_icon_location_marginEnd">24dp</dimen>
+  <dimen name="item_city_icon_location_marginTop">23dp</dimen>
+  <dimen name="item_city_icon_location_marginBottom">22dp</dimen>
+  <dimen name="item_city_name_textSize">18sp</dimen>
+  <dimen name="item_city_name_marginTop">14dp</dimen>
+  <dimen name="item_city_name_marginBottom">28dp</dimen>
+  <dimen name="item_city_name_marginStart">60dp</dimen>
+  <dimen name="item_city_countryName_textSize">12sp</dimen>
+  <dimen name="item_city_countryName_marginTop">38dp</dimen>
+  <dimen name="item_city_countryName_marginBottom">12dp</dimen>
+  <dimen name="item_city_countryName_marginStart">60dp</dimen>
 </resources>

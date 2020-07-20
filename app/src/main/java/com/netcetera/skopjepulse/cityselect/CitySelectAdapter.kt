@@ -37,6 +37,10 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
     }
   })
 
+  fun getElement(position: Int):CitySelectItem{
+    return differ.currentList[position]
+  }
+
   override fun onChanged(newItems: List<CitySelectItem>?) {
     differ.submitList(newItems)
   }

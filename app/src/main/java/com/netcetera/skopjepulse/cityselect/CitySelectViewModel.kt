@@ -78,8 +78,8 @@ class CitySelectViewModel(
     } else {
       // when loading for the first time
       val editor: SharedPreferences.Editor = sharedPref.edit()
-      selectedCitiesSet.add(CityItem("TEST"))
-      selectedCitiesSet.add(CityItem("Skopje"))
+      selectedCitiesSet.add(CityItem("TEST","TEST"))
+      selectedCitiesSet.add(CityItem("Skopje","Macedonia"))
       val jsonSelectedCities = gson.toJson(selectedCitiesSet)
       editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
       editor.commit()
@@ -187,5 +187,32 @@ class CitySelectViewModel(
     loadingResources.addResource(pulseRepository.citiesOverall.toLoadingLiveDataResource())
     errorResources.addResource(pulseRepository.citiesOverall.toErrorLiveDataResource())
     errorResources.addResource(locationProvider.currentLocation.toErrorLiveDataResource())
+  }
+
+  /**
+   * Delete city from selected cities in sharedPreferences
+   */
+  fun deleteCity(deleteCity: CitySelectItem) {
+    var checkedCityItems = HashSet<CityItem>()
+    val gson = Gson()
+    val selectedCities = sharedPref.getString(Constants.SELECTED_CITIES, "")
+    val type = object: TypeToken<HashSet<CityItem>>() {}.type
+    checkedCityItems = gson.fromJson(selectedCities, type)
+
+    var delete_city : CityItem? = null
+    for (city in checkedCityItems){
+      if (city.name.toLowerCase(Locale.ROOT).equals(deleteCity.city.name.toLowerCase(Locale.ROOT))){
+        delete_city = city
+      }
+    }
+
+    checkedCityItems.remove(delete_city)
+
+    val editor: SharedPreferences.Editor = sharedPref.edit()
+    val jsonSelectedCities = gson.toJson(checkedCityItems)
+    editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
+    editor.commit()
+
+    getSelectedCities()
   }
 }

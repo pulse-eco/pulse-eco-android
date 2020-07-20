@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_country.view.*
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickListener) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
   private var dataShow: List<Any>
 
@@ -45,8 +45,8 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
     val element = dataShow[position]
     when(holder){
-      is CityViewHolder -> holder.bind(element as CityItem)
-      is CountryViewHolder -> holder.bind(element as CountryItem)
+      is CityViewHolder -> holder.bind(element as CityItem, clickListener)
+      is CountryViewHolder -> holder.bind(element as CountryItem, clickListener)
       else -> throw IllegalArgumentException()
     }
   }
@@ -84,19 +84,16 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
 
 
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T)
+    abstract fun bind(item: T, clickListener: OnCityClickListener)
   }
 
-  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
+  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view){
 
-    private val cityCheckBox = view.checkBoxCity
-
-    override fun bind(item: CityItem) {
-      cityCheckBox.text = item.name
-      cityCheckBox.isChecked = item.isChecked
-
-      cityCheckBox.setOnClickListener {
-        item.isChecked = cityCheckBox.isChecked
+    override fun bind(item: CityItem, clickListener: OnCityClickListener) {
+      view.cityName.text = item.name
+      view.countryName.text = item.country
+      view.setOnClickListener{
+        clickListener.onCityClick(item)
       }
 
     }
@@ -107,9 +104,12 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
 
     private val countryNameTextView = view.txtCountryName
 
-    override fun bind(item: CountryItem) {
+    override fun bind(item: CountryItem, clickListener: OnCityClickListener) {
       countryNameTextView.text = item.countryName
     }
   }
 
+  interface OnCityClickListener{
+    fun onCityClick(city: CityItem)
+  }
 }
