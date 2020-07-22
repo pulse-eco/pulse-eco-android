@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_country.view.*
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickListener) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<Any>?, val clickListener: OnCityClickListener) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
   private var dataShow: List<Any>
 
@@ -58,7 +58,6 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
       is CountryItem -> TYPE_COUNTRY
       else -> throw IllegalArgumentException("Invalid type of data " + position)
     }
-
   }
 
   override fun getItemCount(): Int {
@@ -81,8 +80,6 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
     }
   }
 
-
-
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: T, clickListener: OnCityClickListener)
   }
@@ -95,9 +92,7 @@ class CountryCityAdapter(var data: List<Any>?, var clickListener: OnCityClickLis
       view.setOnClickListener{
         clickListener.onCityClick(item)
       }
-
     }
-
   }
 
   class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {

@@ -12,18 +12,12 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.extensions.applyCitySelectPulseStyling
 import com.netcetera.skopjepulse.extensions.updateForCity
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectCityLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectCountryLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMapBackground
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureContainer
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureValue
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectOverallStatus
+import kotlinx.android.synthetic.main.city_select_item_layout.view.*
 import java.util.Locale
 
 typealias CitySelectListener = (city : City) -> Unit
 
-class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Observer<List<CitySelectItem>> {
+class CitySelectAdapter(val longClickListener: OnCitySelectLongClickListener) : RecyclerView.Adapter<CitySelectItemViewHolder>(), Observer<List<CitySelectItem>> {
 
   private var citySelectListener : CitySelectListener? = null
 
@@ -53,11 +47,15 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
   override fun getItemCount(): Int = differ.currentList.size
 
   override fun onBindViewHolder(holder: CitySelectItemViewHolder, position: Int) {
-    holder.bind(differ.currentList[position])
+    holder.bind(differ.currentList[position], longClickListener)
   }
 
   fun onCitySelected(listener : CitySelectListener) {
     citySelectListener = listener
+  }
+
+  interface OnCitySelectLongClickListener{
+    fun onCitySelectLongClick(city: CitySelectItem)
   }
 }
 
@@ -73,15 +71,18 @@ class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListene
       googleMap.applyCitySelectPulseStyling(itemView.context)
       itemView.citySelectMapBackground.visibility = View.VISIBLE
       this.googleMap = googleMap
-      googleMap.setOnMapClickListener {
-        citySelectListener.invoke(citySelectItem!!.city)
-      }
       internalDisplayItemMap()
     }
+     itemView.citySelectItem.setOnClickListener {
+      citySelectListener.invoke(citySelectItem!!.city)
+    }
   }
-
-  fun bind(citySelectItem: CitySelectItem) {
+  fun bind(citySelectItem: CitySelectItem, longClickListener: CitySelectAdapter.OnCitySelectLongClickListener) {
     this.citySelectItem = citySelectItem
+    itemView.citySelectItem.setOnLongClickListener {
+      longClickListener.onCitySelectLongClick(citySelectItem)
+      true
+    }
     internalDisplayItem()
   }
 

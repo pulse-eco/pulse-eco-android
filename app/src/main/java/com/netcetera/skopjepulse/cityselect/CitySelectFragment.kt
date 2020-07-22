@@ -9,9 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
@@ -23,10 +21,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 /**
  * Implementation of [CitySelectFragment] that is used for displaying of selected cities
  */
-class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
+class CitySelectFragment : BaseFragment<CitySelectViewModel>(), CitySelectAdapter.OnCitySelectLongClickListener {
   override val viewModel: CitySelectViewModel by viewModel()
   private val mainViewModel : MainViewModel by sharedViewModel()
-  private lateinit var faButton: FloatingActionButton
   private lateinit var citySelectAdapter : CitySelectAdapter
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,30 +36,17 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
     (citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
-    citySelectAdapter = CitySelectAdapter()
+    citySelectAdapter = CitySelectAdapter(this)
     citySelectRecyclerView.adapter = citySelectAdapter
     citySelectAdapter.onCitySelected {
       mainViewModel.showForCity(it)
       parentFragmentManager.popBackStack()
     }
 
-    faButton = fab
-    faButton.setOnClickListener{
+    addCity.setOnClickListener{
       val intent = Intent(activity, CountryCitySelectorActivity::class.java)
       startActivity(intent)
     }
-
-    val scrollListener = object : RecyclerView.OnScrollListener() {
-      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        when (newState) {
-          RecyclerView.SCROLL_STATE_IDLE -> fab.show()
-          else -> fab.hide()
-        }
-        super.onScrollStateChanged(recyclerView, newState)
-      }
-    }
-    citySelectRecyclerView.clearOnScrollListeners()
-    citySelectRecyclerView.addOnScrollListener(scrollListener)
 
     citySelectRefreshView.setOnRefreshListener {
       viewModel.refreshData(true)
@@ -86,7 +70,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override fun onResume() {
     super.onResume()
     viewModel.getSelectedCities()
-      viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
+    viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
@@ -96,5 +80,10 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+  }
+
+  override fun onCitySelectLongClick(city: CitySelectItem) {
+   viewModel.deleteCity(city)
+   viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
   }
 }
