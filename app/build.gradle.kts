@@ -73,6 +73,7 @@ android {
     implementation(Libs.koinViewModel)
     implementation(Libs.timber)
     implementation(Libs.okHttpLogging)
+    implementation(Libs.swipeRefreshLayout)
 
     implementation(Libs.gson)
 

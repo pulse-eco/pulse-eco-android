@@ -1,24 +1,25 @@
 object Libs {
   private object Versions {
-    const val androidX = "1.1.0-alpha05"
-    const val andoridXLifecycle = "2.2.0-rc03"
-    const val androidXConstraint = "2.0.0-beta4"
-    const val androidXAnnotations = "1.0.1"
-    const val androidMaterial = "1.1.0-alpha06"
-    const val retrofit = "2.7.0"
-    const val moshi = "1.9.2"
-    const val okhttpLogging = "3.14.4"
+    const val androidX = "1.2.0"
+    const val androidXRecyclerView = "1.1.0"
+    const val andoridXLifecycle = "2.2.0"
+    const val androidXConstraint = "2.0.4"
+    const val androidXAnnotations = "1.1.0"
+    const val androidMaterial = "1.2.1"
+    const val retrofit = "2.9.0"
+    const val moshi = "1.9.3"
+    const val okhttpLogging = "4.9.0"
     const val anko = "0.10.8"
     const val playServicesMaps = "17.0.0"
-    const val lottie = "2.8.0"
-    const val koin = "2.0.1"
+    const val lottie = "3.5.0"
+    const val koin = "2.1.5"
     const val mpaAndroidChart = "v3.1.0"
     const val likeButton = "0.2.3"
     const val leakcanary = "1.6.2"
     const val timerKt = "1.5.1"
-    const val targetTooltip = "2.0.1"
-
+    const val targetTooltip = "2.0.3"
     const val gson = "2.8.6"
+    const val swipeRefreshLayout = "1.1.0"
 
     // Crashlytics
     const val playServicesFirebaseAnalytics = "17.2.1"
@@ -27,7 +28,7 @@ object Libs {
 
   const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:${ProjectVersions.kotlin}"
   const val androidX = "androidx.appcompat:appcompat:${Versions.androidX}"
-  const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.androidX}"
+  const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.androidXRecyclerView}"
   const val androidMaterial = "com.google.android.material:material:${Versions.androidMaterial}"
   const val androidXAnnotations = "androidx.annotation:annotation:${Versions.androidXAnnotations}"
   const val constaintLayout = "androidx.constraintlayout:constraintlayout:${Versions.androidXConstraint}"
@@ -54,6 +55,7 @@ object Libs {
   const val leakcanaryNoOp = "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
   const val timber = "com.github.ajalt:timberkt:${Versions.timerKt}"
   const val okHttpLogging = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttpLogging}"
+  const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
 
   const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
