@@ -12,7 +12,7 @@ object Libs {
     const val anko = "0.10.8"
     const val playServicesMaps = "17.0.0"
     const val lottie = "3.5.0"
-    const val koin = "2.1.5"
+    const val koin = "2.1.6"
     const val mpaAndroidChart = "v3.1.0"
     const val likeButton = "0.2.3"
     const val leakcanary = "1.6.2"
