@@ -26,7 +26,6 @@ import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.countryCitySelector.CityItem
 import com.netcetera.skopjepulse.extensions.combine
-//import org.koin.ext.isInt
 import com.netcetera.skopjepulse.extensions.isInt
 import java.util.*
 
@@ -82,7 +81,7 @@ class CitySelectViewModel(
       selectedCitiesSet.add(CityItem("TEST"))
       selectedCitiesSet.add(CityItem("Skopje"))
       val jsonSelectedCities = gson.toJson(selectedCitiesSet)
-      editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
+      editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
       editor.commit()
     }
 

@@ -36,7 +36,7 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
     data.add(CountryItem("Romania", "RO", mutableListOf(CityItem("Brasov"),CityItem("Bucharest"),CityItem("Cluj-Napoca"),CityItem("Codlea"),CityItem("Sacele"),CityItem("Targumures"))))
     data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Nis"))))
     data.add(CountryItem("Switzerland", "SW", mutableListOf(CityItem("Zurich"))))
-    data.add(CountryItem("USA", "USA", mutableListOf(CityItem("Grand-Rapids"))))
+    data.add(CountryItem("USA", "USA", mutableListOf(CityItem("Portland"), CityItem("Grand-Rapids"))))
 
     checkedCityItems = HashSet()
     val gson = Gson()
@@ -61,7 +61,7 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
       }
     }
     val jsonSelectedCities = gson.toJson(selectedCityItems)
-    editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities);
+    editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
     editor.commit()
   }
 

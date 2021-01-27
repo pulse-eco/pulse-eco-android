@@ -12,7 +12,8 @@ object Libs {
     const val anko = "0.10.8"
     const val playServicesMaps = "17.0.0"
     const val lottie = "3.5.0"
-    const val koin = "2.1.6"
+    const val activityKtx = "1.2.0-rc01"
+    const val koin = "2.2.2"
     const val mpaAndroidChart = "v3.1.0"
     const val likeButton = "0.2.3"
     const val leakcanary = "1.6.2"
@@ -22,7 +23,7 @@ object Libs {
     const val swipeRefreshLayout = "1.1.0"
 
     // Crashlytics
-    const val playServicesFirebaseAnalytics = "17.2.1"
+    const val playServicesFirebaseAnalytics = "18.0.0"
     const val crashlytics = "2.10.1"
   }
 
@@ -47,6 +48,7 @@ object Libs {
   const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
   const val likeButton = "com.github.jd-alexander:LikeButton:${Versions.likeButton}"
   const val targetTooltip = "it.sephiroth.android.library.targettooltip:target-tooltip-library:${Versions.targetTooltip}"
+  const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityKtx}"
   const val koin = "org.koin:koin-android:${Versions.koin}"
   const val koinScope = "org.koin:koin-androidx-scope:${Versions.koin}"
   const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
