@@ -1,7 +1,7 @@
 object ProjectVersions {
   const val androidGradlePlugin = "3.5.2"
   const val googlePlayServices = "4.3.2"
-  const val kotlin = "1.3.61"
+  const val kotlin = "1.4.21"
 
   // Crashlytics
   const val fabric = "1.31.2"

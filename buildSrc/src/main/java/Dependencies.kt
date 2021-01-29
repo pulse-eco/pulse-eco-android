@@ -7,7 +7,7 @@ object Libs {
     const val androidXAnnotations = "1.1.0"
     const val androidMaterial = "1.2.1"
     const val retrofit = "2.9.0"
-    const val moshi = "1.9.3"
+    const val moshi = "1.11.0"
     const val okhttpLogging = "4.9.0"
     const val anko = "0.10.8"
     const val playServicesMaps = "17.0.0"
