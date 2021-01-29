@@ -8,6 +8,8 @@ buildscript {
 
     // Crashlytics
     maven("https://maven.fabric.io/public")
+
+    maven ("https://dl.bintray.com/kotlin/kotlin-eap")
   }
   dependencies {
     classpath(BuildPlugins.androidGradlePlugin)
@@ -23,6 +25,7 @@ buildscript {
       mavenCentral()
       jcenter()
       maven("https://jitpack.io")
+      maven ("https://dl.bintray.com/kotlin/kotlin-eap")
     }
   }
 
