@@ -68,11 +68,13 @@ android {
     implementation(Libs.lottie)
     implementation(Libs.likeButton)
     implementation(Libs.targetTooltip)
+    implementation(Libs.activityKtx)
     implementation(Libs.koin)
     implementation(Libs.koinScope)
     implementation(Libs.koinViewModel)
     implementation(Libs.timber)
     implementation(Libs.okHttpLogging)
+    implementation(Libs.swipeRefreshLayout)
 
     implementation(Libs.gson)
 

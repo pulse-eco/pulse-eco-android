@@ -16,13 +16,15 @@ import com.netcetera.skopjepulse.base.data.Resource.Status.IDLE
 import com.netcetera.skopjepulse.base.data.Resource.Status.LOADING
 import com.netcetera.skopjepulse.base.data.Resource.Status.SUCCESS
 import com.squareup.leakcanary.RefWatcher
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.HashSet
 
 /**
  * The pulse.eco base [ViewModel] that shall be used for the rest of the [ViewModel]s.
  */
+@KoinApiExtension
 abstract class BaseViewModel : ViewModel(), KoinComponent {
   private val refWatcher by inject<RefWatcher>()
   /**
