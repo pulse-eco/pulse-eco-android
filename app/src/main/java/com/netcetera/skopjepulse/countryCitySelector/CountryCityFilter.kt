@@ -20,16 +20,18 @@ object CountryCityFilter{
           if (country.countryName.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
             resultList.add(country)
             for (city in country.listCityItem) {
-              resultList.add(city)
+              if(data.contains(city))
+                resultList.add(city)
             }
           } else {
             var isContain = false
             resultList.add(country)
             for (city in country.listCityItem) {
-              if (city.name.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
-                isContain = true
-                resultList.add(city)
-              }
+              if(data.contains(city))
+                if (city.name.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                  isContain = true
+                  resultList.add(city)
+                }
             }
             if (isContain == false) {
               resultList.removeAt(resultList.size - 1)
@@ -38,6 +40,10 @@ object CountryCityFilter{
         }
       }
     }
+
+    if(resultList.size==0)
+      resultList.add(CountryItem("No results found", "",ArrayList()))
+
     return resultList
   }
 }

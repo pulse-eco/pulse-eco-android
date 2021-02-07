@@ -49,7 +49,7 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
 
 
   /**
-   *  When the user clicks on the floating action button, checked cities add in sharedPreferences
+   *  When the user clicks on one city, add it to sharedPreferences
    */
   fun saveCheckedCities(){
     val selectedCityItems = HashSet<CityItem>()
@@ -62,7 +62,33 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
     }
     val jsonSelectedCities = gson.toJson(selectedCityItems)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
-    editor.commit()
+    editor.apply()
   }
 
+  /**
+   * Returns the list of countries and cities that are currently not
+   * present in the sharedPreferences
+   */
+  fun getSelectableCities(): List<Any>{
+    var checkableCities = ArrayList<Any>()
+
+    countryCityList.value?.forEach {
+      if(!checkedCityItems.contains(it))
+        checkableCities.add(it)
+    }
+
+    var i = 0
+    while(i < checkableCities.size-1){
+      if(checkableCities[i] is CountryItem && checkableCities[i+1] is CountryItem) {
+        checkableCities.removeAt(i--)
+      }
+      i++
+    }
+
+    if(checkableCities.last() is CountryItem) {
+      checkableCities.removeAt(checkableCities.lastIndex)
+    }
+
+    return checkableCities
+  }
 }

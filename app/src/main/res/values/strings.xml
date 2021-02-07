@@ -62,7 +62,11 @@
   <string name="overall_banner_title_average">average</string>
 
   <string name="fab_content_desc">Add city</string>
-  <string name="search">Search</string>
+  <string name="search">Search City or Country</string>
+  <string name="city_selection">City Selection</string>
+
+  <string name="search_suggested">Suggested</string>
+  <string name="search_results">Results</string>
 
   <plurals name="sensor_limit_reached_message">
     <item quantity="one">You can\'t select more than %d sensor.</item>
