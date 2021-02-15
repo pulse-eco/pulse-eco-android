@@ -10,16 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.GoogleMap
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.extensions.applyCitySelectPulseStyling
 import com.netcetera.skopjepulse.extensions.updateForCity
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectCityLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectCountryLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMapBackground
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureContainer
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureLabel
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectMeasureValue
-import kotlinx.android.synthetic.main.city_select_item_layout.view.citySelectOverallStatus
-import java.util.Locale
+import kotlinx.android.synthetic.main.city_select_item_layout.view.*
 
 typealias CitySelectListener = (city : City) -> Unit
 
@@ -39,6 +31,16 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
 
   override fun onChanged(newItems: List<CitySelectItem>?) {
     differ.submitList(newItems)
+  }
+
+  fun del(position: Int): String {
+    var list = arrayListOf<CitySelectItem>()
+    list.addAll(differ.currentList)
+    val city = list[position]
+    list.removeAt(position)
+    onChanged(list)
+    notifyDataSetChanged()
+    return city.city.name
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitySelectItemViewHolder {
@@ -63,17 +65,10 @@ class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListene
   var citySelectItem : CitySelectItem? = null
 
   init {
-    itemView.citySelectMapBackground.onCreate(null)
-    itemView.citySelectMapBackground.visibility = View.INVISIBLE
-    itemView.citySelectMapBackground.getMapAsync { googleMap ->
-      googleMap.applyCitySelectPulseStyling(itemView.context)
-      itemView.citySelectMapBackground.visibility = View.VISIBLE
-      this.googleMap = googleMap
-      googleMap.setOnMapClickListener {
-        citySelectListener.invoke(citySelectItem!!.city)
-      }
-      internalDisplayItemMap()
+    itemView.setOnClickListener{
+      citySelectListener.invoke(citySelectItem!!.city)
     }
+    internalDisplayItemMap()
   }
 
   fun bind(citySelectItem: CitySelectItem) {
@@ -84,12 +79,21 @@ class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListene
   private fun internalDisplayItem() {
     val citySelectItem = this.citySelectItem
     if (citySelectItem != null) {
+      itemView.citySelectMeasureValue.visibility = View.VISIBLE
+      itemView.citySelectMeasureLabel.visibility = View.VISIBLE
+      itemView.imageNoDataAvailable.visibility = View.GONE
       itemView.citySelectMeasureContainer.setCardBackgroundColor(citySelectItem.color)
-      itemView.citySelectCityLabel.text = citySelectItem.city.name.toUpperCase(Locale.US)
+      itemView.citySelectCityLabel.text = citySelectItem.city.name.capitalize()
       itemView.citySelectCountryLabel.text = citySelectItem.city.countryName
       itemView.citySelectOverallStatus.text = citySelectItem.measurementDescription
       itemView.citySelectMeasureValue.text = citySelectItem.measurementValue
       itemView.citySelectMeasureLabel.text = citySelectItem.measurementUnit
+      if (citySelectItem.measurementValue == "N/A")
+      {
+        itemView.citySelectMeasureValue.visibility = View.GONE
+        itemView.citySelectMeasureLabel.visibility = View.GONE
+        itemView.imageNoDataAvailable.visibility = View.VISIBLE
+      }
       internalDisplayItemMap()
     }
   }

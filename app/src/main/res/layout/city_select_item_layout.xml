@@ -6,14 +6,6 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-  <com.google.android.gms.maps.MapView
-    android:id="@+id/citySelectMapBackground"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    map:liteMode="true"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"/>
-
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,9 +17,9 @@
       android:layout_height="wrap_content"
       tools:text="SKOPJE"
       android:fontFamily="sans-serif-medium"
-      android:textSize="16sp"
+      android:textSize="18sp"
       android:textColor="@color/cityselect_label_text_color"
-      android:layout_marginTop="@dimen/components_side_spacing"
+      android:layout_marginTop="@dimen/component_top_spacing"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       android:layout_marginStart="@dimen/components_side_spacing"/>
@@ -37,8 +29,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       tools:text="Macedonia"
-      android:textSize="11sp"
-      android:textColor="@color/cityselect_label_text_color"
+      android:textSize="12sp"
+      android:textColor="@color/transparent_black"
       app:layout_constraintStart_toStartOf="@+id/citySelectCityLabel"
       app:layout_constraintTop_toBottomOf="@+id/citySelectCityLabel"/>
 
@@ -62,9 +54,9 @@
       android:id="@+id/citySelectMeasureContainer"
       android:layout_width="72dp"
       android:layout_height="72dp"
-      android:layout_marginTop="@dimen/components_side_spacing"
+      android:layout_marginTop="@dimen/city_select_card_view_margin"
       android:layout_marginEnd="@dimen/components_side_spacing"
-      android:layout_marginBottom="30dp"
+      android:layout_marginBottom="@dimen/city_select_card_view_margin"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -85,6 +77,13 @@
           android:textSize="26sp"
           android:textColor="@color/cityselect_measure_text_color"
           tools:text="22"/>
+        <ImageView
+          android:id="@+id/imageNoDataAvailable"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_no_data_available"
+          android:visibility="gone"
+          android:layout_gravity="center"/>
 
         <TextView
           android:id="@+id/citySelectMeasureLabel"
