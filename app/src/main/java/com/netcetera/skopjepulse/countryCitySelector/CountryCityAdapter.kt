@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_country.view.*
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorActivity) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
   private var dataShow: List<Any>
 
@@ -83,8 +83,8 @@ class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorA
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: T)
   }
-
-  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
+  
+  inner class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
     private val cityItemRow = view.cityItemRow
     private val cityName = view.txtCityName
     private val countryName = view.txtCountryNameSmall
@@ -95,8 +95,7 @@ class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorA
 
       cityItemRow.setOnClickListener{
         item.isChecked = true
-        (view.context as CountryCitySelectorActivity).getCountryCityViewModel().saveCheckedCities()
-        (view.context as CountryCitySelectorActivity).finish()
+        onCitySelected()
       }
     }
   }

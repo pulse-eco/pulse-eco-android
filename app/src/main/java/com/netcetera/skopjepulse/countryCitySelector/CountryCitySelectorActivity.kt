@@ -39,7 +39,7 @@ class CountryCitySelectorActivity : AppCompatActivity(){
 
     val recyclerview : RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
-    mAdapter = CountryCityAdapter(countryCityViewModel.getSelectableCities(), this)
+    mAdapter = CountryCityAdapter(countryCityViewModel.getSelectableCities()) { this.onCitySelected() }
     recyclerview.adapter = mAdapter
 
     countryCityViewModel.countryCityList.observe(this, Observer {
@@ -78,10 +78,10 @@ class CountryCitySelectorActivity : AppCompatActivity(){
     }
     countryCityRecyclerView.clearOnScrollListeners()
     countryCityRecyclerView.addOnScrollListener(scrollListener)
-
   }
 
-  fun getCountryCityViewModel(): CountryCityViewModel{
-    return countryCityViewModel
+  val onCitySelected: () -> Unit = {
+    countryCityViewModel.saveCheckedCities()
+    this.finish()
   }
 }
