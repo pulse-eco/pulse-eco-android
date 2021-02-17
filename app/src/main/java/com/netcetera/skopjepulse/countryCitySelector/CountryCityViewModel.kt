@@ -69,26 +69,14 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
    * Returns the list of countries and cities that are currently not
    * present in the sharedPreferences
    */
-  fun getSelectableCities(): List<Any>{
-    var checkableCities = ArrayList<Any>()
-
-    countryCityList.value?.forEach {
-      if(!checkedCityItems.contains(it))
-        checkableCities.add(it)
+  fun getSelectableCities(): List<Any>?{
+    var checkableCities = countryCityList.value?.filter {
+      !checkedCityItems.contains(it)
     }
 
-    var i = 0
-    while(i < checkableCities.size-1){
-      if(checkableCities[i] is CountryItem && checkableCities[i+1] is CountryItem) {
-        checkableCities.removeAt(i--)
-      }
-      i++
+    return checkableCities?.filterIndexed { index, it ->
+      (it == checkableCities.last() && it !is CountryItem) ||
+      (it != checkableCities.last() && !(it is CountryItem && checkableCities[index+1] is CountryItem))
     }
-
-    if(checkableCities.last() is CountryItem) {
-      checkableCities.removeAt(checkableCities.lastIndex)
-    }
-
-    return checkableCities
   }
 }
