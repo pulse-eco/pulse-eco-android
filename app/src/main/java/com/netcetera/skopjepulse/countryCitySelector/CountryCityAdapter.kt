@@ -21,6 +21,7 @@ class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) :
   companion object {
     private val TYPE_COUNTRY = 0
     private val TYPE_CITY = 1
+    private val EMPTY_LIST_PLACEHOLDER = 2
   }
 
   init {
@@ -38,31 +39,45 @@ class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) :
         val view = LayoutInflater.from(context).inflate(R.layout.item_city, parent, false)
         CityViewHolder(view)
       }
+      EMPTY_LIST_PLACEHOLDER -> {
+        val view = LayoutInflater.from(context).inflate(R.layout.item_empty, parent, false)
+        EmptyViewHolder(view)
+      }
       else -> throw IllegalArgumentException("Invalid view type")
     }
   }
 
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-    val element = dataShow[position]
-    when(holder){
-      is CityViewHolder -> holder.bind(element as CityItem, element.getCountryName(data))
-      is CountryViewHolder -> holder.bind(element as CountryItem)
-      else -> throw IllegalArgumentException()
+    if(dataShow.isEmpty())
+      (holder as EmptyViewHolder).bind(Unit)
+    else {
+      val element = dataShow[position]
+      when (holder) {
+        is CityViewHolder -> holder.bind(element as CityItem)
+        is CountryViewHolder -> holder.bind(element as CountryItem)
+        else -> throw IllegalArgumentException()
+      }
     }
   }
 
   override fun getItemViewType(position: Int): Int {
-    val comparable = dataShow[position]
-    return when (comparable) {
-      is CityItem -> TYPE_CITY
-      is CountryItem -> TYPE_COUNTRY
-      else -> throw IllegalArgumentException("Invalid type of data " + position)
+    return if(dataShow.isEmpty())
+      EMPTY_LIST_PLACEHOLDER
+    else {
+      val comparable = dataShow[position]
+      when (comparable) {
+        is CityItem -> TYPE_CITY
+        is CountryItem -> TYPE_COUNTRY
+        else -> throw IllegalArgumentException("Invalid type of data " + position)
+      }
     }
-
   }
 
   override fun getItemCount(): Int {
-    return dataShow.size
+    return if(dataShow.isEmpty())
+      1
+    else
+      dataShow.size
   }
 
   override fun getFilter(): Filter {
@@ -100,12 +115,18 @@ class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) :
     }
   }
 
-  class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {
+  inner class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {
 
     private val countryNameTextView = view.txtCountryName
 
     override fun bind(item: CountryItem) {
       countryNameTextView.text = item.countryName
+    }
+  }
+
+  inner class EmptyViewHolder(val view: View) : BaseViewHolder<Unit>(view) {
+    override fun bind(item: Unit) {
+      //DO NOTHING
     }
   }
 }

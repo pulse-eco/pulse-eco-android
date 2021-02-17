@@ -67,6 +67,7 @@
 
   <string name="search_suggested">Suggested</string>
   <string name="search_results">Results</string>
+  <string name="no_results_found">No results found</string>
 
   <plurals name="sensor_limit_reached_message">
     <item quantity="one">You can\'t select more than %d sensor.</item>

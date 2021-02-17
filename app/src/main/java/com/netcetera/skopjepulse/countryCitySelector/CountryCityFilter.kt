@@ -41,9 +41,6 @@ object CountryCityFilter{
       }
     }
 
-    if(resultList.size==0)
-      resultList.add(CountryItem("No results found", "",ArrayList()))
-
     return resultList
   }
 }
