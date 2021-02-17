@@ -77,7 +77,7 @@ class CitySelectViewModel(
       selectedCitiesSet = gson.fromJson(selectedCities, type)
     } else {
       // when loading for the first time
-      selectedCitiesSet.add(CityItem("Skopje"))
+      selectedCitiesSet.add(CityItem("Skopje", "Macedonia"))
       val editor: SharedPreferences.Editor = sharedPref.edit()
       val jsonSelectedCities = gson.toJson(selectedCitiesSet)
       editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)

@@ -69,7 +69,7 @@ class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorA
     return object : Filter() {
       override fun performFiltering(constraint: CharSequence?): FilterResults {
         val filterResults = FilterResults()
-        filterResults.values = CountryCityFilter.filterCountryCity(constraint,context.getCountryCityViewModel().getSelectableCities())
+        filterResults.values = CountryCityFilter.filterCountryCity(constraint,data)
         return filterResults
       }
 
@@ -81,7 +81,7 @@ class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorA
   }
 
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T, countryName: String="")
+    abstract fun bind(item: T)
   }
 
   class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
@@ -89,9 +89,9 @@ class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorA
     private val cityName = view.txtCityName
     private val countryName = view.txtCountryNameSmall
 
-    override fun bind(item: CityItem, countryName: String) {
+    override fun bind(item: CityItem) {
       cityName.text = item.name
-      this.countryName.text = countryName
+      countryName.text = item.country
 
       cityItemRow.setOnClickListener{
         item.isChecked = true
@@ -105,7 +105,7 @@ class CountryCityAdapter(var data: List<Any>?, var context: CountryCitySelectorA
 
     private val countryNameTextView = view.txtCountryName
 
-    override fun bind(item: CountryItem, countryName: String) {
+    override fun bind(item: CountryItem) {
       countryNameTextView.text = item.countryName
     }
   }
