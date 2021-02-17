@@ -6,11 +6,11 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.activity_city_selector.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 /**
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_city_selector.*
 class CountryCitySelectorActivity : AppCompatActivity(){
 
   private lateinit var mAdapter: CountryCityAdapter
-  private lateinit var countryCityViewModel: CountryCityViewModel
+  private val countryCityViewModel: CountryCityViewModel by viewModel()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -35,9 +35,7 @@ class CountryCitySelectorActivity : AppCompatActivity(){
       onBackPressed()
     }
 
-    countryCityViewModel = ViewModelProviders.of(this).get(CountryCityViewModel::class.java)
-
-    val recyclerview : RecyclerView = countryCityRecyclerView
+    val recyclerview: RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
     mAdapter = CountryCityAdapter(countryCityViewModel.getSelectableCities()) { this.onCitySelected() }
     recyclerview.adapter = mAdapter

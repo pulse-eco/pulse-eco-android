@@ -12,6 +12,7 @@ import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorageFac
 import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.cityselect.CitySelectViewModel
+import com.netcetera.skopjepulse.countryCitySelector.CountryCityViewModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.preferences.MapPreferencesStorage
@@ -59,5 +60,9 @@ val appModule = module {
 
   viewModel {
     CitySelectViewModel(get(), get(), get())
+  }
+
+  viewModel {
+    CountryCityViewModel(get(), get())
   }
 }

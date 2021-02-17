@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.netcetera.skopjepulse.Constants
+import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.extensions.transformData
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
@@ -18,7 +19,7 @@ import kotlin.collections.HashSet
  * displaying of data of a Country/Cities.
  */
 
-class CountryCityViewModel(application: Application) : AndroidViewModel(application) {
+class CountryCityViewModel(application: Application, pulseRepository: PulseRepository) : AndroidViewModel(application) {
   private val _countryCityList = MutableLiveData<ArrayList<Any>>()
   val countryCityList: LiveData<ArrayList<Any>>
     get() = _countryCityList
@@ -28,15 +29,15 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
 
   init {
     val data = ArrayList<CountryItem>()
-    data.add(CountryItem("Macedonia", "MK", mutableListOf(CityItem("Bitola"),CityItem("Kichevo"),CityItem("Kumanovo"),CityItem("Novoselo"),CityItem("Ohrid"),CityItem("Shtip"), CityItem("Skopje"),CityItem("Strumica"),CityItem("Tetovo"))))
-    data.add(CountryItem("Bulgaria", "BG", mutableListOf(CityItem("Sofia"))))
-    data.add(CountryItem("Greece", "GR", mutableListOf(CityItem("Thessaloniki"), CityItem("Syros"))))
-    data.add(CountryItem("Ireland", "IR", mutableListOf(CityItem("Cork"))))
-    data.add(CountryItem("Netherlands", "NE", mutableListOf(CityItem("Delft"))))
-    data.add(CountryItem("Romania", "RO", mutableListOf(CityItem("Brasov"),CityItem("Bucharest"),CityItem("Cluj-Napoca"),CityItem("Codlea"),CityItem("Sacele"),CityItem("Targumures"))))
-    data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Nis"))))
-    data.add(CountryItem("Switzerland", "SW", mutableListOf(CityItem("Zurich"))))
-    data.add(CountryItem("USA", "USA", mutableListOf(CityItem("Portland"), CityItem("Grand-Rapids"))))
+
+    pulseRepository.countries.value?.data?.forEach{
+      val country = it
+      var cities = ArrayList<CityItem>()
+      it.cities.forEach {
+        cities.add(CityItem(it.name.capitalize(), country.countryName ))
+      }
+      data.add(CountryItem(it.countryName, it.countryCode, cities.toMutableList()))
+    }
 
     checkedCityItems = HashSet()
     val gson = Gson()
