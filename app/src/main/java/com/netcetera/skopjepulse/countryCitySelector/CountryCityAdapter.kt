@@ -14,9 +14,9 @@ import kotlinx.android.synthetic.main.item_country.view.*
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: () -> Unit) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
-  private var dataShow: List<Any>
+  private var dataShow: List<CountryCityItem>
 
   companion object {
     private val TYPE_COUNTRY = 0
@@ -25,7 +25,7 @@ class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) :
   }
 
   init {
-    dataShow = data as MutableList<Any>
+    dataShow = data as MutableList<CountryCityItem>
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -89,7 +89,7 @@ class CountryCityAdapter(var data: List<Any>?, val onCitySelected: () -> Unit) :
       }
 
       override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-        dataShow = results?.values as MutableList<Any>
+        dataShow = results?.values as MutableList<CountryCityItem>
         notifyDataSetChanged()
       }
     }

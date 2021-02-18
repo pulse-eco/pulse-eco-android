@@ -8,11 +8,11 @@ import kotlin.collections.ArrayList
  */
 
 object CountryCityFilter{
-  fun filterCountryCity(constraint: CharSequence?, data: List<Any>?) : ArrayList<Any> {
+  fun filterCountryCity(constraint: CharSequence?, data: List<CountryCityItem>?) : ArrayList<CountryCityItem> {
     val charSearch = constraint.toString()
-    var resultList = ArrayList<Any>()
+    var resultList = ArrayList<CountryCityItem>()
     if (charSearch.isEmpty()) {
-      resultList = data as ArrayList<Any>
+      resultList = data as ArrayList<CountryCityItem>
     } else {
 
       for (country in data!!) {

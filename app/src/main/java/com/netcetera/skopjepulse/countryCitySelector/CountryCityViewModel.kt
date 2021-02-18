@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.extensions.transformData
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
@@ -20,8 +21,8 @@ import kotlin.collections.HashSet
  */
 
 class CountryCityViewModel(application: Application, pulseRepository: PulseRepository) : AndroidViewModel(application) {
-  private val _countryCityList = MutableLiveData<ArrayList<Any>>()
-  val countryCityList: LiveData<ArrayList<Any>>
+  private val _countryCityList = MutableLiveData<ArrayList<CountryCityItem>>()
+  val countryCityList: LiveData<ArrayList<CountryCityItem>>
     get() = _countryCityList
 
   var checkedCityItems : HashSet<CityItem>
@@ -31,10 +32,9 @@ class CountryCityViewModel(application: Application, pulseRepository: PulseRepos
     val data = ArrayList<CountryItem>()
 
     pulseRepository.countries.value?.data?.forEach{
-      val country = it
-      var cities = ArrayList<CityItem>()
-      it.cities.forEach {
-        cities.add(CityItem(it.name.capitalize(), country.countryName ))
+      val cities = ArrayList<CityItem>()
+      it.cities.forEach {city ->
+        cities.add(CityItem(city.name.capitalize(Locale.ROOT), it.countryName ))
       }
       data.add(CountryItem(it.countryName, it.countryCode, cities.toMutableList()))
     }
@@ -70,14 +70,25 @@ class CountryCityViewModel(application: Application, pulseRepository: PulseRepos
    * Returns the list of countries and cities that are currently not
    * present in the sharedPreferences
    */
-  fun getSelectableCities(): List<Any>?{
-    var checkableCities = countryCityList.value?.filter {
+  fun getSelectableCities(): List<CountryCityItem>?{
+    val checkableCities = countryCityList.value?.filter {
       !checkedCityItems.contains(it)
     }
 
     return checkableCities?.filterIndexed { index, it ->
-      (it == checkableCities.last() && it !is CountryItem) ||
-      (it != checkableCities.last() && !(it is CountryItem && checkableCities[index+1] is CountryItem))
+      (isElementLast(checkableCities.lastIndex, index) && it !is CountryItem) ||
+      (!isElementLast(checkableCities.lastIndex, index) && !twoCountriesInARow(it, checkableCities[index+1]))
     }
+  }
+
+  private fun isElementLast(lastIndex: Int, elementIndex: Int): Boolean {
+    return lastIndex == elementIndex
+  }
+
+  /**
+   * Checks if there are two countries next to each other in a list
+   */
+  private fun twoCountriesInARow(e1: CountryCityItem, e2: CountryCityItem): Boolean{
+    return e1 is CountryItem && e2 is CountryItem
   }
 }
