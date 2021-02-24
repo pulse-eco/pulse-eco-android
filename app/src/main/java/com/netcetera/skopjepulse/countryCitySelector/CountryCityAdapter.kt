@@ -14,17 +14,18 @@ import kotlinx.android.synthetic.main.item_country.view.*
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: () -> Unit) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
 
-  private var dataShow: List<Any>
+  private var dataShow: List<CountryCityItem>
 
   companion object {
     private val TYPE_COUNTRY = 0
     private val TYPE_CITY = 1
+    private val EMPTY_LIST_PLACEHOLDER = 2
   }
 
   init {
-    dataShow = data as MutableList<Any>
+    dataShow = data as MutableList<CountryCityItem>
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -38,31 +39,45 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
         val view = LayoutInflater.from(context).inflate(R.layout.item_city, parent, false)
         CityViewHolder(view)
       }
+      EMPTY_LIST_PLACEHOLDER -> {
+        val view = LayoutInflater.from(context).inflate(R.layout.item_empty, parent, false)
+        EmptyViewHolder(view)
+      }
       else -> throw IllegalArgumentException("Invalid view type")
     }
   }
 
   override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-    val element = dataShow[position]
-    when(holder){
-      is CityViewHolder -> holder.bind(element as CityItem)
-      is CountryViewHolder -> holder.bind(element as CountryItem)
-      else -> throw IllegalArgumentException()
+    if(dataShow.isEmpty())
+      (holder as EmptyViewHolder).bind(Unit)
+    else {
+      val element = dataShow[position]
+      when (holder) {
+        is CityViewHolder -> holder.bind(element as CityItem)
+        is CountryViewHolder -> holder.bind(element as CountryItem)
+        else -> throw IllegalArgumentException()
+      }
     }
   }
 
   override fun getItemViewType(position: Int): Int {
-    val comparable = dataShow[position]
-    return when (comparable) {
-      is CityItem -> TYPE_CITY
-      is CountryItem -> TYPE_COUNTRY
-      else -> throw IllegalArgumentException("Invalid type of data " + position)
+    return if(dataShow.isEmpty())
+      EMPTY_LIST_PLACEHOLDER
+    else {
+      val comparable = dataShow[position]
+      when (comparable) {
+        is CityItem -> TYPE_CITY
+        is CountryItem -> TYPE_COUNTRY
+        else -> throw IllegalArgumentException("Invalid type of data " + position)
+      }
     }
-
   }
 
   override fun getItemCount(): Int {
-    return dataShow.size
+    return if(dataShow.isEmpty())
+      1
+    else
+      dataShow.size
   }
 
   override fun getFilter(): Filter {
@@ -74,36 +89,33 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
       }
 
       override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-        dataShow = results?.values as MutableList<Any>
+        dataShow = results?.values as MutableList<CountryCityItem>
         notifyDataSetChanged()
       }
-
     }
   }
-
-
 
   abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: T)
   }
-
-  class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
-
-    private val cityCheckBox = view.checkBoxCity
+  
+  inner class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
+    private val cityItemRow = view.cityItemRow
+    private val cityName = view.txtCityName
+    private val countryName = view.txtCountryNameSmall
 
     override fun bind(item: CityItem) {
-      cityCheckBox.text = item.name
-      cityCheckBox.isChecked = item.isChecked
+      cityName.text = item.name
+      countryName.text = item.country
 
-      cityCheckBox.setOnClickListener {
-        item.isChecked = cityCheckBox.isChecked
+      cityItemRow.setOnClickListener{
+        item.isChecked = true
+        onCitySelected()
       }
-
     }
-
   }
 
-  class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {
+  inner class CountryViewHolder(val view: View) : BaseViewHolder<CountryItem>(view) {
 
     private val countryNameTextView = view.txtCountryName
 
@@ -112,4 +124,9 @@ class CountryCityAdapter(var data: List<Any>?) : RecyclerView.Adapter<CountryCit
     }
   }
 
+  inner class EmptyViewHolder(val view: View) : BaseViewHolder<Unit>(view) {
+    override fun bind(item: Unit) {
+      //DO NOTHING
+    }
+  }
 }

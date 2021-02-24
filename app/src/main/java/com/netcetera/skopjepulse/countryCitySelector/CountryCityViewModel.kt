@@ -9,7 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.netcetera.skopjepulse.Constants
+import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.extensions.transformData
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
@@ -18,9 +20,9 @@ import kotlin.collections.HashSet
  * displaying of data of a Country/Cities.
  */
 
-class CountryCityViewModel(application: Application) : AndroidViewModel(application) {
-  private val _countryCityList = MutableLiveData<ArrayList<Any>>()
-  val countryCityList: LiveData<ArrayList<Any>>
+class CountryCityViewModel(application: Application, pulseRepository: PulseRepository) : AndroidViewModel(application) {
+  private val _countryCityList = MutableLiveData<ArrayList<CountryCityItem>>()
+  val countryCityList: LiveData<ArrayList<CountryCityItem>>
     get() = _countryCityList
 
   var checkedCityItems : HashSet<CityItem>
@@ -28,15 +30,14 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
 
   init {
     val data = ArrayList<CountryItem>()
-    data.add(CountryItem("Macedonia", "MK", mutableListOf(CityItem("Bitola"),CityItem("Kichevo"),CityItem("Kumanovo"),CityItem("Novoselo"),CityItem("Ohrid"),CityItem("Shtip"), CityItem("Skopje"),CityItem("Strumica"),CityItem("Tetovo"))))
-    data.add(CountryItem("Bulgaria", "BG", mutableListOf(CityItem("Sofia"))))
-    data.add(CountryItem("Greece", "GR", mutableListOf(CityItem("Thessaloniki"), CityItem("Syros"))))
-    data.add(CountryItem("Ireland", "IR", mutableListOf(CityItem("Cork"))))
-    data.add(CountryItem("Netherlands", "NE", mutableListOf(CityItem("Delft"))))
-    data.add(CountryItem("Romania", "RO", mutableListOf(CityItem("Brasov"),CityItem("Bucharest"),CityItem("Cluj-Napoca"),CityItem("Codlea"),CityItem("Sacele"),CityItem("Targumures"))))
-    data.add(CountryItem("Serbia", "SR", mutableListOf(CityItem("Nis"))))
-    data.add(CountryItem("Switzerland", "SW", mutableListOf(CityItem("Zurich"))))
-    data.add(CountryItem("USA", "USA", mutableListOf(CityItem("Portland"), CityItem("Grand-Rapids"))))
+
+    pulseRepository.countries.value?.data?.forEach{
+      val cities = ArrayList<CityItem>()
+      it.cities.forEach {city ->
+        cities.add(CityItem(city.name.capitalize(Locale.ROOT), it.countryName ))
+      }
+      data.add(CountryItem(it.countryName, it.countryCode, cities.toMutableList()))
+    }
 
     checkedCityItems = HashSet()
     val gson = Gson()
@@ -49,7 +50,7 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
 
 
   /**
-   *  When the user clicks on the floating action button, checked cities add in sharedPreferences
+   *  When the user clicks on one city, add it to sharedPreferences
    */
   fun saveCheckedCities(){
     val selectedCityItems = HashSet<CityItem>()
@@ -62,7 +63,32 @@ class CountryCityViewModel(application: Application) : AndroidViewModel(applicat
     }
     val jsonSelectedCities = gson.toJson(selectedCityItems)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
-    editor.commit()
+    editor.apply()
   }
 
+  /**
+   * Returns the list of countries and cities that are currently not
+   * present in the sharedPreferences
+   */
+  fun getSelectableCities(): List<CountryCityItem>?{
+    val checkableCities = countryCityList.value?.filter {
+      !checkedCityItems.contains(it)
+    }
+
+    return checkableCities?.filterIndexed { index, it ->
+      (isElementLast(checkableCities.lastIndex, index) && it !is CountryItem) ||
+      (!isElementLast(checkableCities.lastIndex, index) && !twoCountriesInARow(it, checkableCities[index+1]))
+    }
+  }
+
+  private fun isElementLast(lastIndex: Int, elementIndex: Int): Boolean {
+    return lastIndex == elementIndex
+  }
+
+  /**
+   * Checks if there are two countries next to each other in a list
+   */
+  private fun twoCountriesInARow(e1: CountryCityItem, e2: CountryCityItem): Boolean{
+    return e1 is CountryItem && e2 is CountryItem
+  }
 }

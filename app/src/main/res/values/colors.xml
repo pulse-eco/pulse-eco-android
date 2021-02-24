@@ -46,6 +46,11 @@
   <color name="cityselect_label_text_color">@color/black</color>
   <color name="cityselect_measure_text_color">@color/white</color>
 
+  <!-- Country City select -->
+  <color name="countrycityselect_country_small">#3db7d6</color>
+  <color name="countrycityselect_country">#262257</color>
+  <color name="countrycityselect_item_border">#474370</color>
+
   <!-- Overall Banner -->
   <color name="overall_banner_title_section_background">@color/black_A20</color>
   <color name="overall_banner_text_foreground">#E5FFFFFF</color>
