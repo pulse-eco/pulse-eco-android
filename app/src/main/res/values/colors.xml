@@ -15,6 +15,8 @@
   <color name="purple_dark">#07062A</color>
   <color name="purple_dark_A50">#8007062A</color>
   <color name="purple_dark_A80">#CC07062A</color>
+  <color name="transparent_black">#C8000000</color>
+  <color name="red_delete_button">#D73F46</color>
 
   <!-- Android colors -->
   <color name="colorPrimary">@color/purple</color>

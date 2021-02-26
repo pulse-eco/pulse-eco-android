@@ -7,15 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
+import androidx.recyclerview.widget.*
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
+import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
 import com.netcetera.skopjepulse.main.MainViewModel
+import com.netcetera.skopjepulse.utils.ui.SwipeHelper
 import kotlinx.android.synthetic.main.city_select_fragment_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,8 +26,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override val viewModel: CitySelectViewModel by viewModel()
   private val mainViewModel : MainViewModel by sharedViewModel()
-  private lateinit var faButton: FloatingActionButton
   private lateinit var citySelectAdapter : CitySelectAdapter
+  private lateinit var addNewCityLinearLayout: LinearLayout
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
@@ -46,23 +46,12 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       parentFragmentManager.popBackStack()
     }
 
-    faButton = fab
-    faButton.setOnClickListener{
+    addNewCityLinearLayout = linearLayoutAddNewCity
+    linearLayoutAddNewCity.setOnClickListener {
       val intent = Intent(activity, CountryCitySelectorActivity::class.java)
       startActivity(intent)
     }
 
-    val scrollListener = object : RecyclerView.OnScrollListener() {
-      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        when (newState) {
-          RecyclerView.SCROLL_STATE_IDLE -> fab.show()
-          else -> fab.hide()
-        }
-        super.onScrollStateChanged(recyclerView, newState)
-      }
-    }
-    citySelectRecyclerView.clearOnScrollListeners()
-    citySelectRecyclerView.addOnScrollListener(scrollListener)
 
     citySelectRefreshView.setOnRefreshListener {
       viewModel.refreshData(true)
@@ -81,6 +70,30 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
       viewModel.showDataForMeasurementType(it)
     })
+
+    citySelectRecyclerView.addItemDecoration(DividerItemDecoration(citySelectRecyclerView.context, DividerItemDecoration.VERTICAL))
+
+    val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(citySelectRecyclerView) {
+      override fun instantiateUnderlayButton(position: Int): List<SwipeHelper.UnderlayButton> {
+        var buttons = listOf<SwipeHelper.UnderlayButton>()
+        val deleteButton = deleteButton(position)
+        buttons = listOf(deleteButton)
+        return buttons
+      }
+    })
+
+    itemTouchHelper.attachToRecyclerView(citySelectRecyclerView)
+  }
+
+  private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
+    return SwipeHelper.UnderlayButton(requireContext(), "Delete", 14.0f, R.color.red_delete_button,
+      object : SwipeHelper.UnderlayButtonClickListener {
+        override fun onClick() {
+          val cityToRemoveFromSharedPreferences = citySelectAdapter.del(position)
+          viewModel.deleteCityOnSwipe(cityToRemoveFromSharedPreferences)
+          Toast.makeText(activity, "Removed from selected cities", Toast.LENGTH_SHORT).show()
+        }
+      })
   }
 
   override fun onResume() {
