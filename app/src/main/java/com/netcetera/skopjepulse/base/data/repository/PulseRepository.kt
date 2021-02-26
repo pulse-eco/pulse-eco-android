@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.api.PulseApiService
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.CityOverall
-import com.netcetera.skopjepulse.base.model.Sensor
-import com.netcetera.skopjepulse.base.model.SensorReading
+import com.netcetera.skopjepulse.base.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,10 +22,12 @@ typealias SensorReadings = List<SensorReading>
 open class PulseRepository(var apiService: PulseApiService) : BasePulseRepository() {
   private val _cities = MutableLiveData<Resource<Cities>>()
   private val _citiesOverall = MutableLiveData<Resource<List<CityOverall>>>()
+  private val _countries = MutableLiveData<Resource<List<Country>>>()
 
   val cities: LiveData<Resource<Cities>>
     get() = _cities
   val citiesOverall: LiveData<Resource<List<CityOverall>>>
+  val countries: LiveData<Resource<List<Country>>> get() = _countries
 
   init {
     citiesOverall = Transformations.switchMap(cities) { cities ->
@@ -49,6 +48,23 @@ open class PulseRepository(var apiService: PulseApiService) : BasePulseRepositor
         }
       }
     }
+
+    apiService.countries().enqueue(object : Callback<List<Country>?> {
+      override fun onResponse(call: Call<List<Country>?>, response: Response<List<Country>?>) {
+        if (response.isSuccessful && response.body() != null) {
+          _countries.value = Resource.success(response.body()!!)
+          refreshStamps[countries] = Date().time
+        } else {
+          _countries.value = Resource.error(countries.value?.data, null)
+          refreshStamps.remove(countries)
+        }
+      }
+
+      override fun onFailure(call: Call<List<Country>?>, t: Throwable) {
+        _countries.value = Resource.error(countries.value?.data, t)
+        refreshStamps.remove(countries)
+      }
+    })
   }
 
   /**

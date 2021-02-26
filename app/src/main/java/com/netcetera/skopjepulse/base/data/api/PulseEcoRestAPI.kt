@@ -9,11 +9,7 @@ import com.netcetera.skopjepulse.base.jsonAdapter.PanceLocationAdapter
 import com.netcetera.skopjepulse.base.jsonAdapter.PulseEcoColorAdapter
 import com.netcetera.skopjepulse.base.jsonAdapter.SensorStatusAdapter
 import com.netcetera.skopjepulse.base.jsonAdapter.SensorTypeAdapter
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.CityOverall
-import com.netcetera.skopjepulse.base.model.DataDefinition
-import com.netcetera.skopjepulse.base.model.Sensor
-import com.netcetera.skopjepulse.base.model.SensorReading
+import com.netcetera.skopjepulse.base.model.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import okhttp3.OkHttpClient
@@ -33,6 +29,9 @@ interface PulseApiService {
 
   @GET("city")
   fun cities(): Call<List<City>>
+
+  @GET("country")
+  fun countries(): Call<List<Country>>
 
   @GET("overall")
   fun citiesOverall(@Query("cityNames") cityNames: List<String>) : Call<List<CityOverall>>
