@@ -69,11 +69,18 @@
   <string name="search_suggested">Suggested</string>
   <string name="search_results">Results</string>
   <string name="no_results_found">No results found</string>
+  <string name="removed_message">Removed from selected cities</string>
 
   <plurals name="sensor_limit_reached_message">
     <item quantity="one">You can\'t select more than %d sensor.</item>
     <item quantity="other">You can\'t select more than %d sensors.</item>
   </plurals>
 
+  <!-- Internationalisation -->
+  <string name="language">EN</string>
+  <string name="language_en">English</string>
+  <string name="language_mk">Macedonian</string>
+
+  <string name="language_title">Choose language</string>
 
 </resources>

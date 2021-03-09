@@ -78,7 +78,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   override val viewModel: MapViewModel by viewModel { parametersOf(city) }
   private val mainViewModel : MainViewModel by sharedViewModel()
 
-  val city : City by lazy { arguments!!.getParcelable<City>("city")!! }
+  val city : City by lazy { requireArguments().getParcelable<City>("city")!! }
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
@@ -283,11 +283,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
           addUpdateListener {
             bottomSheetBehavior.peekHeight = it.animatedValue as Int
             googleMap.setPadding(0, 0, 0, it.animatedValue as Int)
-            val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
-            params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
-            crowdsourcingDisclaimerText.layoutParams = params
-            crowdsourcingDisclaimerText.setOnClickListener { view ->
-              showDisclaimerDialog(view.context)
+            if(crowdsourcingDisclaimerText != null) {
+              val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
+              params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
+              crowdsourcingDisclaimerText.layoutParams = params
+              crowdsourcingDisclaimerText.setOnClickListener { view ->
+                showDisclaimerDialog(view.context)
+              }
             }
           }
         }.start()

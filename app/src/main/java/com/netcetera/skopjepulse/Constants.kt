@@ -6,5 +6,6 @@ class Constants {
    */
   companion object {
     const val SELECTED_CITIES = "selected_cities"
+    const val LANGUAGE_CODE = "language_code"
   }
 }

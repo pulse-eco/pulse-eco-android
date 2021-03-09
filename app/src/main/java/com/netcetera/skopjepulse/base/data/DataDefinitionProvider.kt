@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.ajalt.timberkt.Timber
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.data.api.PulseApiService
 import com.netcetera.skopjepulse.base.model.DataDefinition
 import com.netcetera.skopjepulse.base.model.MeasurementType
@@ -19,18 +20,22 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Date
 
-class DataDefinitionProvider(context: Context, moshi: Moshi, pulseApiService: PulseApiService) {
+class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseApiService: PulseApiService) {
 
   private val _definitionsMap: MutableMap<MeasurementType, MutableLiveData<DataDefinition>> = HashMap()
-  val definitions: LiveData<List<DataDefinition>>
+  var definitions: LiveData<List<DataDefinition>> = MutableLiveData()
 
   init {
+    loadData()
+  }
+
+  fun loadData() {
     val persistedMeasuresProvider = PersistedMeasuresProvider(context, moshi)
     val assetsMeasuresProvider = AssetsMeasuresProvider(context, moshi)
 
     val offlineDefinitions =
-        persistedMeasuresProvider.persistedDefenitions?.second ?: assetsMeasuresProvider.definitions
-        ?: emptyList()
+      persistedMeasuresProvider.persistedDefenitions?.second ?: assetsMeasuresProvider.definitions
+      ?: emptyList()
     val mutableDefinitions = MutableLiveData(offlineDefinitions)
     definitions = mutableDefinitions
 
@@ -38,9 +43,10 @@ class DataDefinitionProvider(context: Context, moshi: Moshi, pulseApiService: Pu
       _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
     }
 
-    pulseApiService.measures().enqueue(object : Callback<List<DataDefinition>> {
+    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, "")
+    pulseApiService.measures((lang)).enqueue(object : Callback<List<DataDefinition>> {
       override fun onResponse(call: Call<List<DataDefinition>>,
-          response: Response<List<DataDefinition>>) {
+                              response: Response<List<DataDefinition>>) {
         response.body()?.let { dataDefinitions ->
           mutableDefinitions.value = dataDefinitions
           dataDefinitions.forEach {
@@ -66,7 +72,7 @@ class DataDefinitionProvider(context: Context, moshi: Moshi, pulseApiService: Pu
 private const val PERSISTED_TIMESTAMP = "persisted-data-definition-timestamp"
 private const val PERSISTED_DEFINITIONS = "persisted-data-definitions"
 
-private class PersistedMeasuresProvider(context: Context, moshi: Moshi) {
+class PersistedMeasuresProvider(context: Context, moshi: Moshi) {
   private val sharedPreferences = context.defaultSharedPreferences
   val jsonAdapter: JsonAdapter<List<DataDefinition>> = moshi.adapter<List<DataDefinition>>(
       Types.newParameterizedType(List::class.java, DataDefinition::class.java))

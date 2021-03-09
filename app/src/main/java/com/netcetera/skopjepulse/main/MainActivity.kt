@@ -1,21 +1,35 @@
 package com.netcetera.skopjepulse.main
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
+import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
 import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
-import kotlinx.android.synthetic.main.pulse_app_bar.measurementTypeTabBarView
+import kotlinx.android.synthetic.main.language_picker_dilog.view.*
+import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
   private val refWatcher : RefWatcher by inject()
@@ -35,7 +49,44 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    Internationalisation.loadLocale(this)
+    Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
+
+    btn_language.setOnClickListener {
+      val lang = getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, "")
+      val pickerView = LayoutInflater.from(this).inflate(
+      R.layout.language_picker_dilog, null) as ViewGroup
+
+      pickerView.mapTypeRadioGroup.check(
+        when (lang) {
+          "mk" -> R.id.language_mk
+          "en" -> R.id.language_en
+          else -> 0
+        }
+      )
+
+      val popupWindow = PopupWindow(pickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+        true)
+
+      pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
+        when(i) {
+          R.id.language_en -> {
+            changeLanguage("en")
+            popupWindow.dismiss()
+          }
+          R.id.language_mk -> {
+            changeLanguage("mk")
+            popupWindow.dismiss()
+          }
+        }
+      }
+
+      if (popupWindow.isShowing)
+        popupWindow.dismiss()
+      else
+        if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
+    }
 
     mainViewModel.measurementTypeTabs.observe(this, Observer {
       measurementTypeTabBarView.availableMeasurementTypes = it?: emptyList()
@@ -80,7 +131,6 @@ class MainActivity : AppCompatActivity() {
         }
       })
     }
-
   }
 
   private fun showCitySelectIfNotShown() {
@@ -102,5 +152,15 @@ class MainActivity : AppCompatActivity() {
   override fun onDestroy() {
     super.onDestroy()
     refWatcher.watch(this)
+  }
+
+  private fun changeLanguage(localeName: String){
+    Internationalisation.setLocale(this, localeName)
+    Internationalisation.setLocale(applicationContext, localeName)
+    mainViewModel.reloadDDPData()
+
+    val intent = Intent(this, MainActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+    this.startActivity(intent)
   }
 }

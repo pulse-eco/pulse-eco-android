@@ -36,15 +36,17 @@
       android:id="@+id/pulseAppbarLogo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@drawable/ic_pulseappbar_logo"
-      android:layout_marginEnd="8dp"
-      android:layout_marginTop="8dp"
-      app:layout_constraintTop_toTopOf="parent"
       android:layout_marginBottom="8dp"
+      android:layout_marginTop="8dp"
+      android:clickable="true"
+      android:src="@drawable/ic_pulseappbar_logo"
       app:layout_constraintBottom_toTopOf="@id/measurementTypeTabBarView"
-      app:layout_constraintStart_toEndOf="parent"
-      android:layout_marginStart="8dp"
-      app:layout_constraintEnd_toStartOf="parent"/>
+      app:layout_constraintEnd_toEndOf="@+id/pulseAppbarCitySelect"
+      app:layout_constraintStart_toStartOf="@+id/townLabel"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="1.0"
+      android:debuggable="true"
+      android:focusable="true" />
 
     <ImageView
       android:id="@+id/pulseAppbarCitySelect"
@@ -61,6 +63,22 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
       app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"/>
+
+    <ImageView
+      android:id="@+id/btn_language"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="?android:selectableItemBackgroundBorderless"
+      android:clickable="true"
+      android:focusable="true"
+      android:paddingBottom="5dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:paddingTop="5dp"
+      android:src="@drawable/ic_language"
+      app:layout_constraintBottom_toBottomOf="@+id/pulseAppbarLogo"
+      app:layout_constraintEnd_toStartOf="@+id/pulseAppbarCitySelect"
+      app:layout_constraintTop_toTopOf="@+id/pulseAppbarLogo" />
 
     <com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTabBarView
       android:id="@+id/measurementTypeTabBarView"
