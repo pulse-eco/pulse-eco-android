@@ -76,6 +76,11 @@
     <item quantity="other">You can\'t select more than %d sensors.</item>
   </plurals>
 
+  <string name="confirm_title">Confirmation</string>
+  <string name="confirm_body">Are you sure you want to change the language?</string>
+  <string name="btn_yes">YES</string>
+  <string name="btn_no">NO</string>
+
   <!-- Internationalisation -->
   <string name="language">EN</string>
   <string name="language_en">English</string>

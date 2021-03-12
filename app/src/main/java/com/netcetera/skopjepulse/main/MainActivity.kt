@@ -2,23 +2,21 @@ package com.netcetera.skopjepulse.main
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
-import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
+import com.netcetera.skopjepulse.showConformationDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
@@ -28,7 +26,6 @@ import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -72,12 +69,12 @@ class MainActivity : AppCompatActivity() {
       pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
         when(i) {
           R.id.language_en -> {
-            changeLanguage("en")
             popupWindow.dismiss()
+            showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("en") }
           }
           R.id.language_mk -> {
-            changeLanguage("mk")
             popupWindow.dismiss()
+            showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("mk") }
           }
         }
       }

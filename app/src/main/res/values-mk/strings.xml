@@ -78,6 +78,11 @@
     <item quantity="other">Не можат да бидат изберени повеќе од %d сензори.</item>
   </plurals>
 
+  <string name="confirm_title">Потврда</string>
+  <string name="confirm_body">Дали сте сигурни дека сакате да го промените јазикот?</string>
+  <string name="btn_yes">ДА</string>
+  <string name="btn_no">НЕ</string>
+
   <!-- Internationalisation -->
   <string name="language">MK</string>
   <string name="language_en">Англиски</string>
