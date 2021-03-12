@@ -11,7 +11,9 @@ import com.netcetera.skopjepulse.extensions.resourceCombine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Date
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Repository that is responsible for loading data for a single city from the pulse.eco platform.
@@ -22,9 +24,12 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   private val _sensors = MutableLiveData<Resource<Sensors>>()
   private val _current = MutableLiveData<Resource<SensorReadings>>()
   private val _data24 = MutableLiveData<Resource<SensorReadings>>()
+  private val _avgDailyData = MutableLiveData <List<SensorReading>>()
 
   val sensors: LiveData<Resource<Sensors>>
     get() = _sensors
+  val avgDailyData:LiveData<List<SensorReading>>
+    get() = _avgDailyData
   val currentReadings : LiveData<Resource<List<CurrentSensorReading>>>
   val historicalReadings : LiveData<Resource<List<HistoricalSensorReadings>>>
 
@@ -125,6 +130,31 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     })
   }
 
+  fun getAverageWeeklyData(sensorId: String, selectedMeasurementType: MeasurementType?) {
+
+    val cal:Calendar = Calendar.getInstance()
+    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
+    println(formatter.format(cal.time))
+
+    val cal2:Calendar = Calendar.getInstance()
+    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    cal2.add(Calendar.DATE, -8)
+    val date = cal2.time
+    val fromDate: String = dateFormat.format(date)
+
+    apiService.getAvgDailyData(sensorId, selectedMeasurementType!!, fromDate,formatter.format(cal.time)).enqueue(object : Callback<List<SensorReading>> {
+
+      override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
+
+      }
+
+      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
+        if (response.isSuccessful && response.body() != null) {
+          _avgDailyData.value = response.body()!!
+        }
+      }
+    })
+  }
 }
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="horizontal"
+  android:layout_marginLeft="20dp"
+  android:layout_marginRight="20dp"
+  android:gravity="center"
+  android:background="@color/white">
+<LinearLayout
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <TextView
+    android:id="@+id/tv_sevenDaysAgo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:text="Mon"
+    android:textSize="12sp" />
+  <View
+    android:id="@+id/rectangle_1"
+    android:layout_width="45.07dp"
+    android:layout_height="4dp"
+    android:background="#252323"
+    android:alpha="0.4"
+    android:layout_marginRight="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginTop="5dp"/>
+  <TextView
+    android:id="@+id/valueForMonday"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:textSize="15sp"
+    android:layout_marginTop="5dp"
+    android:text="N/A"
+    android:textColor="#7C7575"/>
+
+</LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_sixDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Tue"
+      android:textSize="12sp" />
+    <View
+      android:id="@+id/rectangle_2"
+      android:layout_width="45.07dp"
+      android:layout_height="4dp"
+      android:background="#252323"
+      android:alpha="0.4"
+      android:layout_marginRight="2dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginTop="5dp"/>
+    <TextView
+      android:id="@+id/valueForTueday"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="N/A"
+      android:textColor="#7C7575"/>
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+      android:id="@+id/tv_FiveDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Wed"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/rectangle_3"
+      android:layout_width="45.07dp"
+      android:layout_height="4dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4"
+      android:background="#252323" />
+    <TextView
+      android:id="@+id/valueForWednesday"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="N/A"
+      android:textColor="#7C7575"/>
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_FourDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Thu"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/rectangle_4"
+      android:layout_width="45.07dp"
+      android:layout_height="4dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4"
+      android:background="#252323" />
+    <TextView
+      android:id="@+id/valueForThursday"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="N/A"
+      android:textColor="#7C7575"/>
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_ThreeDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Fri"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/rectangle_5"
+      android:layout_width="45.07dp"
+      android:layout_height="4dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4"
+      android:background="#252323" />
+    <TextView
+      android:id="@+id/valueForFriday"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="N/A"
+      android:textColor="#7C7575"/>
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_TwoDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Sat"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/rectangle_6"
+      android:layout_width="45.07dp"
+      android:layout_height="4dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4"
+      android:background="#252323" />
+    <TextView
+      android:id="@+id/valueForSaturday"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="N/A"
+      android:textColor="#7C7575"/>
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_OneDayAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Sun"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/rectangle_7"
+      android:layout_width="45.07dp"
+      android:layout_height="4dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4"
+      android:background="#252323" />
+    <TextView
+      android:id="@+id/valueForSunday"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="N/A"
+      android:textColor="#7C7575"/>
+
+  </LinearLayout>
+</LinearLayout>

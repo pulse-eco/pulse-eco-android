@@ -1,11 +1,13 @@
 package com.netcetera.skopjepulse.map
 
 import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
@@ -19,18 +21,8 @@ import com.like.OnLikeListener
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.DataDefinition
-import com.netcetera.skopjepulse.extensions.applyPulseStyling
-import com.netcetera.skopjepulse.extensions.dimOnExpand
-import com.netcetera.skopjepulse.extensions.gone
-import com.netcetera.skopjepulse.extensions.lifecycleAwareOnMapClickListener
-import com.netcetera.skopjepulse.extensions.onExpanded
-import com.netcetera.skopjepulse.extensions.onStateChange
-import com.netcetera.skopjepulse.extensions.pulseMapType
-import com.netcetera.skopjepulse.extensions.toggle
-import com.netcetera.skopjepulse.extensions.updateForCity
-import com.netcetera.skopjepulse.extensions.visible
+import com.netcetera.skopjepulse.base.model.*
+import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
@@ -41,42 +33,45 @@ import com.netcetera.skopjepulse.map.preferences.MapPreferencesPopup
 import com.netcetera.skopjepulse.showDisclaimerDialog
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
-import kotlinx.android.synthetic.main.bottom_sheet.bottomSheetContainer
-import kotlinx.android.synthetic.main.bottom_sheet.peekContainer
-import kotlinx.android.synthetic.main.bottom_sheet.peekPull
-import kotlinx.android.synthetic.main.bottom_sheet_content_layout.sensorMeasurementsGraph
-import kotlinx.android.synthetic.main.bottom_sheet_default_peek.editSelectedSensors
-import kotlinx.android.synthetic.main.bottom_sheet_default_peek.hasSelectedSensors
-import kotlinx.android.synthetic.main.bottom_sheet_default_peek.noSensorsSelected
-import kotlinx.android.synthetic.main.bottom_sheet_no_sensors_layout.bottomSheetNoSensorsContainer
-import kotlinx.android.synthetic.main.bottom_sheet_no_sensors_layout.selectSensorsButton
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.bottomSheetSensorOverview
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.sensorFavouriteButtonOverlay
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorFavouriteButton
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorFavouriteButtonOverlay
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorMeasurement
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorMeasurementDate
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorMeasurementTime
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorMeasurementUnit
-import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.sensorTitle
-import kotlinx.android.synthetic.main.map_fragment_layout.bottomSheetBackgroundOverlay
-import kotlinx.android.synthetic.main.map_fragment_layout.crowdsourcingDisclaimerText
-import kotlinx.android.synthetic.main.map_fragment_layout.map
-import kotlinx.android.synthetic.main.map_fragment_layout.mapConstraintLayout
-import kotlinx.android.synthetic.main.map_fragment_layout.mapLayersPick
-import kotlinx.android.synthetic.main.map_loading_indicator.loadingIndicatorContainer
-import kotlinx.android.synthetic.main.overall_banner_layout.overallBannerView
+import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.bottom_sheet_content_layout.*
+import kotlinx.android.synthetic.main.bottom_sheet_default_peek.*
+import kotlinx.android.synthetic.main.bottom_sheet_no_sensors_layout.*
+import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.*
+import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.*
+import kotlinx.android.synthetic.main.map_fragment_layout.*
+import kotlinx.android.synthetic.main.map_loading_indicator.*
+import kotlinx.android.synthetic.main.overall_banner_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
+
 
 class MapFragment : BaseFragment<MapViewModel>() {
   override val viewModel: MapViewModel by viewModel { parametersOf(city) }
   private val mainViewModel : MainViewModel by sharedViewModel()
+  private lateinit var dataMon:TextView
+  private lateinit var dataTue:TextView
+  private lateinit var dataWed:TextView
+  private lateinit var dataThu:TextView
+  private lateinit var dataFri:TextView
+  private lateinit var dataSat:TextView
+  private lateinit var dataSun:TextView
+  private lateinit var rectangle1:View
+  private lateinit var rectangle2:View
+  private lateinit var rectangle3:View
+  private lateinit var rectangle4:View
+  private lateinit var rectangle5:View
+  private lateinit var rectangle6:View
+  private lateinit var rectangle7:View
+
+  lateinit var dataDef:DataDefinition
+  lateinit var sensorType:MeasurementType
 
   val city : City by lazy { arguments!!.getParcelable<City>("city")!! }
 
@@ -102,7 +97,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       )
     }
   }
-
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
@@ -117,8 +111,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
     /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
       viewModel.showDataForMeasurementType(it)
+      sensorType = it
+      setDaysNames()
+      setValueForAverageDailyData()
     })
 
+    viewModel.dataDefinitionDataPublicHelper.observe(viewLifecycleOwner, Observer {
+      dataDef = it
+      displayUnit()
+    })
     // Data observers
     viewModel.overallData.observe(viewLifecycleOwner, overallBanner)
     map.getMapAsync { googleMap ->
@@ -141,6 +142,22 @@ class MapFragment : BaseFragment<MapViewModel>() {
         viewModel.deselectSensor()
       })
     }
+    dataMon = view.findViewById(R.id.valueForMonday)
+    dataTue = view.findViewById(R.id.valueForTueday)
+    dataWed = view.findViewById(R.id.valueForWednesday)
+    dataThu = view.findViewById(R.id.valueForThursday)
+    dataFri = view.findViewById(R.id.valueForFriday)
+    dataSat = view.findViewById(R.id.valueForSaturday)
+    dataSun = view.findViewById(R.id.valueForSunday)
+
+    rectangle1 = view.findViewById(R.id.rectangle_1)
+    rectangle2 = view.findViewById(R.id.rectangle_2)
+    rectangle3 = view.findViewById(R.id.rectangle_3)
+    rectangle4 = view.findViewById(R.id.rectangle_4)
+    rectangle5 = view.findViewById(R.id.rectangle_5)
+    rectangle6 = view.findViewById(R.id.rectangle_6)
+    rectangle7 = view.findViewById(R.id.rectangle_7)
+
     viewModel.bottomSheetPeek.observe(viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
     viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner, Observer {
@@ -177,9 +194,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
     // Bottom sheet behavioral stuff
     val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
     bottomSheetBehavior.onStateChange(arrayOf(
-        dimOnExpand(bottomSheetBackgroundOverlay),
-        onExpanded { viewModel.loadHistoricalReadings(false) }
-      )
+      dimOnExpand(bottomSheetBackgroundOverlay),
+      onExpanded {
+        viewModel.loadHistoricalReadings(false)
+        displayUnit()
+        setDaysNames()
+        setValueForAverageDailyData()
+      }
+    )
     )
     peekPull.setOnClickListener { bottomSheetBehavior.toggle() }
     bottomSheetBackgroundOverlay.setOnClickListener { bottomSheetBehavior.toggle() }
@@ -194,6 +216,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
     mapPreferencesPopup.onPreferenceChange {
       viewModel.updatePreference(it)
     }
+    viewModel.selectedSensor.observe(viewLifecycleOwner, Observer {
+      setValueForAverageDailyData()
+      setDaysNames()
+    })
+
     overallBanner.onToggled { isOpen ->
       TransitionManager.beginDelayedTransition(mapConstraintLayout)
       ConstraintSet().apply {
@@ -203,6 +230,68 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }.applyTo(mapConstraintLayout)
     }
 
+  }
+
+  private fun getBand(intValue: Int): Band? {
+    return dataDef.findBandByValue(intValue)
+  }
+
+  private fun displayUnit() {
+    val tvUnit = view?.findViewById<TextView>(R.id.tvUnit)
+    tvUnit?.text = resources.getString(R.string.past_week,dataDef.unit)
+  }
+
+  private fun setValueForAverageDailyData() {
+    val cal = Calendar.getInstance()
+    val arr = listOf(dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, dataSun)
+    val arr2 = listOf(rectangle1, rectangle2, rectangle3, rectangle4, rectangle5, rectangle6, rectangle7)
+
+    for (value in arr){
+      value.text = resources.getString(R.string.data_not_available)
+      value.setTextColor(Color.GRAY)
+    }
+    for (i in arr2){
+      i.setBackgroundColor(Color.GRAY)
+    }
+
+    val format = SimpleDateFormat("MMM dd yyyy")
+
+    val listOfDailyAverageData = viewModel.getAverageData(sensorType).value
+    if (listOfDailyAverageData != null) {
+
+      for (c in listOfDailyAverageData) {
+        val dateOfSensorToString = c.stamp.toString().substring(4, 10) + " " + c.stamp.toString().substring(30, 34)
+        cal.add(Calendar.DATE, -7)
+        for (i in 0..6) {
+          val iteratingDate  = format.format(cal.time)
+          if (dateOfSensorToString == iteratingDate) {
+            arr[i].text = c.value.toInt().toString()
+            val band = getBand(c.value.toInt())
+            arr[i].setTextColor(band!!.legendColor)
+            arr2[i].setBackgroundColor(band.legendColor)
+            this.sensorType
+          }
+          cal.add(Calendar.DATE, 1)
+        }
+      }
+    }
+  }
+
+  private fun setDaysNames() {
+    val cal = Calendar.getInstance()
+    val sevenDaysAgo :TextView = requireView().findViewById(R.id.tv_sevenDaysAgo)
+    val sixDaysAgo :TextView = requireView().findViewById(R.id.tv_sixDaysAgo)
+    val fiveDaysAgo :TextView = requireView().findViewById(R.id.tv_FiveDaysAgo)
+    val fourDaysAgo :TextView = requireView().findViewById(R.id.tv_FourDaysAgo)
+    val threeDaysAgo :TextView = requireView().findViewById(R.id.tv_ThreeDaysAgo)
+    val twoDaysAgo :TextView = requireView().findViewById(R.id.tv_TwoDaysAgo)
+    val oneDayAgo :TextView = requireView().findViewById(R.id.tv_OneDayAgo)
+    val arr = listOf(oneDayAgo, twoDaysAgo, threeDaysAgo, fourDaysAgo, fiveDaysAgo, sixDaysAgo, sevenDaysAgo)
+    for (tv in arr){
+      cal.add(Calendar.DATE, -1)
+      val dayOfWeek = SimpleDateFormat("EEEE", Locale.ENGLISH).format(cal.time)
+      tv.text = dayOfWeek.substring(0, 3)
+    }
   }
 
   private fun displayPeekContent(peekViewModel: BottomSheetPeekViewModel) {

@@ -2,6 +2,7 @@ package com.netcetera.skopjepulse.map
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
@@ -11,12 +12,7 @@ import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
 import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
 import com.netcetera.skopjepulse.base.data.repository.Sensors
-import com.netcetera.skopjepulse.base.model.Band
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.DataDefinition
-import com.netcetera.skopjepulse.base.model.MeasurementType
-import com.netcetera.skopjepulse.base.model.PULSE_SENSOR_COLORS
-import com.netcetera.skopjepulse.base.model.Sensor
+import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.base.viewModel.PulseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
@@ -59,7 +55,8 @@ class MapViewModel(
     PulseViewModel(cityPulseRepository, favouriteSensorsStorage) {
 
   private val selectedMeasurementType = MutableLiveData<MeasurementType>()
-  private val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
+  val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
+  var dataDefinitionDataPublicHelper :LiveData<DataDefinition>
 
   val overallData: LiveData<OverallBannerData>
   val mapMarkers: LiveData<List<MapMarkerModel>>
@@ -82,6 +79,7 @@ class MapViewModel(
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
       dataDefinitionProvider[it]
     }
+    dataDefinitionDataPublicHelper = dataDefinitionData
 
     val currentReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.currentReadings) { current ->
@@ -239,6 +237,16 @@ class MapViewModel(
    */
   fun loadHistoricalReadings(forceRefresh: Boolean = false) {
     cityPulseRepository.refreshData24(forceRefresh)
+  }
+
+  fun getAverageData(activeMeasurementType: MeasurementType): LiveData<List<SensorReading>> {
+    var sensorId = "-1"
+    if (selectedSensor.value?.id != null){
+      sensorId = selectedSensor.value?.id.toString()
+    }
+
+    cityPulseRepository.getAverageWeeklyData(sensorId,activeMeasurementType)
+    return cityPulseRepository.avgDailyData
   }
 
   fun showDataForMeasurementType(measurementType: MeasurementType) {
