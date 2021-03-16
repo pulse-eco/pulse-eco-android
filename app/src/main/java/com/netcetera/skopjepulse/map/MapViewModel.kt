@@ -6,8 +6,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
+import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
 import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
@@ -239,8 +241,8 @@ class MapViewModel(
     cityPulseRepository.refreshData24(forceRefresh)
   }
 
-  fun getAverageData(activeMeasurementType: MeasurementType): LiveData<List<SensorReading>> {
-    var sensorId = "-1"
+  fun getAverageData(activeMeasurementType: MeasurementType): LiveData<Resource<List<SensorReading>>> {
+    var sensorId = Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     if (selectedSensor.value?.id != null){
       sensorId = selectedSensor.value?.id.toString()
     }

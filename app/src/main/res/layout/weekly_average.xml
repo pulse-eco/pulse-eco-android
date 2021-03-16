@@ -36,7 +36,7 @@
     android:layout_gravity="center"
     android:textSize="15sp"
     android:layout_marginTop="5dp"
-    android:text="N/A"
+    android:text="@string/data_not_available"
     android:textColor="#7C7575"/>
 
 </LinearLayout>
@@ -62,13 +62,13 @@
       android:layout_marginLeft="2dp"
       android:layout_marginTop="5dp"/>
     <TextView
-      android:id="@+id/valueForTueday"
+      android:id="@+id/valueForTuesday"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="N/A"
+      android:text="@string/data_not_available"
       android:textColor="#7C7575"/>
   </LinearLayout>
   <LinearLayout
@@ -101,7 +101,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="N/A"
+      android:text="@string/data_not_available"
       android:textColor="#7C7575"/>
 
   </LinearLayout>
@@ -134,7 +134,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="N/A"
+      android:text="@string/data_not_available"
       android:textColor="#7C7575"/>
 
   </LinearLayout>
@@ -167,7 +167,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="N/A"
+      android:text="@string/data_not_available"
       android:textColor="#7C7575"/>
 
   </LinearLayout>
@@ -200,7 +200,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="N/A"
+      android:text="@string/data_not_available"
       android:textColor="#7C7575"/>
 
   </LinearLayout>
@@ -233,7 +233,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="N/A"
+      android:text="@string/data_not_available"
       android:textColor="#7C7575"/>
 
   </LinearLayout>

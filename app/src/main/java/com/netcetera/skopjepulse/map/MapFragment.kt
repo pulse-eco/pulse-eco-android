@@ -18,10 +18,13 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.like.LikeButton
 import com.like.OnLikeListener
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
+import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.model.*
+import com.netcetera.skopjepulse.base.utils.*
 import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.main.MainViewModel
@@ -42,6 +45,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.*
 import kotlinx.android.synthetic.main.map_fragment_layout.*
 import kotlinx.android.synthetic.main.map_loading_indicator.*
 import kotlinx.android.synthetic.main.overall_banner_layout.*
+import kotlinx.android.synthetic.main.weekly_average.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -55,20 +59,6 @@ import kotlin.math.roundToInt
 class MapFragment : BaseFragment<MapViewModel>() {
   override val viewModel: MapViewModel by viewModel { parametersOf(city) }
   private val mainViewModel : MainViewModel by sharedViewModel()
-  private lateinit var dataMon:TextView
-  private lateinit var dataTue:TextView
-  private lateinit var dataWed:TextView
-  private lateinit var dataThu:TextView
-  private lateinit var dataFri:TextView
-  private lateinit var dataSat:TextView
-  private lateinit var dataSun:TextView
-  private lateinit var rectangle1:View
-  private lateinit var rectangle2:View
-  private lateinit var rectangle3:View
-  private lateinit var rectangle4:View
-  private lateinit var rectangle5:View
-  private lateinit var rectangle6:View
-  private lateinit var rectangle7:View
 
   lateinit var dataDef:DataDefinition
   lateinit var sensorType:MeasurementType
@@ -142,21 +132,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         viewModel.deselectSensor()
       })
     }
-    dataMon = view.findViewById(R.id.valueForMonday)
-    dataTue = view.findViewById(R.id.valueForTueday)
-    dataWed = view.findViewById(R.id.valueForWednesday)
-    dataThu = view.findViewById(R.id.valueForThursday)
-    dataFri = view.findViewById(R.id.valueForFriday)
-    dataSat = view.findViewById(R.id.valueForSaturday)
-    dataSun = view.findViewById(R.id.valueForSunday)
-
-    rectangle1 = view.findViewById(R.id.rectangle_1)
-    rectangle2 = view.findViewById(R.id.rectangle_2)
-    rectangle3 = view.findViewById(R.id.rectangle_3)
-    rectangle4 = view.findViewById(R.id.rectangle_4)
-    rectangle5 = view.findViewById(R.id.rectangle_5)
-    rectangle6 = view.findViewById(R.id.rectangle_6)
-    rectangle7 = view.findViewById(R.id.rectangle_7)
 
     viewModel.bottomSheetPeek.observe(viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
     viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
@@ -243,35 +218,31 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setValueForAverageDailyData() {
     val cal = Calendar.getInstance()
-    val arr = listOf(dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, dataSun)
-    val arr2 = listOf(rectangle1, rectangle2, rectangle3, rectangle4, rectangle5, rectangle6, rectangle7)
+    val listOfTextViewsForValues = listOf(valueForMonday, valueForTuesday, valueForWednesday, valueForThursday, valueForFriday, valueForSaturday, valueForSunday)
+    val listOfRectangleViews = listOf(rectangle_1, rectangle_2, rectangle_3, rectangle_4, rectangle_5, rectangle_6, rectangle_7)
 
-    for (value in arr){
-      value.text = resources.getString(R.string.data_not_available)
-      value.setTextColor(Color.GRAY)
-    }
-    for (i in arr2){
-      i.setBackgroundColor(Color.GRAY)
-    }
+    setInitialDataToNotAvailable()
 
-    val format = SimpleDateFormat("MMM dd yyyy")
+    val format = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT)
 
-    val listOfDailyAverageData = viewModel.getAverageData(sensorType).value
-    if (listOfDailyAverageData != null) {
+    viewModel.getAverageData(sensorType).observe(viewLifecycleOwner) { listOfDailyAverageData ->
 
-      for (c in listOfDailyAverageData) {
-        val dateOfSensorToString = c.stamp.toString().substring(4, 10) + " " + c.stamp.toString().substring(30, 34)
-        cal.add(Calendar.DATE, -7)
-        for (i in 0..6) {
-          val iteratingDate  = format.format(cal.time)
-          if (dateOfSensorToString == iteratingDate) {
-            arr[i].text = c.value.toInt().toString()
-            val band = getBand(c.value.toInt())
-            arr[i].setTextColor(band!!.legendColor)
-            arr2[i].setBackgroundColor(band.legendColor)
-            this.sensorType
+      setInitialDataToNotAvailable()
+
+      listOfDailyAverageData.data?.let { it ->
+        it.forEach { sensorReading ->
+          val dateOfSensorToString = sensorReading.getMonthAndDayFromStamp() + " " + sensorReading.getYearFromStamp()
+          cal.add(Calendar.DATE, -7)
+          for (i in 0..6) {
+            val iteratingDate = format.format(cal.time)
+            if (dateOfSensorToString == iteratingDate) {
+              listOfTextViewsForValues[i].text = sensorReading.value.toInt().toString()
+              val band = getBand(sensorReading.value.toInt())
+              listOfTextViewsForValues[i].setTextColor(band!!.legendColor)
+              listOfRectangleViews[i].setBackgroundColor(band.legendColor)
+            }
+            cal.add(Calendar.DATE, 1)
           }
-          cal.add(Calendar.DATE, 1)
         }
       }
     }
@@ -279,18 +250,23 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setDaysNames() {
     val cal = Calendar.getInstance()
-    val sevenDaysAgo :TextView = requireView().findViewById(R.id.tv_sevenDaysAgo)
-    val sixDaysAgo :TextView = requireView().findViewById(R.id.tv_sixDaysAgo)
-    val fiveDaysAgo :TextView = requireView().findViewById(R.id.tv_FiveDaysAgo)
-    val fourDaysAgo :TextView = requireView().findViewById(R.id.tv_FourDaysAgo)
-    val threeDaysAgo :TextView = requireView().findViewById(R.id.tv_ThreeDaysAgo)
-    val twoDaysAgo :TextView = requireView().findViewById(R.id.tv_TwoDaysAgo)
-    val oneDayAgo :TextView = requireView().findViewById(R.id.tv_OneDayAgo)
-    val arr = listOf(oneDayAgo, twoDaysAgo, threeDaysAgo, fourDaysAgo, fiveDaysAgo, sixDaysAgo, sevenDaysAgo)
-    for (tv in arr){
+    val listOfDaysNames = listOf(tv_OneDayAgo, tv_TwoDaysAgo, tv_ThreeDaysAgo, tv_FourDaysAgo, tv_FiveDaysAgo, tv_sixDaysAgo, tv_sevenDaysAgo)
+    listOfDaysNames.forEach{
       cal.add(Calendar.DATE, -1)
-      val dayOfWeek = SimpleDateFormat("EEEE", Locale.ENGLISH).format(cal.time)
-      tv.text = dayOfWeek.substring(0, 3)
+      it.text = SimpleDateFormat("EEE", Locale.ENGLISH).format(cal.time)
+    }
+  }
+
+  private fun setInitialDataToNotAvailable(){
+    val listOfTextViewsForValues = listOf(valueForMonday, valueForTuesday, valueForWednesday, valueForThursday, valueForFriday, valueForSaturday, valueForSunday)
+    val listOfRectangleViews = listOf(rectangle_1, rectangle_2, rectangle_3, rectangle_4, rectangle_5, rectangle_6, rectangle_7)
+
+    listOfTextViewsForValues.forEach{
+      it.text = resources.getString(R.string.data_not_available)
+      it.setTextColor(Color.GRAY)
+    }
+    listOfRectangleViews.forEach{
+      it.setBackgroundColor(Color.GRAY)
     }
   }
 

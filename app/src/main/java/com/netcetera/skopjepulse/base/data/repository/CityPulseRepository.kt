@@ -1,7 +1,9 @@
 package com.netcetera.skopjepulse.base.data.repository
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.api.CityPulseApiService
 import com.netcetera.skopjepulse.base.model.MeasurementType
@@ -24,11 +26,11 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   private val _sensors = MutableLiveData<Resource<Sensors>>()
   private val _current = MutableLiveData<Resource<SensorReadings>>()
   private val _data24 = MutableLiveData<Resource<SensorReadings>>()
-  private val _avgDailyData = MutableLiveData <List<SensorReading>>()
+  private val _avgDailyData = MutableLiveData <Resource<List<SensorReading>>>()
 
   val sensors: LiveData<Resource<Sensors>>
     get() = _sensors
-  val avgDailyData:LiveData<List<SensorReading>>
+  val avgDailyData:LiveData<Resource<List<SensorReading>>>
     get() = _avgDailyData
   val currentReadings : LiveData<Resource<List<CurrentSensorReading>>>
   val historicalReadings : LiveData<Resource<List<HistoricalSensorReadings>>>
@@ -133,24 +135,26 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   fun getAverageWeeklyData(sensorId: String, selectedMeasurementType: MeasurementType?) {
 
     val cal:Calendar = Calendar.getInstance()
-    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
-    println(formatter.format(cal.time))
-
     val cal2:Calendar = Calendar.getInstance()
-    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     cal2.add(Calendar.DATE, -8)
-    val date = cal2.time
-    val fromDate: String = dateFormat.format(date)
 
-    apiService.getAvgDailyData(sensorId, selectedMeasurementType!!, fromDate,formatter.format(cal.time)).enqueue(object : Callback<List<SensorReading>> {
+    val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
+    val toDate = formatter.format(cal.time)
+
+    val date = cal2.time
+    val fromDate: String = formatter.format(date)
+
+    apiService.getAvgDailyData(sensorId, selectedMeasurementType!!, fromDate, toDate).enqueue(object : Callback<List<SensorReading>> {
 
       override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
-
+        _avgDailyData.value = Resource.error(_avgDailyData.value?.data,t)
       }
 
       override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
         if (response.isSuccessful && response.body() != null) {
-          _avgDailyData.value = response.body()!!
+          _avgDailyData.value = Resource.success(response.body()!!)
+        }else{
+          _avgDailyData.value = Resource.error(_avgDailyData.value?.data,null)
         }
       }
     })
