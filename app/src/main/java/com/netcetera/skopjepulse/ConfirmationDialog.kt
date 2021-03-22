@@ -7,7 +7,7 @@ fun showConformationDialog(context: Context, message: String, onConfirmation: ()
   val builder = AlertDialog.Builder(context)
 
   builder.setTitle(context.getString(R.string.confirm_title))
-  builder.setMessage(context.getString(R.string.confirm_body))
+  builder.setMessage(message)
 
   builder.setPositiveButton(context.getString(R.string.btn_yes)) { _, _ ->
     onConfirmation()

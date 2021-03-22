@@ -52,8 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, "")
-      val pickerView = LayoutInflater.from(this).inflate(
-      R.layout.language_picker_dilog, null) as ViewGroup
+      val pickerView = LayoutInflater.from(this).inflate(R.layout.language_picker_dilog, null) as ViewGroup
 
       pickerView.mapTypeRadioGroup.check(
         when (lang) {
