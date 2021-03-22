@@ -30,13 +30,20 @@
     android:layout_marginBottom="20dp"
     android:layout_marginLeft="35dp"
     android:textStyle="bold"
-    tools:text="Past week" />
+    tools:text="@string/past_week_for_specific_sensor"/>
+
+  <ProgressBar
+    android:id="@+id/progressBarForWeeklyAverageData"
+    style="?android:attr/progressBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
   <include
     android:id="@+id/weeklyAverageView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginBottom="13dp"
     layout="@layout/weekly_average"/>
 
   <include layout="@layout/bottom_sheet_no_sensors_layout"/>

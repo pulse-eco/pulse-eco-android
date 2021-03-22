@@ -1,6 +1,5 @@
 package com.netcetera.skopjepulse.base.data.repository
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.netcetera.skopjepulse.Constants
@@ -13,7 +12,6 @@ import com.netcetera.skopjepulse.extensions.resourceCombine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,12 +24,9 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   private val _sensors = MutableLiveData<Resource<Sensors>>()
   private val _current = MutableLiveData<Resource<SensorReadings>>()
   private val _data24 = MutableLiveData<Resource<SensorReadings>>()
-  private val _avgDailyData = MutableLiveData <Resource<List<SensorReading>>>()
 
   val sensors: LiveData<Resource<Sensors>>
     get() = _sensors
-  val avgDailyData:LiveData<Resource<List<SensorReading>>>
-    get() = _avgDailyData
   val currentReadings : LiveData<Resource<List<CurrentSensorReading>>>
   val historicalReadings : LiveData<Resource<List<HistoricalSensorReadings>>>
 
@@ -132,8 +127,9 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     })
   }
 
-  fun getAverageWeeklyData(sensorId: String, selectedMeasurementType: MeasurementType?) {
-
+  fun getAverageWeeklyData(sensorId: String?, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
+    val result = MutableLiveData<Resource<List<SensorReading>>>()
+    val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     val cal:Calendar = Calendar.getInstance()
     val cal2:Calendar = Calendar.getInstance()
     cal2.add(Calendar.DATE, -8)
@@ -144,20 +140,20 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     val date = cal2.time
     val fromDate: String = formatter.format(date)
 
-    apiService.getAvgDailyData(sensorId, selectedMeasurementType!!, fromDate, toDate).enqueue(object : Callback<List<SensorReading>> {
+    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate).enqueue(object : Callback<List<SensorReading>> {
 
       override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
-        _avgDailyData.value = Resource.error(_avgDailyData.value?.data,t)
+        result.postValue(Resource.error(null, t))
       }
 
       override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
         if (response.isSuccessful && response.body() != null) {
-          _avgDailyData.value = Resource.success(response.body()!!)
-        }else{
-          _avgDailyData.value = Resource.error(_avgDailyData.value?.data,null)
+          result.postValue(Resource.success(response.body()!!))
         }
       }
     })
+
+    return result
   }
 }
 

@@ -22,13 +22,13 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
-import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.base.utils.*
 import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
+import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
 import com.netcetera.skopjepulse.map.model.BottomSheetPeekViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
 import com.netcetera.skopjepulse.map.overallbanner.OverallBannerView
@@ -62,6 +62,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   lateinit var dataDef:DataDefinition
   lateinit var sensorType:MeasurementType
+
+  private var pastWeekDataLabelForCityName:Boolean = true
 
   val city : City by lazy { arguments!!.getParcelable<City>("city")!! }
 
@@ -102,8 +104,20 @@ class MapFragment : BaseFragment<MapViewModel>() {
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
       viewModel.showDataForMeasurementType(it)
       sensorType = it
+      progressBarForWeeklyAverageData.visibility = View.VISIBLE
+      weeklyAverageView.visibility = View.GONE
       setDaysNames()
-      setValueForAverageDailyData()
+      viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
+        setValueForAverageDailyData(weeklyAverageDataModel)
+      }
+    })
+
+    viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
+        setValueForAverageDailyData(it)
+    }
+
+    viewModel.pastWeekCityNameLabelBoolean.observe(viewLifecycleOwner, Observer {
+      pastWeekDataLabelForCityName = it
     })
 
     viewModel.dataDefinitionDataPublicHelper.observe(viewLifecycleOwner, Observer {
@@ -174,7 +188,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
         viewModel.loadHistoricalReadings(false)
         displayUnit()
         setDaysNames()
-        setValueForAverageDailyData()
+        viewModel.averageWeeklyData.value?.let {
+          setValueForAverageDailyData(it)
+        }
       }
     )
     )
@@ -192,7 +208,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.updatePreference(it)
     }
     viewModel.selectedSensor.observe(viewLifecycleOwner, Observer {
-      setValueForAverageDailyData()
+      setValueForAverageDailyData(viewModel.averageWeeklyData.value)
       setDaysNames()
     })
 
@@ -213,10 +229,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun displayUnit() {
     val tvUnit = view?.findViewById<TextView>(R.id.tvUnit)
-    tvUnit?.text = resources.getString(R.string.past_week,dataDef.unit)
+    if (pastWeekDataLabelForCityName){
+      tvUnit?.text = resources.getString(R.string.past_week_for_whole_city, mainViewModel.activeCity.value?.name?.capitalize(), dataDef.unit)
+    }else {
+      tvUnit?.text = resources.getString(R.string.past_week_for_specific_sensor, dataDef.unit)
+    }
   }
 
-  private fun setValueForAverageDailyData() {
+  private fun setValueForAverageDailyData(dataModel: AverageWeeklyDataModel?) {
     val cal = Calendar.getInstance()
     val listOfTextViewsForValues = listOf(valueForMonday, valueForTuesday, valueForWednesday, valueForThursday, valueForFriday, valueForSaturday, valueForSunday)
     val listOfRectangleViews = listOf(rectangle_1, rectangle_2, rectangle_3, rectangle_4, rectangle_5, rectangle_6, rectangle_7)
@@ -224,27 +244,24 @@ class MapFragment : BaseFragment<MapViewModel>() {
     setInitialDataToNotAvailable()
 
     val format = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT)
-
-    viewModel.getAverageData(sensorType).observe(viewLifecycleOwner) { listOfDailyAverageData ->
-
-      setInitialDataToNotAvailable()
-
-      listOfDailyAverageData.data?.let { it ->
-        it.forEach { sensorReading ->
-          val dateOfSensorToString = sensorReading.getMonthAndDayFromStamp() + " " + sensorReading.getYearFromStamp()
-          cal.add(Calendar.DATE, -7)
-          for (i in 0..6) {
-            val iteratingDate = format.format(cal.time)
-            if (dateOfSensorToString == iteratingDate) {
-              listOfTextViewsForValues[i].text = sensorReading.value.toInt().toString()
-              val band = getBand(sensorReading.value.toInt())
-              listOfTextViewsForValues[i].setTextColor(band!!.legendColor)
-              listOfRectangleViews[i].setBackgroundColor(band.legendColor)
-            }
-            cal.add(Calendar.DATE, 1)
+    dataModel?.data?.let { readings ->
+      readings.forEach { sensorReading ->
+        val dateOfSensorToString = sensorReading.getMonthAndDayFromStamp() + " " + sensorReading.getYearFromStamp()
+        cal.add(Calendar.DATE, -7)
+        for (i in 0..6) {
+          val iteratingDate = format.format(cal.time)
+          if (dateOfSensorToString == iteratingDate) {
+            listOfTextViewsForValues[i].text = sensorReading.value.toInt().toString()
+            val band = getBand(sensorReading.value.toInt())
+            listOfTextViewsForValues[i].setTextColor(band!!.legendColor)
+            listOfRectangleViews[i].setBackgroundColor(band.legendColor)
           }
+          cal.add(Calendar.DATE, 1)
         }
+
       }
+      progressBarForWeeklyAverageData.visibility = View.GONE
+      weeklyAverageView.visibility = View.VISIBLE
     }
   }
 

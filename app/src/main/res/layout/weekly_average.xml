@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  xmlns:tools="http://schemas.android.com/tools"
   android:orientation="horizontal"
-  android:layout_marginLeft="20dp"
-  android:layout_marginRight="20dp"
+  android:layout_marginLeft="@dimen/average_weekly_data_view_margin"
+  android:layout_marginRight="@dimen/average_weekly_data_view_margin"
   android:gravity="center"
   android:background="@color/white">
 <LinearLayout
@@ -18,13 +17,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:text="Mon"
+    android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
     android:textSize="12sp" />
   <View
     android:id="@+id/rectangle_1"
-    android:layout_width="45.07dp"
-    android:layout_height="4dp"
-    android:background="#252323"
+    android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+    android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
     android:alpha="0.4"
     android:layout_marginRight="2dp"
     android:layout_marginLeft="2dp"
@@ -36,8 +34,7 @@
     android:layout_gravity="center"
     android:textSize="15sp"
     android:layout_marginTop="5dp"
-    android:text="@string/data_not_available"
-    android:textColor="#7C7575"/>
+    android:text="@string/data_not_available" />
 
 </LinearLayout>
   <LinearLayout
@@ -50,13 +47,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="Tue"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
     <View
       android:id="@+id/rectangle_2"
-      android:layout_width="45.07dp"
-      android:layout_height="4dp"
-      android:background="#252323"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:alpha="0.4"
       android:layout_marginRight="2dp"
       android:layout_marginLeft="2dp"
@@ -68,8 +64,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="@string/data_not_available"
-      android:textColor="#7C7575"/>
+      android:text="@string/data_not_available" />
   </LinearLayout>
   <LinearLayout
     android:layout_width="wrap_content"
@@ -82,18 +77,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="Wed"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
 
     <View
       android:id="@+id/rectangle_3"
-      android:layout_width="45.07dp"
-      android:layout_height="4dp"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
       android:layout_marginRight="2dp"
       android:layout_marginTop="5dp"
-      android:alpha="0.4"
-      android:background="#252323" />
+      android:alpha="0.4" />
     <TextView
       android:id="@+id/valueForWednesday"
       android:layout_width="wrap_content"
@@ -101,8 +95,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="@string/data_not_available"
-      android:textColor="#7C7575"/>
+      android:text="@string/data_not_available" />
 
   </LinearLayout>
   <LinearLayout
@@ -115,18 +108,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="Thu"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
 
     <View
       android:id="@+id/rectangle_4"
-      android:layout_width="45.07dp"
-      android:layout_height="4dp"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
       android:layout_marginRight="2dp"
       android:layout_marginTop="5dp"
-      android:alpha="0.4"
-      android:background="#252323" />
+      android:alpha="0.4" />
     <TextView
       android:id="@+id/valueForThursday"
       android:layout_width="wrap_content"
@@ -134,8 +126,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="@string/data_not_available"
-      android:textColor="#7C7575"/>
+      android:text="@string/data_not_available" />
 
   </LinearLayout>
   <LinearLayout
@@ -148,18 +139,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="Fri"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
 
     <View
       android:id="@+id/rectangle_5"
-      android:layout_width="45.07dp"
-      android:layout_height="4dp"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
       android:layout_marginRight="2dp"
       android:layout_marginTop="5dp"
-      android:alpha="0.4"
-      android:background="#252323" />
+      android:alpha="0.4" />
     <TextView
       android:id="@+id/valueForFriday"
       android:layout_width="wrap_content"
@@ -167,8 +157,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="@string/data_not_available"
-      android:textColor="#7C7575"/>
+      android:text="@string/data_not_available" />
 
   </LinearLayout>
   <LinearLayout
@@ -181,18 +170,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="Sat"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
 
     <View
       android:id="@+id/rectangle_6"
-      android:layout_width="45.07dp"
-      android:layout_height="4dp"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
       android:layout_marginRight="2dp"
       android:layout_marginTop="5dp"
-      android:alpha="0.4"
-      android:background="#252323" />
+      android:alpha="0.4" />
     <TextView
       android:id="@+id/valueForSaturday"
       android:layout_width="wrap_content"
@@ -200,8 +188,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="@string/data_not_available"
-      android:textColor="#7C7575"/>
+      android:text="@string/data_not_available" />
 
   </LinearLayout>
   <LinearLayout
@@ -214,18 +201,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="Sun"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
 
     <View
       android:id="@+id/rectangle_7"
-      android:layout_width="45.07dp"
-      android:layout_height="4dp"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
       android:layout_marginRight="2dp"
       android:layout_marginTop="5dp"
-      android:alpha="0.4"
-      android:background="#252323" />
+      android:alpha="0.4" />
     <TextView
       android:id="@+id/valueForSunday"
       android:layout_width="wrap_content"
@@ -233,8 +219,7 @@
       android:layout_gravity="center"
       android:textSize="15sp"
       android:layout_marginTop="5dp"
-      android:text="@string/data_not_available"
-      android:textColor="#7C7575"/>
+      android:text="@string/data_not_available" />
 
   </LinearLayout>
 </LinearLayout>

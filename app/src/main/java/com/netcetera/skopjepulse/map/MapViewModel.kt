@@ -1,15 +1,10 @@
 package com.netcetera.skopjepulse.map
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
-import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
-import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
 import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
@@ -20,12 +15,7 @@ import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
-import com.netcetera.skopjepulse.map.model.BottomSheetPeekViewModel
-import com.netcetera.skopjepulse.map.model.GraphBand
-import com.netcetera.skopjepulse.map.model.GraphModel
-import com.netcetera.skopjepulse.map.model.GraphSeries
-import com.netcetera.skopjepulse.map.model.MapMarkerModel
-import com.netcetera.skopjepulse.map.model.SensorOverviewModel
+import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.LegendBand
 import com.netcetera.skopjepulse.map.overallbanner.OverallBannerData
@@ -76,6 +66,12 @@ class MapViewModel(
   val preferences = mapPreferencesStorage.preferences
   val mapPolygons: LiveData<List<PolygonOptions>>
   val bottomSheetPeek: LiveData<BottomSheetPeekViewModel>
+
+  private val _pastWeekCityNameLabelBoolean = MutableLiveData<Boolean>()
+  val pastWeekCityNameLabelBoolean: LiveData<Boolean>
+    get() = _pastWeekCityNameLabelBoolean
+
+  var averageWeeklyData: LiveData<AverageWeeklyDataModel>
 
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
@@ -171,6 +167,18 @@ class MapViewModel(
       }
     }
 
+    averageWeeklyData = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageWeeklyData(sensor?.id, measurementType)
+        _pastWeekCityNameLabelBoolean.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
+
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {
         return@switchMap Transformations.map(hasFavouriteSensors) { it.not() }
@@ -239,16 +247,6 @@ class MapViewModel(
    */
   fun loadHistoricalReadings(forceRefresh: Boolean = false) {
     cityPulseRepository.refreshData24(forceRefresh)
-  }
-
-  fun getAverageData(activeMeasurementType: MeasurementType): LiveData<Resource<List<SensorReading>>> {
-    var sensorId = Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
-    if (selectedSensor.value?.id != null){
-      sensorId = selectedSensor.value?.id.toString()
-    }
-
-    cityPulseRepository.getAverageWeeklyData(sensorId,activeMeasurementType)
-    return cityPulseRepository.avgDailyData
   }
 
   fun showDataForMeasurementType(measurementType: MeasurementType) {
