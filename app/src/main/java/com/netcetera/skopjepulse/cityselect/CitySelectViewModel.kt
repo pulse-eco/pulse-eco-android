@@ -6,6 +6,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.github.ajalt.timberkt.w
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.netcetera.skopjepulse.Constants
@@ -57,12 +58,18 @@ class CitySelectViewModel(
 
   lateinit var allCityItems: LiveData<List<CitySelectItem>>
 
+  private var _shouldRefreshSelectedCities = MutableLiveData<Boolean>()
+
+  val shouldRefreshSelectedCities :LiveData<Boolean>
+    get() = _shouldRefreshSelectedCities
+
   private val _citiesSharedPref = MutableLiveData<String>()
 
 
   init {
     loadData()
     getSelectedCities()
+    _shouldRefreshSelectedCities.value = false
   }
 
 
@@ -112,7 +119,10 @@ class CitySelectViewModel(
     val editor: SharedPreferences.Editor = sharedPref.edit()
     val jsonSelectedCities = gson.toJson(selectedCitiesSet)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
-    editor.commit()
+    editor.apply()
+
+    getSelectedCities()
+    _shouldRefreshSelectedCities.value = true
   }
 
   /**

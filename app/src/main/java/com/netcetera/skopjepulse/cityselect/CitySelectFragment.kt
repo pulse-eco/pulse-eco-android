@@ -60,6 +60,10 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       citySelectRefreshView.isRefreshing = it == true
     })
 
+    viewModel.shouldRefreshSelectedCities.observe(viewLifecycleOwner, Observer {
+      viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
+    })
+
     viewModel.requestLocationPermission.observe(viewLifecycleOwner, Observer { event ->
       event?.getContentIfNotHandled()?.let {
         requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 24)
