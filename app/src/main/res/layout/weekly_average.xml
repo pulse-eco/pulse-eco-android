@@ -13,14 +13,14 @@
   android:orientation="vertical">
 
   <TextView
-    android:id="@+id/tv_sevenDaysAgo"
+    android:id="@+id/nameSevenDaysAgo"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
     android:textSize="12sp" />
   <View
-    android:id="@+id/rectangle_1"
+    android:id="@+id/colorSevenDaysAgo"
     android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
     android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
     android:alpha="0.4"
@@ -28,7 +28,7 @@
     android:layout_marginLeft="2dp"
     android:layout_marginTop="5dp"/>
   <TextView
-    android:id="@+id/valueForMonday"
+    android:id="@+id/valueSevenDaysAgo"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -43,14 +43,14 @@
     android:orientation="vertical">
 
     <TextView
-      android:id="@+id/tv_sixDaysAgo"
+      android:id="@+id/nameSixDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
       android:textSize="12sp" />
     <View
-      android:id="@+id/rectangle_2"
+      android:id="@+id/colorSixDaysAgo"
       android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
       android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:alpha="0.4"
@@ -58,7 +58,7 @@
       android:layout_marginLeft="2dp"
       android:layout_marginTop="5dp"/>
     <TextView
-      android:id="@+id/valueForTuesday"
+      android:id="@+id/valueSixDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -73,7 +73,7 @@
     >
 
     <TextView
-      android:id="@+id/tv_FiveDaysAgo"
+      android:id="@+id/nameFiveDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -81,7 +81,7 @@
       android:textSize="12sp" />
 
     <View
-      android:id="@+id/rectangle_3"
+      android:id="@+id/colorFiveDaysAgo"
       android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
       android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
@@ -89,7 +89,7 @@
       android:layout_marginTop="5dp"
       android:alpha="0.4" />
     <TextView
-      android:id="@+id/valueForWednesday"
+      android:id="@+id/valueFiveDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -104,7 +104,7 @@
     android:orientation="vertical">
 
     <TextView
-      android:id="@+id/tv_FourDaysAgo"
+      android:id="@+id/nameFourDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -112,7 +112,7 @@
       android:textSize="12sp" />
 
     <View
-      android:id="@+id/rectangle_4"
+      android:id="@+id/colorFourDaysAgo"
       android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
       android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
@@ -120,7 +120,7 @@
       android:layout_marginTop="5dp"
       android:alpha="0.4" />
     <TextView
-      android:id="@+id/valueForThursday"
+      android:id="@+id/valueFourDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -135,7 +135,7 @@
     android:orientation="vertical">
 
     <TextView
-      android:id="@+id/tv_ThreeDaysAgo"
+      android:id="@+id/nameThreeDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -143,7 +143,7 @@
       android:textSize="12sp" />
 
     <View
-      android:id="@+id/rectangle_5"
+      android:id="@+id/colorThreeDaysAgo"
       android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
       android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
@@ -151,7 +151,7 @@
       android:layout_marginTop="5dp"
       android:alpha="0.4" />
     <TextView
-      android:id="@+id/valueForFriday"
+      android:id="@+id/valueThreeDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -166,7 +166,7 @@
     android:orientation="vertical">
 
     <TextView
-      android:id="@+id/tv_TwoDaysAgo"
+      android:id="@+id/nameTwoDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -174,7 +174,7 @@
       android:textSize="12sp" />
 
     <View
-      android:id="@+id/rectangle_6"
+      android:id="@+id/colorTwoDaysAgo"
       android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
       android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
@@ -182,7 +182,7 @@
       android:layout_marginTop="5dp"
       android:alpha="0.4" />
     <TextView
-      android:id="@+id/valueForSaturday"
+      android:id="@+id/valueTwoDaysAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -197,7 +197,7 @@
     android:orientation="vertical">
 
     <TextView
-      android:id="@+id/tv_OneDayAgo"
+      android:id="@+id/nameOneDayAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -205,7 +205,7 @@
       android:textSize="12sp" />
 
     <View
-      android:id="@+id/rectangle_7"
+      android:id="@+id/colorOneDayAgo"
       android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
       android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
       android:layout_marginLeft="2dp"
@@ -213,7 +213,7 @@
       android:layout_marginTop="5dp"
       android:alpha="0.4" />
     <TextView
-      android:id="@+id/valueForSunday"
+      android:id="@+id/valueOneDayAgo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"

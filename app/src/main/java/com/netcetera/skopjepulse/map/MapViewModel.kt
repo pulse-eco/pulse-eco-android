@@ -67,9 +67,9 @@ class MapViewModel(
   val mapPolygons: LiveData<List<PolygonOptions>>
   val bottomSheetPeek: LiveData<BottomSheetPeekViewModel>
 
-  private val _pastWeekCityNameLabelBoolean = MutableLiveData<Boolean>()
-  val pastWeekCityNameLabelBoolean: LiveData<Boolean>
-    get() = _pastWeekCityNameLabelBoolean
+  private val _isSpecificSensorSelected = MutableLiveData<Boolean>()
+  val isSpecificSensorSelected: LiveData<Boolean>
+    get() = _isSpecificSensorSelected
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
 
@@ -170,7 +170,7 @@ class MapViewModel(
     averageWeeklyData = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
         val averageLiveData = cityPulseRepository.getAverageWeeklyData(sensor?.id, measurementType)
-        _pastWeekCityNameLabelBoolean.value = sensor == null
+        _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData.data?.let { readings ->
             AverageWeeklyDataModel(readings)

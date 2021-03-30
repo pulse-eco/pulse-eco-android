@@ -116,7 +116,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         setValueForAverageDailyData(it)
     }
 
-    viewModel.pastWeekCityNameLabelBoolean.observe(viewLifecycleOwner, Observer {
+    viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner, Observer {
       pastWeekDataLabelForCityName = it
     })
 
@@ -238,8 +238,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setValueForAverageDailyData(dataModel: AverageWeeklyDataModel?) {
     val cal = Calendar.getInstance()
-    val listOfTextViewsForValues = listOf(valueForMonday, valueForTuesday, valueForWednesday, valueForThursday, valueForFriday, valueForSaturday, valueForSunday)
-    val listOfRectangleViews = listOf(rectangle_1, rectangle_2, rectangle_3, rectangle_4, rectangle_5, rectangle_6, rectangle_7)
+    val listOfTextViewsForValues = listOf(valueSevenDaysAgo, valueSixDaysAgo, valueFiveDaysAgo, valueFourDaysAgo, valueThreeDaysAgo, valueTwoDaysAgo, valueOneDayAgo)
+    val listOColorViews = listOf(colorSevenDaysAgo, colorSixDaysAgo, colorFiveDaysAgo, colorFourDaysAgo, colorThreeDaysAgo, colorTwoDaysAgo, colorOneDayAgo)
 
     setInitialDataToNotAvailable()
 
@@ -254,7 +254,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
             listOfTextViewsForValues[i].text = sensorReading.value.toInt().toString()
             val band = getBand(sensorReading.value.toInt())
             listOfTextViewsForValues[i].setTextColor(band!!.legendColor)
-            listOfRectangleViews[i].setBackgroundColor(band.legendColor)
+            listOColorViews[i].setBackgroundColor(band.legendColor)
           }
           cal.add(Calendar.DATE, 1)
         }
@@ -267,7 +267,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setDaysNames() {
     val cal = Calendar.getInstance()
-    val listOfDaysNames = listOf(tv_OneDayAgo, tv_TwoDaysAgo, tv_ThreeDaysAgo, tv_FourDaysAgo, tv_FiveDaysAgo, tv_sixDaysAgo, tv_sevenDaysAgo)
+    val listOfDaysNames = listOf(nameOneDayAgo, nameTwoDaysAgo, nameThreeDaysAgo, nameFourDaysAgo, nameFiveDaysAgo, nameSixDaysAgo, nameSevenDaysAgo)
     listOfDaysNames.forEach{
       cal.add(Calendar.DATE, -1)
       it.text = SimpleDateFormat("EEE", Locale.ENGLISH).format(cal.time)
@@ -275,14 +275,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
   }
 
   private fun setInitialDataToNotAvailable(){
-    val listOfTextViewsForValues = listOf(valueForMonday, valueForTuesday, valueForWednesday, valueForThursday, valueForFriday, valueForSaturday, valueForSunday)
-    val listOfRectangleViews = listOf(rectangle_1, rectangle_2, rectangle_3, rectangle_4, rectangle_5, rectangle_6, rectangle_7)
+    val listOfTextViewsForValues = listOf(valueSevenDaysAgo, valueSixDaysAgo, valueFiveDaysAgo, valueFourDaysAgo, valueThreeDaysAgo, valueTwoDaysAgo, valueOneDayAgo)
+    val listOfColorViews = listOf(colorSevenDaysAgo, colorSixDaysAgo, colorFiveDaysAgo, colorFourDaysAgo, colorThreeDaysAgo, colorTwoDaysAgo, colorOneDayAgo)
 
     listOfTextViewsForValues.forEach{
       it.text = resources.getString(R.string.data_not_available)
       it.setTextColor(Color.GRAY)
     }
-    listOfRectangleViews.forEach{
+    listOfColorViews.forEach{
       it.setBackgroundColor(Color.GRAY)
     }
   }
