@@ -2,6 +2,7 @@ package com.netcetera.skopjepulse.base.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.api.CityPulseApiService
 import com.netcetera.skopjepulse.base.model.MeasurementType
@@ -11,7 +12,8 @@ import com.netcetera.skopjepulse.extensions.resourceCombine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Repository that is responsible for loading data for a single city from the pulse.eco platform.
@@ -125,6 +127,34 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     })
   }
 
+  fun getAverageWeeklyData(sensorId: String?, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
+    val result = MutableLiveData<Resource<List<SensorReading>>>()
+    val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
+    val cal:Calendar = Calendar.getInstance()
+    val cal2:Calendar = Calendar.getInstance()
+    cal2.add(Calendar.DATE, -8)
+
+    val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
+    val toDate = formatter.format(cal.time)
+
+    val date = cal2.time
+    val fromDate: String = formatter.format(date)
+
+    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate).enqueue(object : Callback<List<SensorReading>> {
+
+      override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
+        result.postValue(Resource.error(null, t))
+      }
+
+      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
+        if (response.isSuccessful && response.body() != null) {
+          result.postValue(Resource.success(response.body()!!))
+        }
+      }
+    })
+
+    return result
+  }
 }
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)

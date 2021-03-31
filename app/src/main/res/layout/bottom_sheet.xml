@@ -48,11 +48,6 @@
 
     <include layout="@layout/bottom_sheet_content_layout"/>
 
-  <com.netcetera.skopjepulse.DisclaimerView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/component_inner_spacing"/>
-
   </LinearLayout>
 
 </FrameLayout>
