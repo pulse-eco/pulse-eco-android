@@ -74,7 +74,7 @@
   <string name="removed_message">Избришано од листата на градови</string>
 
   <plurals name="sensor_limit_reached_message">
-    <item quantity="one">Не можат да бидат изберени повеќе од %d сензори.</item>
+    <item quantity="one">Не можат да бидат изберени повеќе од %d сензор.</item>
     <item quantity="other">Не можат да бидат изберени повеќе од %d сензори.</item>
   </plurals>
 
@@ -87,6 +87,7 @@
   <string name="language">MK</string>
   <string name="language_en">Англиски</string>
   <string name="language_mk">Македонски</string>
-  <string name="language_title">Одберете јазик</string>
+  <string name="language_de">Германски</string>
 
+  <string name="language_title">Одберете јазик</string>
 </resources>

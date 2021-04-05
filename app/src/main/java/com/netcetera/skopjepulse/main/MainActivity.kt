@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         when (lang) {
           "mk" -> R.id.language_mk
           "en" -> R.id.language_en
+          "de" -> R.id.language_de
           else -> 0
         }
       )
@@ -74,6 +75,10 @@ class MainActivity : AppCompatActivity() {
           R.id.language_mk -> {
             popupWindow.dismiss()
             showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("mk") }
+          }
+          R.id.language_de -> {
+            popupWindow.dismiss()
+            showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("de") }
           }
         }
       }
