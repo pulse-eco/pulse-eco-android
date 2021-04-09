@@ -71,6 +71,10 @@
   <string name="search_results">Ergebnisse</string>
   <string name="no_results_found">keine Ergebnisse gefunden</string>
   <string name="removed_message">Aus ausgewählten Städten entfernt</string>
+  <string name="data_not_available">N/A</string>
+  <string name="past_week_for_whole_city">Durchschnittliche Daten der letzten Woche für %s (%s)</string>
+  <string name="past_week_for_specific_sensor">Durchschnittliche Daten der letzten Woche (%s)</string>
+  <string name="placeholder_for_name_of_day_for_weekly_average_data_view">Tag</string>
 
   <plurals name="sensor_limit_reached_message">
     <item quantity="one">Sie können nicht mehr als %d Sensor auswählen.</item>

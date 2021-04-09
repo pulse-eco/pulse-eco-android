@@ -72,6 +72,10 @@
   <string name="search_results">Резултати</string>
   <string name="no_results_found">Не постојат резултати</string>
   <string name="removed_message">Избришано од листата на градови</string>
+  <string name="data_not_available">N/A</string>
+  <string name="past_week_for_whole_city">Просечни податоци за минатата недела за %s (%s)</string>
+  <string name="past_week_for_specific_sensor">Просечни податоци за минатата недела (%s)</string>
+  <string name="placeholder_for_name_of_day_for_weekly_average_data_view">Ден</string>
 
   <plurals name="sensor_limit_reached_message">
     <item quantity="one">Не можат да бидат изберени повеќе од %d сензор.</item>
