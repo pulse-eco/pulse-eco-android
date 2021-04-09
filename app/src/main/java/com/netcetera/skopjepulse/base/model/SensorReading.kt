@@ -18,8 +18,3 @@ data class SensorReading(
   @Json(name = "value")
   val value: Double
 )
-
-fun List<SensorReading>.lastReading(maxStaleMinutes : Int = 120) : SensorReading? {
-  val maxStaleDate = Calendar.getInstance().apply { add(Calendar.MINUTE, -maxStaleMinutes) }.time
-  return maxBy { it.stamp }?.takeIf { it.stamp.after(maxStaleDate) }
-}

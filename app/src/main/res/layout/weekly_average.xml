@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:layout_marginLeft="@dimen/average_weekly_data_view_margin"
+  android:layout_marginRight="@dimen/average_weekly_data_view_margin"
+  android:gravity="center"
+  android:background="@color/white">
+<LinearLayout
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <TextView
+    android:id="@+id/nameSevenDaysAgo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+    android:textSize="12sp" />
+  <View
+    android:id="@+id/colorSevenDaysAgo"
+    android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+    android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+    android:alpha="0.4"
+    android:layout_marginRight="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginTop="5dp"/>
+  <TextView
+    android:id="@+id/valueSevenDaysAgo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:textSize="15sp"
+    android:layout_marginTop="5dp"
+    android:text="@string/data_not_available" />
+
+</LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameSixDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+      android:textSize="12sp" />
+    <View
+      android:id="@+id/colorSixDaysAgo"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+      android:alpha="0.4"
+      android:layout_marginRight="2dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginTop="5dp"/>
+    <TextView
+      android:id="@+id/valueSixDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="@string/data_not_available" />
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+      android:id="@+id/nameFiveDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/colorFiveDaysAgo"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4" />
+    <TextView
+      android:id="@+id/valueFiveDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="@string/data_not_available" />
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameFourDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/colorFourDaysAgo"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4" />
+    <TextView
+      android:id="@+id/valueFourDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="@string/data_not_available" />
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameThreeDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/colorThreeDaysAgo"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4" />
+    <TextView
+      android:id="@+id/valueThreeDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="@string/data_not_available" />
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameTwoDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/colorTwoDaysAgo"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4" />
+    <TextView
+      android:id="@+id/valueTwoDaysAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="@string/data_not_available" />
+
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameOneDayAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/placeholder_for_name_of_day_for_weekly_average_data_view"
+      android:textSize="12sp" />
+
+    <View
+      android:id="@+id/colorOneDayAgo"
+      android:layout_width="@dimen/rectangle_for_weekly_data_view_width"
+      android:layout_height="@dimen/rectangle_for_weekly_data_view_height"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="2dp"
+      android:layout_marginTop="5dp"
+      android:alpha="0.4" />
+    <TextView
+      android:id="@+id/valueOneDayAgo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="15sp"
+      android:layout_marginTop="5dp"
+      android:text="@string/data_not_available" />
+
+  </LinearLayout>
+</LinearLayout>

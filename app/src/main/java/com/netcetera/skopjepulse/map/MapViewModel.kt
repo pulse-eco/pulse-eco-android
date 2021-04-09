@@ -1,8 +1,6 @@
 package com.netcetera.skopjepulse.map
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
 import com.netcetera.skopjepulse.R.string
@@ -11,23 +9,13 @@ import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
 import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
 import com.netcetera.skopjepulse.base.data.repository.Sensors
-import com.netcetera.skopjepulse.base.model.Band
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.DataDefinition
-import com.netcetera.skopjepulse.base.model.MeasurementType
-import com.netcetera.skopjepulse.base.model.PULSE_SENSOR_COLORS
-import com.netcetera.skopjepulse.base.model.Sensor
+import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.base.viewModel.PulseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
-import com.netcetera.skopjepulse.map.model.BottomSheetPeekViewModel
-import com.netcetera.skopjepulse.map.model.GraphBand
-import com.netcetera.skopjepulse.map.model.GraphModel
-import com.netcetera.skopjepulse.map.model.GraphSeries
-import com.netcetera.skopjepulse.map.model.MapMarkerModel
-import com.netcetera.skopjepulse.map.model.SensorOverviewModel
+import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.LegendBand
 import com.netcetera.skopjepulse.map.overallbanner.OverallBannerData
@@ -59,7 +47,8 @@ class MapViewModel(
     PulseViewModel(cityPulseRepository, favouriteSensorsStorage) {
 
   private val selectedMeasurementType = MutableLiveData<MeasurementType>()
-  private val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
+  val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
+  var dataDefinitionDataPublicHelper :LiveData<DataDefinition>
 
   val overallData: LiveData<OverallBannerData>
   val mapMarkers: LiveData<List<MapMarkerModel>>
@@ -78,10 +67,17 @@ class MapViewModel(
   val mapPolygons: LiveData<List<PolygonOptions>>
   val bottomSheetPeek: LiveData<BottomSheetPeekViewModel>
 
+  private val _isSpecificSensorSelected = MutableLiveData<Boolean>()
+  val isSpecificSensorSelected: LiveData<Boolean>
+    get() = _isSpecificSensorSelected
+
+  var averageWeeklyData: LiveData<AverageWeeklyDataModel>
+
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
       dataDefinitionProvider[it]
     }
+    dataDefinitionDataPublicHelper = dataDefinitionData
 
     val currentReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.currentReadings) { current ->
@@ -167,6 +163,18 @@ class MapViewModel(
       } else {
         return@switchMap Transformations.map(historicalSensorReadings) { (dataDefinition, data) ->
           return@map createGraphModel(dataDefinition, data.filter { it.key == selectedSensor })
+        }
+      }
+    }
+
+    averageWeeklyData = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageWeeklyData(sensor?.id, measurementType)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
         }
       }
     }
