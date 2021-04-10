@@ -20,7 +20,6 @@ import com.netcetera.skopjepulse.base.data.Resource.Status.LOADING
 import com.netcetera.skopjepulse.base.data.Resource.Status.SUCCESS
 import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.CityOverall
 import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
@@ -29,7 +28,7 @@ import com.netcetera.skopjepulse.countryCitySelector.CityItem
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.isInt
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 /**
  * Implementation of [BaseViewModel] that is used for displaying of cities to select from in [CitySelectFragment].
@@ -57,12 +56,18 @@ class CitySelectViewModel(
 
   lateinit var allCityItems: LiveData<List<CitySelectItem>>
 
+  private var _shouldRefreshSelectedCities = MutableLiveData<Boolean>()
+
+  val shouldRefreshSelectedCities :LiveData<Boolean>
+    get() = _shouldRefreshSelectedCities
+
   private val _citiesSharedPref = MutableLiveData<String>()
 
 
   init {
     loadData()
     getSelectedCities()
+    _shouldRefreshSelectedCities.value = false
   }
 
 
@@ -112,7 +117,10 @@ class CitySelectViewModel(
     val editor: SharedPreferences.Editor = sharedPref.edit()
     val jsonSelectedCities = gson.toJson(selectedCitiesSet)
     editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
-    editor.commit()
+    editor.apply()
+
+    getSelectedCities()
+    _shouldRefreshSelectedCities.value = true
   }
 
   /**
