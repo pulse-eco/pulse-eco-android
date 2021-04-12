@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.*
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
+import com.netcetera.skopjepulse.databinding.CitySelectFragmentLayoutBinding
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.utils.ui.SwipeHelper
-import kotlinx.android.synthetic.main.city_select_fragment_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,36 +28,38 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   private val mainViewModel : MainViewModel by sharedViewModel()
   private lateinit var citySelectAdapter : CitySelectAdapter
   private lateinit var addNewCityLinearLayout: LinearLayout
+  private lateinit var views: CitySelectFragmentLayoutBinding
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
+    views = CitySelectFragmentLayoutBinding.inflate(inflater,container,false)
+    return views.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
-    (citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+    views.citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
+    (views.citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
     citySelectAdapter = CitySelectAdapter()
-    citySelectRecyclerView.adapter = citySelectAdapter
+    views.citySelectRecyclerView.adapter = citySelectAdapter
     citySelectAdapter.onCitySelected {
       mainViewModel.showForCity(it)
       parentFragmentManager.popBackStack()
     }
 
-    addNewCityLinearLayout = linearLayoutAddNewCity
-    linearLayoutAddNewCity.setOnClickListener {
+    addNewCityLinearLayout = views.linearLayoutAddNewCity
+    views.linearLayoutAddNewCity.setOnClickListener {
       val intent = Intent(activity, CountryCitySelectorActivity::class.java)
       startActivity(intent)
     }
 
 
-    citySelectRefreshView.setOnRefreshListener {
+    views.citySelectRefreshView.setOnRefreshListener {
       viewModel.refreshData(true)
     }
     viewModel.showLoading.observe(viewLifecycleOwner, Observer {
-      citySelectRefreshView.isRefreshing = it == true
+      views.citySelectRefreshView.isRefreshing = it == true
     })
 
     viewModel.requestLocationPermission.observe(viewLifecycleOwner, Observer { event ->
@@ -71,9 +73,9 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       viewModel.showDataForMeasurementType(it)
     })
 
-    citySelectRecyclerView.addItemDecoration(DividerItemDecoration(citySelectRecyclerView.context, DividerItemDecoration.VERTICAL))
+    views.citySelectRecyclerView.addItemDecoration(DividerItemDecoration(views.citySelectRecyclerView.context, DividerItemDecoration.VERTICAL))
 
-    val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(citySelectRecyclerView) {
+    val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(views.citySelectRecyclerView) {
       override fun instantiateUnderlayButton(position: Int): List<SwipeHelper.UnderlayButton> {
         var buttons = listOf<SwipeHelper.UnderlayButton>()
         val deleteButton = deleteButton(position)
@@ -82,7 +84,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       }
     })
 
-    itemTouchHelper.attachToRecyclerView(citySelectRecyclerView)
+    itemTouchHelper.attachToRecyclerView(views.citySelectRecyclerView)
   }
 
   private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {

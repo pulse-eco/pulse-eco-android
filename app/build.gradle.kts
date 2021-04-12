@@ -16,6 +16,9 @@ android {
     versionName = PulseEco.versionName
     multiDexEnabled = true
   }
+  dataBinding {
+    isEnabled = true
+  }
   buildTypes {
     getByName("release") {
       isDebuggable = false

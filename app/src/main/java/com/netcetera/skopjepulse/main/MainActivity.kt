@@ -3,44 +3,48 @@ package com.netcetera.skopjepulse.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
+import com.netcetera.skopjepulse.databinding.ActivityMainBinding
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.squareup.leakcanary.RefWatcher
-import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
-import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
-import kotlinx.android.synthetic.main.pulse_app_bar.measurementTypeTabBarView
-import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
   private val refWatcher : RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
+  private lateinit var views: ActivityMainBinding
 
   private val citySelectFragment: CitySelectFragment by lazy {
     CitySelectFragment()
   }
 
   private val appBarView : PulseAppBarView by lazy {
-    PulseAppBarView(pulse_app_bar)
+    PulseAppBarView(views.pulseAppBar.pulseAppBarCardView)
   }
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
-    PulseLoadingIndicator(loadingIndicatorContainer)
+    PulseLoadingIndicator(views.loadingIndicatorContainer)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    views = DataBindingUtil.setContentView(this,R.layout.activity_main)
+    views.apply {
+      viewModel = mainViewModel
+      lifecycleOwner = this@MainActivity
+      onErrorViewClickListener = onErrorClickListener
+    }
 
     mainViewModel.measurementTypeTabs.observe(this, Observer {
-      measurementTypeTabBarView.availableMeasurementTypes = it?: emptyList()
+      views.pulseAppBar.measurementTypeTabBarView.availableMeasurementTypes = it?: emptyList()
     })
-    measurementTypeTabBarView.selectedMeasurementType.observe(this, Observer {
+    views.pulseAppBar.measurementTypeTabBarView.selectedMeasurementType.observe(this, Observer {
       mainViewModel.showForMeasurement(it)
     })
 
@@ -67,21 +71,9 @@ class MainActivity : AppCompatActivity() {
 
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
-    errorView?.let { errorTextView ->
-      errorTextView.setOnClickListener {
-        mainViewModel.refreshData(true)
-      }
-      mainViewModel.errorMessage.observe(this, Observer {
-        errorTextView.text = it
-        if (it?.isNotBlank() == true) {
-          errorTextView.visibility = View.VISIBLE
-        } else {
-          errorTextView.visibility = View.GONE
-        }
-      })
-    }
-
   }
+
+  private val onErrorClickListener = View.OnClickListener { mainViewModel.refreshData(true) }
 
   private fun showCitySelectIfNotShown() {
     val someFragmentShown = supportFragmentManager.findFragmentById(R.id.content) != null
