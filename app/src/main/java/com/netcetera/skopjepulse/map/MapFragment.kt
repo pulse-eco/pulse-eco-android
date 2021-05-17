@@ -65,7 +65,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private var pastWeekDataLabelForCityName:Boolean = true
 
-  val city : City by lazy { arguments!!.getParcelable<City>("city")!! }
+  val city : City by lazy { requireArguments().getParcelable<City>("city")!! }
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
@@ -89,6 +89,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       )
     }
   }
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
@@ -357,22 +358,26 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun updatePeekHeight() {
     peekContainer.post {
-      map.getMapAsync { googleMap ->
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
-        ValueAnimator.ofInt(bottomSheetBehavior.peekHeight, peekContainer.height).apply {
-          duration = 100
-          interpolator = AccelerateDecelerateInterpolator()
-          addUpdateListener {
-            bottomSheetBehavior.peekHeight = it.animatedValue as Int
-            googleMap.setPadding(0, 0, 0, it.animatedValue as Int)
-            val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
-            params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
-            crowdsourcingDisclaimerText.layoutParams = params
-            crowdsourcingDisclaimerText.setOnClickListener { view ->
-              showDisclaimerDialog(view.context)
+      map?.getMapAsync { googleMap ->
+        if(bottomSheetContainer != null) {
+          val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+          ValueAnimator.ofInt(bottomSheetBehavior.peekHeight, peekContainer.height).apply {
+            duration = 100
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener {
+              bottomSheetBehavior.peekHeight = it.animatedValue as Int
+              googleMap.setPadding(0, 0, 0, it.animatedValue as Int)
+              if(crowdsourcingDisclaimerText != null) {
+                val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
+                params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
+                crowdsourcingDisclaimerText.layoutParams = params
+                crowdsourcingDisclaimerText.setOnClickListener { view ->
+                  showDisclaimerDialog(view.context)
+                }
+              }
             }
-          }
-        }.start()
+          }.start()
+        }
       }
     }
   }

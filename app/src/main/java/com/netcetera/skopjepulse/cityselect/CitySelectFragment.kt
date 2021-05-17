@@ -95,7 +95,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
         override fun onClick() {
           val cityToRemoveFromSharedPreferences = citySelectAdapter.del(position)
           viewModel.deleteCityOnSwipe(cityToRemoveFromSharedPreferences)
-          Toast.makeText(activity, "Removed from selected cities", Toast.LENGTH_SHORT).show()
+          Toast.makeText(activity, resources.getString(R.string.removed_message), Toast.LENGTH_SHORT).show()
         }
       })
   }

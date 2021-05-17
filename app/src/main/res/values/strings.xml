@@ -69,6 +69,7 @@
   <string name="search_suggested">Suggested</string>
   <string name="search_results">Results</string>
   <string name="no_results_found">No results found</string>
+  <string name="removed_message">Removed from selected cities</string>
   <string name="data_not_available">N/A</string>
   <string name="past_week_for_whole_city">Past week average data for %s (%s)</string>
   <string name="past_week_for_specific_sensor">Past week average data (%s)</string>
@@ -79,5 +80,17 @@
     <item quantity="other">You can\'t select more than %d sensors.</item>
   </plurals>
 
+  <string name="confirm_title">Confirmation</string>
+  <string name="confirm_body">Are you sure you want to change the language?</string>
+  <string name="btn_yes">YES</string>
+  <string name="btn_no">NO</string>
+
+  <!-- Internationalisation -->
+  <string name="language">EN</string>
+  <string name="language_en">English</string>
+  <string name="language_mk">Macedonian</string>
+  <string name="language_de">German</string>
+
+  <string name="language_title">Choose language</string>
 
 </resources>

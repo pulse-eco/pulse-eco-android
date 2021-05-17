@@ -1,9 +1,12 @@
 package com.netcetera.skopjepulse.main
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.PreferredCityStorage
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.base.data.Resource
@@ -14,6 +17,7 @@ import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
+import java.util.*
 
 /**
  * The main [androidx.lifecycle.ViewModel] used in [MainActivity] and shared across fragments.
@@ -22,7 +26,7 @@ import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
 class MainViewModel(
     private val pulseRepository: PulseRepository,
     cityStorage: PreferredCityStorage,
-    dataDefinitionProvider: DataDefinitionProvider) : BaseViewModel() {
+    private val dataDefinitionProvider: DataDefinitionProvider) : BaseViewModel() {
 
   /**
    * The [City] that data shall be shown for.
@@ -76,6 +80,13 @@ class MainViewModel(
       if (!it.data.isNullOrEmpty()) Resource.idle() else null
     })
     errorResources.addResource(pulseRepository.cities.toErrorLiveDataResource())
+  }
+
+  /**
+   * Reloads the [DataDefinitionProvider] data, so that changed configuration takes effect (ex. Language change)
+   */
+  fun reloadDDPData(){
+    dataDefinitionProvider.loadData()
   }
 
   /**
