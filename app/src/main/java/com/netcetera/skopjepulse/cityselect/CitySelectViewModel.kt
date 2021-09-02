@@ -120,6 +120,7 @@ class CitySelectViewModel(
     editor.apply()
 
     getSelectedCities()
+
     _shouldRefreshSelectedCities.value = true
   }
 

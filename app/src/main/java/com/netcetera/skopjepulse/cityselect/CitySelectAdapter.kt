@@ -1,5 +1,7 @@
 package com.netcetera.skopjepulse.cityselect
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.GoogleMap
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.extensions.updateForCity
@@ -45,12 +48,15 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitySelectItemViewHolder {
     val view = LayoutInflater.from(parent.context).inflate(R.layout.city_select_item_layout, parent, false)
+    val lang = parent.context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)!!.getString(Constants.LANGUAGE_CODE, " ")
+    Log.d("LANG", lang)
     return CitySelectItemViewHolder(view) { city -> citySelectListener?.invoke(city) }
   }
 
   override fun getItemCount(): Int = differ.currentList.size
 
   override fun onBindViewHolder(holder: CitySelectItemViewHolder, position: Int) {
+
     holder.bind(differ.currentList[position])
   }
 

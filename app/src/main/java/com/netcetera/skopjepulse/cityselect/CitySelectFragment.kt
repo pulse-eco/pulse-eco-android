@@ -1,9 +1,11 @@
 package com.netcetera.skopjepulse.cityselect
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,9 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.base.App
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
 import com.netcetera.skopjepulse.main.MainViewModel
@@ -34,7 +38,9 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
     super.onViewCreated(view, savedInstanceState)
+
 
     citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
     (citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
@@ -60,9 +66,9 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       citySelectRefreshView.isRefreshing = it == true
     })
 
-    viewModel.shouldRefreshSelectedCities.observe(viewLifecycleOwner, Observer {
-      viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
-    })
+    //viewModel.shouldRefreshSelectedCities.observe(viewLifecycleOwner, Observer {
+    viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
+    //})
 
     viewModel.requestLocationPermission.observe(viewLifecycleOwner, Observer { event ->
       event?.getContentIfNotHandled()?.let {
@@ -102,7 +108,12 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
 
   override fun onResume() {
     super.onResume()
+    Log.d("RESUME", "aaa")
     viewModel.getSelectedCities()
+    viewModel.citySelectItems.observe(this,  { lista->
+      Log.d("LISTA", lista.toString())
+
+    })
       viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
   }
 
@@ -114,4 +125,5 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     }
 
   }
+
 }

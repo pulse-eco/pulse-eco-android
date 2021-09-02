@@ -1,6 +1,7 @@
 package com.netcetera.skopjepulse.base.data
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -43,25 +44,23 @@ class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseAp
       _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
     }
 
-    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, "")
-    pulseApiService.measures((lang)).enqueue(object : Callback<List<DataDefinition>> {
-      override fun onResponse(call: Call<List<DataDefinition>>,
-                              response: Response<List<DataDefinition>>) {
-        response.body()?.let { dataDefinitions ->
-          mutableDefinitions.value = dataDefinitions
-          dataDefinitions.forEach {
-            _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
+    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, null)
+      pulseApiService.measures((lang)).enqueue(object : Callback<List<DataDefinition>> {
+        override fun onResponse(call: Call<List<DataDefinition>>,
+                                response: Response<List<DataDefinition>>) {
+          response.body()?.let { dataDefinitions ->
+            mutableDefinitions.value = dataDefinitions
+            dataDefinitions.forEach {
+              _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
+            }
+            persistedMeasuresProvider.persistDefinitions(dataDefinitions)
           }
-          persistedMeasuresProvider.persistDefinitions(dataDefinitions)
         }
-      }
 
-      override fun onFailure(call: Call<List<DataDefinition>>, t: Throwable) {
-        // maybe retry?
-      }
-
-    })
-
+        override fun onFailure(call: Call<List<DataDefinition>>, t: Throwable) {
+          // maybe retry?
+        }
+      })
   }
 
   operator fun get(type: MeasurementType): LiveData<DataDefinition> {

@@ -3,6 +3,7 @@ package com.netcetera.skopjepulse.countryCitySelector
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -41,6 +42,7 @@ class CountryCitySelectorActivity : AppCompatActivity(){
     recyclerview.adapter = mAdapter
 
     countryCityViewModel.countryCityList.observe(this, Observer {
+      mAdapter.data = it
       mAdapter.notifyDataSetChanged()
     })
 

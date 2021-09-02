@@ -28,6 +28,8 @@ class App : Application() {
       return
     }
 
+
+
     setupKoin()
     setupTimber()
     setupCrashlytics()
@@ -73,6 +75,9 @@ fun Context.isOnline(): Boolean {
   val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
   return connectivityManager.activeNetworkInfo?.isConnected ?: false
 }
+
+
+
 
 fun Context.isLocationPermissionGranted(): Boolean {
   val coarse = PermissionChecker.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED
