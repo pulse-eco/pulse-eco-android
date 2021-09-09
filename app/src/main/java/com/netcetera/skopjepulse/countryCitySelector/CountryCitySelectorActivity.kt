@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.utils.Internationalisation
 import kotlinx.android.synthetic.main.activity_city_selector.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -24,6 +25,10 @@ class CountryCitySelectorActivity : AppCompatActivity(){
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    Internationalisation.loadLocale(this)
+    Internationalisation.loadLocale(applicationContext)
+
     setContentView(R.layout.activity_city_selector)
 
     var toolbar = findViewById<Toolbar>(R.id.toolbar_to_go_back)
