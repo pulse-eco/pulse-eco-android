@@ -35,10 +35,9 @@ class DisclaimerView : AppCompatTextView {
         .pushSpan(object : ClickableSpan() {
           override fun onClick(widget: View) {
             val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, null)
-            if(lang.equals("de"))  {
+            if (lang.equals("de")) {
               context.openUrl("https://www.netcetera.com/de/home/privacy-policy.html")
-            }
-            else {
+            } else {
               context.openUrl("https://www.netcetera.com/home/privacy-policy.html")
             }
           }
