@@ -43,7 +43,7 @@ class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseAp
       _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
     }
 
-    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, "")
+    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, null)
     pulseApiService.measures((lang)).enqueue(object : Callback<List<DataDefinition>> {
       override fun onResponse(call: Call<List<DataDefinition>>,
                               response: Response<List<DataDefinition>>) {
