@@ -1,6 +1,7 @@
 package com.netcetera.skopjepulse.map
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,7 +24,6 @@ import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.*
-import com.netcetera.skopjepulse.base.utils.*
 import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.main.MainViewModel
@@ -247,7 +247,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     val format = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT)
     dataModel?.data?.let { readings ->
       readings.forEach { sensorReading ->
-        val dateOfSensorToString = sensorReading.getMonthAndDayFromStamp() + " " + sensorReading.getYearFromStamp()
+        val dateOfSensorToString = format.format(sensorReading.stamp)
         cal.add(Calendar.DATE, -7)
         for (i in 0..6) {
           val iteratingDate = format.format(cal.time)
@@ -259,7 +259,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
           }
           cal.add(Calendar.DATE, 1)
         }
-
       }
       progressBarForWeeklyAverageData.visibility = View.GONE
       weeklyAverageView.visibility = View.VISIBLE
@@ -269,9 +268,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
   private fun setDaysNames() {
     val cal = Calendar.getInstance()
     val listOfDaysNames = listOf(nameOneDayAgo, nameTwoDaysAgo, nameThreeDaysAgo, nameFourDaysAgo, nameFiveDaysAgo, nameSixDaysAgo, nameSevenDaysAgo)
-    listOfDaysNames.forEach{
+    listOfDaysNames.forEach {
       cal.add(Calendar.DATE, -1)
-      it.text = SimpleDateFormat("EEE", Locale.ENGLISH).format(cal.time)
+      val language = context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)?.getString(Constants.LANGUAGE_CODE, "en")
+        ?: "en"
+      it.text = SimpleDateFormat("EEE", Locale(language)).format(cal.time)
     }
   }
 
