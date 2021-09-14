@@ -270,9 +270,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
     val listOfDaysNames = listOf(nameOneDayAgo, nameTwoDaysAgo, nameThreeDaysAgo, nameFourDaysAgo, nameFiveDaysAgo, nameSixDaysAgo, nameSevenDaysAgo)
     val language = context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)?.getString(Constants.LANGUAGE_CODE, "en")
       ?: "en"
+    val formatter = SimpleDateFormat("EEE", Locale(language))
     listOfDaysNames.forEach {
       cal.add(Calendar.DATE, -1)
-      it.text = SimpleDateFormat("EEE", Locale(language)).format(cal.time)
+      it.text = formatter.format(cal.time)
     }
   }
 
