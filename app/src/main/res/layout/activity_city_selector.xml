@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/pulseAppBarColor"
+  android:background="@color/white"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <LinearLayout
@@ -32,7 +32,7 @@
         android:text="@string/city_selection"
         android:textSize="21sp"
         android:textFontWeight="500"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:gravity="center_vertical"
         android:fontFamily="@font/sf_pro_display"
         tools:targetApi="p" />
@@ -59,7 +59,7 @@
       android:textSize="18sp"
       android:textStyle="bold"
       android:text="@string/search_suggested"
-      android:textColor="@color/white"
+      android:textColor="@color/black"
       android:gravity="center"
       android:paddingBottom="15dp"
       android:background="@drawable/bottom_line"/>
