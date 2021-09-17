@@ -27,7 +27,7 @@
   <dimen name="has_sensors_selected_margin_bottom">18dp</dimen>
   <dimen name="country_item_padding_top">15dp</dimen>
   <dimen name="country_item_padding_bottom">8dp</dimen>
-  <dimen name="country_item_text_size">16xzsp</dimen>
+  <dimen name="country_item_text_size">16sp</dimen>
   <dimen name="country_item_margin">1dp</dimen>
   <dimen name="country_item_margin_top">5dp</dimen>
   <dimen name="city_item_margin">1dp</dimen>
