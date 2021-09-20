@@ -200,15 +200,16 @@ class CitySelectViewModel(
                 measurementBand.grade,
                 measurement.toInt().toString(),
                 dataDefinition.unit,
-                measurementBand.legendColor)
+                measurementBand.legendColor
+              )
             }
-            measurement != null ->CitySelectItem(
+            else -> CitySelectItem(
               city,
               dataDefinition.description,
-              measurement,
+              "N/A",
               dataDefinition.unit,
-              Color.LTGRAY)
-            else -> null
+              Color.LTGRAY
+            )
           }
         }
       }
