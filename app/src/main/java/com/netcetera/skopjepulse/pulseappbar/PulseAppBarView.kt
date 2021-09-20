@@ -2,7 +2,6 @@ package com.netcetera.skopjepulse.pulseappbar
 
 import android.view.View
 import com.netcetera.skopjepulse.base.model.City
-import kotlinx.android.synthetic.main.pulse_app_bar.view.pulseAppbarCitySelect
 import kotlinx.android.synthetic.main.pulse_app_bar.view.pulseAppbarLogo
 import kotlinx.android.synthetic.main.pulse_app_bar.view.townLabel
 
@@ -13,7 +12,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
 
   init {
     pulseAppBarView.pulseAppbarLogo.setOnClickListener { refreshRequestedListener?.invoke() }
-    pulseAppBarView.pulseAppbarCitySelect.setOnClickListener { selectedCityListener?.invoke() }
+    pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke() }
   }
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
