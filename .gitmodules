@@ -1,0 +1,3 @@
+[submodule "app/build-resources/trema"]
+	path = app/build-resources/trema
+	url = https://github.com/netceteragroup/pulse-eco-i18n.git

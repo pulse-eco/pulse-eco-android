@@ -10,9 +10,12 @@ buildscript {
     maven("https://maven.fabric.io/public")
 
     maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+
+    maven("./localm2repository")
   }
   dependencies {
     classpath(BuildPlugins.androidGradlePlugin)
+    classpath(BuildPlugins.tremaGradlePlugin)
     classpath(BuildPlugins.googlePlayServices)
     classpath(BuildPlugins.kotlinGradlePlugin)
 
