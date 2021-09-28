@@ -13,21 +13,23 @@ import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.extensions.updateForCity
 import kotlinx.android.synthetic.main.city_select_item_layout.view.*
 
-typealias CitySelectListener = (city : City) -> Unit
+typealias HistorySelectListener = (city: City) -> Unit
 
-class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Observer<List<CitySelectItem>> {
+class HistoryCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(),
+  Observer<List<CitySelectItem>> {
 
-  private var citySelectListener : CitySelectListener? = null
+  private var citySelectListener: CitySelectListener? = null
 
-  private val differ = AsyncListDiffer<CitySelectItem>(this, object : DiffUtil.ItemCallback<CitySelectItem?>() {
-    override fun areItemsTheSame(oldItem: CitySelectItem, newItem: CitySelectItem): Boolean {
-      return oldItem.city.name == newItem.city.name
-    }
+  private val differ =
+    AsyncListDiffer<CitySelectItem>(this, object : DiffUtil.ItemCallback<CitySelectItem?>() {
+      override fun areItemsTheSame(oldItem: CitySelectItem, newItem: CitySelectItem): Boolean {
+        return oldItem.city.name == newItem.city.name
+      }
 
-    override fun areContentsTheSame(oldItem: CitySelectItem, newItem: CitySelectItem): Boolean {
-      return oldItem == newItem
-    }
-  })
+      override fun areContentsTheSame(oldItem: CitySelectItem, newItem: CitySelectItem): Boolean {
+        return oldItem == newItem
+      }
+    })
 
   override fun onChanged(newItems: List<CitySelectItem>?) {
     differ.submitList(newItems)
@@ -44,7 +46,8 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitySelectItemViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.city_select_item_layout, parent, false)
+    val view =
+      LayoutInflater.from(parent.context).inflate(R.layout.city_select_item_layout, parent, false)
     return CitySelectItemViewHolder(view) { city -> citySelectListener?.invoke(city) }
   }
 
@@ -54,18 +57,19 @@ class CitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(), Obse
     holder.bind(differ.currentList[position])
   }
 
-  fun onCitySelected(listener : CitySelectListener) {
+  fun onCitySelected(listener: CitySelectListener) {
     citySelectListener = listener
   }
 }
 
-class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListener) : RecyclerView.ViewHolder(view) {
+class HistorySelectItemViewHolder(view: View, citySelectListener: CitySelectListener) :
+  RecyclerView.ViewHolder(view) {
   lateinit var googleMap: GoogleMap
 
-  var citySelectItem : CitySelectItem? = null
+  var citySelectItem: CitySelectItem? = null
 
   init {
-    itemView.setOnClickListener{
+    itemView.setOnClickListener {
       citySelectListener.invoke(citySelectItem!!.city)
     }
     internalDisplayItemMap()
@@ -88,8 +92,7 @@ class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListene
       itemView.citySelectOverallStatus.text = citySelectItem.measurementDescription
       itemView.citySelectMeasureValue.text = citySelectItem.measurementValue
       itemView.citySelectMeasureLabel.text = citySelectItem.measurementUnit
-      if (citySelectItem.measurementValue == "N/A")
-      {
+      if (citySelectItem.measurementValue == "N/A") {
         itemView.citySelectMeasureValue.visibility = View.GONE
         itemView.citySelectMeasureLabel.visibility = View.GONE
         itemView.imageNoDataAvailable.visibility = View.VISIBLE

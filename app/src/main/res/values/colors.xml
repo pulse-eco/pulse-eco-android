@@ -73,4 +73,7 @@
   <color name="gray">#eeeeee</color>
 
   <color name="searchbar">#757575</color>
+
+  <color name="hc_bg">#f5f5f5</color>
+  <color name="hc_text">#757575</color>
 </resources>

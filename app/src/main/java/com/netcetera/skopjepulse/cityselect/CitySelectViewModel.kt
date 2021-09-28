@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.gson.Gson
@@ -14,6 +15,7 @@ import com.netcetera.skopjepulse.LocationServicesDisabled
 import com.netcetera.skopjepulse.MissingLocationPermission
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.Event
+import com.netcetera.skopjepulse.base.PreferredCityStorage
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.Resource.Status.LOADING
@@ -63,13 +65,28 @@ class CitySelectViewModel(
 
   private val _citiesSharedPref = MutableLiveData<String>()
 
+  val activeCity: LiveData<City?>
+  private val selectableCity = MutableLiveData<City?>()
+  private val cityStorage: PreferredCityStorage = PreferredCityStorage(context)
+
 
   init {
     loadData()
     getSelectedCities()
     _shouldRefreshSelectedCities.value = false
-  }
 
+    activeCity = Transformations.distinctUntilChanged(
+      MediatorLiveData<City>().apply {
+        addSource(pulseRepository.cities) { cities ->
+          value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
+        }
+
+        addSource(selectableCity) {
+          value = it
+          cityStorage.cityId = it?.name ?: ""
+        }
+      })
+  }
 
   /**
    * Get selected cities in [citySelectItems]
@@ -109,10 +126,15 @@ class CitySelectViewModel(
 
     for (c in selectedCitiesSet) {
       if (c.name.equals(cityToRemove, ignoreCase = true)) {
+        if (c.name.equals(cityStorage.cityId, ignoreCase = true)) {
+          cityStorage.cityId = ""
+          selectableCity.value = null
+        }
         selectedCitiesSet.remove(c)
         break
       }
     }
+
 
     val editor: SharedPreferences.Editor = sharedPref.edit()
     val jsonSelectedCities = gson.toJson(selectedCitiesSet)
@@ -163,9 +185,6 @@ class CitySelectViewModel(
   }
 
 
-  /**
-   * Load all cities in [allCityItems]
-   */
   fun loadData(){
     val sortedCities = Transformations.switchMap(pulseRepository.cities) { cities ->
       Transformations.map(locationProvider.currentLocation) { location ->
@@ -219,4 +238,5 @@ class CitySelectViewModel(
     errorResources.addResource(pulseRepository.citiesOverall.toErrorLiveDataResource())
     errorResources.addResource(locationProvider.currentLocation.toErrorLiveDataResource())
   }
+
 }

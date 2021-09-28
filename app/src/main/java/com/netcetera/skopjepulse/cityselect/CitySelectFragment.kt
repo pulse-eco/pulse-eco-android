@@ -7,44 +7,93 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
+import com.netcetera.skopjepulse.base.model.City
+import com.netcetera.skopjepulse.countryCitySelector.CityItem
 import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
 import com.netcetera.skopjepulse.main.MainViewModel
+import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.utils.ui.SwipeHelper
 import kotlinx.android.synthetic.main.city_select_fragment_layout.*
+import kotlinx.android.synthetic.main.city_select_item_layout.view.*
+import kotlinx.android.synthetic.main.pulse_app_bar.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.HashSet
 
 /**
  * Implementation of [CitySelectFragment] that is used for displaying of selected cities
  */
 class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override val viewModel: CitySelectViewModel by viewModel()
-  private val mainViewModel : MainViewModel by sharedViewModel()
-  private lateinit var citySelectAdapter : CitySelectAdapter
+  private val mainViewModel: MainViewModel by sharedViewModel()
+  private lateinit var historyCitySelectAdapter: HistoryCitySelectAdapter
+  private lateinit var currentlyCitySelectAdapter: CurrentlyCitySelectAdapter
   private lateinit var addNewCityLinearLayout: LinearLayout
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  private var currentlySelected = MutableLiveData<List<CitySelectItem>>()
+  private var history = MutableLiveData<List<CitySelectItem>>()
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    citySelectRecyclerView.layoutManager = LinearLayoutManager(context)
-    (citySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+    historySelectRecyclerView.layoutManager = LinearLayoutManager(context)
+    (historySelectRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
+      false
 
-    citySelectAdapter = CitySelectAdapter()
-    citySelectRecyclerView.adapter = citySelectAdapter
-    citySelectAdapter.onCitySelected {
+    currentlyCityRecyclerView.layoutManager = LinearLayoutManager(context)
+    (currentlyCityRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
+      false
+
+    historyCitySelectAdapter = HistoryCitySelectAdapter()
+    historySelectRecyclerView.adapter = historyCitySelectAdapter
+
+    currentlyCitySelectAdapter = CurrentlyCitySelectAdapter()
+    currentlyCityRecyclerView.adapter = currentlyCitySelectAdapter
+
+    historyCitySelectAdapter.onCitySelected {
       mainViewModel.showForCity(it)
       parentFragmentManager.popBackStack()
     }
+
+    mainViewModel.activeCity.observe(viewLifecycleOwner, Observer { activeCity ->
+      val citySelectedItems = viewModel.citySelectItems.value ?: listOf()
+      val selectedList = citySelectedItems.filter { it.city.name == activeCity?.name }.toList()
+      val historyList = citySelectedItems.filter { it.city.name != activeCity?.name }.toList()
+      currentlySelected.value = selectedList
+      history.value = historyList
+
+      /*if (selectedList.isNotEmpty()) {
+        currentlySelectedLinearLayout.visibility = View.VISIBLE
+      } else {
+        currentlySelectedLinearLayout.visibility = View.GONE
+      }
+
+      if (historyList.isNotEmpty()) {
+        historyLinearLayout.visibility = View.VISIBLE
+      } else {
+        historyLinearLayout.visibility = View.GONE
+      }*/
+    })
+
+    history.observe(viewLifecycleOwner, historyCitySelectAdapter)
+    currentlySelected.observe(viewLifecycleOwner, currentlyCitySelectAdapter)
 
     addNewCityLinearLayout = linearLayoutAddNewCity
     linearLayoutAddNewCity.setOnClickListener {
@@ -52,17 +101,17 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       startActivity(intent)
     }
 
-
     citySelectRefreshView.setOnRefreshListener {
       viewModel.refreshData(true)
     }
+
     viewModel.showLoading.observe(viewLifecycleOwner, Observer {
       citySelectRefreshView.isRefreshing = it == true
     })
 
-    viewModel.shouldRefreshSelectedCities.observe(viewLifecycleOwner, Observer {
-      viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
-    })
+    /*viewModel.shouldRefreshSelectedCities.observe(viewLifecycleOwner, Observer {
+      viewModel.citySelectItems.observe(viewLifecycleOwner, historyCitySelectAdapter)
+    })*/
 
     viewModel.requestLocationPermission.observe(viewLifecycleOwner, Observer { event ->
       event?.getContentIfNotHandled()?.let {
@@ -75,27 +124,92 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       viewModel.showDataForMeasurementType(it)
     })
 
-    citySelectRecyclerView.addItemDecoration(DividerItemDecoration(citySelectRecyclerView.context, DividerItemDecoration.VERTICAL))
+    historySelectRecyclerView.addItemDecoration(
+      DividerItemDecoration(
+        historySelectRecyclerView.context,
+        DividerItemDecoration.VERTICAL
+      )
+    )
+    currentlyCityRecyclerView.addItemDecoration(
+      DividerItemDecoration(
+        currentlyCityRecyclerView.context,
+        DividerItemDecoration.VERTICAL
+      )
+    )
 
-    val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(citySelectRecyclerView) {
+    val historyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(historySelectRecyclerView) {
       override fun instantiateUnderlayButton(position: Int): List<SwipeHelper.UnderlayButton> {
         var buttons = listOf<SwipeHelper.UnderlayButton>()
-        val deleteButton = deleteButton(position)
+        val deleteButton = historyDeleteButton(position)
         buttons = listOf(deleteButton)
         return buttons
       }
     })
 
-    itemTouchHelper.attachToRecyclerView(citySelectRecyclerView)
+    val currentlyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(currentlyCityRecyclerView) {
+      override fun instantiateUnderlayButton(position: Int): List<SwipeHelper.UnderlayButton> {
+        var buttons = listOf<SwipeHelper.UnderlayButton>()
+        val deleteButton = currentlyDeleteButton(position)
+        buttons = listOf(deleteButton)
+        return buttons
+      }
+    })
+
+
+
+    historyItemTouchHelper.attachToRecyclerView(historySelectRecyclerView)
+    currentlyItemTouchHelper.attachToRecyclerView(currentlyCityRecyclerView)
   }
 
-  private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
+  private fun historyDeleteButton(position: Int): SwipeHelper.UnderlayButton {
     return SwipeHelper.UnderlayButton(requireContext(), "Delete", 14.0f, R.color.red_delete_button,
       object : SwipeHelper.UnderlayButtonClickListener {
         override fun onClick() {
-          val cityToRemoveFromSharedPreferences = citySelectAdapter.del(position)
-          viewModel.deleteCityOnSwipe(cityToRemoveFromSharedPreferences)
-          Toast.makeText(activity, resources.getString(R.string.removed_message), Toast.LENGTH_SHORT).show()
+          val historyCityToRemoveFromSharedPreferences = historyCitySelectAdapter.del(position)
+          viewModel.deleteCityOnSwipe(historyCityToRemoveFromSharedPreferences)
+          Toast.makeText(
+            activity,
+            resources.getString(R.string.removed_message),
+            Toast.LENGTH_SHORT
+          ).show()
+
+          mainViewModel.activeCity.observe(viewLifecycleOwner, Observer { activeCity ->
+            val citySelectedItems = viewModel.citySelectItems.value ?: listOf()
+            val selectedList = citySelectedItems.filter { it.city.name == activeCity?.name }.toList()
+            currentlySelected.value = selectedList
+
+            if (selectedList.isNullOrEmpty()) {
+              currentlySelectedLinearLayout.visibility = View.GONE
+            }
+          })
+        }
+      })
+
+  }
+
+  private fun currentlyDeleteButton(position: Int): SwipeHelper.UnderlayButton {
+    return SwipeHelper.UnderlayButton(requireContext(), "Delete", 14.0f, R.color.red_delete_button,
+      object : SwipeHelper.UnderlayButtonClickListener {
+        override fun onClick() {
+          val currentlyCityToRemoveFromSharedPreferences = currentlyCitySelectAdapter.del(position)
+          viewModel.deleteCityOnSwipe(currentlyCityToRemoveFromSharedPreferences)
+          Toast.makeText(
+            activity,
+            resources.getString(R.string.removed_message),
+            Toast.LENGTH_SHORT
+          ).show()
+
+
+        /*mainViewModel.activeCity.observe(viewLifecycleOwner, Observer { activeCity ->
+          val citySelectedItems = viewModel.citySelectItems.value ?: listOf()
+          val selectedList = citySelectedItems.filter { it.city.name == activeCity?.name }.toList()
+          currentlySelected.value = selectedList
+
+          if (selectedList.isNullOrEmpty()) {
+            currentlySelectedLinearLayout.visibility = View.GONE
+          }
+        })*/
+
         }
       })
   }
@@ -103,12 +217,23 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   override fun onResume() {
     super.onResume()
     viewModel.getSelectedCities()
-      viewModel.citySelectItems.observe(viewLifecycleOwner, citySelectAdapter)
+    viewModel.citySelectItems.observe(viewLifecycleOwner, {
+      val activeCity = mainViewModel.activeCity.value
+      val citySelectedItems = it ?: listOf()
+      val selectedList =
+        citySelectedItems.filter { it2 -> it2.city.name == activeCity?.name }.toList()
+      val historyList =
+        citySelectedItems.filter { it2 -> it2.city.name != activeCity?.name }.toList()
+      currentlySelected.value = selectedList
+      history.value = historyList
+    })
   }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-      grantResults: IntArray) {
-    when(requestCode) {
+  override fun onRequestPermissionsResult(
+    requestCode: Int, permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    when (requestCode) {
       24 -> if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) viewModel.requestLocation()
       else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }

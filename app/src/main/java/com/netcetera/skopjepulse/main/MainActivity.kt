@@ -97,6 +97,8 @@ class MainActivity : AppCompatActivity() {
     })
 
     appBarView.onCitySelectRequest {
+      pulseAppbarDropDown.visibility = View.GONE
+      pulseAppbarDropUp.visibility = View.VISIBLE
       val citySelectShown = supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
       if (!citySelectShown) {
         supportFragmentManager.beginTransaction()
@@ -107,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
     mainViewModel.activeCity.observe(this, Observer { activeCity ->
       if (activeCity == null) {
-        showCitySelectIfNotShown()
+        appBarView.displayNoCityName()
       } else {
         appBarView.displayCityName(activeCity)
         val existingMapFragment = supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment

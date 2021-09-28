@@ -54,9 +54,11 @@ class MainViewModel(
           }
 
           addSource(selectableCity) {
-            cityStorage.cityId = it.name
             value = it
+            cityStorage.cityId = it?.name ?: ""
+
           }
+
         })
     selectableMeasurementType = MediatorLiveData<MeasurementType>().apply {
       addSource(dataDefinitionProvider.definitions) {
@@ -101,7 +103,7 @@ class MainViewModel(
   /**
    * Set the provided [City] as [MainViewModel.activeCity]
    */
-  fun showForCity(city: City) {
+  fun showForCity(city: City?) {
     if (activeCity.value != city) {
       selectableCity.value = city
     }
