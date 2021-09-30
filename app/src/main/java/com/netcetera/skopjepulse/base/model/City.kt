@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.netcetera.skopjepulse.cityselect.CitySelectItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.IgnoredOnParcel

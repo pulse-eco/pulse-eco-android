@@ -93,4 +93,10 @@
 
   <string name="language_title">Choose language</string>
 
+  <!-- City select -->
+  <string name="history">History</string>
+  <string name="currently_selected">Currently selected</string>
+  <string name="select_city">Select city</string>
+  <string name="no_recent">No recent cities</string>
+
 </resources>

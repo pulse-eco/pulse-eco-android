@@ -94,4 +94,10 @@
   <string name="language_de">Германски</string>
 
   <string name="language_title">Одберете јазик</string>
+
+  <!-- City select -->
+  <string name="history">Историја</string>
+  <string name="currently_selected">Моментално избрано</string>
+  <string name="select_city">Изберете град</string>
+  <string name="no_recent">Нема неодамнешни градови</string>
 </resources>

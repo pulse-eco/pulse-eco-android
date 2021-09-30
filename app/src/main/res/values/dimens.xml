@@ -27,7 +27,7 @@
   <dimen name="has_sensors_selected_margin_bottom">18dp</dimen>
   <dimen name="country_item_padding_top">15dp</dimen>
   <dimen name="country_item_padding_bottom">8dp</dimen>
-  <dimen name="country_item_text_size">20sp</dimen>
+  <dimen name="country_item_text_size">16sp</dimen>
   <dimen name="country_item_margin">1dp</dimen>
   <dimen name="country_item_margin_top">5dp</dimen>
   <dimen name="city_item_margin">1dp</dimen>
@@ -42,7 +42,7 @@
   <dimen name="country_city_selector_back_btn_size">22dp</dimen>
   <dimen name="country_city_selector_back_btn_margin_right">20dp</dimen>
   <dimen name="country_city_selector_location_margin_right">30dp</dimen>
-  <dimen name="country_city_selector_city_font_size">22sp</dimen>
+  <dimen name="country_city_selector_city_font_size">23sp</dimen>
   <dimen name="country_city_selector_small_country_font_size">14sp</dimen>
 
   <dimen name="average_weekly_data_view_margin">20dp</dimen>

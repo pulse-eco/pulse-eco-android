@@ -12,14 +12,6 @@
   android:paddingTop="@dimen/city_item_padding"
   android:paddingBottom="@dimen/city_item_padding">
 
-  <ImageView
-    android:id="@+id/imageView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_location"
-    android:layout_marginEnd="@dimen/country_city_selector_location_margin_right"
-    android:layout_gravity="center_vertical"/>
-
   <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -29,18 +21,10 @@
       android:id="@+id/txtCityName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/white"
+      android:textColor="@color/black"
       android:textSize="@dimen/country_city_selector_city_font_size"
       android:fontFamily="@font/sf_pro_display" />
 
-    <TextView
-      android:id="@+id/txtCountryNameSmall"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/country_city_selector_small_country_font_size"
-      android:textColor="@color/countrycityselect_country_small"
-      android:fontFamily="@font/sf_pro_display"
-      />
   </LinearLayout>
 
 </LinearLayout>

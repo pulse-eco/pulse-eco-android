@@ -92,4 +92,10 @@
   <string name="language_de">Deutsch</string>
 
   <string name="language_title">Sprache wählen</string>
+
+  <!-- City select -->
+  <string name="history">Geschichte</string>
+  <string name="currently_selected">Aktuell ausgewählt</string>
+  <string name="select_city">Stadt wählen</string>
+  <string name="no_recent">Keine neueren Städte</string>
 </resources>

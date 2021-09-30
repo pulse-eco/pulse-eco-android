@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.Constants
@@ -29,14 +28,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
-  private val refWatcher : RefWatcher by inject()
+  private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
 
   private val citySelectFragment: CitySelectFragment by lazy {
     CitySelectFragment()
   }
 
-  private val appBarView : PulseAppBarView by lazy {
+  private val appBarView: PulseAppBarView by lazy {
     PulseAppBarView(pulse_app_bar)
   }
 
@@ -51,8 +50,12 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
 
     btn_language.setOnClickListener {
-      val lang = getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, "")
-      val pickerView = LayoutInflater.from(this).inflate(R.layout.language_picker_dilog, null) as ViewGroup
+      val lang = getSharedPreferences(
+        Constants.LANGUAGE_CODE,
+        Context.MODE_PRIVATE
+      ).getString(Constants.LANGUAGE_CODE, "")
+      val pickerView =
+        LayoutInflater.from(this).inflate(R.layout.language_picker_dilog, null) as ViewGroup
 
       pickerView.mapTypeRadioGroup.check(
         when (lang) {
@@ -63,11 +66,13 @@ class MainActivity : AppCompatActivity() {
         }
       )
 
-      val popupWindow = PopupWindow(pickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
-        true)
+      val popupWindow = PopupWindow(
+        pickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+        true
+      )
 
       pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
-        when(i) {
+        when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
             showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("en") }
@@ -90,14 +95,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     mainViewModel.measurementTypeTabs.observe(this, Observer {
-      measurementTypeTabBarView.availableMeasurementTypes = it?: emptyList()
+      measurementTypeTabBarView.availableMeasurementTypes = it ?: emptyList()
     })
     measurementTypeTabBarView.selectedMeasurementType.observe(this, Observer {
       mainViewModel.showForMeasurement(it)
     })
 
     appBarView.onCitySelectRequest {
-      val citySelectShown = supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
+      pulseAppbarDropDown.visibility = View.GONE
+      pulseAppbarDropUp.visibility = View.VISIBLE
+      val citySelectShown =
+        supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
       if (!citySelectShown) {
         supportFragmentManager.beginTransaction()
           .add(R.id.content, citySelectFragment)
@@ -107,12 +115,18 @@ class MainActivity : AppCompatActivity() {
 
     mainViewModel.activeCity.observe(this, Observer { activeCity ->
       if (activeCity == null) {
+        appBarView.displayNoCityName()
         showCitySelectIfNotShown()
       } else {
         appBarView.displayCityName(activeCity)
-        val existingMapFragment = supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
+        val existingMapFragment =
+          supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
         supportFragmentManager.beginTransaction()
-          .replace(R.id.content, existingMapFragment ?: MapFragment.newInstance(activeCity), activeCity.name)
+          .replace(
+            R.id.content,
+            existingMapFragment ?: MapFragment.newInstance(activeCity),
+            activeCity.name
+          )
           .commit()
       }
     })
@@ -136,7 +150,8 @@ class MainActivity : AppCompatActivity() {
 
   private fun showCitySelectIfNotShown() {
     val someFragmentShown = supportFragmentManager.findFragmentById(R.id.content) != null
-    val citySelectShown = supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
+    val citySelectShown =
+      supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
     if (!citySelectShown) {
       supportFragmentManager.beginTransaction().apply {
         add(R.id.content, citySelectFragment)
@@ -155,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     refWatcher.watch(this)
   }
 
-  private fun changeLanguage(localeName: String){
+  private fun changeLanguage(localeName: String) {
     Internationalisation.setLocale(this, localeName)
     Internationalisation.setLocale(applicationContext, localeName)
     mainViewModel.reloadDDPData()

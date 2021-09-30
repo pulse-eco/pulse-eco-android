@@ -11,7 +11,7 @@
   </style>
 
   <style name="CountryCitySearchBar">
-    <item name="android:textColorHint">#8987a3</item>
+    <item name="android:textColorHint">@color/searchbar</item>
   </style>
 
   <style name="PulseAppBarTownPicker" parent="Widget.AppCompat.PopupMenu">
