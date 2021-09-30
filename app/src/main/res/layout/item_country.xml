@@ -14,7 +14,7 @@
     android:id="@+id/txtCountryName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/white"
+    android:textColor="@color/black"
     android:textSize="@dimen/country_item_text_size"
     android:layout_centerInParent="true"/>
 

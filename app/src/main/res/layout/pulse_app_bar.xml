@@ -33,6 +33,32 @@
       app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"/>
 
     <ImageView
+      android:id="@+id/pulseAppbarDropDown"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:debuggable="true"
+      android:focusable="true"
+      android:src="@drawable/ic_arrow_drop_down"
+      app:layout_constraintBottom_toTopOf="@+id/measurementTypeTabBarView"
+      app:layout_constraintStart_toEndOf="@+id/townLabel"
+      app:layout_constraintTop_toTopOf="parent"
+      android:visibility="gone"/>
+
+    <ImageView
+      android:id="@+id/pulseAppbarDropUp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:debuggable="true"
+      android:focusable="true"
+      android:src="@drawable/ic_arrow_drop_up"
+      app:layout_constraintBottom_toTopOf="@+id/measurementTypeTabBarView"
+      app:layout_constraintStart_toEndOf="@+id/townLabel"
+      app:layout_constraintTop_toTopOf="parent"
+      android:visibility="gone"/>
+
+    <ImageView
       android:id="@+id/pulseAppbarLogo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -41,28 +67,12 @@
       android:clickable="true"
       android:src="@drawable/ic_pulseappbar_logo"
       app:layout_constraintBottom_toTopOf="@id/measurementTypeTabBarView"
-      app:layout_constraintEnd_toEndOf="@+id/pulseAppbarCitySelect"
+      app:layout_constraintEnd_toEndOf="@+id/btn_language"
       app:layout_constraintStart_toStartOf="@+id/townLabel"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="1.0"
       android:debuggable="true"
       android:focusable="true" />
-
-    <ImageView
-      android:id="@+id/pulseAppbarCitySelect"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/ic_location_search"
-      android:paddingLeft="10dp"
-      android:paddingRight="10dp"
-      android:paddingTop="5dp"
-      android:paddingBottom="5dp"
-      android:clickable="true"
-      android:focusable="true"
-      android:background="?android:selectableItemBackgroundBorderless"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
-      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"/>
 
     <ImageView
       android:id="@+id/btn_language"
@@ -76,9 +86,9 @@
       android:paddingRight="10dp"
       android:paddingTop="5dp"
       android:src="@drawable/ic_language"
-      app:layout_constraintBottom_toBottomOf="@+id/pulseAppbarLogo"
-      app:layout_constraintEnd_toStartOf="@+id/pulseAppbarCitySelect"
-      app:layout_constraintTop_toTopOf="@+id/pulseAppbarLogo" />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
+      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo" />
 
     <com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTabBarView
       android:id="@+id/measurementTypeTabBarView"

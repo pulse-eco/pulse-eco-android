@@ -3,13 +3,13 @@
 <item >
   <shape
     android:shape="rectangle">
-    <solid android:color="@color/white"/>
+    <solid android:color="@color/countrycityselect_item_border"/>
   </shape>
 </item>
 <item android:bottom="3dp">
   <shape
     android:shape="rectangle">
-    <solid android:color="@color/pulseAppBarColor"/>
+    <solid android:color="@color/white"/>
   </shape>
 </item>
 </layer-list>

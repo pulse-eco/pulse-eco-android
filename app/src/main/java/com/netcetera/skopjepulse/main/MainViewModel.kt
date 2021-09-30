@@ -1,12 +1,9 @@
 package com.netcetera.skopjepulse.main
 
-import android.content.Context
-import android.content.res.Configuration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.PreferredCityStorage
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.base.data.Resource
@@ -17,24 +14,25 @@ import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
-import java.util.*
 
 /**
  * The main [androidx.lifecycle.ViewModel] used in [MainActivity] and shared across fragments.
  * Responsible for manging on what [City] and [MeasurementType] are shown in the fragments.
  */
 class MainViewModel(
-    private val pulseRepository: PulseRepository,
-    cityStorage: PreferredCityStorage,
-    private val dataDefinitionProvider: DataDefinitionProvider) : BaseViewModel() {
+  private val pulseRepository: PulseRepository,
+  cityStorage: PreferredCityStorage,
+  private val dataDefinitionProvider: DataDefinitionProvider
+) : BaseViewModel() {
 
   /**
    * The [City] that data shall be shown for.
    */
   val activeCity: LiveData<City?>
-  private val selectableCity = MutableLiveData<City>()
+  private val selectableCity = MutableLiveData<City?>()
 
   private val selectableMeasurementType: MutableLiveData<MeasurementType>
+
   /**
    * The [MeasurementType] that data shall be shown for.
    */
@@ -48,16 +46,18 @@ class MainViewModel(
 
   init {
     activeCity = Transformations.distinctUntilChanged(
-        MediatorLiveData<City>().apply {
-          addSource(pulseRepository.cities) { cities ->
-            value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
-          }
+      MediatorLiveData<City>().apply {
+        addSource(pulseRepository.cities) { cities ->
+          value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
+        }
 
-          addSource(selectableCity) {
-            cityStorage.cityId = it.name
-            value = it
-          }
-        })
+        addSource(selectableCity) {
+          value = it
+          cityStorage.cityId = it?.name ?: ""
+
+        }
+
+      })
     selectableMeasurementType = MediatorLiveData<MeasurementType>().apply {
       addSource(dataDefinitionProvider.definitions) {
         // Workaround to make selection from the available types if nothing is selected
@@ -70,11 +70,11 @@ class MainViewModel(
     }
 
     measurementTypeTabs = Transformations.distinctUntilChanged(
-        Transformations.map(dataDefinitionProvider.definitions) { definitions ->
-          definitions.map {
-            MeasurementTypeTab(it.id, it.shortTitle)
-          }
-        })
+      Transformations.map(dataDefinitionProvider.definitions) { definitions ->
+        definitions.map {
+          MeasurementTypeTab(it.id, it.shortTitle)
+        }
+      })
 
     loadingResources.addResource(pulseRepository.cities.toLoadingLiveDataResource {
       if (!it.data.isNullOrEmpty()) Resource.idle() else null
@@ -85,7 +85,7 @@ class MainViewModel(
   /**
    * Reloads the [DataDefinitionProvider] data, so that changed configuration takes effect (ex. Language change)
    */
-  fun reloadDDPData(){
+  fun reloadDDPData() {
     dataDefinitionProvider.loadData()
   }
 
@@ -101,7 +101,7 @@ class MainViewModel(
   /**
    * Set the provided [City] as [MainViewModel.activeCity]
    */
-  fun showForCity(city: City) {
+  fun showForCity(city: City?) {
     if (activeCity.value != city) {
       selectableCity.value = city
     }

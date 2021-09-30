@@ -34,19 +34,23 @@ import java.util.*
  * Implementation of [BaseViewModel] that is used for displaying of cities to select from in [CitySelectFragment].
  */
 class CitySelectViewModel(
-    private val pulseRepository: PulseRepository,
-    private val locationProvider: CurrentLocationProvider,
-    private val dataDefinitionProvider: DataDefinitionProvider) : BaseViewModel() {
+  private val pulseRepository: PulseRepository,
+  private val locationProvider: CurrentLocationProvider,
+  private val dataDefinitionProvider: DataDefinitionProvider
+) : BaseViewModel() {
 
   private val selectedMeasurementType = MutableLiveData<MeasurementType>()
   private val _requestLocationPermission = MutableLiveData<Event<Unit>>()
 
-  private val sharedPref = context.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
+  private val selectedCitiesSet = HashSet<CityItem>()
+
+  private val sharedPref =
+    context.getSharedPreferences(Constants.SELECTED_CITIES, Context.MODE_PRIVATE)
 
   /**
    * Emitting of [Event] when there is permission missing for access of the current user location.
    */
-  val requestLocationPermission : LiveData<Event<Unit>>
+  val requestLocationPermission: LiveData<Event<Unit>>
     get() = _requestLocationPermission
 
   /**
@@ -58,11 +62,10 @@ class CitySelectViewModel(
 
   private var _shouldRefreshSelectedCities = MutableLiveData<Boolean>()
 
-  val shouldRefreshSelectedCities :LiveData<Boolean>
+  val shouldRefreshSelectedCities: LiveData<Boolean>
     get() = _shouldRefreshSelectedCities
 
   private val _citiesSharedPref = MutableLiveData<String>()
-
 
   init {
     loadData()
@@ -70,18 +73,17 @@ class CitySelectViewModel(
     _shouldRefreshSelectedCities.value = false
   }
 
-
   /**
    * Get selected cities in [citySelectItems]
    */
   fun getSelectedCities() {
     _citiesSharedPref.value = sharedPref.getString(Constants.SELECTED_CITIES, "")
-    var selectedCitiesSet = HashSet<CityItem>()
+    selectedCitiesSet.clear()
     val gson = Gson()
     val selectedCities = _citiesSharedPref.value
     if (!selectedCities.isNullOrEmpty()) {
       val type = object : TypeToken<HashSet<CityItem>>() {}.type
-      selectedCitiesSet = gson.fromJson(selectedCities, type)
+      selectedCitiesSet.addAll(gson.fromJson(selectedCities, type))
     } else {
       // when loading for the first time
       selectedCitiesSet.add(CityItem("Skopje", "Macedonia"))
@@ -90,12 +92,7 @@ class CitySelectViewModel(
       editor.putString(Constants.SELECTED_CITIES, jsonSelectedCities)
       editor.apply()
     }
-
-    citySelectItems = Transformations.map(allCityItems) {
-      it.filter {
-        selectedCitiesSet.map { it.name.toLowerCase(Locale.ROOT) }.contains(it.city.name.toLowerCase(Locale.ROOT))
-      }
-    }
+    pulseRepository.loadCities(true)
   }
 
   fun deleteCityOnSwipe(cityToRemove: String) {
@@ -130,11 +127,13 @@ class CitySelectViewModel(
   override fun handleError(resource: Resource<Any>): String? {
     return when (resource.throwable) {
       is MissingLocationPermission -> {
-        if (_requestLocationPermission.value?.hasBeenHandled != true) _requestLocationPermission.value = Event(Unit)
+        if (_requestLocationPermission.value?.hasBeenHandled != true) _requestLocationPermission.value =
+          Event(Unit)
         context.getString(string.missing_location_permission_error)
       }
       is LocationServicesDisabled -> context.getString(
-          string.location_services_disabled_error)
+        string.location_services_disabled_error
+      )
       else -> super.handleError(resource)
     }
   }
@@ -159,17 +158,14 @@ class CitySelectViewModel(
   }
 
   fun showDataForMeasurementType(measurementType: MeasurementType) {
-    if (measurementType != selectedMeasurementType.value) selectedMeasurementType.value = measurementType
+    if (measurementType != selectedMeasurementType.value) selectedMeasurementType.value =
+      measurementType
   }
 
-
-  /**
-   * Load all cities in [allCityItems]
-   */
-  fun loadData(){
+  private fun loadData() {
     val sortedCities = Transformations.switchMap(pulseRepository.cities) { cities ->
       Transformations.map(locationProvider.currentLocation) { location ->
-        val locationToSortBy = when(location.status) {
+        val locationToSortBy = when (location.status) {
           SUCCESS, LOADING -> location.data
           else -> null
         }
@@ -200,17 +196,25 @@ class CitySelectViewModel(
                 measurementBand.grade,
                 measurement.toInt().toString(),
                 dataDefinition.unit,
-                measurementBand.legendColor)
+                measurementBand.legendColor
+              )
             }
-            measurement != null ->CitySelectItem(
+            else -> CitySelectItem(
               city,
               dataDefinition.description,
-              measurement,
+              "N/A",
               dataDefinition.unit,
-              Color.LTGRAY)
-            else -> null
+              Color.LTGRAY
+            )
           }
         }
+      }
+    }
+
+    citySelectItems = Transformations.map(allCityItems) {
+      it.filter {
+        selectedCitiesSet.map { it.name.toLowerCase(Locale.ROOT) }
+          .contains(it.city.name.toLowerCase(Locale.ROOT))
       }
     }
 
@@ -218,4 +222,5 @@ class CitySelectViewModel(
     errorResources.addResource(pulseRepository.citiesOverall.toErrorLiveDataResource())
     errorResources.addResource(locationProvider.currentLocation.toErrorLiveDataResource())
   }
+
 }

@@ -1,10 +1,13 @@
 package com.netcetera.skopjepulse.pulseappbar
 
+
+import android.content.Context
+import android.content.res.Resources
 import android.view.View
+import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
-import kotlinx.android.synthetic.main.pulse_app_bar.view.pulseAppbarCitySelect
-import kotlinx.android.synthetic.main.pulse_app_bar.view.pulseAppbarLogo
-import kotlinx.android.synthetic.main.pulse_app_bar.view.townLabel
+import kotlinx.android.synthetic.main.pulse_app_bar.*
+import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 
 class PulseAppBarView(private val pulseAppBarView: View) {
 
@@ -13,21 +16,45 @@ class PulseAppBarView(private val pulseAppBarView: View) {
 
   init {
     pulseAppBarView.pulseAppbarLogo.setOnClickListener { refreshRequestedListener?.invoke() }
-    pulseAppBarView.pulseAppbarCitySelect.setOnClickListener { selectedCityListener?.invoke() }
+    pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke()}
+
   }
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
     this.selectedCityListener = citySelectRequestListener
+    pulseAppBarView.pulseAppbarDropDown.apply {
+      visibility = View.GONE
+    }
+    pulseAppBarView.pulseAppbarDropUp.apply {
+      visibility = View.VISIBLE
+    }
   }
 
   fun onRefreshRequested(func: () -> Unit) {
     this.refreshRequestedListener = func
   }
 
+  fun displayNoCityName() {
+    val string =  pulseAppBarView.context.getString(R.string.select_city)
+    displayCityName(string)
+  }
+
   fun displayCityName(city: City) {
+    displayCityName(city.name.toUpperCase())
+  }
+
+  private fun displayCityName(name: String) {
     pulseAppBarView.townLabel.apply {
-      text = city.name.toUpperCase()
+      text = name
       visibility = View.VISIBLE
+    }
+
+    pulseAppBarView.pulseAppbarDropDown.apply {
+      visibility = View.VISIBLE
+    }
+
+    pulseAppBarView.pulseAppbarDropUp.apply {
+      visibility = View.GONE
     }
   }
 }
