@@ -21,7 +21,7 @@
     android:layout_marginEnd="@dimen/components_side_spacing"
     android:layout_marginBottom="@dimen/components_between_spacing"
     android:lineSpacingExtra="3sp"
-    android:text="@string/no_sensors_selected_message"/>
+    android:text="@string/no_sensors_selected"/>
 
   <Button
     android:id="@+id/selectSensorsButton"

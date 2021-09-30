@@ -52,20 +52,20 @@ class CountryCitySelectorActivity : AppCompatActivity(){
     text_search.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable?) {
         mAdapter.filter.filter(s.toString())
-        if(s.toString().isEmpty()) txtResult.text = getString(R.string.search_suggested)
-        else txtResult.text = getString(R.string.search_results)
+        if(s.toString().isEmpty()) txtResult.text = getString(R.string.suggested)
+        else txtResult.text = getString(R.string.results)
       }
 
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         mAdapter.filter.filter(s.toString())
-        if(s.toString().isEmpty()) txtResult.text = getString(R.string.search_suggested)
-        else txtResult.text = getString(R.string.search_results)
+        if(s.toString().isEmpty()) txtResult.text = getString(R.string.suggested)
+        else txtResult.text = getString(R.string.results)
       }
 
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         mAdapter.filter.filter(s.toString())
-        if(s.toString().isEmpty()) txtResult.text = getString(R.string.search_suggested)
-        else txtResult.text = getString(R.string.search_results)
+        if(s.toString().isEmpty()) txtResult.text = getString(R.string.suggested)
+        else txtResult.text = getString(R.string.results)
       }
 
     })

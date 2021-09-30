@@ -105,7 +105,7 @@ class MapViewModel(
       measurements.map { (_, reading) -> reading.value }.average().takeUnless { it.isNaN() }?.roundToInt()?.let {
         val valueBand = dataDefinition.findBandByValue(it)
         OverallBannerData(
-            context.getString(string.overall_banner_title_average),
+            context.getString(string.average),
             it.toString(),
             dataDefinition.unit,
             valueBand.grade,

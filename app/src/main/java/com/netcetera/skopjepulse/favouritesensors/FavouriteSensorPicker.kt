@@ -19,7 +19,7 @@ fun Fragment.showFavouriteSensorsPicker(favouriteSensors: List<Sensor>, otherSen
 
   val selectedItems = allSensors.map { it.second }.toBooleanArray()
   AlertDialog.Builder(requireContext())
-    .setTitle(R.string.sensors_select_dialog_title)
+    .setTitle(R.string.tooltip_maximum_sensors_reached)
     .setMultiChoiceItems(
       allSensors.map { it.first.description }.toTypedArray(),
       selectedItems) { dialog, which, isChecked ->
@@ -36,10 +36,10 @@ fun Fragment.showFavouriteSensorsPicker(favouriteSensors: List<Sensor>, otherSen
         allSensors[which] = allSensors[which].copy(second = false)
       }
     }
-    .setNegativeButton(R.string.cancel_action) { _, _ ->
+    .setNegativeButton(R.string.cancel) { _, _ ->
       // no-op
     }
-    .setPositiveButton(R.string.ok_action) { _, _ ->
+    .setPositiveButton(R.string.ok) { _, _ ->
       val favourites = allSensors.filter { it.second }.map { it.first }
       val unselectedFavourites = favouriteSensors.filter { !favourites.contains(it) }
       val newSelectedFavourites = otherSensors.filter { favourites.contains(it) }

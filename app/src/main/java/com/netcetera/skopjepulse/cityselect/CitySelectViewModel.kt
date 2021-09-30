@@ -131,10 +131,10 @@ class CitySelectViewModel(
     return when (resource.throwable) {
       is MissingLocationPermission -> {
         if (_requestLocationPermission.value?.hasBeenHandled != true) _requestLocationPermission.value = Event(Unit)
-        context.getString(string.city_select_missing_location_permission_error_message)
+        context.getString(string.missing_location_permission_error)
       }
       is LocationServicesDisabled -> context.getString(
-          string.city_select_location_services_disabled_error_message)
+          string.location_services_disabled_error)
       else -> super.handleError(resource)
     }
   }

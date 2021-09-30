@@ -24,7 +24,7 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/map_preferences_map_type_title"/>
+          android:text="@string/map_type_title"/>
 
       <RadioGroup
           android:id="@+id/mapTypeRadioGroup"
@@ -36,21 +36,21 @@
             android:id="@+id/mapTypeRadioItemDefault"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_preferences_map_type_default"
+            android:text="@string/map_type_default"
             />
 
         <RadioButton
             android:id="@+id/mapTypeRadioItemSatellite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_preferences_map_type_satellite"
+            android:text="@string/map_type_satellite"
             />
 
         <RadioButton
             android:id="@+id/mapTypeRadioItemTerrain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_preferences_map_type_terrain"
+            android:text="@string/map_type_terrain"
             />
 
       </RadioGroup>
@@ -59,21 +59,21 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/components_between_spacing"
-          android:text="@string/map_preferences_data_visualization_title"/>
+          android:text="@string/data_visualization_title"/>
 
       <CheckBox
-          android:id="@+id/dataVisualizationItemSensorMarkers"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/map_preferences_data_visualization_sensor_marker"
-          />
+        android:id="@+id/dataVisualizationItemSensorMarkers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_visualization_sensor_marker"
+        />
 
       <CheckBox
-          android:id="@+id/dataVisualizationItemGeographic"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/map_preferences_data_visualization_geographic"
-          />
+        android:id="@+id/dataVisualizationItemGeographic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_visualization_geographic"
+        />
 
 
     </LinearLayout>
