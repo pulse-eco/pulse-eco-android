@@ -121,13 +121,15 @@ class MainActivity : AppCompatActivity() {
         appBarView.displayCityName(activeCity)
         val existingMapFragment =
           supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
-        supportFragmentManager.beginTransaction()
-          .replace(
-            R.id.content,
-            existingMapFragment ?: MapFragment.newInstance(activeCity),
-            activeCity.name
-          )
-          .commit()
+        if (existingMapFragment == null) {
+          supportFragmentManager.beginTransaction()
+            .replace(
+              R.id.content,
+              MapFragment.newInstance(activeCity),
+              activeCity.name
+            )
+            .commit()
+        }
       }
     })
 

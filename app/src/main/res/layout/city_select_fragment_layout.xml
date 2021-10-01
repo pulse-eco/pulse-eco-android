@@ -71,12 +71,6 @@
                 layout="@layout/history"
                 />
 
-              <include
-                android:id="@+id/emptyHistory"
-                layout="@layout/empty_history"
-                android:visibility="gone"
-                />
-
               <androidx.recyclerview.widget.RecyclerView
                 android:overScrollMode="never"
                 android:id="@+id/historySelectRecyclerView"
