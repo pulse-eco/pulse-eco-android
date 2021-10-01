@@ -13,7 +13,7 @@
     android:gravity="center_horizontal"
     android:textSize="@dimen/no_sensors_selected_text_size"
     android:textColor="@color/bottom_sheet_text_primary"
-    android:text="@string/bottom_sheet_default_no_sensors_selected"
+    android:text="@string/default_no_sensors_selected"
     android:layout_marginBottom="@dimen/no_sensors_selected_text_view_margin_bottom"
     android:layout_marginTop="@dimen/no_sensors_selected_text_view_margin_top"
     android:layout_marginStart="@dimen/no_sensors_selected_text_view_margin_start"
@@ -40,7 +40,7 @@
       android:layout_weight="1"
       android:textSize="@dimen/has_sensors_selected_text_size"
       android:textColor="@color/bottom_sheet_text_primary"
-      android:text="@string/bottom_sheet_has_sensors_selected"/>
+      android:text="@string/sensors_selected"/>
 
     <ImageView
       android:id="@+id/editSelectedSensors"

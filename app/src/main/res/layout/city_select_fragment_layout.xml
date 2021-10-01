@@ -71,12 +71,6 @@
                 layout="@layout/history"
                 />
 
-              <include
-                android:id="@+id/emptyHistory"
-                layout="@layout/empty_history"
-                android:visibility="gone"
-                />
-
               <androidx.recyclerview.widget.RecyclerView
                 android:overScrollMode="never"
                 android:id="@+id/historySelectRecyclerView"
@@ -114,7 +108,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
-          android:text="@string/add_city"
+          android:text="@string/add_city_button"
           android:textColor="@color/purple"
           android:textStyle="bold" />
       </LinearLayout>

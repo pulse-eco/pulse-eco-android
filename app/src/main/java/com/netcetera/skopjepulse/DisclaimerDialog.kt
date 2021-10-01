@@ -5,8 +5,8 @@ import androidx.appcompat.app.AlertDialog
 
 fun showDisclaimerDialog(context: Context) {
   AlertDialog.Builder(context)
-    .setTitle(R.string.disclaimer_details_title)
-    .setMessage(R.string.disclaimer_details_text)
-    .setNeutralButton(R.string.close_action, null)
+    .setTitle(R.string.disclaimer)
+    .setMessage(R.string.disclaimer_message)
+    .setNeutralButton(R.string.cancel, null)
     .show()
 }

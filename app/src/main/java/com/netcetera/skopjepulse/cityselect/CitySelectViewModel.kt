@@ -129,10 +129,10 @@ class CitySelectViewModel(
       is MissingLocationPermission -> {
         if (_requestLocationPermission.value?.hasBeenHandled != true) _requestLocationPermission.value =
           Event(Unit)
-        context.getString(string.city_select_missing_location_permission_error_message)
+        context.getString(string.missing_location_permission_error)
       }
       is LocationServicesDisabled -> context.getString(
-        string.city_select_location_services_disabled_error_message
+        string.location_services_disabled_error
       )
       else -> super.handleError(resource)
     }
@@ -193,7 +193,7 @@ class CitySelectViewModel(
               val measurementBand = dataDefinition.findBandByValue(measurement.toInt())
               CitySelectItem(
                 city,
-                measurementBand.grade,
+                measurementBand.shortGrade,
                 measurement.toInt().toString(),
                 dataDefinition.unit,
                 measurementBand.legendColor
@@ -201,7 +201,7 @@ class CitySelectViewModel(
             }
             else -> CitySelectItem(
               city,
-              dataDefinition.description,
+              context.getString(string.no_data_available),
               "N/A",
               dataDefinition.unit,
               Color.LTGRAY

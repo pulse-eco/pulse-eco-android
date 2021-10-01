@@ -66,12 +66,12 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
    */
   protected open fun handleError(resource: Resource<Any>): String? {
     return if (resource.throwable is NoConnectivityException) {
-      context.getString(R.string.error_msg_no_internet_connection)
+      context.getString(R.string.no_internet_connection)
     } else {
       if (resource.throwable == null) {
-        e { "Unhandled technical error." }
+        e { context.getString(R.string.unhandled_technical_error) }
       } else {
-        e(resource.throwable) { "Unhandled technical error." }
+        e(resource.throwable) { context.getString(R.string.unhandled_technical_error) }
       }
       null
     }

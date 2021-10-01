@@ -4,6 +4,7 @@ plugins {
   id(Plugins.kotlinAndroidExtensions)
   id(Plugins.kotlinKapt)
   id(Plugins.fabric)
+  id(Plugins.trema)
 }
 
 android {
@@ -86,4 +87,14 @@ android {
     kapt(Libs.moshiCodegen)
     }
 }
+
+tasks.getByPath("preBuild").dependsOn(tasks.named("generateTexts"))
+
+trema {
+  defaultLanguage = "en"
+  languages = listOf("mk", "en", "de")
+  inputFilePath = file("./build-resources/trema/mobile/translations.trm").absolutePath
+}
+
+
 apply(plugin = "com.google.gms.google-services")

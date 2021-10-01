@@ -282,7 +282,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     val listOfColorViews = listOf(colorSevenDaysAgo, colorSixDaysAgo, colorFiveDaysAgo, colorFourDaysAgo, colorThreeDaysAgo, colorTwoDaysAgo, colorOneDayAgo)
 
     listOfTextViewsForValues.forEach{
-      it.text = resources.getString(R.string.data_not_available)
+      it.text = resources.getString(R.string.not_available)
       it.setTextColor(Color.GRAY)
     }
     listOfColorViews.forEach{

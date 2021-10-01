@@ -160,7 +160,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
           viewModel.deleteCityOnSwipe(historyCityToRemoveFromSharedPreferences)
           Toast.makeText(
             activity,
-            resources.getString(R.string.removed_message),
+            resources.getString(R.string.msg_removed),
             Toast.LENGTH_SHORT
           ).show()
         }
@@ -177,7 +177,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
           mainViewModel.showForCity(null)
           Toast.makeText(
             activity,
-            resources.getString(R.string.removed_message),
+            resources.getString(R.string.msg_removed),
             Toast.LENGTH_SHORT
           ).show()
         }

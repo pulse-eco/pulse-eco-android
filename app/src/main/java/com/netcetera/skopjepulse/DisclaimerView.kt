@@ -22,14 +22,14 @@ class DisclaimerView : AppCompatTextView {
     setLinkTextColor(ContextCompat.getColor(context, R.color.bottom_sheet_text_primary))
     textSize = 12f
     text = Truss()
-      .append(context.getString(R.string.disclaimer_text))
+      .append(context.getString(R.string.disclaimer_short_message))
       .append(' ')
         .pushSpan(object : ClickableSpan() {
           override fun onClick(widget: View) {
             showDisclaimerDialog(context)
           }
         })
-        .append(context.getString(R.string.disclaimer_details_action))
+        .append(context.getString(R.string.details))
         .popSpan()
       .append("\n\n")
         .pushSpan(object : ClickableSpan() {
@@ -42,7 +42,7 @@ class DisclaimerView : AppCompatTextView {
             }
           }
         })
-        .append(context.getString(R.string.privacy_policy_action))
+        .append(context.getString(R.string.privacy_policy))
         .popSpan()
       .build()
     movementMethod = LinkMovementMethod.getInstance()

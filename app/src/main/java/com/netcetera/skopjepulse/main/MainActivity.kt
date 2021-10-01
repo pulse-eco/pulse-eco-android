@@ -75,15 +75,15 @@ class MainActivity : AppCompatActivity() {
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("en") }
+            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("en") }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("mk") }
+            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("mk") }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.confirm_body)) { changeLanguage("de") }
+            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("de") }
           }
         }
       }
@@ -121,13 +121,15 @@ class MainActivity : AppCompatActivity() {
         appBarView.displayCityName(activeCity)
         val existingMapFragment =
           supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
-        supportFragmentManager.beginTransaction()
-          .replace(
-            R.id.content,
-            existingMapFragment ?: MapFragment.newInstance(activeCity),
-            activeCity.name
-          )
-          .commit()
+        if (existingMapFragment == null) {
+          supportFragmentManager.beginTransaction()
+            .replace(
+              R.id.content,
+              MapFragment.newInstance(activeCity),
+              activeCity.name
+            )
+            .commit()
+        }
       }
     })
 
