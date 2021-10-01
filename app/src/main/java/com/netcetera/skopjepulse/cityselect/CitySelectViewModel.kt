@@ -193,7 +193,7 @@ class CitySelectViewModel(
               val measurementBand = dataDefinition.findBandByValue(measurement.toInt())
               CitySelectItem(
                 city,
-                measurementBand.grade,
+                measurementBand.shortGrade,
                 measurement.toInt().toString(),
                 dataDefinition.unit,
                 measurementBand.legendColor
@@ -201,7 +201,7 @@ class CitySelectViewModel(
             }
             else -> CitySelectItem(
               city,
-              dataDefinition.description,
+              context.getString(string.no_data_available),
               "N/A",
               dataDefinition.unit,
               Color.LTGRAY
