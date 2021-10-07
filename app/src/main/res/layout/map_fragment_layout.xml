@@ -52,7 +52,7 @@
       android:layout_height="wrap_content"
       android:background="@drawable/disclaimer_background"
       android:text="@string/disclaimer"
-      android:textColor="#3F3F3F"
+      android:textColor="@color/disclaimer_text"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"/>
 
