@@ -90,6 +90,7 @@
   <color name="searchbar">@color/darkmode</color>
   <color name="search_bg">@color/white</color>
   <color name="search_text">@color/darkmode</color>
+  <color name="search_no_data_available">@color/white_secondary</color>
   <!-- Suggested -->
   <color name="suggested_bg">@color/darkmode_dark</color>
   <color name="suggested">@color/white</color>
@@ -145,7 +146,5 @@
 
   <color name="circle_background">#1A000000</color>
   <color name="circle_shape">#cdecec</color>
-
-  <color name="btn">@color/purpleLighter</color>
 
 </resources>
