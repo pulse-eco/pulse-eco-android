@@ -39,6 +39,8 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
   private var currentlySelected = MutableLiveData<List<CitySelectItem>>()
   private var history = MutableLiveData<List<CitySelectItem>>()
 
+  private val REQUEST_CODE = 123
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -87,7 +89,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     addNewCityLinearLayout = linearLayoutAddNewCity
     linearLayoutAddNewCity.setOnClickListener {
       val intent = Intent(activity, CountryCitySelectorActivity::class.java)
-      startActivity(intent)
+      activity?.startActivityForResult(intent, REQUEST_CODE)
     }
 
     citySelectRefreshView.setOnRefreshListener {
