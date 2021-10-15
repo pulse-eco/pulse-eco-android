@@ -1,5 +1,7 @@
 package com.netcetera.skopjepulse.countryCitySelector
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,6 +14,7 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.utils.Internationalisation
 import kotlinx.android.synthetic.main.activity_city_selector.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_NAME_RESULT
 
 
 /**
@@ -42,7 +45,7 @@ class CountryCitySelectorActivity : AppCompatActivity(){
 
     val recyclerview: RecyclerView = countryCityRecyclerView
     recyclerview.layoutManager = LinearLayoutManager(this)
-    mAdapter = CountryCityAdapter(countryCityViewModel.getSelectableCities()) { this.onCitySelected() }
+    mAdapter = CountryCityAdapter(countryCityViewModel.getSelectableCities(), onCitySelected)
     recyclerview.adapter = mAdapter
 
     countryCityViewModel.countryCityList.observe(this, Observer {
@@ -83,8 +86,11 @@ class CountryCitySelectorActivity : AppCompatActivity(){
     countryCityRecyclerView.addOnScrollListener(scrollListener)
   }
 
-  val onCitySelected: () -> Unit = {
+  val onCitySelected: (String) -> Unit = {
     countryCityViewModel.saveCheckedCities()
+    val intent = Intent()
+    intent.putExtra(NEW_CITY_NAME_RESULT, it)
+    setResult(Activity.RESULT_OK, intent)
     this.finish()
   }
 }
