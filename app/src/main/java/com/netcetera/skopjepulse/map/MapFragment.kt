@@ -23,8 +23,20 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
-import com.netcetera.skopjepulse.base.model.*
-import com.netcetera.skopjepulse.extensions.*
+import com.netcetera.skopjepulse.base.model.Band
+import com.netcetera.skopjepulse.base.model.City
+import com.netcetera.skopjepulse.base.model.DataDefinition
+import com.netcetera.skopjepulse.base.model.MeasurementType
+import com.netcetera.skopjepulse.extensions.applyPulseStyling
+import com.netcetera.skopjepulse.extensions.dimOnExpand
+import com.netcetera.skopjepulse.extensions.gone
+import com.netcetera.skopjepulse.extensions.lifecycleAwareOnMapClickListener
+import com.netcetera.skopjepulse.extensions.onExpanded
+import com.netcetera.skopjepulse.extensions.onStateChange
+import com.netcetera.skopjepulse.extensions.pulseMapType
+import com.netcetera.skopjepulse.extensions.toggle
+import com.netcetera.skopjepulse.extensions.updateForCity
+import com.netcetera.skopjepulse.extensions.visible
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
@@ -121,6 +133,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
       pastWeekDataLabelForCityName = it
     })
 
+    viewModel.dataDefinitionDataPublicHelper.value?.let {
+      dataDef = it
+    }
     viewModel.dataDefinitionDataPublicHelper.observe(viewLifecycleOwner, Observer {
       dataDef = it
       displayUnit()
