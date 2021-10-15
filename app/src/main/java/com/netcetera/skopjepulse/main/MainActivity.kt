@@ -32,7 +32,10 @@ class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
 
-  private val REQUEST_CODE = 123
+  companion object {
+    const val NEW_CITY_REQUEST_CODE = 12345
+    const val NEW_CITY_NAME_RESULT = "cityName"
+  }
 
   private val citySelectFragment: CitySelectFragment by lazy {
     CitySelectFragment()
@@ -186,10 +189,10 @@ class MainActivity : AppCompatActivity() {
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (requestCode == REQUEST_CODE) {
+    if (requestCode == NEW_CITY_REQUEST_CODE) {
       if (resultCode == Activity.RESULT_OK) {
         if (data != null) {
-          val result = data.getStringExtra("name")
+          val result = data.getStringExtra(NEW_CITY_NAME_RESULT)
           if (result != null) {
             mainViewModel.showForCity(result)
 
