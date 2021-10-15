@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
+import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_REQUEST_CODE
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.utils.ui.SwipeHelper
 import kotlinx.android.synthetic.main.city_select_fragment_layout.*
@@ -38,8 +39,6 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
 
   private var currentlySelected = MutableLiveData<List<CitySelectItem>>()
   private var history = MutableLiveData<List<CitySelectItem>>()
-
-  private val REQUEST_CODE = 123
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -89,7 +88,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     addNewCityLinearLayout = linearLayoutAddNewCity
     linearLayoutAddNewCity.setOnClickListener {
       val intent = Intent(activity, CountryCitySelectorActivity::class.java)
-      activity?.startActivityForResult(intent, REQUEST_CODE)
+      activity?.startActivityForResult(intent, NEW_CITY_REQUEST_CODE)
     }
 
     citySelectRefreshView.setOnRefreshListener {
