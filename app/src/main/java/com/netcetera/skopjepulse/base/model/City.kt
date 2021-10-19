@@ -18,8 +18,10 @@ data class City(
   val cityBorderPoints: List<Location>,
   @Json(name = "cityLocation")
   val location: Location,
-  @Json(name = "siteName")
+  @Json(name = "cityName")
   val name: String,
+  @Json(name = "siteName")
+  val displayName: String,
   @Json(name = "intialZoomLevel")
   val initialWebZoomLevel: Int,
   val siteTitle: String,
