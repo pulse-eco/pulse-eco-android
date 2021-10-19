@@ -87,7 +87,7 @@ class HistorySelectItemViewHolder(view: View, citySelectListener: CitySelectList
       itemView.citySelectMeasureLabel.visibility = View.VISIBLE
       itemView.imageNoDataAvailable.visibility = View.GONE
       itemView.citySelectMeasureContainer.setCardBackgroundColor(citySelectItem.color)
-      itemView.citySelectCityLabel.text = citySelectItem.city.name.capitalize()
+      itemView.citySelectCityLabel.text = citySelectItem.city.displayName
       itemView.citySelectCountryLabel.text = citySelectItem.city.countryName
       itemView.citySelectOverallStatus.text = citySelectItem.measurementDescription
       itemView.citySelectMeasureValue.text = citySelectItem.measurementValue
