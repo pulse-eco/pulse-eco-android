@@ -28,7 +28,7 @@ object CountryCityFilter{
             resultList.add(country)
             for (city in country.listCityItem) {
               if(data.contains(city))
-                if (city.name.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                if (city.displayName.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                   isContain = true
                   resultList.add(city)
                 }

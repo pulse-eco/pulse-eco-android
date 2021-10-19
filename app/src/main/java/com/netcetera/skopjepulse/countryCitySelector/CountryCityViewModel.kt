@@ -34,7 +34,7 @@ class CountryCityViewModel(application: Application, pulseRepository: PulseRepos
     pulseRepository.countries.value?.data?.forEach{
       val cities = ArrayList<CityItem>()
       it.cities.forEach {city ->
-        cities.add(CityItem(city.name.capitalize(Locale.ROOT), it.countryName ))
+        cities.add(CityItem(city.name, city.displayName, it.countryName))
       }
       data.add(CountryItem(it.countryName, it.countryCode, cities.toMutableList()))
     }
