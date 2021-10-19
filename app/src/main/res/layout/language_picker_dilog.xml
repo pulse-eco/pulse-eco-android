@@ -51,6 +51,12 @@
           android:layout_height="wrap_content"
           android:text="@string/german"
           />
+        <RadioButton
+          android:id="@+id/language_ro"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/romanian"
+          />
 
       </RadioGroup>
     </LinearLayout>
