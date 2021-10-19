@@ -92,7 +92,7 @@ tasks.getByPath("preBuild").dependsOn(tasks.named("generateTexts"))
 
 trema {
   defaultLanguage = "en"
-  languages = listOf("mk", "en", "de")
+  languages = listOf("mk", "en", "de", "ro")
   inputFilePath = file("./build-resources/trema/mobile/translations.trm").absolutePath
 }
 
