@@ -110,4 +110,12 @@ class MainViewModel(
   override fun refreshData(forceRefresh: Boolean) {
     pulseRepository.loadCities(forceRefresh)
   }
+
+  fun showForCity(city: String) {
+    val foundCity =
+      pulseRepository.cities.value?.data?.firstOrNull { it.name.equals(city, ignoreCase = true) }
+    if (foundCity != null) {
+      showForCity(foundCity)
+    }
+  }
 }

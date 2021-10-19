@@ -1,5 +1,6 @@
 package com.netcetera.skopjepulse.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -30,6 +31,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
+
+  companion object {
+    const val NEW_CITY_REQUEST_CODE = 12345
+    const val NEW_CITY_NAME_RESULT = "cityName"
+  }
 
   private val citySelectFragment: CitySelectFragment by lazy {
     CitySelectFragment()
@@ -180,5 +186,20 @@ class MainActivity : AppCompatActivity() {
     val intent = Intent(this, MainActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     this.startActivity(intent)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == NEW_CITY_REQUEST_CODE) {
+      if (resultCode == Activity.RESULT_OK) {
+        if (data != null) {
+          val result = data.getStringExtra(NEW_CITY_NAME_RESULT)
+          if (result != null) {
+            mainViewModel.showForCity(result)
+
+          }
+        }
+      }
+    }
+    super.onActivityResult(requestCode, resultCode, data)
   }
 }
