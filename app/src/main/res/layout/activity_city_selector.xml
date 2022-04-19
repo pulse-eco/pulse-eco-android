@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app2="schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/white"
@@ -9,35 +10,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/city_selector_margin"
+    android:background="@color/city_select_fragment_bg"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar_to_go_back"
-      xmlns:app="schemas.android.com/apk/res-auto"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:paddingTop="30dp"
+      android:background="@color/select_city_toolbar"
       android:paddingLeft="30dp"
-      android:paddingRight="30dp">
+      android:paddingRight="30dp"
+      android:paddingTop="30dp">
+
       <Button
         android:id="@+id/btn_go_back"
         android:layout_width="@dimen/country_city_selector_back_btn_size"
         android:layout_height="@dimen/country_city_selector_back_btn_size"
+        android:layout_marginEnd="@dimen/country_city_selector_back_btn_margin_right"
         android:background="@drawable/ic_left_arrow"
-        android:textColor="@color/white"
-        android:layout_marginEnd="@dimen/country_city_selector_back_btn_margin_right"/>
+        android:textColor="@color/select_city_btn_back" />
+
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/select_city"
-        android:textSize="21sp"
-        android:textFontWeight="500"
-        android:textColor="@color/black"
-        android:gravity="center_vertical"
         android:fontFamily="@font/sf_pro_display"
+        android:gravity="center_vertical"
+        android:text="@string/select_city"
+        android:textColor="@color/select_city_text"
+        android:textFontWeight="500"
+        android:textSize="21sp"
         tools:targetApi="p" />
 
     </androidx.appcompat.widget.Toolbar>
+
     <EditText
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -49,7 +54,7 @@
       android:background="@drawable/search_input"
       android:drawableStart="@drawable/ic_search"
       android:drawablePadding="15dp"
-      android:textColor="@color/black"
+      android:textColor="@color/search_text"
       android:layout_margin="@dimen/city_select_search_margin"/>
 
     <TextView
@@ -59,10 +64,10 @@
       android:textSize="18sp"
       android:textStyle="bold"
       android:text="@string/suggested"
-      android:textColor="@color/black"
+      android:textColor="@color/suggested"
       android:gravity="center"
       android:paddingBottom="15dp"
-      android:background="@drawable/bottom_line"/>
+      android:background="@drawable/bottom_line" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/countryCityRecyclerView"

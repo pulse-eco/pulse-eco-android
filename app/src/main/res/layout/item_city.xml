@@ -21,7 +21,7 @@
       android:id="@+id/txtCityName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/black"
+      android:textColor="@color/city_text"
       android:textSize="@dimen/country_city_selector_city_font_size"
       android:fontFamily="@font/sf_pro_display" />
 

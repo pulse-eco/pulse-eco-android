@@ -15,7 +15,7 @@
     android:id="@+id/txtMessage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/black"
+    android:textColor="@color/search_no_data_available"
     android:textSize="@dimen/country_item_text_size"
     android:text="@string/no_data_available"
     android:gravity="center"

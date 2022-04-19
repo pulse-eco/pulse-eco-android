@@ -6,7 +6,7 @@
               android:layout_width="match_parent"
               android:gravity="center_horizontal"
               android:layout_height="wrap_content"
-              tools:background="@color/white"
+              tools:background="@color/bottom_sheet_no_sensors"
               android:visibility="gone"
               tools:visibility="visible">
 
@@ -15,6 +15,7 @@
     android:layout_height="wrap_content"
     android:textSize="14sp"
     android:textColor="@color/bottom_sheet_text_secondary"
+    android:background="@color/bottom_sheet_bg"
     android:gravity="center_horizontal"
     android:layout_marginTop="@dimen/components_between_spacing"
     android:layout_marginStart="@dimen/components_side_spacing"
@@ -28,7 +29,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/select_sensors"
-    android:textColor="@color/colorPrimary"
+    android:textColor="@color/select_sensor_button"
     style="@style/Base.Widget.AppCompat.Button.Borderless"
     android:background="@drawable/select_sensors_button_outline"
     android:paddingStart="24dp"

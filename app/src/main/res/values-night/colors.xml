@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Generic colors -->
+  <color name="purple_A50">#800E0A44</color>
+  <color name="purple_dark_A50">#8007062A</color>
+  <color name="purple_A80">#CC0E0A44</color>
+  <color name="purple_dark_A80">#CC07062A</color>
+
+  <!-- New colors -->
+  <color name="purple">#0e0a44</color>
+  <color name="purpleDark">#00001f</color>
+  <color name="purpleLight">#3d3070</color>
+  <color name="purpleLighter">#9b87d0</color>
+
+  <color name="red">#d73f46</color>
+  <color name="redDark">#9f001f</color>
+  <color name="redLight">#ff7371</color>
+
+  <color name="white">#ffffff</color>
+  <color name="whiteGray">#eeeeee</color>
+  <color name="white_secondary">#f9f9f9</color>
+  <color name="grey">#eeeeee</color>
+  <color name="greyLight">#ffffff</color>
+  <color name="greyDark">#bcbcbc</color>
+  <color name="greyCountry">#f5f5f5</color>
+  <color name="greyBorder">#c2c2c2</color>
+  <color name="hc">#e0e0e0</color>
+  <color name="black">#000000</color>
+  <color name="blackLight">#2c2c2c</color>
+  <color name="transparent_black">#C8000000</color>
+
+  <!-- Dark -->
+  <color name="darkmode">#212121</color>
+  <color name="darkmode_dark">#000000</color>
+  <color name="darkmode_light">#484848</color>
+  <color name="darkmode_lighter">#6d6d6d</color>
+
+  <!-- Android colors -->
+  <color name="colorPrimary">@color/purple</color>
+  <color name="colorPrimaryDark">@color/purpleDark</color>
+  <color name="colorAccent">@color/purpleLighter</color>
+
+  <!-- Delete button -->
+  <color name="red_delete_button">@color/red</color>
+
+  <!-- Component colors -->
+  <color name="pulse_primary_component_background">@color/darkmode_dark</color>
+
+  <!-- Pulse App Bar-->
+  <color name="pulse_app_bar_color">@color/pulse_primary_component_background</color>
+  <color name="pulse_town_label">@color/white</color>
+  <color name="pulseAppBarTitleColor">@color/white</color>
+  <color name="pulse_app_bar_logo">@color/white</color>
+  <color name="down_arrow">@color/white</color>
+  <color name="up_arrow">@color/white</color>
+  <color name="language">@color/white</color>
+
+  <!-- Measurement types navigation toolbar -->
+  <color name="measurement_type_tab_selected_indicator">@color/white_secondary</color>
+  <color name="measurement_type_tab_text_active">@color/whiteGray</color>
+  <color name="measurement_type_tab_text_inactive">@color/darkmode_lighter</color>
+
+  <!--  Map -->
+  <color name="map_loading_indicator_background">@color/colorPrimary</color>
+
+  <!-- City select -->
+  <color name="cityselect_item_overlay">@color/darkmode</color>
+  <color name="cityselect_label_text_color">@color/white_secondary</color>
+  <color name="cityselect_measure_text_color">@color/darkmode</color>
+  <color name="city_select_country">@color/darkmode_lighter</color>
+  <!-- History Currently selected -->
+  <color name="hc_bg">@color/darkmode_dark</color>
+  <color name="hc_text">@color/white</color>
+  <!-- Add New City -->
+  <color name="add_new_city">@color/white</color>
+  <color name="add_city">@color/white</color>
+
+  <!-- Country City select -->
+  <color name="city_select_fragment_bg">@color/darkmode_dark</color>
+  <color name="countrycityselect_item_border">@color/darkmode_dark</color>
+  <color name="countrycityselect_country">@color/darkmode_light</color>
+  <color name="country_text">@color/white_secondary</color>
+  <color name="city_color">@color/darkmode</color>
+  <color name="city_text">@color/white_secondary</color>
+  <!-- Select City Toolbar-->
+  <color name="select_city_toolbar">@color/darkmode_dark</color>
+  <color name="select_city_text">@color/white</color>
+  <color name="select_city_btn_back">@color/white</color>
+  <!-- Searchbar -->
+  <color name="searchbar">@color/darkmode</color>
+  <color name="search_bg">@color/white</color>
+  <color name="search_text">@color/darkmode</color>
+  <color name="search_no_data_available">@color/white_secondary</color>
+  <!-- Suggested -->
+  <color name="suggested_bg">@color/darkmode_dark</color>
+  <color name="suggested">@color/white</color>
+
+  <!-- Error -->
+  <color name="error_background">@color/greyDark</color>
+  <color name="error_text">@color/darkmode</color>
+  <color name="no_data_available">@color/darkmode</color>
+
+  <!-- Overall Banner -->
+  <color name="overall_banner_title_section_background">@color/black</color>
+  <color name="overall_banner_text_foreground">@color/white</color>
+
+  <!-- Bottom sheet -->
+  <color name="bottom_sheet_text_primary">@color/white</color>
+  <color name="bottom_sheet_text_secondary">@color/white_secondary</color>
+  <color name="bottom_sheet_text_color">@color/white</color>
+  <color name="bottom_sheet_text">@color/white</color>
+  <color name="bottom_sheet_bg">@color/darkmode_dark</color>
+  <color name="bottom_sheet_no_sensors">@color/darkmode_dark</color>
+  <color name="bottom_sheet_default_peek">@color/darkmode_light</color>
+  <color name="select_sensor_button_outline">@color/darkmode_dark</color>
+  <color name="select_sensor_button">@color/white</color>
+  <color name="weekly_average_bg">@color/darkmode_dark</color>
+
+  <!-- Disclaimer -->
+  <color name="disclaimer_background">@color/darkmode_light</color>
+  <color name="disclaimer_text">@color/white</color>
+
+  <!-- Shadow for Linear Layout -->
+  <color name="shadow1">#0fffffff</color>
+  <color name="shadow2">#05ffffff</color>
+  <color name="shadow3">#1fffffff</color>
+  <color name="shadow4">#15ffffff</color>
+  <color name="shadow5">#2fffffff</color>
+  <color name="shadow6">#25ffffff</color>
+  <color name="shadow7">#3fffffff</color>
+  <color name="shadow8">#000000</color>
+
+  <!-- Icons -->
+  <color name="star_off">@color/white</color>
+  <color name="star_on">@color/white</color>
+
+  <color name="overall_fold">@color/white</color>
+  <color name="overall_unfold">@color/white</color>
+
+  <color name="foreground_active">#e5ffffff</color>
+  <color name="foreground_inactive">#b2ffffff</color>
+
+
+  <!-- Drawable-->
+  <color name="background_pull">#C4C4C4</color>
+
+  <color name="circle_background">#1A000000</color>
+  <color name="circle_shape">#cdecec</color>
+
+</resources>

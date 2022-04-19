@@ -2,6 +2,8 @@ package com.netcetera.skopjepulse.extensions
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
 import androidx.lifecycle.Lifecycle.Event.ON_START
@@ -40,11 +42,22 @@ var GoogleMap.pulseMapType : MapType
   }
 
 fun GoogleMap.applyPulseStyling(context: Context) {
-  applyStyling(context, MapStyleOptions.loadRawResourceStyle(context, R.raw.light_pulse_eco_maps_style))
-}
+  val currentNightMode = context.getResources().getConfiguration().uiMode and Configuration.UI_MODE_NIGHT_MASK
+  when (currentNightMode) {
+    Configuration.UI_MODE_NIGHT_NO -> {
+      applyStyling(
+        context,
+        MapStyleOptions.loadRawResourceStyle(context, R.raw.light_pulse_eco_maps_style)
+      )
+    }
+    Configuration.UI_MODE_NIGHT_YES -> {
+      applyStyling(
+        context,
+        MapStyleOptions.loadRawResourceStyle(context, R.raw.dark_pulse_eco_maps_style)
+      )
+    }
+  }
 
-fun GoogleMap.applyCitySelectPulseStyling(context: Context) {
-  applyStyling(context, MapStyleOptions.loadRawResourceStyle(context, R.raw.light_pulse_eco_maps_style_city_select))
 }
 
 private fun GoogleMap.applyStyling(context: Context, style: MapStyleOptions) {
