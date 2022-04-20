@@ -18,6 +18,12 @@
       android:layout_height="wrap_content"/>
 
     <include
+      android:id="@+id/history_and_forecast"
+      layout="@layout/history_and_forecast"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+    <include
       android:id="@+id/errorView"
       layout="@layout/simple_error_layout"
       android:layout_width="match_parent"
