@@ -10,10 +10,13 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
+import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastAdapter
+import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastDataModel
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.showConformationDialog
@@ -21,11 +24,13 @@ import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
 import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
+import kotlinx.android.synthetic.main.history_and_forecast.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +60,14 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
+    historyAndForecastRecyclerView.layoutManager =
+      LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+    val historyForecastAdapter = HistoryForecastAdapter(this, getButtonsList())
+    historyAndForecastRecyclerView.adapter = historyForecastAdapter
+    historyAndForecastRecyclerView.scrollToPosition(5)
+
+
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
         Constants.LANGUAGE_CODE,
@@ -82,19 +95,31 @@ class MainActivity : AppCompatActivity() {
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("en") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("en") }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("mk") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("mk") }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("de") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("de") }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("ro") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("ro") }
           }
         }
       }
@@ -159,6 +184,16 @@ class MainActivity : AppCompatActivity() {
         }
       })
     }
+  }
+
+
+  private fun getButtonsList(): ArrayList<HistoryForecastDataModel> {
+    val list = ArrayList<HistoryForecastDataModel>()
+    list.add(HistoryForecastDataModel("Item 1", HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+    for (i in 1 until 6) {
+      list.add(HistoryForecastDataModel("Item 2", HistoryForecastAdapter.VIEW_TYPE_DATE))
+    }
+    return list
   }
 
   private fun showCitySelectIfNotShown() {

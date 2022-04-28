@@ -17,6 +17,7 @@
   <color name="purple_dark_A80">#CC07062A</color>
   <color name="transparent_black">#C8000000</color>
   <color name="red_delete_button">#D73F46</color>
+  <color name="black_disabled">#9E9E9E</color>
 
   <!-- Android colors -->
   <color name="colorPrimary">@color/purple</color>
@@ -70,8 +71,12 @@
   <color name="pulseAppBarTitleColor">#ccffffff</color>
 
   <!-- History and Forecast -->
-  <color name="history_and_forecast_background">#DFDEDE</color>
-
+  <color name="history_and_forecast_background">#F5F5F5</color>
+  <color name="history_and_forecast_green">#409757</color>
+  <color name="history_and_forecast_red">#B12B38</color>
+  <color name="history_and_forecast_orange">#FF9800</color>
+  
+  <color name="date_button_transparency">#C0C0C0</color>
 
 
   <color name="bg_city_selector">#f5f5f5</color>
@@ -81,4 +86,10 @@
 
   <color name="hc_bg">#f5f5f5</color>
   <color name="hc_text">#757575</color>
+
+  <!-- Calendar colors -->
+  <color name="calendar_cancel_button">@color/black_disabled</color>
+  <color name="calendar_ok_button">@color/colorPrimary</color>
+
+
 </resources>

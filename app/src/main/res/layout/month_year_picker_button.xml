@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:id="@+id/monthYearPickerButton"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="@dimen/calendar_month_year_picker_card_view_width_height"
+  android:layout_height="@dimen/calendar_month_year_picker_card_view_width_height"
+  android:layout_margin="@dimen/calendar_month_year_picker_card_view_margin"
+  android:clickable="true"
+  android:focusable="true"
+  app:cardCornerRadius="@dimen/calendar_month_year_picker_card_view_radius"
+  app:cardElevation="@dimen/calendar_month_year_picker_card_view_elevation"
+  app:cardUseCompatPadding="false">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+      android:id="@+id/textButtonMonthYearPicker"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:lines="1"
+      android:maxLines="1"
+      android:textColor="@color/black"
+      android:textSize="@dimen/calendar_month_year_picker_card_view_font_size"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="January" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>
