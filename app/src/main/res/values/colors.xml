@@ -70,7 +70,12 @@
   <color name="pulseAppBarTitleColor">#ccffffff</color>
 
   <!-- History and Forecast -->
-  <color name="history_and_forecast_background">#DFDEDE</color>
+  <color name="history_and_forecast_background">#F5F5F5</color>
+  <color name="green">#409757</color>
+  <color name="red">#B12B38</color>
+  <color name="orange">#FF9800</color>
+  
+  <color name="date_button_transparency">#C0C0C0</color>
 
 
 

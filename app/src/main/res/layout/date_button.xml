@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
+    android:id="@+id/dateButton"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="64dp"
-    android:layout_height="64dp"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="3dp">
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="@dimen/history_and_forecast_buttons_size"
+    android:layout_height="@dimen/history_and_forecast_buttons_size"
+    android:layout_margin="@dimen/history_and_forecast_buttons_margin"
+    app:cardCornerRadius="@dimen/history_and_forecast_buttons_radius">
 
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_gravity="center"
-      android:gravity="center">
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
       <TextView
+        android:id="@+id/textDateButtonDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/history_and_forecast_buttons_text_size"
         android:textColor="@color/black"
-        android:layout_marginTop="10dp"
-        tools:text="Mon" />
+        android:layout_marginTop="@dimen/history_and_forecast_date_buttons_margin_top_text"
+        tools:text="Mon"/>
 
-      <androidx.cardview.widget.CardView
-        android:layout_width="40dp"
-        android:layout_height="14dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="2dp"
-        app:cardBackgroundColor="@color/design_default_color_error"
-        app:cardCornerRadius="3dp">
+      <Button
+        android:id="@+id/backgroundColorDateButton"
+        android:layout_width="@dimen/history_and_forecast_date_button_width"
+        android:layout_height="@dimen/history_and_forecast_date_button_height"
+        android:background="@drawable/green_shape_with_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/history_and_forecast_date_button_text_size"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/textDateButtonDay"
+        android:layout_marginTop="@dimen/history_and_forecast_date_buttons_margin_top"
+        android:layout_marginBottom="@dimen/history_and_forecast_buttons_margin"/>
 
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textSize="12sp"
-          android:layout_gravity="center"
-          android:gravity="center"
-          tools:text="52"
-          android:textColor="@color/white" />
-
-      </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
 
 
