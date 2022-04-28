@@ -2,13 +2,9 @@ package com.netcetera.skopjepulse.historyAndForecast
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
@@ -60,16 +56,16 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
     else if (holder is DateViewHolder){
 
       if(position in 1..5){
-        holder.backgroundColor.setBackgroundResource(R.drawable.green_shape_with_radius)
-        holder.backgroundColor.text = "24"
-        holder.day.text = "Mon"
+        holder.bodyAmount.setBackgroundResource(R.drawable.green_shape_with_radius)
+        holder.bodyAmount.text = "24"
+        holder.titleDate.text = "Mon"
       }
 
       else{
         holder.dateButton.alpha = 0.4F
-        holder.backgroundColor.setBackgroundResource(R.drawable.orange_shape_with_radius)
-        holder.backgroundColor.text = "24"
-        holder.day.text = "Mon"
+        holder.bodyAmount.setBackgroundResource(R.drawable.orange_shape_with_radius)
+        holder.bodyAmount.text = "24"
+        holder.titleDate.text = "Mon"
       }
 
     }
@@ -90,8 +86,8 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
 
   class DateViewHolder(view: View): RecyclerView.ViewHolder(view){
     val dateButton = view.dateButton
-    val backgroundColor = view.backgroundColorDateButton
-    val day = view.textDateButtonDay
+    val bodyAmount = view.textViewAmount
+    val titleDate = view.textDateButtonDay
 
   }
 

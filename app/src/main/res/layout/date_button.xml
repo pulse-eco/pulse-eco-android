@@ -1,47 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
-    android:id="@+id/dateButton"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:clickable="true"
-    android:focusable="true"
-    android:layout_width="@dimen/history_and_forecast_buttons_size"
-    android:layout_height="@dimen/history_and_forecast_buttons_size"
-    android:layout_margin="@dimen/history_and_forecast_buttons_margin"
-    app:cardCornerRadius="@dimen/history_and_forecast_buttons_radius">
+  android:id="@+id/dateButton"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:clickable="true"
+  android:focusable="true"
+  android:layout_width="@dimen/history_and_forecast_buttons_size"
+  android:layout_height="@dimen/history_and_forecast_buttons_size"
+  android:layout_margin="@dimen/history_and_forecast_buttons_margin"
+  app:cardElevation="1dp"
+  app:cardCornerRadius="@dimen/history_and_forecast_button_radius">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-      <TextView
-        android:id="@+id/textDateButtonDay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="@dimen/history_and_forecast_buttons_text_size"
-        android:textColor="@color/black"
-        android:layout_marginTop="@dimen/history_and_forecast_date_buttons_margin_top_text"
-        tools:text="Mon"/>
+    <TextView
+      android:id="@+id/textDateButtonDay"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/textViewAmount"
+      android:textSize="@dimen/history_and_forecast_title_button_text_size"
+      android:textColor="@color/black"
+      android:layout_marginTop="@dimen/history_and_forecast_date_buttons_margin_top_text"
+      android:layout_marginBottom="@dimen/history_and_forecast_date_buttons_margin_top"
+      tools:text="Mon"/>
 
-      <Button
-        android:id="@+id/backgroundColorDateButton"
-        android:layout_width="@dimen/history_and_forecast_date_button_width"
-        android:layout_height="@dimen/history_and_forecast_date_button_height"
-        android:background="@drawable/green_shape_with_radius"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="@dimen/history_and_forecast_date_button_text_size"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/textDateButtonDay"
-        android:layout_marginTop="@dimen/history_and_forecast_date_buttons_margin_top"
-        android:layout_marginBottom="@dimen/history_and_forecast_buttons_margin"/>
+    <TextView
+      android:id="@+id/textViewAmount"
+      android:layout_width="@dimen/history_and_forecast_date_button_width"
+      android:layout_height="@dimen/history_and_forecast_date_button_height"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/textDateButtonDay"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:textSize="@dimen/history_and_forecast_date_button_text_size"
+      android:textColor="@color/white"
+      android:gravity="center"
+      android:layout_marginBottom="@dimen/history_and_forecast_buttons_margin"
+      tools:background="@color/history_and_forecast_green"
+      tools:text="24"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
+
 
 
