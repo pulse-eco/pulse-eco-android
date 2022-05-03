@@ -5,13 +5,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<HistoryAndForecastDataModel> ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -50,7 +52,12 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
     if(holder is ExploreViewHolder){
 
       holder.explore.setOnClickListener {
-        DatePickerDialog(context,datePicker,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
+
+        val activity = context as FragmentActivity
+        val fm: FragmentManager = activity.supportFragmentManager
+        val alertDialog = CalendarDialog()
+        alertDialog.show(fm, "calendar_dialog")
+        //DatePickerDialog(context,datePicker,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
       }
     }
     else if (holder is DateViewHolder){
