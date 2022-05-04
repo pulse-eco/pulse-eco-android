@@ -1,6 +1,5 @@
 package com.netcetera.skopjepulse.historyAndForecast
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -40,43 +39,36 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
     val item = items[position]
 
     // Explore button - Calendar
-    val calendar = Calendar.getInstance()
+    if (holder is ExploreViewHolder) {
 
-    val datePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-      calendar.set(Calendar.YEAR,year)
-      calendar.set(Calendar.MONTH,month)
-      calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
-      updateLable(calendar)
-    }
+      val datePicker =
+        MaterialDatePicker.Builder.datePicker().setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
+          .setTitleText("Select date")
+          .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+          .build()
 
-    if(holder is ExploreViewHolder){
+      val activity = context as FragmentActivity
+      val fragmentManager: FragmentManager = activity.supportFragmentManager
 
-      holder.explore.setOnClickListener {
-
-        val activity = context as FragmentActivity
-        val fm: FragmentManager = activity.supportFragmentManager
-        val alertDialog = CalendarDialog()
-        alertDialog.show(fm, "calendar_dialog")
-        //DatePickerDialog(context,datePicker,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
-      }
-    }
-    else if (holder is DateViewHolder){
-
-      if(position in 1..5){
-        holder.bodyAmount.setBackgroundResource(R.drawable.green_shape_with_radius)
-        holder.bodyAmount.text = "24"
-        holder.titleDate.text = "Mon"
-      }
-
-      else{
-        holder.dateButton.alpha = 0.4F
-        holder.bodyAmount.setBackgroundResource(R.drawable.orange_shape_with_radius)
-        holder.bodyAmount.text = "24"
-        holder.titleDate.text = "Mon"
-      }
+      holder.explore.setOnClickListener { datePicker.show(fragmentManager, datePicker.toString()) }
 
     }
-  }
+
+      else if (holder is DateViewHolder) {
+
+        if (position in 1..5) {
+          holder.bodyAmount.setBackgroundResource(R.drawable.green_shape_with_radius)
+          holder.bodyAmount.text = "24"
+          holder.titleDate.text = "Mon"
+        } else {
+          holder.dateButton.alpha = 0.4F
+          holder.bodyAmount.setBackgroundResource(R.drawable.orange_shape_with_radius)
+          holder.bodyAmount.text = "24"
+          holder.titleDate.text = "Mon"
+        }
+
+      }
+    }
 
   override fun getItemCount(): Int {
     return items.size
@@ -97,12 +89,4 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
     val titleDate = view.textDateButtonDay
 
   }
-
-
-  private fun updateLable(calendar: Calendar) {
-    val myFormat = "dd-MM-yyyy"
-    val sdf = SimpleDateFormat(myFormat,Locale.US)
-  }
-
-
 }
