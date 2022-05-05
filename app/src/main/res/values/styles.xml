@@ -8,6 +8,7 @@
     <item name="colorAccent">@color/colorAccent</item>
     <item name="android:windowBackground">@color/colorPrimary</item>
     <item name="android:windowTranslucentStatus">true</item>
+    <item name="materialCalendarTheme">@style/Widget.AppTheme.MaterialDatePicker</item>
   </style>
 
   <style name="CountryCitySearchBar">
@@ -21,7 +22,6 @@
     <item name="android:dropDownVerticalOffset">10dp</item>
   </style>
 
-
   <style name="Widget.AppTheme.MaterialDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
     <item name="materialCalendarHeaderToggleButton">@style/Widget.AppTheme.MaterialCalendar.HeaderToggleButton</item>
   </style>
@@ -30,6 +30,38 @@
     <item name="android:visibility">gone</item>
   </style>
 
+
+
+
+
+  <!-- -->
+
+  <style name="DefaultDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <item name="materialCalendarStyle">@style/DefaultCalendarStyle</item>
+    <item name="buttonBarPositiveButtonStyle">@style/DefaultDatePickerButtonStyle</item>
+    <item name="buttonBarNegativeButtonStyle">@style/DefaultDatePickerButtonStyle</item>
+    <item name="materialCalendarHeaderToggleButton">@style/Widget.AppTheme.MaterialCalendar.HeaderToggleButton</item>
+  </style>
+
+  <style name="DefaultDatePickerButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <item name="android:textColor">@color/colorPrimaryDark</item>
+  </style>
+
+  <style name="DefaultCalendarStyle" parent="Widget.MaterialComponents.MaterialCalendar">
+    <item name="daySelectedStyle">@style/DefaultDaySelectedStyle</item>
+    <item name="dayStyle">@style/DefaultDayStyle</item>
+  </style>
+
+  <style name="DefaultDaySelectedStyle" parent="Widget.MaterialComponents.MaterialCalendar.Day.Selected">
+    <item name="itemStrokeColor">@color/history_and_forecast_red</item>
+    <item name="itemFillColor">@color/history_and_forecast_red</item>
+    <item name="itemTextColor">@color/white</item>
+  </style>
+
+  <style name="DefaultDayStyle" parent="Widget.MaterialComponents.MaterialCalendar.Day">
+    <item name="itemStrokeColor">@color/history_and_forecast_red</item>
+    <item name="itemTextColor">@color/colorPrimary</item>
+  </style>
 
 
 </resources>

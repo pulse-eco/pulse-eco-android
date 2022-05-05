@@ -1,5 +1,6 @@
 package com.netcetera.skopjepulse.historyAndForecast
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +12,12 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
-import java.util.*
+
 
 
 class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<HistoryAndForecastDataModel> ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+  private var currentSelectedDate: Long? = null
   companion object{
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2
@@ -41,8 +43,9 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
     // Explore button - Calendar
     if (holder is ExploreViewHolder) {
 
+
       val datePicker =
-        MaterialDatePicker.Builder.datePicker().setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
+        MaterialDatePicker.Builder.datePicker().setTheme(R.style.DefaultDatePickerTheme)
           .setTitleText("Select date")
           .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
           .build()
@@ -50,9 +53,12 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
       val activity = context as FragmentActivity
       val fragmentManager: FragmentManager = activity.supportFragmentManager
 
-      holder.explore.setOnClickListener { datePicker.show(fragmentManager, datePicker.toString()) }
+      holder.explore.setOnClickListener {
+        datePicker.show(fragmentManager, datePicker.toString())
+      }
 
     }
+
 
       else if (holder is DateViewHolder) {
 
@@ -68,6 +74,7 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
         }
 
       }
+
     }
 
   override fun getItemCount(): Int {
@@ -89,4 +96,6 @@ class HistoryAndForecastAdapter(val context: Context,val items: ArrayList<Histor
     val titleDate = view.textDateButtonDay
 
   }
-}
+  private fun onDateSelected(dateTimeStampInMillis: Long) {
+    currentSelectedDate = dateTimeStampInMillis
+  }}
