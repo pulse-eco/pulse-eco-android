@@ -49,16 +49,19 @@
   <dimen name="rectangle_for_weekly_data_view_width">45dp</dimen>
   <dimen name="rectangle_for_weekly_data_view_height">4dp</dimen>
 
-  <dimen name="history_and_forecast_view_height">84dp</dimen>
-  <dimen name="history_and_forecast_buttons_size">64dp</dimen>
-  <dimen name="history_and_forecast_buttons_margin">10dp</dimen>
-  <dimen name="history_and_forecast_date_buttons_margin_top">4dp</dimen>
-  <dimen name="history_and_forecast_date_buttons_margin_top_text">15dp</dimen>
-  <dimen name="history_and_forecast_buttons_imageView_margin">12dp</dimen>
-  <dimen name="history_and_forecast_button_radius">3dp</dimen>
-  <dimen name="history_and_forecast_title_button_text_size">14sp</dimen>
-  <dimen name="history_and_forecast_date_button_width">40dp</dimen>
-  <dimen name="history_and_forecast_date_button_height">18dp</dimen>
-  <dimen name="history_and_forecast_date_button_text_size">12sp</dimen>
+  <dimen name="history_forecast_container_height">84dp</dimen>
+  <dimen name="history_forecast_button_width_height">64dp</dimen>
+  <dimen name="history_forecast_card_view_radius">3dp</dimen>
+  <dimen name="history_forecast_card_elevation">3dp</dimen>
+  <dimen name="history_forecast_button_margin">10dp</dimen>
+  <dimen name="history_forecast_explore_image_margin_top">12dp</dimen>
+  <dimen name="history_forecast_explore_image_margin_bottom">8dp</dimen>
+  <dimen name="history_forecast_explore_text_margin_bottom">10dp</dimen>
+  <dimen name="history_forecast_date_margin_top_bottom">15dp</dimen>
+  <dimen name="history_forecast_date_margin_bottom">4dp</dimen>
+  <dimen name="history_forecast_date_button_width">40dp</dimen>
+  <dimen name="history_forecast_explore_text_size">14sp</dimen>
+  <dimen name="history_forecast_date_text_size">14sp</dimen>
+  <dimen name="history_forecast_pollution_text_size">12sp</dimen>
 
 </resources>

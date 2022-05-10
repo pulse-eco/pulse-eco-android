@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="@dimen/history_and_forecast_view_height"
+  android:layout_height="@dimen/history_forecast_container_height"
   android:orientation="horizontal"
   android:background="@color/history_and_forecast_background">
 
