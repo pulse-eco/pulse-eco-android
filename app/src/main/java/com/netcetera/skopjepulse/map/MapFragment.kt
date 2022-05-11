@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -122,6 +123,19 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setDaysNames()
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
+      }
+
+    })
+
+    viewModel.averageDataFourDayRange.observe(viewLifecycleOwner, Observer {
+      viewModel.averageDataFourDayRange.value?.let { AverageDataModel ->
+        Log.d("API 4daysRange result",AverageDataModel.toString())
+      }
+    })
+
+    viewModel.dataCurrentDay.observe(viewLifecycleOwner, Observer {
+      viewModel.dataCurrentDay.value?.let { AverageDataModel ->
+        Log.d("API currentDay result",AverageDataModel.toString())
       }
     })
 

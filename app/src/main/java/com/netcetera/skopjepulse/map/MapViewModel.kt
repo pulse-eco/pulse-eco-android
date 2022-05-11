@@ -5,10 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
-import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
-import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
-import com.netcetera.skopjepulse.base.data.repository.SensorReadings
-import com.netcetera.skopjepulse.base.data.repository.Sensors
+import com.netcetera.skopjepulse.base.data.repository.*
 import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.base.viewModel.PulseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
@@ -72,6 +69,9 @@ class MapViewModel(
     get() = _isSpecificSensorSelected
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
+  var averageDataFourDayRange: LiveData<AverageWeeklyDataModel>
+  var dataCurrentDay: LiveData<AverageWeeklyDataModel>
+
 
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
@@ -178,6 +178,23 @@ class MapViewModel(
         }
       }
     }
+    averageDataFourDayRange =  Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageDataFourDaysAgo(sensor?.id, measurementType)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+         }
+        }
+      }
+    }
+
+    val liveDataCurrentDay = cityPulseRepository.dataCurrentDay()
+    dataCurrentDay = Transformations.map(liveDataCurrentDay) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings) }
+        }
 
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {

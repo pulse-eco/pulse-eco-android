@@ -155,6 +155,49 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
 
     return result
   }
+
+
+  fun getAverageDataFourDaysAgo(sensorId: String?, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
+    val result = MutableLiveData<Resource<List<SensorReading>>>()
+    val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
+    val cal: Calendar = Calendar.getInstance()
+    val cal2: Calendar = Calendar.getInstance()
+    cal2.add(Calendar.DATE, -4)
+
+    val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
+    val toDate: String = formatter.format(cal.time)
+
+    val date = cal2.time
+    val fromDate: String = formatter.format(date)
+
+    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate).enqueue(object :
+      Callback<List<SensorReading>> {
+
+      override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
+        result.postValue(Resource.error(null, t))
+      }
+
+      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
+        if (response.isSuccessful && response.body() != null) {
+          result.postValue(Resource.success(response.body()!!))
+        }
+      }
+    })
+    return result
+  }
+
+
+  fun dataCurrentDay(): LiveData<Resource<List<SensorReading>>> {
+    val result = MutableLiveData<Resource<List<SensorReading>>>()
+
+    apiService.getCurrent().enqueue(object : Callback<SensorReadings> {
+      override fun onResponse(call: Call<SensorReadings>, response: Response<SensorReadings>) {
+        result.postValue(Resource.success(response.body()!!)) }
+      override fun onFailure(call: Call<SensorReadings>, t: Throwable) {
+        result.postValue(Resource.error(null, t))
+      } })
+    return result
+  }
 }
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)
