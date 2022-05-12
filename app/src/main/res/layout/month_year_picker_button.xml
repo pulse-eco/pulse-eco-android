@@ -3,12 +3,15 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="94dp"
-  android:layout_height="94dp"
+  android:layout_width="85dp"
+  android:layout_height="85dp"
   android:layout_margin="10dp"
+  android:padding="5dp"
   android:clickable="true"
   android:focusable="true"
-  app:cardCornerRadius="40dp">
+  app:cardCornerRadius="40dp"
+  android:elevation="0dp"
+  app:cardUseCompatPadding="false">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -16,18 +19,20 @@
 
     <TextView
       android:id="@+id/textButtonMonthYearPicker"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="10dp"
-      android:layout_marginRight="10dp"
-      android:gravity="center_horizontal|center_vertical"
+      android:gravity="center_horizontal"
+      android:lines="1"
+      android:maxLines="1"
       android:textColor="@color/black"
-      android:textSize="13dp"
+      android:textSize="11sp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="January" />
+    <!--    android:layout_marginLeft="10dp"-->
+    <!--    android:layout_marginRight="10dp"-->
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

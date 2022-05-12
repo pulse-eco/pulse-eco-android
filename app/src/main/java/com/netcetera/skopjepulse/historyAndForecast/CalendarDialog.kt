@@ -25,19 +25,23 @@ class CalendarDialog: DialogFragment() {
 
 
     monthPicker.setOnClickListener {
-        calendarViewPicker.isVisible = false
-        monthYearPickerRecyclerView.isVisible = true
+      calendarViewPicker.isVisible = !calendarViewPicker.isVisible
+      monthYearPickerRecyclerView.isVisible = !monthYearPickerRecyclerView.isVisible
 
-        monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
-        val calendarAdapter = CalendarAdapter(arrayOfMonths)
-        monthYearPickerRecyclerView.adapter = calendarAdapter
+      monthYearPickerRecyclerView.layoutManager =
+        StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+
+      val calendarAdapter = CalendarAdapter(arrayOfMonths)
+      monthYearPickerRecyclerView.adapter = calendarAdapter
     }
 
     yearPicker.setOnClickListener {
       calendarViewPicker.isVisible = false
       monthYearPickerRecyclerView.isVisible = true
 
-      monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+      monthYearPickerRecyclerView.layoutManager =
+        StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+
       val calendarAdapter = CalendarAdapter(arrayOfYear)
       monthYearPickerRecyclerView.adapter = calendarAdapter
     }

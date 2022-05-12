@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="350dp"
-  android:layout_height="350dp">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center">
 
   <CalendarView
     android:id="@+id/calendarViewPicker"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|center_horizontal"
-    android:layout_marginTop="15dp"
     android:selectedDateVerticalBar="@color/white"
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/two_buttons"
+    app:layout_constraintCircleRadius="4dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-
   <LinearLayout
-    android:id="@+id/linearLayout"
+    android:id="@+id/monthYearButtons"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="20dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="20dp"
     android:gravity="center_horizontal|center_vertical"
     android:orientation="horizontal"
     app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
       android:id="@+id/monthPicker"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:padding="5dp"
+      android:layout_marginEnd="15dp"
       android:text="Month"
       android:textColor="@color/colorPrimary"
       android:textSize="14sp"
@@ -43,7 +43,6 @@
       android:id="@+id/yearPicker"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:padding="5dp"
       android:text="Year"
       android:textColor="@color/colorPrimary"
       android:textSize="14sp"
@@ -51,11 +50,12 @@
   </LinearLayout>
 
   <LinearLayout
+    android:id="@+id/two_buttons"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="15dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginTop="35dp"
     android:orientation="horizontal"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent">
@@ -64,31 +64,41 @@
       android:id="@+id/calendarDialogCancelButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:padding="5dp"
+      android:layout_marginEnd="25dp"
       android:text="Cancel"
-      android:textColor="@color/black"
-      android:textSize="14sp" />
+      android:textAllCaps="true"
+      android:textColor="@color/calendar_cancel_button"
+      android:textSize="14sp"
+      tools:textColor="@color/white" />
 
     <TextView
       android:id="@+id/calendarDialogOkButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:padding="5dp"
-      android:text="OK"
-      android:textColor="@color/colorPrimary"
+      android:text="@string/ok"
+      android:textAllCaps="true"
+      android:textColor="@color/calendar_ok_button"
       android:textSize="14sp"
-      android:textStyle="bold" />
+      android:textStyle="bold"
+      tools:textColor="@color/white" />
   </LinearLayout>
-
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/monthYearPickerRecyclerView"
-    android:layout_width="350dp"
-    android:layout_height="350dp"
-    android:layout_margin="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="35dp"
+    android:layout_marginEnd="45dp"
+    android:layout_marginStart="45dp"
+    android:layout_marginTop="20dp"
+    android:padding="12dp"
     android:visibility="invisible"
+    app:layout_constraintBottom_toTopOf="@id/two_buttons"
+    app:layout_constraintCircleRadius="4dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+    app:layout_constraintTop_toBottomOf="@id/monthYearButtons"
+    tools:textColor="@color/white"
+    tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

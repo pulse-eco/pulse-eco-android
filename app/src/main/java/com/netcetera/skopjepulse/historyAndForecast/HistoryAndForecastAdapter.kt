@@ -46,7 +46,7 @@ class HistoryAndForecastAdapter(
 
       holder.explore.text = context.getString(R.string.explore)
 
-      val activity = context as FragmentActivity
+      context as FragmentActivity
       val fragmentManager = context.supportFragmentManager
 
       holder.explore.setOnClickListener {
