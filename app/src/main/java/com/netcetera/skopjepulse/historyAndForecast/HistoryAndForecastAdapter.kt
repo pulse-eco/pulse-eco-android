@@ -5,13 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
-import kotlin.collections.ArrayList
 
 
 class HistoryAndForecastAdapter(
@@ -49,17 +46,12 @@ class HistoryAndForecastAdapter(
 
       holder.explore.text = context.getString(R.string.explore)
 
-      val datePicker =
-        MaterialDatePicker.Builder.datePicker().setTheme(R.style.DefaultDatePickerTheme)
-          .setTitleText("Select date")
-          .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-          .build()
-
       val activity = context as FragmentActivity
-      val fragmentManager: FragmentManager = activity.supportFragmentManager
+      val fragmentManager = context.supportFragmentManager
 
       holder.explore.setOnClickListener {
-        datePicker.show(fragmentManager, datePicker.toString())
+        val calendarDialog = CalendarDialog()
+        calendarDialog.show(fragmentManager,"calendar_dialog")
       }
 
     } else if (holder is DateViewHolder) {
