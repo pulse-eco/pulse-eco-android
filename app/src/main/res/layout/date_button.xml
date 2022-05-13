@@ -8,7 +8,9 @@
   android:focusable="true"
   android:layout_width="@dimen/history_forecast_button_width_height"
   android:layout_height="@dimen/history_forecast_button_width_height"
-  android:layout_margin="@dimen/history_forecast_button_margin"
+  android:layout_marginTop="@dimen/history_forecast_button_margin"
+  android:layout_marginBottom="@dimen/history_forecast_button_margin"
+  android:layout_marginEnd="@dimen/history_forecast_button_margin"
   app:cardElevation="@dimen/history_forecast_card_elevation"
   app:cardCornerRadius="@dimen/history_forecast_card_view_radius">
 

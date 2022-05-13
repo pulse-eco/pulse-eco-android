@@ -10,7 +10,7 @@
   android:clickable="true"
   android:focusable="true"
   app:cardCornerRadius="40dp"
-  android:elevation="0dp"
+  app:elevation="0dp"
   app:cardUseCompatPadding="false">
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,8 +31,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="January" />
-    <!--    android:layout_marginLeft="10dp"-->
-    <!--    android:layout_marginRight="10dp"-->
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
