@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     val historyForecastAdapter = HistoryAndForecastAdapter(this,getButtonsList())
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
+    historyAndForecastRecyclerView.scrollToPosition(7)
 
 
     btn_language.setOnClickListener {

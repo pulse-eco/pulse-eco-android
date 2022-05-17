@@ -10,7 +10,7 @@
   android:clickable="true"
   android:focusable="true"
   app:cardCornerRadius="40dp"
-  app:elevation="0dp"
+  app:cardElevation="0.5dp"
   app:cardUseCompatPadding="false">
 
   <androidx.constraintlayout.widget.ConstraintLayout

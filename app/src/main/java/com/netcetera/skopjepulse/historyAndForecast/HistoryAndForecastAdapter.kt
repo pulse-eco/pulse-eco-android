@@ -1,5 +1,6 @@
 package com.netcetera.skopjepulse.historyAndForecast
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,9 @@ class HistoryAndForecastAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   private var currentSelectedDate: Long? = null
+  var selectedPosition = -1
+
+
 
   companion object {
     const val VIEW_TYPE_EXPLORE = 1
@@ -24,49 +28,75 @@ class HistoryAndForecastAdapter(
   }
 
 
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
     if (viewType == VIEW_TYPE_EXPLORE) {
       return ExploreViewHolder(
-        LayoutInflater.from(context).inflate(R.layout.explore_button, parent, false)
-      )
+        LayoutInflater.from(context).inflate(R.layout.explore_button, parent, false))
     } else {
-      return DateViewHolder(
-        LayoutInflater.from(context).inflate(R.layout.date_button, parent, false)
-      )
+      return DateViewHolder(LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
     }
 
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
     val item = items[position]
     // Explore button - Calendar
     if (holder is ExploreViewHolder) {
 
-      holder.explore.text = context.getString(R.string.explore)
+      holder.exploreTextView.text = context.getString(R.string.explore)
 
       context as FragmentActivity
       val fragmentManager = context.supportFragmentManager
 
       holder.explore.setOnClickListener {
         val calendarDialog = CalendarDialog()
-        calendarDialog.show(fragmentManager,"calendar_dialog")
+        calendarDialog.show(fragmentManager, "calendar_dialog")
+
+
       }
 
     } else if (holder is DateViewHolder) {
       holder.titleDate.text = getDayName(position)
       holder.bodyAmount.text = getPollutionAmount(position).toString()
       holder.bodyAmount.setBackgroundResource(getModuloColor(position))
-      if (position == 6 || position == 7) {
+
+      if (position == 6 || position == 7 ) {
         holder.dateButton.alpha = 0.4F
       }
+
+      holder.dateButton.setOnClickListener {
+        selectedPosition=position
+        notifyDataSetChanged()
+      }
+
+      if (selectedPosition==position)
+      {
+        holder.dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
+
+     } else{
+        holder.dateButton.setBackgroundResource(R.drawable.date_button_unclicked_shape)
+
+     }
+
+      if (selectedPosition < 0 && position == 5) {
+        holder.dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
+      }
+
+
     }
+
 
   }
 
   override fun getItemCount(): Int {
     return items.size
+  }
+
+  interface RecyclerViewInterface{
+    fun onClick(position: Int)
   }
 
   override fun getItemViewType(position: Int): Int {
@@ -75,7 +105,8 @@ class HistoryAndForecastAdapter(
 
 
   class ExploreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val explore = view.textExplore
+    val exploreTextView = view.textExplore
+    val explore = view.exploreButton
   }
 
   class DateViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -87,6 +118,7 @@ class HistoryAndForecastAdapter(
   private fun onDateSelected(dateTimeStampInMillis: Long) {
     currentSelectedDate = dateTimeStampInMillis
   }
+
 
 
   private fun getModuloColor(pos: Int): Int {
