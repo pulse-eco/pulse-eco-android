@@ -37,16 +37,18 @@
     android:id="@+id/yearPicker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="#00000000"
     android:text="Year"
     android:textColor="@color/colorPrimary"
     android:textSize="14sp"
     android:textStyle="bold"
     android:visibility="invisible"
+    android:layout_marginTop="10dp"
     app:layout_constraintBottom_toTopOf="@+id/monthYearPickerRecyclerView"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    android:background="#00000000"
-    tools:visibility="visible"/>
+    app:layout_constraintTop_toTopOf="parent"
+    tools:visibility="visible" />
 
   <LinearLayout
     android:id="@+id/calendarDialogTwoButtonsLayout"

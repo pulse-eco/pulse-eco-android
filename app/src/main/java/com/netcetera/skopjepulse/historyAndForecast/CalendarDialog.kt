@@ -18,6 +18,12 @@ import java.util.*
 
 class CalendarDialog : DialogFragment() {
 
+  companion object{
+    var latestDateSelected : Long ? = null
+    var MONTH : Int? = 0
+    var YEAR: Int?=0
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -30,13 +36,18 @@ class CalendarDialog : DialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     val arrayOfMonths = arrayOf("January", "February", "March", "April", "May", "June", "July", "Avgust", "September", "October", "November", "December")
     val arrayOfYear = arrayOf("2017", "2018", "2019", "2020", "2021", "2022")
-
     val calendar = Calendar.getInstance()
 
     calendarViewPicker.setOnDateChangeListener { calView: CalendarView, year: Int, month: Int, dayOfMonth: Int ->
-      val calender: Calendar = Calendar.getInstance()
-      calender.set(year, month, dayOfMonth)
-      calView.setDate(calender.timeInMillis, true, true)
+      val cal: Calendar = Calendar.getInstance()
+      cal.set(year, month, dayOfMonth)
+      calView.setDate(cal.timeInMillis, true, true)
+    }
+
+    if (latestDateSelected != null) {
+      calendar.set(Calendar.YEAR, YEAR!!)
+      calendar.set(Calendar.MONTH, MONTH!!)
+      calendarViewPicker.setDate(latestDateSelected!!, false, false)
     }
 
     monthYearButtons.setOnClickListener {
@@ -45,10 +56,13 @@ class CalendarDialog : DialogFragment() {
       val calendarAdapter = CalendarAdapter(arrayOfMonths)
       monthYearPickerRecyclerView.adapter = calendarAdapter
 
+      val currentYear = calendar.get(Calendar.YEAR).toString()
+      yearPicker.text = currentYear
       showRecyclerViewHideCalendar()
 
       calendarDialogOkButton.setOnClickListener {
         val newMonth = CalendarAdapter.MONTH_YEAR_VALUE
+        MONTH = getMonthName(newMonth)
         calendar.set(Calendar.MONTH, getMonthName(newMonth))
         calendarViewPicker.setDate(calendar.timeInMillis, false, false)
 
@@ -73,18 +87,17 @@ class CalendarDialog : DialogFragment() {
 
         calendarAdapter.onItemClick = {
           val newYear = CalendarAdapter.MONTH_YEAR_VALUE.toInt()
+          MONTH = getMonthName(newMonth)
+          YEAR = newYear
           calendar.set(Calendar.YEAR, newYear)
           calendar.set(Calendar.MONTH, getMonthName(newMonth))
           calendarViewPicker.setDate(calendar.timeInMillis, false, false)
         }
 
-
         calendarDialogCancelButton.setOnClickListener {
           showCalendarHideRecyclerView()
           calendarCancelAndOkButtons()
         }
-
-
         calendarDialogOkButton.setOnClickListener {
           showCalendarHideRecyclerView()
           calendarCancelAndOkButtons()
@@ -105,7 +118,7 @@ class CalendarDialog : DialogFragment() {
       val date: Date = Date(dateMillis)
       val formatter = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT)
       val datePicked = formatter.format(date.time)
-
+      latestDateSelected = dateMillis
       Log.d("Date", datePicked)
       dismiss()
     }
