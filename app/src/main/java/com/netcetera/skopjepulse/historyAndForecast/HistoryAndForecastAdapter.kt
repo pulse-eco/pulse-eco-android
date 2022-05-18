@@ -66,6 +66,9 @@ class HistoryAndForecastAdapter(
       if (position == 6 || position == 7 ) {
         holder.dateButton.alpha = 0.4F
       }
+      else{
+        holder.dateButton.alpha = 1F
+      }
 
       holder.dateButton.setOnClickListener {
         selectedPosition=position

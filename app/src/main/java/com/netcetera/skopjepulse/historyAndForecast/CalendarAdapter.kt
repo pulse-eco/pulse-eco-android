@@ -54,11 +54,13 @@ class CalendarAdapter(val items: Array<String>) : RecyclerView.Adapter<RecyclerV
         holder.montYearPickerButton.setBackgroundResource(R.drawable.circle_shape_calendar_dark_blue)
         holder.textView.setTextColor(Color.WHITE)
       }
+
       if (selectedPosition < 0 && item == getMonthName(calendarMonth))
       {
         holder.montYearPickerButton.setBackgroundResource(R.drawable.circle_shape_calendar_dark_blue)
         holder.textView.setTextColor(Color.WHITE)
       }
+
 
       if(selectedPosition == position)
       {
@@ -69,6 +71,7 @@ class CalendarAdapter(val items: Array<String>) : RecyclerView.Adapter<RecyclerV
         holder.montYearPickerButton.setBackgroundResource(R.drawable.circle_shape_calendar_white)
         holder.textView.setTextColor(Color.BLACK)
       }
+
 
     }
   }

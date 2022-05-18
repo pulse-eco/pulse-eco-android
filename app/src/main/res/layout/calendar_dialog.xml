@@ -31,18 +31,22 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-      android:id="@+id/monthYearPicker"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="15dp"
-      tools:text="Month Year"
-      android:visibility="visible"
-      android:textColor="@color/colorPrimary"
-      android:textSize="14sp"
-      android:textStyle="bold" />
-
   </LinearLayout>
+
+  <Button
+    android:id="@+id/yearPicker"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Year"
+    android:textColor="@color/colorPrimary"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    android:visibility="invisible"
+    app:layout_constraintBottom_toTopOf="@+id/monthYearPickerRecyclerView"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:background="#00000000"
+    tools:visibility="visible"/>
 
   <LinearLayout
     android:id="@+id/calendarDialogTwoButtonsLayout"

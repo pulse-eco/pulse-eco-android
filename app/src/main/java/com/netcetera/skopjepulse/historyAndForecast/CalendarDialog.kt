@@ -28,69 +28,75 @@ class CalendarDialog : DialogFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val arrayOfMonths = arrayOf(
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "Avgust",
-      "September",
-      "October",
-      "November",
-      "December"
-    )
+    val arrayOfMonths = arrayOf("January", "February", "March", "April", "May", "June", "July", "Avgust", "September", "October", "November", "December")
     val arrayOfYear = arrayOf("2017", "2018", "2019", "2020", "2021", "2022")
 
     val calendar = Calendar.getInstance()
+
+    calendarViewPicker.setOnDateChangeListener { calView: CalendarView, year: Int, month: Int, dayOfMonth: Int ->
+      val calender: Calendar = Calendar.getInstance()
+      calender.set(year, month, dayOfMonth)
+      calView.setDate(calender.timeInMillis, true, true)
+    }
+
     monthYearButtons.setOnClickListener {
+
       monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
       val calendarAdapter = CalendarAdapter(arrayOfMonths)
       monthYearPickerRecyclerView.adapter = calendarAdapter
 
-      monthYearButtons.isVisible = !monthYearButtons.isVisible
-      calendarViewPicker.isVisible = !calendarViewPicker.isVisible
-      monthYearPickerRecyclerView.isVisible = !monthYearPickerRecyclerView.isVisible
-
-      calendarDialogCancelButton.setOnClickListener {
-        monthYearButtons.isVisible = !monthYearButtons.isVisible
-        calendarViewPicker.isVisible = !calendarViewPicker.isVisible
-        monthYearPickerRecyclerView.isVisible = !monthYearPickerRecyclerView.isVisible
-      }
+      showRecyclerViewHideCalendar()
 
       calendarDialogOkButton.setOnClickListener {
+        val newMonth = CalendarAdapter.MONTH_YEAR_VALUE
+        calendar.set(Calendar.MONTH, getMonthName(newMonth))
+        calendarViewPicker.setDate(calendar.timeInMillis, false, false)
+
+        showCalendarHideRecyclerView()
+        calendarCancelAndOkButtons()
+      }
+
+      calendarDialogCancelButton.setOnClickListener {
+        showCalendarHideRecyclerView()
+        calendarCancelAndOkButtons()
+      }
+
+      yearPicker.setOnClickListener {
+
         val newMonth = CalendarAdapter.MONTH_YEAR_VALUE
         monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
 
         val calendarAdapter = CalendarAdapter(arrayOfYear)
         monthYearPickerRecyclerView.adapter = calendarAdapter
+
+        showRecyclerViewHideCalendar()
+
         calendarAdapter.onItemClick = {
           val newYear = CalendarAdapter.MONTH_YEAR_VALUE.toInt()
           calendar.set(Calendar.YEAR, newYear)
           calendar.set(Calendar.MONTH, getMonthName(newMonth))
           calendarViewPicker.setDate(calendar.timeInMillis, false, false)
         }
-        calendarDialogOkButton.setOnClickListener {
-          monthYearPickerRecyclerView.isVisible = false
-          monthYearButtons.isVisible = true
-          calendarViewPicker.isVisible = true
-        }
+
+
         calendarDialogCancelButton.setOnClickListener {
-          monthYearButtons.isVisible = true
-          calendarViewPicker.isVisible = true
-          monthYearPickerRecyclerView.isVisible = false
+          showCalendarHideRecyclerView()
+          calendarCancelAndOkButtons()
         }
 
+
+        calendarDialogOkButton.setOnClickListener {
+          showCalendarHideRecyclerView()
+          calendarCancelAndOkButtons()
+        }
       }
     }
 
-    calendarViewPicker.setOnDateChangeListener  { calView: CalendarView, year: Int, month: Int, dayOfMonth: Int ->
-      val calender: Calendar = Calendar.getInstance()
-      calender.set(year, month, dayOfMonth)
-      calView.setDate(calender.timeInMillis, true, true)
-    }
+    calendarCancelAndOkButtons()
+  }
+
+  private fun calendarCancelAndOkButtons()
+  {
 
     calendarDialogOkButton.setOnClickListener {
 
@@ -104,12 +110,24 @@ class CalendarDialog : DialogFragment() {
       dismiss()
     }
 
-
     calendarDialogCancelButton.setOnClickListener {
       dismiss()
     }
 
+  }
+  private fun showRecyclerViewHideCalendar()
+  {
+    monthYearButtons.isVisible = false
+    calendarViewPicker.isVisible = false
+    monthYearPickerRecyclerView.isVisible = true
+    yearPicker.isVisible = true
+  }
 
+  private fun showCalendarHideRecyclerView(){
+    monthYearButtons.isVisible = true
+    calendarViewPicker.isVisible = true
+    monthYearPickerRecyclerView.isVisible = false
+    yearPicker.isVisible = false
   }
 
   private fun getMonthName(month: String): Int {
