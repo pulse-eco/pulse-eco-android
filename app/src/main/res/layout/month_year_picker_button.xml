@@ -3,14 +3,13 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="85dp"
-  android:layout_height="85dp"
-  android:layout_margin="10dp"
-  android:padding="5dp"
+  android:layout_width="@dimen/calendar_month_year_picker_card_view_width_height"
+  android:layout_height="@dimen/calendar_month_year_picker_card_view_width_height"
+  android:layout_margin="@dimen/calendar_month_year_picker_card_view_margin"
   android:clickable="true"
   android:focusable="true"
-  app:cardCornerRadius="40dp"
-  app:cardElevation="0.5dp"
+  app:cardCornerRadius="@dimen/calendar_month_year_picker_card_view_radius"
+  app:cardElevation="@dimen/calendar_month_year_picker_card_view_elevation"
   app:cardUseCompatPadding="false">
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +24,7 @@
       android:lines="1"
       android:maxLines="1"
       android:textColor="@color/black"
-      android:textSize="11sp"
+      android:textSize="@dimen/calendar_month_year_picker_card_view_font_size"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

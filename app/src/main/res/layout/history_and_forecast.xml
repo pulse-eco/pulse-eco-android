@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="@dimen/history_forecast_container_height"
-  android:orientation="horizontal"
-  android:background="@color/history_and_forecast_background">
+  android:background="@color/history_and_forecast_background"
+  android:orientation="horizontal">
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/historyAndForecastRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"/>
+    android:scrollbars="none" />
 
 </LinearLayout>
 

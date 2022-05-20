@@ -17,6 +17,7 @@
   <color name="purple_dark_A80">#CC07062A</color>
   <color name="transparent_black">#C8000000</color>
   <color name="red_delete_button">#D73F46</color>
+  <color name="black_disabled">#9E9E9E</color>
 
   <!-- Android colors -->
   <color name="colorPrimary">@color/purple</color>
@@ -87,7 +88,7 @@
   <color name="hc_text">#757575</color>
 
   <!-- Calendar colors -->
-  <color name="calendar_cancel_button">#9E9E9E</color>
+  <color name="calendar_cancel_button">@color/black_disabled</color>
   <color name="calendar_ok_button">@color/colorPrimary</color>
 
 

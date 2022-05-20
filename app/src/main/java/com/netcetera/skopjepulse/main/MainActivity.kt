@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
     const val NEW_CITY_NAME_RESULT = "cityName"
+    const val HISTORY_FORECAST_LIST_SIZE = 7
   }
 
   private val citySelectFragment: CitySelectFragment by lazy {
@@ -60,12 +61,12 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
-    // Recycler View for History and Forecast
-    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+    historyAndForecastRecyclerView.layoutManager =
+      LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-    val historyForecastAdapter = HistoryAndForecastAdapter(this,getButtonsList())
+    val historyForecastAdapter = HistoryAndForecastAdapter(this, getButtonsList())
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
-    historyAndForecastRecyclerView.scrollToPosition(7)
+    historyAndForecastRecyclerView.scrollToPosition(5)
 
 
     btn_language.setOnClickListener {
@@ -95,19 +96,31 @@ class MainActivity : AppCompatActivity() {
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("en") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("en") }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("mk") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("mk") }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("de") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("de") }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("ro") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("ro") }
           }
         }
       }
@@ -177,15 +190,11 @@ class MainActivity : AppCompatActivity() {
 
   private fun getButtonsList(): ArrayList<HistoryAndForecastDataModel> {
     val list = ArrayList<HistoryAndForecastDataModel>()
-
     list.add(HistoryAndForecastDataModel("Item 1", HistoryAndForecastAdapter.VIEW_TYPE_EXPLORE))
-
-    for(i in 1..7) {
+    for (i in 1..HISTORY_FORECAST_LIST_SIZE) {
       list.add(HistoryAndForecastDataModel("Item 2", HistoryAndForecastAdapter.VIEW_TYPE_DATE))
     }
-
     return list
-
   }
 
   private fun showCitySelectIfNotShown() {

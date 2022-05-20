@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView android:id="@+id/exploreButton"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/exploreButton"
   android:layout_width="@dimen/history_forecast_button_width_height"
   android:layout_height="@dimen/history_forecast_button_width_height"
   android:layout_margin="@dimen/history_forecast_button_margin"
-  app:layout_constraintStart_toStartOf="parent"
-  app:layout_constraintTop_toTopOf="parent"
-  app:layout_constraintBottom_toBottomOf="parent"
-  app:cardElevation="@dimen/history_forecast_card_elevation"
+  app:cardBackgroundColor="@color/colorPrimary"
   app:cardCornerRadius="@dimen/history_forecast_card_view_radius"
-  app:cardBackgroundColor="@color/colorPrimary">
+  app:cardElevation="@dimen/history_forecast_card_elevation"
+  app:layout_constraintBottom_toBottomOf="parent"
+  app:layout_constraintStart_toStartOf="parent"
+  app:layout_constraintTop_toTopOf="parent">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -21,27 +21,27 @@
       android:id="@+id/imageExplore"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@id/textExplore"
-      android:layout_marginTop="@dimen/history_forecast_explore_image_margin_top"
       android:layout_marginBottom="@dimen/history_forecast_explore_image_margin_bottom"
+      android:layout_marginTop="@dimen/history_forecast_explore_image_margin_top"
+      android:contentDescription="@null"
       android:src="@drawable/ic_restore_white"
-      android:contentDescription="@null"/>
+      app:layout_constraintBottom_toTopOf="@id/textExplore"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
       android:id="@+id/textExplore"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/imageExplore"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
       android:layout_marginBottom="@dimen/history_forecast_explore_text_margin_bottom"
       android:textColor="@color/white"
       android:textSize="@dimen/history_forecast_explore_text_size"
-      tools:text="Explore"/>
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/imageExplore"
+      tools:text="Explore" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

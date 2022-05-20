@@ -14,83 +14,67 @@ import kotlinx.android.synthetic.main.explore_button.view.*
 
 class HistoryAndForecastAdapter(
   val context: Context,
-  val items: ArrayList<HistoryAndForecastDataModel>
+  private val items: ArrayList<HistoryAndForecastDataModel>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-  private var currentSelectedDate: Long? = null
   var selectedPosition = -1
-
-
 
   companion object {
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2
   }
 
-
-
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-    if (viewType == VIEW_TYPE_EXPLORE) {
-      return ExploreViewHolder(
-        LayoutInflater.from(context).inflate(R.layout.explore_button, parent, false))
+    return if (viewType == VIEW_TYPE_EXPLORE) {
+      ExploreViewHolder(LayoutInflater.from(context).inflate(R.layout.explore_button, parent, false))
     } else {
-      return DateViewHolder(LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
+      DateViewHolder(LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
     }
-
   }
 
   @SuppressLint("NotifyDataSetChanged")
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-    val item = items[position]
-    // Explore button - Calendar
     if (holder is ExploreViewHolder) {
-
       holder.exploreTextView.text = context.getString(R.string.explore)
-
       context as FragmentActivity
       val fragmentManager = context.supportFragmentManager
-
       holder.explore.setOnClickListener {
         val calendarDialog = CalendarDialog()
         calendarDialog.show(fragmentManager, "calendar_dialog")
-
-
       }
-
     } else if (holder is DateViewHolder) {
       holder.titleDate.text = getDayName(position)
       holder.bodyAmount.text = getPollutionAmount(position).toString()
       holder.bodyAmount.setBackgroundResource(getModuloColor(position))
-
-      if (position == 6 || position == 7 ) {
-        holder.dateButton.alpha = 0.4F
+      if (position == 6 || position == 7) {
+        holder.dateButton.alpha = 0.5F
+        holder.itemView.visibility = View.GONE
+        val params = holder.itemView.layoutParams
+        params.height = 0
+        params.width = 0
+        holder.itemView.layoutParams = params
       }
       else{
         holder.dateButton.alpha = 1F
+        holder.itemView.visibility = View.VISIBLE
+        val params = holder.itemView.layoutParams
+        params.height = 175
+        params.width = 175
+        holder.itemView.layoutParams = params
       }
-
       holder.dateButton.setOnClickListener {
-        selectedPosition=position
+        selectedPosition = position
         notifyDataSetChanged()
       }
-
-      if (selectedPosition==position)
-      {
+      if (selectedPosition == position) {
         holder.dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
-
-     } else{
+      } else {
         holder.dateButton.setBackgroundResource(R.drawable.date_button_unclicked_shape)
-
-     }
-
+      }
       if (selectedPosition < 0 && position == 5) {
         holder.dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
       }
-
-
     }
-
 
   }
 
@@ -98,14 +82,9 @@ class HistoryAndForecastAdapter(
     return items.size
   }
 
-  interface RecyclerViewInterface{
-    fun onClick(position: Int)
-  }
-
   override fun getItemViewType(position: Int): Int {
     return items[position].viewType
   }
-
 
   class ExploreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val exploreTextView = view.textExplore
@@ -118,23 +97,21 @@ class HistoryAndForecastAdapter(
     val titleDate = view.textDateButtonDay
   }
 
-  private fun onDateSelected(dateTimeStampInMillis: Long) {
-    currentSelectedDate = dateTimeStampInMillis
-  }
-
-
-
   private fun getModuloColor(pos: Int): Int {
-    if (pos % 3 == 0) {
-      return R.drawable.green_shape_with_radius
-    } else if (pos % 3 == 1) {
-      return R.drawable.orange_shape_with_radius
-    } else {
-      return R.drawable.red_shape_radius
+    return when {
+      pos % 3 == 0 -> {
+        R.drawable.green_shape_with_radius
+      }
+      pos % 3 == 1 -> {
+        R.drawable.orange_shape_with_radius
+      }
+      else -> {
+        R.drawable.red_shape_radius
+      }
     }
   }
 
-  private fun getPollutionAmount(pos: Int): Int{
+  private fun getPollutionAmount(pos: Int): Int {
     return pos + 1 * 3
   }
 

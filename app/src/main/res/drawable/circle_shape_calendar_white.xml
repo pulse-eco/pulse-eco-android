@@ -5,8 +5,8 @@
 
   <solid
     android:color="#FFFF"/>
-
   <size
-    android:width="120dp"
-    android:height="120dp"/>
+    android:width="@dimen/calendar_circle_shape_width_height"
+    android:height="@dimen/calendar_circle_shape_width_height"/>
+  
 </shape>
