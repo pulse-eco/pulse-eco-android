@@ -15,8 +15,8 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
-import com.netcetera.skopjepulse.historyAndForecast.HistoryAndForecastAdapter
-import com.netcetera.skopjepulse.historyAndForecast.HistoryAndForecastDataModel
+import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastAdapter
+import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastDataModel
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.showConformationDialog
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
     const val NEW_CITY_NAME_RESULT = "cityName"
-    const val HISTORY_FORECAST_LIST_SIZE = 7
   }
 
   private val citySelectFragment: CitySelectFragment by lazy {
@@ -64,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     historyAndForecastRecyclerView.layoutManager =
       LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-    val historyForecastAdapter = HistoryAndForecastAdapter(this, getButtonsList())
+    val historyForecastAdapter = HistoryForecastAdapter(this, getButtonsList())
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
     historyAndForecastRecyclerView.scrollToPosition(5)
 
@@ -188,11 +187,11 @@ class MainActivity : AppCompatActivity() {
   }
 
 
-  private fun getButtonsList(): ArrayList<HistoryAndForecastDataModel> {
-    val list = ArrayList<HistoryAndForecastDataModel>()
-    list.add(HistoryAndForecastDataModel("Item 1", HistoryAndForecastAdapter.VIEW_TYPE_EXPLORE))
-    for (i in 1..HISTORY_FORECAST_LIST_SIZE) {
-      list.add(HistoryAndForecastDataModel("Item 2", HistoryAndForecastAdapter.VIEW_TYPE_DATE))
+  private fun getButtonsList(): ArrayList<HistoryForecastDataModel> {
+    val list = ArrayList<HistoryForecastDataModel>()
+    list.add(HistoryForecastDataModel("Item 1", HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+    for (i in 1 until 6) {
+      list.add(HistoryForecastDataModel("Item 2", HistoryForecastAdapter.VIEW_TYPE_DATE))
     }
     return list
   }

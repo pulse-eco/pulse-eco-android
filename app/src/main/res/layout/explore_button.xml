@@ -35,6 +35,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/history_forecast_explore_text_margin_bottom"
+      android:text="@string/explore"
       android:textColor="@color/white"
       android:textSize="@dimen/history_forecast_explore_text_size"
       app:layout_constraintBottom_toBottomOf="parent"
