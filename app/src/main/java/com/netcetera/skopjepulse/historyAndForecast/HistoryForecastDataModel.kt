@@ -1,3 +1,5 @@
 package com.netcetera.skopjepulse.historyAndForecast
 
-data class HistoryForecastDataModel(val itemName: String, val viewType: Int)
+import com.netcetera.skopjepulse.base.model.SensorReading
+
+data class HistoryForecastDataModel(val averageWeeklyDataModel: SensorReading, val viewType: Int)

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
@@ -28,8 +27,11 @@ import kotlinx.android.synthetic.main.history_and_forecast.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
+import kotlinx.android.synthetic.main.weekly_average.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -60,12 +62,11 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
-    historyAndForecastRecyclerView.layoutManager =
-      LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-    val historyForecastAdapter = HistoryForecastAdapter(this, getButtonsList())
-    historyAndForecastRecyclerView.adapter = historyForecastAdapter
-    historyAndForecastRecyclerView.scrollToPosition(5)
+//    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//
+//    val historyForecastAdapter = HistoryForecastAdapter(this, getButtonsList())
+//    historyAndForecastRecyclerView.adapter = historyForecastAdapter
+//    historyAndForecastRecyclerView.scrollToPosition(5)
 
 
     btn_language.setOnClickListener {
@@ -184,16 +185,6 @@ class MainActivity : AppCompatActivity() {
         }
       })
     }
-  }
-
-
-  private fun getButtonsList(): ArrayList<HistoryForecastDataModel> {
-    val list = ArrayList<HistoryForecastDataModel>()
-    list.add(HistoryForecastDataModel("Item 1", HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
-    for (i in 1 until 6) {
-      list.add(HistoryForecastDataModel("Item 2", HistoryForecastAdapter.VIEW_TYPE_DATE))
-    }
-    return list
   }
 
   private fun showCitySelectIfNotShown() {

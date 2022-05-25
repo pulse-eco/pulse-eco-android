@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Polygon
@@ -23,21 +24,11 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
-import com.netcetera.skopjepulse.base.model.Band
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.base.model.DataDefinition
-import com.netcetera.skopjepulse.base.model.MeasurementType
-import com.netcetera.skopjepulse.extensions.applyPulseStyling
-import com.netcetera.skopjepulse.extensions.dimOnExpand
-import com.netcetera.skopjepulse.extensions.gone
-import com.netcetera.skopjepulse.extensions.lifecycleAwareOnMapClickListener
-import com.netcetera.skopjepulse.extensions.onExpanded
-import com.netcetera.skopjepulse.extensions.onStateChange
-import com.netcetera.skopjepulse.extensions.pulseMapType
-import com.netcetera.skopjepulse.extensions.toggle
-import com.netcetera.skopjepulse.extensions.updateForCity
-import com.netcetera.skopjepulse.extensions.visible
+import com.netcetera.skopjepulse.base.model.*
+import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
+import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastAdapter
+import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastDataModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
@@ -54,6 +45,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_default_peek.*
 import kotlinx.android.synthetic.main.bottom_sheet_no_sensors_layout.*
 import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.*
 import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.*
+import kotlinx.android.synthetic.main.history_and_forecast.*
 import kotlinx.android.synthetic.main.map_fragment_layout.*
 import kotlinx.android.synthetic.main.map_loading_indicator.*
 import kotlinx.android.synthetic.main.overall_banner_layout.*
@@ -64,7 +56,6 @@ import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
@@ -76,6 +67,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   lateinit var sensorType:MeasurementType
 
   private var pastWeekDataLabelForCityName:Boolean = true
+  lateinit var historyForecastAdapter: HistoryForecastAdapter
 
   val city : City by lazy { requireArguments().getParcelable<City>("city")!! }
 
@@ -109,6 +101,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
+    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
 
     // Declarations and interactions
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
@@ -122,11 +116,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setDaysNames()
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
+        setValueForFourDayRange(weeklyAverageDataModel)
       }
     })
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
         setValueForAverageDailyData(it)
+        setValueForFourDayRange(it)
     }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner, Observer {
@@ -251,6 +247,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
       tvUnit?.text = resources.getString(R.string.past_week_for_specific_sensor, dataDef.unit)
     }
   }
+  private fun setValueForFourDayRange(dataModel: AverageWeeklyDataModel)
+  {
+    historyForecastAdapter = HistoryForecastAdapter(requireContext(), getButtonsList(dataModel))
+    historyAndForecastRecyclerView.adapter = historyForecastAdapter
+    historyAndForecastRecyclerView.scrollToPosition(5)
+  }
+
 
   private fun setValueForAverageDailyData(dataModel: AverageWeeklyDataModel?) {
     val cal = Calendar.getInstance()
@@ -399,6 +402,19 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
+  private fun getButtonsList(dataModel: AverageWeeklyDataModel): ArrayList<HistoryForecastDataModel> {
+    val list = ArrayList<HistoryForecastDataModel>()
+
+    list.add(HistoryForecastDataModel(dataModel.data[1], HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+
+    for (i in 1 until 5)
+    {
+      list.add(HistoryForecastDataModel(dataModel.data[i], HistoryForecastAdapter.VIEW_TYPE_DATE))
+    }
+
+    //list.add(HistoryForecastDataModel(dataModel.data[6], HistoryForecastAdapter.VIEW_TYPE_DATE))
+    return list
+  }
   override fun onSaveInstanceState(outState: Bundle) {
     map.onSaveInstanceState(outState)
     super.onSaveInstanceState(outState)
