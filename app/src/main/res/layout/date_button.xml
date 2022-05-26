@@ -25,6 +25,8 @@
       android:layout_marginTop="@dimen/history_forecast_date_margin_top_bottom"
       android:textColor="@color/black"
       android:textSize="@dimen/history_forecast_date_text_size"
+      android:lines="1"
+      android:maxLines="1"
       app:layout_constraintBottom_toTopOf="@id/textViewAmount"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

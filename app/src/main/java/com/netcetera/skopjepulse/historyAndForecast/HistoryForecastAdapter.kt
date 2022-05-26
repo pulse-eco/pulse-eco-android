@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
+import java.text.SimpleDateFormat
 
 class HistoryForecastAdapter(
   val context: Context,
@@ -72,10 +73,14 @@ class HistoryForecastAdapter(
     private val dateButton = view.dateButton
     private val bodyAmount = view.textViewAmount
     private val titleDate = view.textDateButtonDay
+    val format = SimpleDateFormat("EEEE")
     override fun bind() {
-      titleDate.text = getDayName(adapterPosition)
-      bodyAmount.text = getPollutionAmount(adapterPosition).toString()
-      bodyAmount.setBackgroundResource(getModuloColor(adapterPosition))
+      val value = items[adapterPosition].averageWeeklyDataModel.value
+      val dateOfSensorToString = format.format(items[adapterPosition].averageWeeklyDataModel.stamp)
+      titleDate.text = dateOfSensorToString.substring(0,3)
+      bodyAmount.text = value.toInt().toString()
+      val color = items[adapterPosition].sensorValueColor
+      bodyAmount.setBackgroundColor(color.legendColor)
       dateButton.setOnClickListener {
         selectedPosition = adapterPosition
         notifyDataSetChanged()

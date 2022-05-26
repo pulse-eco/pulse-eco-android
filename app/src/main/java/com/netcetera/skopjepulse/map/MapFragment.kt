@@ -61,15 +61,15 @@ import kotlin.math.roundToInt
 
 class MapFragment : BaseFragment<MapViewModel>() {
   override val viewModel: MapViewModel by viewModel { parametersOf(city) }
-  private val mainViewModel : MainViewModel by sharedViewModel()
+  private val mainViewModel: MainViewModel by sharedViewModel()
 
-  lateinit var dataDef:DataDefinition
-  lateinit var sensorType:MeasurementType
+  lateinit var dataDef: DataDefinition
+  lateinit var sensorType: MeasurementType
 
-  private var pastWeekDataLabelForCityName:Boolean = true
+  private var pastWeekDataLabelForCityName: Boolean = true
   lateinit var historyForecastAdapter: HistoryForecastAdapter
 
-  val city : City by lazy { requireArguments().getParcelable<City>("city")!! }
+  val city: City by lazy { requireArguments().getParcelable<City>("city")!! }
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
@@ -94,14 +94,19 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
-    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    historyAndForecastRecyclerView.layoutManager =
+      LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
 
     // Declarations and interactions
@@ -121,8 +126,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     })
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
-        setValueForAverageDailyData(it)
-        setValueForFourDayRange(it)
+      setValueForAverageDailyData(it)
+      setValueForFourDayRange(it)
     }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner, Observer {
@@ -144,7 +149,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
         googleMap.pulseMapType = it.mapType
       })
       googleMap.updateForCity(city)
-      viewModel.mapMarkers.observe(viewLifecycleOwner, Observer { mapMarkersController.showMarkers(it ?: emptyList()) })
+      viewModel.mapMarkers.observe(
+        viewLifecycleOwner,
+        Observer { mapMarkersController.showMarkers(it ?: emptyList()) })
 
       val previousPolygons: MutableList<Polygon> = ArrayList()
       viewModel.mapPolygons.observe(viewLifecycleOwner, Observer { mapPolygons ->
@@ -159,37 +166,44 @@ class MapFragment : BaseFragment<MapViewModel>() {
       })
     }
 
-    viewModel.bottomSheetPeek.observe(viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
+    viewModel.bottomSheetPeek.observe(
+      viewLifecycleOwner,
+      Observer { peekViewModel -> displayPeekContent(peekViewModel) })
     viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner, Observer {
       bottomSheetNoSensorsContainer.visibility = if (it == true) View.VISIBLE else View.GONE
     })
-    viewModel.favouriteSensorsPicking.observe(viewLifecycleOwner, Observer { (favouriteSensors, otherSensors) ->
-      val editFavouriteSensorsClickListener = View.OnClickListener {
-        showFavouriteSensorsPicker(favouriteSensors, otherSensors) { newSelectedFavourites, unselectedFavourites ->
-          unselectedFavourites.forEach { unfavouritedSensor ->
-            viewModel.unFavouriteSensor(unfavouritedSensor)
-          }
-          newSelectedFavourites.forEach { newFavouritedSensor ->
-            viewModel.favouriteSensor(newFavouritedSensor)
+    viewModel.favouriteSensorsPicking.observe(
+      viewLifecycleOwner,
+      Observer { (favouriteSensors, otherSensors) ->
+        val editFavouriteSensorsClickListener = View.OnClickListener {
+          showFavouriteSensorsPicker(
+            favouriteSensors,
+            otherSensors
+          ) { newSelectedFavourites, unselectedFavourites ->
+            unselectedFavourites.forEach { unfavouritedSensor ->
+              viewModel.unFavouriteSensor(unfavouritedSensor)
+            }
+            newSelectedFavourites.forEach { newFavouritedSensor ->
+              viewModel.favouriteSensor(newFavouritedSensor)
+            }
           }
         }
-      }
 
-      selectSensorsButton.setOnClickListener(editFavouriteSensorsClickListener)
-      editSelectedSensors.setOnClickListener(editFavouriteSensorsClickListener)
-      sensorFavouriteButtonOverlay.setOnClickListener {
-        Tooltip.Builder(requireContext())
-          .anchor(sensorFavouriteButtonOverlay, follow = true)
-          .text(R.string.tooltip_maximum_sensors_reached)
-          .closePolicy(ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME)
-          .showDuration(TimeUnit.SECONDS.toMillis(1))
-          .arrow(false)
-          .overlay(false)
-          .create()
-          .show(bottomSheetSensorOverview, Tooltip.Gravity.LEFT)
-      }
-    })
+        selectSensorsButton.setOnClickListener(editFavouriteSensorsClickListener)
+        editSelectedSensors.setOnClickListener(editFavouriteSensorsClickListener)
+        sensorFavouriteButtonOverlay.setOnClickListener {
+          Tooltip.Builder(requireContext())
+            .anchor(sensorFavouriteButtonOverlay, follow = true)
+            .text(R.string.tooltip_maximum_sensors_reached)
+            .closePolicy(ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME)
+            .showDuration(TimeUnit.SECONDS.toMillis(1))
+            .arrow(false)
+            .overlay(false)
+            .create()
+            .show(bottomSheetSensorOverview, Tooltip.Gravity.LEFT)
+        }
+      })
 
 
     // Bottom sheet behavioral stuff
@@ -228,8 +242,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
       TransitionManager.beginDelayedTransition(mapConstraintLayout)
       ConstraintSet().apply {
         clone(mapConstraintLayout)
-        this.connect(R.id.mapLayersPick, ConstraintSet.TOP, R.id.overallBannerView,
-            if(isOpen) ConstraintSet.BOTTOM else ConstraintSet.TOP)
+        this.connect(
+          R.id.mapLayersPick, ConstraintSet.TOP, R.id.overallBannerView,
+          if (isOpen) ConstraintSet.BOTTOM else ConstraintSet.TOP
+        )
       }.applyTo(mapConstraintLayout)
     }
 
@@ -241,17 +257,35 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun displayUnit() {
     val tvUnit = view?.findViewById<TextView>(R.id.tvUnit)
-    if (pastWeekDataLabelForCityName){
-      tvUnit?.text = resources.getString(R.string.past_week_for_whole_city, mainViewModel.activeCity.value?.name?.capitalize(), dataDef.unit)
-    }else {
+    if (pastWeekDataLabelForCityName) {
+      tvUnit?.text = resources.getString(
+        R.string.past_week_for_whole_city,
+        mainViewModel.activeCity.value?.name?.capitalize(),
+        dataDef.unit
+      )
+    } else {
       tvUnit?.text = resources.getString(R.string.past_week_for_specific_sensor, dataDef.unit)
     }
   }
-  private fun setValueForFourDayRange(dataModel: AverageWeeklyDataModel)
-  {
+
+  private fun setValueForFourDayRange(dataModel: AverageWeeklyDataModel) {
     historyForecastAdapter = HistoryForecastAdapter(requireContext(), getButtonsList(dataModel))
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
     historyAndForecastRecyclerView.scrollToPosition(5)
+  }
+
+  private fun getButtonsList(dataModel: AverageWeeklyDataModel): ArrayList<HistoryForecastDataModel> {
+    val list = ArrayList<HistoryForecastDataModel>()
+
+    val band = getBand(dataModel.data[0].value.toInt())
+    list.add(HistoryForecastDataModel(dataModel.data[1],band!!,HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+
+    for (i in 3 until dataModel.data.size) {
+      val band = getBand(dataModel.data[i].value.toInt())
+      list.add(HistoryForecastDataModel(dataModel.data[i],band!!,HistoryForecastAdapter.VIEW_TYPE_DATE))
+    }
+
+    return list
   }
 
 
@@ -402,19 +436,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun getButtonsList(dataModel: AverageWeeklyDataModel): ArrayList<HistoryForecastDataModel> {
-    val list = ArrayList<HistoryForecastDataModel>()
-
-    list.add(HistoryForecastDataModel(dataModel.data[1], HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
-
-    for (i in 1 until 5)
-    {
-      list.add(HistoryForecastDataModel(dataModel.data[i], HistoryForecastAdapter.VIEW_TYPE_DATE))
-    }
-
-    //list.add(HistoryForecastDataModel(dataModel.data[6], HistoryForecastAdapter.VIEW_TYPE_DATE))
-    return list
-  }
   override fun onSaveInstanceState(outState: Bundle) {
     map.onSaveInstanceState(outState)
     super.onSaveInstanceState(outState)
