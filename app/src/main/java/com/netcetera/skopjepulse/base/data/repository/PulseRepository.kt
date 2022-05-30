@@ -11,6 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.Date
 
+
 typealias Cities = List<City>
 typealias Sensors = List<Sensor>
 typealias SensorReadings = List<SensorReading>
@@ -105,10 +106,59 @@ open class PulseRepository(var apiService: PulseApiService) : BasePulseRepositor
           _citiesOverall.value = Resource.error(citiesOverall.value?.data, null)
         }
       }
-
       override fun onFailure(call: Call<List<CityOverall>?>, t: Throwable) {
         _citiesOverall.value = Resource.error(citiesOverall.value?.data, t)
       }
     })
   }
+
+  fun getDataCitiesOverall(cities : List<String>): Resource<List<CityOverall>>? {
+    _citiesOverall.value = Resource.loading(citiesOverall.value?.data)
+    apiService.citiesOverall(cities).enqueue(object : Callback<List<CityOverall>?> {
+      override fun onResponse(call: Call<List<CityOverall>?>, response: Response<List<CityOverall>?>) {
+        if (response.isSuccessful && response.body() != null) {
+          _citiesOverall.value = Resource.success(response.body()!!)
+        } else {
+          _citiesOverall.value = Resource.error(citiesOverall.value?.data, null)
+        }
+      }
+
+      override fun onFailure(call: Call<List<CityOverall>?>, t: Throwable) {
+        _citiesOverall.value = Resource.error(citiesOverall.value?.data, t)
+      }
+    })
+   return  _citiesOverall.value
+  }
+
+//  fun overall(cities : List<String> ): LiveData<Resource<CityOverall>>{
+//    val result = MutableLiveData<Resource<CityOverall>>()
+//    apiService.citiesOverall(cities).enqueue(object : Callback<List<CityOverall>?> {
+//      override fun onResponse(call: Call<List<CityOverall>?>, response: Response<List<CityOverall>?>) {
+//        if (response.isSuccessful && response.body() != null) {
+//          result.postValue(Resource.success(response.body()!!)) }
+//      }
+//      override fun onFailure(call: Call<List<CityOverall>?>, t: Throwable) {
+//        result.postValue(Resource.error(null, t))
+//
+//      }
+//    })
+//    return result
+//  }
+
+  fun getCityOverallData(city: String): LiveData<Resource<CityOverall>> {
+    val result = MutableLiveData<Resource<CityOverall>>()
+    apiService.getCityOverall(city).enqueue(object: Callback<CityOverall> {
+      override fun onFailure(call: Call<CityOverall>, t: Throwable) {
+        result.postValue(Resource.error(null, t))
+      }
+      override fun onResponse(call: Call<CityOverall>, response: Response<CityOverall>) {
+        if (response.isSuccessful && response.body() != null) {
+          result.postValue(Resource.success(response.body()!!))
+        }
+      }
+    })
+    return result
+  }
+
+
 }

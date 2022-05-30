@@ -1,9 +1,11 @@
 package com.netcetera.skopjepulse.map
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +73,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   val city: City by lazy { requireArguments().getParcelable<City>("city")!! }
 
+
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
   }
@@ -102,11 +105,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
 
+  @SuppressLint("LogNotTimber")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
     historyAndForecastRecyclerView.layoutManager =
       LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
 
 
     // Declarations and interactions
@@ -122,12 +127,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
         setValueForFourDayRange(weeklyAverageDataModel)
+        Log.d("today",mainViewModel.overall(city)?.data.toString())
+        Log.d("city",city.name)
       }
     })
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(it)
       setValueForFourDayRange(it)
+      Log.d("today",mainViewModel.overall(city)?.data.toString())
+      Log.d("city",city.name)
+
     }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner, Observer {
@@ -150,8 +160,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       })
       googleMap.updateForCity(city)
       viewModel.mapMarkers.observe(
-        viewLifecycleOwner,
-        Observer { mapMarkersController.showMarkers(it ?: emptyList()) })
+        viewLifecycleOwner, Observer { mapMarkersController.showMarkers(it ?: emptyList()) })
 
       val previousPolygons: MutableList<Polygon> = ArrayList()
       viewModel.mapPolygons.observe(viewLifecycleOwner, Observer { mapPolygons ->
@@ -271,16 +280,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
   private fun setValueForFourDayRange(dataModel: AverageWeeklyDataModel) {
     historyForecastAdapter = HistoryForecastAdapter(requireContext(), getButtonsList(dataModel))
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
-    historyAndForecastRecyclerView.scrollToPosition(5)
+    historyAndForecastRecyclerView.scrollToPosition(getButtonsList(dataModel).size - 1)
   }
 
   private fun getButtonsList(dataModel: AverageWeeklyDataModel): ArrayList<HistoryForecastDataModel> {
     val list = ArrayList<HistoryForecastDataModel>()
 
     val band = getBand(dataModel.data[0].value.toInt())
-    list.add(HistoryForecastDataModel(dataModel.data[1],band!!,HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+    list.add(HistoryForecastDataModel(dataModel.data[0],band!!,HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
 
-    for (i in 3 until dataModel.data.size) {
+    for (i in 1 until dataModel.data.size) {
       val band = getBand(dataModel.data[i].value.toInt())
       list.add(HistoryForecastDataModel(dataModel.data[i],band!!,HistoryForecastAdapter.VIEW_TYPE_DATE))
     }

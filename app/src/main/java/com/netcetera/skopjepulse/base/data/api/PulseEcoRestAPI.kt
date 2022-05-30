@@ -38,6 +38,9 @@ interface PulseApiService {
 
   @GET("measures")
   fun measures(@Query("lang") lang: String?): Call<List<DataDefinition>>
+
+  @GET("overall")
+  fun getCityOverall(@Query("cityName") cityName: String): Call<CityOverall>
 }
 
 /**

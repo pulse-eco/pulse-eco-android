@@ -10,6 +10,8 @@ import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HistoryForecastAdapter(
   val context: Context,
@@ -74,13 +76,30 @@ class HistoryForecastAdapter(
     private val bodyAmount = view.textViewAmount
     private val titleDate = view.textDateButtonDay
     val format = SimpleDateFormat("EEEE")
+    val formatDayMonth = SimpleDateFormat("dd MMM")
+
     override fun bind() {
-      val value = items[adapterPosition].averageWeeklyDataModel.value
-      val dateOfSensorToString = format.format(items[adapterPosition].averageWeeklyDataModel.stamp)
-      titleDate.text = dateOfSensorToString.substring(0,3)
-      bodyAmount.text = value.toInt().toString()
-      val color = items[adapterPosition].sensorValueColor
-      bodyAmount.setBackgroundColor(color.legendColor)
+      val value = items[adapterPosition].averageWeeklyDataModel.value.toInt()
+      val stamp = items[adapterPosition].averageWeeklyDataModel.stamp
+      val cal = Calendar.getInstance()
+      cal.add(Calendar.DATE, -7)
+      val dateOneWeekAgo = cal.time
+
+      if (formatDayMonth.format(stamp) <= formatDayMonth.format(dateOneWeekAgo) )
+      {
+        val date = dateShownInsteadDayOfWeek(stamp)
+        titleDate.text = date
+        bodyAmount.text = value.toString()
+        val color = items[adapterPosition].sensorValueColor
+        bodyAmount.setBackgroundColor(color.legendColor)
+
+      }else {
+        val dateOfSensorToString = format.format(stamp)
+        titleDate.text = dateOfSensorToString.substring(0, 3)
+        bodyAmount.text = value.toString()
+        val color = items[adapterPosition].sensorValueColor
+        bodyAmount.setBackgroundColor(color.legendColor)
+      }
       dateButton.setOnClickListener {
         selectedPosition = adapterPosition
         notifyDataSetChanged()
@@ -109,6 +128,11 @@ class HistoryForecastAdapter(
       bodyAmount.setBackgroundResource(getModuloColor(adapterPosition))
       dateButton.visibility = View.GONE
     }
+  }
+
+  private fun dateShownInsteadDayOfWeek(stamp: Date): String? {
+    val format = SimpleDateFormat("dd MMM")
+    return format.format(stamp)
   }
 
   private fun getModuloColor(pos: Int): Int {

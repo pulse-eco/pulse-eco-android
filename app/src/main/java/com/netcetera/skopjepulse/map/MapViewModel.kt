@@ -72,6 +72,8 @@ class MapViewModel(
     get() = _isSpecificSensorSelected
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
+//  var cityOverallData: LiveData<CityOverallDataModel>
+
 
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
@@ -178,6 +180,7 @@ class MapViewModel(
         }
       }
     }
+
 
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {

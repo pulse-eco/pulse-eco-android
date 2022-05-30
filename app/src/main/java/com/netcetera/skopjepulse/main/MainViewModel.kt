@@ -1,5 +1,6 @@
 package com.netcetera.skopjepulse.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,10 +10,12 @@ import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.base.model.City
+import com.netcetera.skopjepulse.base.model.CityOverall
 import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
+import com.netcetera.skopjepulse.historyAndForecast.CityOverallDataModel
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
 
 /**
@@ -44,6 +47,9 @@ class MainViewModel(
    */
   val measurementTypeTabs: LiveData<List<MeasurementTypeTab>>
 
+  //var cityOverallData :  LiveData<LiveData<CityOverallDataModel>>
+ //var cityOverallData: LiveData<CityOverall>
+
   init {
     activeCity = Transformations.distinctUntilChanged(
       MediatorLiveData<City>().apply {
@@ -68,6 +74,25 @@ class MainViewModel(
         }
       }
     }
+//    cityOverallData = Transformations.map(activeCity){ city ->
+//      val overall = pulseRepository.getCityOverallData(city?.name!!)
+//      Transformations.map(overall){ resData ->
+//        resData.data?.let { res ->
+//          CityOverallDataModel(res)
+//        }
+//
+//      }
+//    }
+//    overallDataForToday = Transformations.switchMap(activeCity){ city ->
+//      val overall = pulseRepository.overall(city?.name!!)
+//      Transformations.map(overall){ responseData ->
+//        responseData.data?.let { overall ->
+//          CityOverallDataModel(overall)
+//        }
+//      }
+//    }
+   // cityOverallData = pulseRepository.loadCities(activeCity)
+
 
     measurementTypeTabs = Transformations.distinctUntilChanged(
       Transformations.map(dataDefinitionProvider.definitions) { definitions ->
@@ -118,4 +143,15 @@ class MainViewModel(
       showForCity(foundCity)
     }
   }
+
+//  fun overall(city: City): Resource<CityOverall>? {
+//    return pulseRepository.getCityOverallData(city.name)
+//  }
+
+  fun overall(city: City): Resource<List<CityOverall>>? {
+    return pulseRepository.getDataCitiesOverall(listOf(city.name))
+  }
+//  fun overall(city: City): Resource<CityOverall>? {
+//    return pulseRepository.getCityOverallData(city.name!!)
+//  }
 }
