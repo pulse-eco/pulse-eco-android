@@ -1,11 +1,9 @@
 package com.netcetera.skopjepulse.map
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +56,7 @@ import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
@@ -95,7 +94,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
         "city" to city
       )
     }
+    var overAllData: List<CityOverall>? = null
   }
+
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -105,17 +106,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
 
-  @SuppressLint("LogNotTimber")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
-    historyAndForecastRecyclerView.layoutManager =
-      LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
 
 
     // Declarations and interactions
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
+
+    mainViewModel.overall(this.city.name).observe(viewLifecycleOwner) { response ->
+      overAllData = response.data
+    }
 
     /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
@@ -126,18 +127,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setDaysNames()
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
-        setValueForFourDayRange(weeklyAverageDataModel)
-        Log.d("today",mainViewModel.overall(city)?.data.toString())
-        Log.d("city",city.name)
+        setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
       }
     })
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(it)
-      setValueForFourDayRange(it)
-      Log.d("today",mainViewModel.overall(city)?.data.toString())
-      Log.d("city",city.name)
-
+      setValueForSevenDaysRange(it, overAllData?.last(), sensorType)
     }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner, Observer {
@@ -174,10 +170,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
         viewModel.deselectSensor()
       })
     }
-
     viewModel.bottomSheetPeek.observe(
-      viewLifecycleOwner,
-      Observer { peekViewModel -> displayPeekContent(peekViewModel) })
+      viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
     viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner, Observer {
       bottomSheetNoSensorsContainer.visibility = if (it == true) View.VISIBLE else View.GONE
@@ -257,7 +251,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         )
       }.applyTo(mapConstraintLayout)
     }
-
   }
 
   private fun getBand(intValue: Int): Band? {
@@ -277,22 +270,56 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun setValueForFourDayRange(dataModel: AverageWeeklyDataModel) {
-    historyForecastAdapter = HistoryForecastAdapter(requireContext(), getButtonsList(dataModel))
+  private fun setValueForSevenDaysRange(
+    dataModel: AverageWeeklyDataModel,
+    todayButtonData: CityOverall?,
+    mesType: MeasurementType
+  ) {
+    historyAndForecastRecyclerView.layoutManager =
+      LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    historyForecastAdapter = HistoryForecastAdapter(
+      requireContext(),
+      getDateButtonsList(dataModel, todayButtonData, mesType)
+    )
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
-    historyAndForecastRecyclerView.scrollToPosition(getButtonsList(dataModel).size - 1)
+    historyAndForecastRecyclerView.scrollToPosition(getDateButtonsList(dataModel, todayButtonData,mesType).size - 1
+    )
   }
 
-  private fun getButtonsList(dataModel: AverageWeeklyDataModel): ArrayList<HistoryForecastDataModel> {
+
+  private fun getDateButtonsList(
+    dataModel: AverageWeeklyDataModel,
+    todayButtonData: CityOverall?,
+    mesType: MeasurementType
+  ): ArrayList<HistoryForecastDataModel> {
     val list = ArrayList<HistoryForecastDataModel>()
 
     val band = getBand(dataModel.data[0].value.toInt())
-    list.add(HistoryForecastDataModel(dataModel.data[0],band!!,HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+    list.add(
+      HistoryForecastDataModel(
+        dataModel.data[0],
+        band!!,
+        HistoryForecastAdapter.VIEW_TYPE_EXPLORE
+      )
+    )
 
-    for (i in 1 until dataModel.data.size) {
+    for (i in 0 until dataModel.data.size) {
       val band = getBand(dataModel.data[i].value.toInt())
-      list.add(HistoryForecastDataModel(dataModel.data[i],band!!,HistoryForecastAdapter.VIEW_TYPE_DATE))
+      list.add(
+        HistoryForecastDataModel(
+          dataModel.data[i],
+          band!!,
+          HistoryForecastAdapter.VIEW_TYPE_DATE
+        )
+      )
     }
+
+    val cal = Calendar.getInstance()
+    val todayDate = cal.time
+    val sensorReadingFromOverall = SensorReading(todayButtonData?.cityName!!,todayDate,mesType, todayButtonData.values[sensorType]?.toDouble()!!)
+    val bandToday = getBand(sensorReadingFromOverall.value.toInt())
+    list.add(HistoryForecastDataModel(sensorReadingFromOverall, bandToday!!, HistoryForecastAdapter.VIEW_TYPE_DATE))
+
 
     return list
   }
@@ -300,8 +327,24 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setValueForAverageDailyData(dataModel: AverageWeeklyDataModel?) {
     val cal = Calendar.getInstance()
-    val listOfTextViewsForValues = listOf(valueSevenDaysAgo, valueSixDaysAgo, valueFiveDaysAgo, valueFourDaysAgo, valueThreeDaysAgo, valueTwoDaysAgo, valueOneDayAgo)
-    val listOColorViews = listOf(colorSevenDaysAgo, colorSixDaysAgo, colorFiveDaysAgo, colorFourDaysAgo, colorThreeDaysAgo, colorTwoDaysAgo, colorOneDayAgo)
+    val listOfTextViewsForValues = listOf(
+      valueSevenDaysAgo,
+      valueSixDaysAgo,
+      valueFiveDaysAgo,
+      valueFourDaysAgo,
+      valueThreeDaysAgo,
+      valueTwoDaysAgo,
+      valueOneDayAgo
+    )
+    val listOColorViews = listOf(
+      colorSevenDaysAgo,
+      colorSixDaysAgo,
+      colorFiveDaysAgo,
+      colorFourDaysAgo,
+      colorThreeDaysAgo,
+      colorTwoDaysAgo,
+      colorOneDayAgo
+    )
 
     setInitialDataToNotAvailable()
 
@@ -328,8 +371,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setDaysNames() {
     val cal = Calendar.getInstance()
-    val listOfDaysNames = listOf(nameOneDayAgo, nameTwoDaysAgo, nameThreeDaysAgo, nameFourDaysAgo, nameFiveDaysAgo, nameSixDaysAgo, nameSevenDaysAgo)
-    val language = context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)?.getString(Constants.LANGUAGE_CODE, "en")
+    val listOfDaysNames = listOf(
+      nameOneDayAgo,
+      nameTwoDaysAgo,
+      nameThreeDaysAgo,
+      nameFourDaysAgo,
+      nameFiveDaysAgo,
+      nameSixDaysAgo,
+      nameSevenDaysAgo
+    )
+    val language = context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)
+      ?.getString(Constants.LANGUAGE_CODE, "en")
       ?: "en"
     val formatter = SimpleDateFormat("EEE", Locale(language))
     listOfDaysNames.forEach {
@@ -338,15 +390,31 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun setInitialDataToNotAvailable(){
-    val listOfTextViewsForValues = listOf(valueSevenDaysAgo, valueSixDaysAgo, valueFiveDaysAgo, valueFourDaysAgo, valueThreeDaysAgo, valueTwoDaysAgo, valueOneDayAgo)
-    val listOfColorViews = listOf(colorSevenDaysAgo, colorSixDaysAgo, colorFiveDaysAgo, colorFourDaysAgo, colorThreeDaysAgo, colorTwoDaysAgo, colorOneDayAgo)
+  private fun setInitialDataToNotAvailable() {
+    val listOfTextViewsForValues = listOf(
+      valueSevenDaysAgo,
+      valueSixDaysAgo,
+      valueFiveDaysAgo,
+      valueFourDaysAgo,
+      valueThreeDaysAgo,
+      valueTwoDaysAgo,
+      valueOneDayAgo
+    )
+    val listOfColorViews = listOf(
+      colorSevenDaysAgo,
+      colorSixDaysAgo,
+      colorFiveDaysAgo,
+      colorFourDaysAgo,
+      colorThreeDaysAgo,
+      colorTwoDaysAgo,
+      colorOneDayAgo
+    )
 
-    listOfTextViewsForValues.forEach{
+    listOfTextViewsForValues.forEach {
       it.text = resources.getString(R.string.not_available)
       it.setTextColor(Color.GRAY)
     }
-    listOfColorViews.forEach{
+    listOfColorViews.forEach {
       it.setBackgroundColor(Color.GRAY)
     }
   }
@@ -369,12 +437,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
       bottomSheetSensorOverview.visible()
       bottomSheetSensorOverview.sensorTitle.setCompoundDrawablesWithIntrinsicBounds(
         sensorOverviewModel.sensor.type.drawableRes ?: 0,
-        0, 0, 0)
-      bottomSheetSensorOverview.sensorTitle.text = sensorOverviewModel.sensor.description.toUpperCase()
-      bottomSheetSensorOverview.sensorMeasurement.text = sensorOverviewModel.measurement.roundToInt().toString()
+        0, 0, 0
+      )
+      bottomSheetSensorOverview.sensorTitle.text =
+        sensorOverviewModel.sensor.description.toUpperCase()
+      bottomSheetSensorOverview.sensorMeasurement.text =
+        sensorOverviewModel.measurement.roundToInt().toString()
       bottomSheetSensorOverview.sensorMeasurementUnit.text = sensorOverviewModel.measurementUnit
-      bottomSheetSensorOverview.sensorMeasurementTime.text = SimpleDateFormat("HH:mm", Locale.US).format(sensorOverviewModel.timestamp)
-      bottomSheetSensorOverview.sensorMeasurementDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.US).format(sensorOverviewModel.timestamp)
+      bottomSheetSensorOverview.sensorMeasurementTime.text =
+        SimpleDateFormat("HH:mm", Locale.US).format(sensorOverviewModel.timestamp)
+      bottomSheetSensorOverview.sensorMeasurementDate.text =
+        SimpleDateFormat("dd.MM.yyyy", Locale.US).format(sensorOverviewModel.timestamp)
 
       bottomSheetSensorOverview.sensorFavouriteButton.isLiked = sensorOverviewModel.favourite
       if (!peekViewModel.canAddMoreFavouriteSensors && !sensorOverviewModel.favourite) {
@@ -422,7 +495,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   private fun updatePeekHeight() {
     peekContainer.post {
       map?.getMapAsync { googleMap ->
-        if(bottomSheetContainer != null) {
+        if (bottomSheetContainer != null) {
           val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
           ValueAnimator.ofInt(bottomSheetBehavior.peekHeight, peekContainer.height).apply {
             duration = 100
@@ -430,8 +503,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
             addUpdateListener {
               bottomSheetBehavior.peekHeight = it.animatedValue as Int
               googleMap.setPadding(0, 0, 0, it.animatedValue as Int)
-              if(crowdsourcingDisclaimerText != null) {
-                val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
+              if (crowdsourcingDisclaimerText != null) {
+                val params =
+                  crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
                 params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
                 crowdsourcingDisclaimerText.layoutParams = params
                 crowdsourcingDisclaimerText.setOnClickListener { view ->

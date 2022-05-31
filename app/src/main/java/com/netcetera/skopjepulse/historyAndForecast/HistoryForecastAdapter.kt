@@ -30,15 +30,20 @@ class HistoryForecastAdapter(
     val context = parent.context
     return when (viewType) {
       VIEW_TYPE_EXPLORE -> {
-        ExploreViewHolder(LayoutInflater.from(context).inflate(R.layout.explore_button, parent, false))
+        ExploreViewHolder(
+          LayoutInflater.from(context).inflate(R.layout.explore_button, parent, false)
+        )
       }
       VIEW_TYPE_DATE -> {
         DateViewHolder(LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
       }
       VIEW_TYPE_DATE_FORECAST -> {
-        ForecastViewHolder(LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
+        ForecastViewHolder(
+          LayoutInflater.from(context).inflate(R.layout.date_button, parent, false)
+        )
       }
-      else -> {throw IllegalArgumentException("Invalid view type")
+      else -> {
+        throw IllegalArgumentException("Invalid view type")
       }
     }
   }
@@ -59,7 +64,7 @@ class HistoryForecastAdapter(
     abstract fun bind()
   }
 
-  inner class ExploreViewHolder(view: View): BaseViewHolder<HistoryForecastDataModel>(view) {
+  inner class ExploreViewHolder(view: View) : BaseViewHolder<HistoryForecastDataModel>(view) {
     private val exploreView = view.exploreButton
     override fun bind() {
       context as FragmentActivity
@@ -75,31 +80,31 @@ class HistoryForecastAdapter(
     private val dateButton = view.dateButton
     private val bodyAmount = view.textViewAmount
     private val titleDate = view.textDateButtonDay
-    val format = SimpleDateFormat("EEEE")
-    val formatDayMonth = SimpleDateFormat("dd MMM")
 
     override fun bind() {
-      val value = items[adapterPosition].averageWeeklyDataModel.value.toInt()
+      val value = items[adapterPosition].averageWeeklyDataModel.value.toInt().toString()
       val stamp = items[adapterPosition].averageWeeklyDataModel.stamp
       val cal = Calendar.getInstance()
+      val todayDate = cal.time
       cal.add(Calendar.DATE, -7)
       val dateOneWeekAgo = cal.time
 
-      if (formatDayMonth.format(stamp) <= formatDayMonth.format(dateOneWeekAgo) )
-      {
-        val date = dateShownInsteadDayOfWeek(stamp)
-        titleDate.text = date
-        bodyAmount.text = value.toString()
-        val color = items[adapterPosition].sensorValueColor
-        bodyAmount.setBackgroundColor(color.legendColor)
-
-      }else {
-        val dateOfSensorToString = format.format(stamp)
-        titleDate.text = dateOfSensorToString.substring(0, 3)
-        bodyAmount.text = value.toString()
-        val color = items[adapterPosition].sensorValueColor
-        bodyAmount.setBackgroundColor(color.legendColor)
+      when {
+        dateShownInsteadDayOfWeek(stamp) <= dateShownInsteadDayOfWeek(dateOneWeekAgo) -> {
+          titleDate.text = dateShownInsteadDayOfWeek(stamp)
+        }
+        dateShownInsteadDayOfWeek(stamp) == dateShownInsteadDayOfWeek(todayDate) -> {
+          titleDate.text = context.getText(R.string.today)
+        }
+        else -> {
+          titleDate.text = dayOfWeekShown(stamp)
+        }
       }
+
+      val color = items[adapterPosition].sensorValueColor
+      bodyAmount.setBackgroundColor(color.legendColor)
+      bodyAmount.text = value
+
       dateButton.setOnClickListener {
         selectedPosition = adapterPosition
         notifyDataSetChanged()
@@ -111,7 +116,7 @@ class HistoryForecastAdapter(
           dateButton.setBackgroundResource(R.drawable.date_button_unclicked_shape)
         }
       } else {
-        if (adapterPosition == 5) {
+        if (adapterPosition == itemCount - 1) {
           dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
         }
       }
@@ -130,9 +135,14 @@ class HistoryForecastAdapter(
     }
   }
 
-  private fun dateShownInsteadDayOfWeek(stamp: Date): String? {
+  private fun dateShownInsteadDayOfWeek(stamp: Date): String {
     val format = SimpleDateFormat("dd MMM")
     return format.format(stamp)
+  }
+
+  private fun dayOfWeekShown(stamp: Date): String {
+    val formatWeekDay = SimpleDateFormat("EEE")
+    return formatWeekDay.format(stamp)
   }
 
   private fun getModuloColor(pos: Int): Int {
