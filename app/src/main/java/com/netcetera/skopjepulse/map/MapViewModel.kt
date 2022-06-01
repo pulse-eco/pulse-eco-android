@@ -30,6 +30,7 @@ import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation
 import org.kynosarges.tektosyne.geometry.Voronoi
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -291,7 +292,7 @@ class MapViewModel(
       val measurementsForType = sensorReadings.filter { dataDefinition.id == it.type }
       return@map GraphSeries(
           measurementsForType.map { Pair(it.stamp.time, it.value) },
-          sensor.description.toUpperCase(),
+          sensor.description.toUpperCase(Locale.getDefault()),
           colorIterator.nextInt())
     }.filter { it.measurements.isNotEmpty() }
     return GraphModel(graphBands, graphDataSet)

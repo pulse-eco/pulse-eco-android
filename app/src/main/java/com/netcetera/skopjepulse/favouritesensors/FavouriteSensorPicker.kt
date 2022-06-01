@@ -7,7 +7,8 @@ import com.netcetera.skopjepulse.base.model.Sensor
 import com.netcetera.skopjepulse.extensions.toast
 
 
-typealias ConfirmFavouriteSensors = (newSelectedFavourites: List<Sensor>, unselectedFavourites: List<Sensor>) -> Unit
+typealias ConfirmFavouriteSensors = (newSelectedFavourites: List<Sensor>,
+                                     unselectedFavourites: List<Sensor>) -> Unit
 
 fun Fragment.showFavouriteSensorsPicker(favouriteSensors: List<Sensor>, otherSensors: List<Sensor>,
                                         confirmFavouriteSensors: ConfirmFavouriteSensors) {

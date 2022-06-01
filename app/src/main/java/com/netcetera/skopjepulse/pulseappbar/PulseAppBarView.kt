@@ -5,6 +5,7 @@ import android.view.View
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
 import kotlinx.android.synthetic.main.pulse_app_bar.view.*
+import java.util.*
 
 class PulseAppBarView(private val pulseAppBarView: View) {
 
@@ -37,7 +38,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
   }
 
   fun displayCityName(city: City) {
-    displayCityName(city.displayName.toUpperCase())
+    displayCityName(city.displayName.toUpperCase(Locale.getDefault()))
   }
 
   private fun displayCityName(name: String) {

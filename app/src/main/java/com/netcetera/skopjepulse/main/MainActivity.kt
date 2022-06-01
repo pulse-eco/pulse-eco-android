@@ -14,8 +14,6 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
-import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastAdapter
-import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastDataModel
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.showConformationDialog
@@ -23,16 +21,11 @@ import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
 import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
-import kotlinx.android.synthetic.main.history_and_forecast.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
-import kotlinx.android.synthetic.main.weekly_average.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {

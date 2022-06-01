@@ -15,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.like.LikeButton
@@ -27,8 +26,8 @@ import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
-import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastAdapter
-import com.netcetera.skopjepulse.historyAndForecast.HistoryForecastDataModel
+import com.netcetera.skopjepulse.historyforecast.HistoryForecastAdapter
+import com.netcetera.skopjepulse.historyforecast.HistoryForecastDataModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
@@ -70,7 +69,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   private var pastWeekDataLabelForCityName: Boolean = true
   lateinit var historyForecastAdapter: HistoryForecastAdapter
 
-  val city: City by lazy { requireArguments().getParcelable<City>("city")!! }
+  val city: City by lazy { requireArguments().getParcelable("city")!! }
 
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
@@ -97,20 +96,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
     var overAllData: List<CityOverall>? = null
   }
 
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                            savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
-
-
     // Declarations and interactions
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
 
@@ -119,7 +112,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     /* Observe on what Measurement Type to show */
-    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
+    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
       viewModel.showDataForMeasurementType(it)
       sensorType = it
       progressBarForWeeklyAverageData.visibility = View.VISIBLE
@@ -129,85 +122,80 @@ class MapFragment : BaseFragment<MapViewModel>() {
         setValueForAverageDailyData(weeklyAverageDataModel)
         setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
       }
-    })
+    }
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(it)
       setValueForSevenDaysRange(it, overAllData?.last(), sensorType)
     }
 
-    viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner, Observer {
+    viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner) {
       pastWeekDataLabelForCityName = it
-    })
+    }
 
     viewModel.dataDefinitionDataPublicHelper.value?.let {
       dataDef = it
     }
-    viewModel.dataDefinitionDataPublicHelper.observe(viewLifecycleOwner, Observer {
+    viewModel.dataDefinitionDataPublicHelper.observe(viewLifecycleOwner) {
       dataDef = it
       displayUnit()
-    })
+    }
     // Data observers
     viewModel.overallData.observe(viewLifecycleOwner, overallBanner)
     map.getMapAsync { googleMap ->
       googleMap.applyPulseStyling(requireContext())
-      viewModel.preferences.observe(viewLifecycleOwner, Observer {
+      viewModel.preferences.observe(viewLifecycleOwner) {
         googleMap.pulseMapType = it.mapType
-      })
+      }
       googleMap.updateForCity(city)
       viewModel.mapMarkers.observe(
-        viewLifecycleOwner, Observer { mapMarkersController.showMarkers(it ?: emptyList()) })
+        viewLifecycleOwner
+      ) { mapMarkersController.showMarkers(it ?: emptyList()) }
 
       val previousPolygons: MutableList<Polygon> = ArrayList()
-      viewModel.mapPolygons.observe(viewLifecycleOwner, Observer { mapPolygons ->
+      viewModel.mapPolygons.observe(viewLifecycleOwner) { mapPolygons ->
         previousPolygons.forEach { it.remove() }
         previousPolygons.clear()
         mapPolygons.mapTo(previousPolygons) { googleMap.addPolygon(it) }
-      })
+      }
 
-
-      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner, GoogleMap.OnMapClickListener {
+      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner) {
         viewModel.deselectSensor()
-      })
+      }
     }
-    viewModel.bottomSheetPeek.observe(
-      viewLifecycleOwner, Observer { peekViewModel -> displayPeekContent(peekViewModel) })
-    viewModel.graphData.observe(viewLifecycleOwner, Observer { showGraphData(it) })
-    viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner, Observer {
+    viewModel.bottomSheetPeek.observe(viewLifecycleOwner) {
+        peekViewModel -> displayPeekContent(peekViewModel) }
+    viewModel.graphData.observe(viewLifecycleOwner) { showGraphData(it) }
+    viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner) {
       bottomSheetNoSensorsContainer.visibility = if (it == true) View.VISIBLE else View.GONE
-    })
-    viewModel.favouriteSensorsPicking.observe(
-      viewLifecycleOwner,
-      Observer { (favouriteSensors, otherSensors) ->
-        val editFavouriteSensorsClickListener = View.OnClickListener {
-          showFavouriteSensorsPicker(
-            favouriteSensors,
-            otherSensors
-          ) { newSelectedFavourites, unselectedFavourites ->
-            unselectedFavourites.forEach { unfavouritedSensor ->
-              viewModel.unFavouriteSensor(unfavouritedSensor)
-            }
-            newSelectedFavourites.forEach { newFavouritedSensor ->
-              viewModel.favouriteSensor(newFavouritedSensor)
-            }
+    }
+    viewModel.favouriteSensorsPicking.observe(viewLifecycleOwner) { (favouriteSensors, otherSensors) ->
+      val editFavouriteSensorsClickListener = View.OnClickListener {
+        showFavouriteSensorsPicker(favouriteSensors, otherSensors) {
+            newSelectedFavourites, unselectedFavourites ->
+          unselectedFavourites.forEach { sensor ->
+            viewModel.removeFromFavoriteSensors(sensor)
+          }
+          newSelectedFavourites.forEach { sensor ->
+            viewModel.addToFavoriteSensors(sensor)
           }
         }
+      }
 
-        selectSensorsButton.setOnClickListener(editFavouriteSensorsClickListener)
-        editSelectedSensors.setOnClickListener(editFavouriteSensorsClickListener)
-        sensorFavouriteButtonOverlay.setOnClickListener {
-          Tooltip.Builder(requireContext())
-            .anchor(sensorFavouriteButtonOverlay, follow = true)
-            .text(R.string.tooltip_maximum_sensors_reached)
-            .closePolicy(ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME)
-            .showDuration(TimeUnit.SECONDS.toMillis(1))
-            .arrow(false)
-            .overlay(false)
-            .create()
-            .show(bottomSheetSensorOverview, Tooltip.Gravity.LEFT)
-        }
-      })
-
+      selectSensorsButton.setOnClickListener(editFavouriteSensorsClickListener)
+      editSelectedSensors.setOnClickListener(editFavouriteSensorsClickListener)
+      sensorFavouriteButtonOverlay.setOnClickListener {
+        Tooltip.Builder(requireContext())
+          .anchor(sensorFavouriteButtonOverlay, follow = true)
+          .text(R.string.tooltip_maximum_sensors_reached)
+          .closePolicy(ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME)
+          .showDuration(TimeUnit.SECONDS.toMillis(1))
+          .arrow(false)
+          .overlay(false)
+          .create()
+          .show(bottomSheetSensorOverview, Tooltip.Gravity.LEFT)
+      }
+    }
 
     // Bottom sheet behavioral stuff
     val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
@@ -221,8 +209,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
           setValueForAverageDailyData(it)
         }
       }
-    )
-    )
+    ))
     peekPull.setOnClickListener { bottomSheetBehavior.toggle() }
     bottomSheetBackgroundOverlay.setOnClickListener { bottomSheetBehavior.toggle() }
 
@@ -253,7 +240,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun getBand(intValue: Int): Band? {
+  private fun getBand(intValue: Int): Band {
     return dataDef.findBandByValue(intValue)
   }
 
@@ -262,7 +249,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     if (pastWeekDataLabelForCityName) {
       tvUnit?.text = resources.getString(
         R.string.past_week_for_whole_city,
-        mainViewModel.activeCity.value?.name?.capitalize(),
+        mainViewModel.activeCity.value?.name?.capitalize(Locale.getDefault()),
         dataDef.unit
       )
     } else {
@@ -270,96 +257,61 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun setValueForSevenDaysRange(
-    dataModel: AverageWeeklyDataModel,
-    todayButtonData: CityOverall?,
-    mesType: MeasurementType
-  ) {
-    historyAndForecastRecyclerView.layoutManager =
-      LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-    historyForecastAdapter = HistoryForecastAdapter(
-      requireContext(),
-      getDateButtonsList(dataModel, todayButtonData, mesType)
-    )
+  private fun setValueForSevenDaysRange(dataModel: AverageWeeklyDataModel,
+                                        todayButtonData: CityOverall?, mesType: MeasurementType) {
+    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(context,
+      LinearLayoutManager.HORIZONTAL, false)
+    historyForecastAdapter = HistoryForecastAdapter(requireContext(),
+      getDateButtonsList(dataModel, todayButtonData, mesType))
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
-    historyAndForecastRecyclerView.scrollToPosition(getDateButtonsList(dataModel, todayButtonData,mesType).size - 1
-    )
+    historyAndForecastRecyclerView.scrollToPosition(
+      getDateButtonsList(dataModel, todayButtonData, mesType).size - 1)
   }
 
+  private fun getDateButtonsList(dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?,
+                                 mesType: MeasurementType): ArrayList<HistoryForecastDataModel> {
 
-  private fun getDateButtonsList(
-    dataModel: AverageWeeklyDataModel,
-    todayButtonData: CityOverall?,
-    mesType: MeasurementType
-  ): ArrayList<HistoryForecastDataModel> {
     val list = ArrayList<HistoryForecastDataModel>()
-
-    val band = getBand(dataModel.data[0].value.toInt())
-    list.add(
-      HistoryForecastDataModel(
-        dataModel.data[0],
-        band!!,
-        HistoryForecastAdapter.VIEW_TYPE_EXPLORE
-      )
-    )
-
-    for (i in 0 until dataModel.data.size) {
-      val band = getBand(dataModel.data[i].value.toInt())
-      list.add(
-        HistoryForecastDataModel(
-          dataModel.data[i],
-          band!!,
-          HistoryForecastAdapter.VIEW_TYPE_DATE
-        )
-      )
-    }
-
     val cal = Calendar.getInstance()
     val todayDate = cal.time
-    val sensorReadingFromOverall = SensorReading(todayButtonData?.cityName!!,todayDate,mesType, todayButtonData.values[sensorType]?.toDouble()!!)
+
+    list.add(HistoryForecastDataModel(null, null,
+      HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
+    for (i in 0 until dataModel.data.size) {
+      val band = getBand(dataModel.data[i].value.toInt())
+      list.add(HistoryForecastDataModel(dataModel.data[i], band,
+        HistoryForecastAdapter.VIEW_TYPE_DATE))
+    }
+    val sensorReadingFromOverall = SensorReading(todayButtonData?.cityName!!, todayDate, mesType,
+      todayButtonData.values[sensorType]?.toDouble()!!)
+
     val bandToday = getBand(sensorReadingFromOverall.value.toInt())
-    list.add(HistoryForecastDataModel(sensorReadingFromOverall, bandToday!!, HistoryForecastAdapter.VIEW_TYPE_DATE))
 
-
+    list.add(HistoryForecastDataModel(sensorReadingFromOverall, bandToday,
+      HistoryForecastAdapter.VIEW_TYPE_DATE))
     return list
   }
 
 
   private fun setValueForAverageDailyData(dataModel: AverageWeeklyDataModel?) {
-    val cal = Calendar.getInstance()
-    val listOfTextViewsForValues = listOf(
-      valueSevenDaysAgo,
-      valueSixDaysAgo,
-      valueFiveDaysAgo,
-      valueFourDaysAgo,
-      valueThreeDaysAgo,
-      valueTwoDaysAgo,
-      valueOneDayAgo
-    )
-    val listOColorViews = listOf(
-      colorSevenDaysAgo,
-      colorSixDaysAgo,
-      colorFiveDaysAgo,
-      colorFourDaysAgo,
-      colorThreeDaysAgo,
-      colorTwoDaysAgo,
-      colorOneDayAgo
-    )
+    val listWeeklyAverageValues = getBoundValues()
+    val listWeeklyAverageColors = getBoundColors()
+    setInitialDataToNotAvailable(listWeeklyAverageValues, listWeeklyAverageColors)
 
-    setInitialDataToNotAvailable()
-
-    val format = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT)
     dataModel?.data?.let { readings ->
       readings.forEach { sensorReading ->
+        val cal = Calendar.getInstance()
+        val format = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT,
+          Locale(getLanguage(context)))
         val dateOfSensorToString = format.format(sensorReading.stamp)
         cal.add(Calendar.DATE, -7)
         for (i in 0..6) {
           val iteratingDate = format.format(cal.time)
           if (dateOfSensorToString == iteratingDate) {
-            listOfTextViewsForValues[i].text = sensorReading.value.toInt().toString()
+            listWeeklyAverageValues[i].text = sensorReading.value.toInt().toString()
             val band = getBand(sensorReading.value.toInt())
-            listOfTextViewsForValues[i].setTextColor(band!!.legendColor)
-            listOColorViews[i].setBackgroundColor(band.legendColor)
+            listWeeklyAverageValues[i].setTextColor(band.legendColor)
+            listWeeklyAverageColors[i].setBackgroundColor(band.legendColor)
           }
           cal.add(Calendar.DATE, 1)
         }
@@ -371,51 +323,42 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private fun setDaysNames() {
     val cal = Calendar.getInstance()
-    val listOfDaysNames = listOf(
-      nameOneDayAgo,
-      nameTwoDaysAgo,
-      nameThreeDaysAgo,
-      nameFourDaysAgo,
-      nameFiveDaysAgo,
-      nameSixDaysAgo,
-      nameSevenDaysAgo
-    )
-    val language = context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)
-      ?.getString(Constants.LANGUAGE_CODE, "en")
-      ?: "en"
-    val formatter = SimpleDateFormat("EEE", Locale(language))
+    val listOfDaysNames = getBoundsDays()
+    val formatter = SimpleDateFormat("EEE", Locale(getLanguage(context)))
     listOfDaysNames.forEach {
       cal.add(Calendar.DATE, -1)
       it.text = formatter.format(cal.time)
     }
   }
 
-  private fun setInitialDataToNotAvailable() {
-    val listOfTextViewsForValues = listOf(
-      valueSevenDaysAgo,
-      valueSixDaysAgo,
-      valueFiveDaysAgo,
-      valueFourDaysAgo,
-      valueThreeDaysAgo,
-      valueTwoDaysAgo,
-      valueOneDayAgo
-    )
-    val listOfColorViews = listOf(
-      colorSevenDaysAgo,
-      colorSixDaysAgo,
-      colorFiveDaysAgo,
-      colorFourDaysAgo,
-      colorThreeDaysAgo,
-      colorTwoDaysAgo,
-      colorOneDayAgo
-    )
+  private fun getLanguage(context: Context?): String {
+    return context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)
+      ?.getString(Constants.LANGUAGE_CODE, "en") ?: "en"
+  }
 
-    listOfTextViewsForValues.forEach {
-      it.text = resources.getString(R.string.not_available)
-      it.setTextColor(Color.GRAY)
-    }
-    listOfColorViews.forEach {
-      it.setBackgroundColor(Color.GRAY)
+  private fun getBoundsDays(): List<TextView> {
+    return listOf(nameOneDayAgo, nameTwoDaysAgo, nameThreeDaysAgo, nameFourDaysAgo,
+      nameFiveDaysAgo, nameSixDaysAgo, nameSevenDaysAgo)
+  }
+
+  private fun getBoundColors(): List<View> {
+    return listOf(colorSevenDaysAgo, colorSixDaysAgo, colorFiveDaysAgo,
+      colorFourDaysAgo, colorThreeDaysAgo, colorTwoDaysAgo, colorOneDayAgo)
+  }
+
+  private fun getBoundValues(): List<TextView> {
+    return listOf(valueSevenDaysAgo, valueSixDaysAgo, valueFiveDaysAgo,
+      valueFourDaysAgo, valueThreeDaysAgo, valueTwoDaysAgo, valueOneDayAgo)
+  }
+
+  private fun setInitialDataToNotAvailable(
+    listWeeklyAverageValues: List<TextView>,
+    listWeeklyAverageColors: List<View>
+  ) {
+    for (i in listWeeklyAverageValues.indices) {
+      listWeeklyAverageValues[i].text = resources.getString(R.string.not_available)
+      listWeeklyAverageValues[i].setTextColor(Color.GRAY)
+      listWeeklyAverageColors[i].setBackgroundColor(Color.GRAY)
     }
   }
 
@@ -437,10 +380,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
       bottomSheetSensorOverview.visible()
       bottomSheetSensorOverview.sensorTitle.setCompoundDrawablesWithIntrinsicBounds(
         sensorOverviewModel.sensor.type.drawableRes ?: 0,
-        0, 0, 0
-      )
+        0, 0, 0)
       bottomSheetSensorOverview.sensorTitle.text =
-        sensorOverviewModel.sensor.description.toUpperCase()
+        sensorOverviewModel.sensor.description.toUpperCase(Locale.getDefault())
       bottomSheetSensorOverview.sensorMeasurement.text =
         sensorOverviewModel.measurement.roundToInt().toString()
       bottomSheetSensorOverview.sensorMeasurementUnit.text = sensorOverviewModel.measurementUnit
@@ -458,11 +400,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
         bottomSheetSensorOverview.sensorFavouriteButtonOverlay.gone()
         bottomSheetSensorOverview.sensorFavouriteButton.setOnLikeListener(object : OnLikeListener {
           override fun liked(likeButton: LikeButton?) {
-            viewModel.favouriteSensor(sensorOverviewModel.sensor)
+            viewModel.addToFavoriteSensors(sensorOverviewModel.sensor)
           }
 
           override fun unLiked(likeButton: LikeButton?) {
-            viewModel.unFavouriteSensor(sensorOverviewModel.sensor)
+            viewModel.removeFromFavoriteSensors(sensorOverviewModel.sensor)
           }
         })
       }

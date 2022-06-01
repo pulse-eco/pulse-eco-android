@@ -1,4 +1,4 @@
-package com.netcetera.skopjepulse.historyAndForecast
+package com.netcetera.skopjepulse.historyforecast
 
 
 import android.annotation.SuppressLint

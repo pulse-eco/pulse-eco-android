@@ -3,7 +3,6 @@ package com.netcetera.skopjepulse.base.model
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.util.Calendar
 import java.util.Date
 
 @Keep

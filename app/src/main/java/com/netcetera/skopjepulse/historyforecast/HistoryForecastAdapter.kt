@@ -1,4 +1,4 @@
-package com.netcetera.skopjepulse.historyAndForecast
+package com.netcetera.skopjepulse.historyforecast
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -35,7 +35,8 @@ class HistoryForecastAdapter(
         )
       }
       VIEW_TYPE_DATE -> {
-        DateViewHolder(LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
+        DateViewHolder(
+          LayoutInflater.from(context).inflate(R.layout.date_button, parent, false))
       }
       VIEW_TYPE_DATE_FORECAST -> {
         ForecastViewHolder(
@@ -77,119 +78,70 @@ class HistoryForecastAdapter(
   }
 
   inner class DateViewHolder(view: View) : BaseViewHolder<HistoryForecastDataModel>(view) {
-    private val dateButton = view.dateButton
-    private val bodyAmount = view.textViewAmount
-    private val titleDate = view.textDateButtonDay
-
+    private val cardView = view.cardViewDateButton
+    private val titleDayDate = view.textViewDayDate
+    private val bodyDayAmount = view.textViewPollutionAmount
     override fun bind() {
-      val value = items[adapterPosition].averageWeeklyDataModel.value.toInt().toString()
-      val stamp = items[adapterPosition].averageWeeklyDataModel.stamp
-      val cal = Calendar.getInstance()
-      val todayDate = cal.time
-      cal.add(Calendar.DATE, -7)
-      val dateOneWeekAgo = cal.time
-
-      when {
-        dateShownInsteadDayOfWeek(stamp) <= dateShownInsteadDayOfWeek(dateOneWeekAgo) -> {
-          titleDate.text = dateShownInsteadDayOfWeek(stamp)
-        }
-        dateShownInsteadDayOfWeek(stamp) == dateShownInsteadDayOfWeek(todayDate) -> {
-          titleDate.text = context.getText(R.string.today)
-        }
-        else -> {
-          titleDate.text = dayOfWeekShown(stamp)
-        }
-      }
-
+      val timeStamp = items[adapterPosition].averageWeeklyDataModel?.stamp
+      val value = items[adapterPosition].averageWeeklyDataModel?.value?.toInt().toString()
       val color = items[adapterPosition].sensorValueColor
-      bodyAmount.setBackgroundColor(color.legendColor)
-      bodyAmount.text = value
 
-      dateButton.setOnClickListener {
+      titleDayDate.text = formatDayTitle(context, timeStamp)
+      bodyDayAmount.text = value
+      color?.let { bodyDayAmount.setBackgroundColor(it.legendColor) }
+
+      cardView.setOnClickListener {
         selectedPosition = adapterPosition
         notifyDataSetChanged()
       }
       if (selectedPosition > 0) {
         if (selectedPosition == adapterPosition) {
-          dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
+          cardView.setBackgroundResource(R.drawable.date_button_clicked_shape)
         } else {
-          dateButton.setBackgroundResource(R.drawable.date_button_unclicked_shape)
+          cardView.setBackgroundResource(R.drawable.date_button_unclicked_shape)
         }
       } else {
         if (adapterPosition == itemCount - 1) {
-          dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
+          cardView.setBackgroundResource(R.drawable.date_button_clicked_shape)
         }
+      }
+    }
+  }
+
+  fun formatDayTitle(context: Context, timeStamp: Date?) : String {
+    val cal = Calendar.getInstance()
+    val todayDate = cal.time
+    cal.add(Calendar.DATE, -7)
+    val dateOneWeekAgo = cal.time
+
+    when {
+      dateShownInsteadDayOfWeek(timeStamp) <= dateShownInsteadDayOfWeek(dateOneWeekAgo) -> {
+        return dateShownInsteadDayOfWeek(timeStamp)
+      }
+      dateShownInsteadDayOfWeek(timeStamp) == dateShownInsteadDayOfWeek(todayDate) -> {
+        return context.getText(R.string.today).toString()
+      }
+      else -> {
+        return dayOfWeekShown(timeStamp)
       }
     }
   }
 
   inner class ForecastViewHolder(view: View) : BaseViewHolder<HistoryForecastDataModel>(view) {
-    private val dateButton = view.dateButton
-    private val bodyAmount = view.textViewAmount
-    private val titleDate = view.textDateButtonDay
+    private val dateButton = view.cardViewDateButton
     override fun bind() {
-      titleDate.text = getDayName(adapterPosition)
-      bodyAmount.text = getPollutionAmount(adapterPosition).toString()
-      bodyAmount.setBackgroundResource(getModuloColor(adapterPosition))
       dateButton.visibility = View.GONE
     }
   }
 
-  private fun dateShownInsteadDayOfWeek(stamp: Date): String {
+  private fun dateShownInsteadDayOfWeek(stamp: Date?): String {
     val format = SimpleDateFormat("dd MMM")
     return format.format(stamp)
   }
 
-  private fun dayOfWeekShown(stamp: Date): String {
+  private fun dayOfWeekShown(stamp: Date?): String {
     val formatWeekDay = SimpleDateFormat("EEE")
     return formatWeekDay.format(stamp)
-  }
-
-  private fun getModuloColor(pos: Int): Int {
-    return when {
-      pos % 3 == 0 -> {
-        R.drawable.green_shape_with_radius
-      }
-      pos % 3 == 1 -> {
-        R.drawable.orange_shape_with_radius
-      }
-      else -> {
-        R.drawable.red_shape_radius
-      }
-    }
-  }
-
-  private fun getPollutionAmount(pos: Int): Int {
-    return pos + 1 * 3
-  }
-
-  private fun getDayName(pos: Int): String {
-    when (pos) {
-      1 -> {
-        return context.getString(R.string.monday_short)
-      }
-      2 -> {
-        return context.getString(R.string.tuesday_short)
-      }
-      3 -> {
-        return context.getString(R.string.wednesday_short)
-      }
-      4 -> {
-        return context.getString(R.string.thursday_short)
-      }
-      5 -> {
-        return context.getString(R.string.today)
-      }
-      6 -> {
-        return context.getString(R.string.saturday_short)
-      }
-      7 -> {
-        return context.getString(R.string.sunday_short)
-      }
-      else -> {
-        return context.getString(R.string.unknown)
-      }
-    }
   }
 
 }

@@ -15,11 +15,13 @@ import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
+import org.koin.core.component.KoinApiExtension
 
 /**
  * The main [androidx.lifecycle.ViewModel] used in [MainActivity] and shared across fragments.
  * Responsible for manging on what [City] and [MeasurementType] are shown in the fragments.
  */
+@KoinApiExtension
 class MainViewModel(
   private val pulseRepository: PulseRepository,
   cityStorage: PreferredCityStorage,
