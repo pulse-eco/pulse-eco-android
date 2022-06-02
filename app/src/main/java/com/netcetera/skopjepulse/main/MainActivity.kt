@@ -55,12 +55,6 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
-//    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//
-//    val historyForecastAdapter = HistoryForecastAdapter(this, getButtonsList())
-//    historyAndForecastRecyclerView.adapter = historyForecastAdapter
-//    historyAndForecastRecyclerView.scrollToPosition(5)
-
 
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(

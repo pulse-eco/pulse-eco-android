@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.api.CityPulseApiService
-import com.netcetera.skopjepulse.base.model.CityOverall
 import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.model.Sensor
 import com.netcetera.skopjepulse.base.model.SensorReading
@@ -156,21 +155,6 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
 
     return result
   }
-
-//  fun getCityOverallData(city: String):LiveData<Resource<CityOverall>> {
-//    val result = MutableLiveData<Resource<CityOverall>>()
-//    apiService.getCityOverall(city).enqueue(object: Callback<CityOverall> {
-//      override fun onFailure(call: Call<CityOverall>, t: Throwable) {
-//        result.postValue(Resource.error(null, t))
-//      }
-//      override fun onResponse(call: Call<CityOverall>, response: Response<CityOverall>) {
-//        if (response.isSuccessful && response.body() != null) {
-//          result.postValue(Resource.success(response.body()!!))
-//        }
-//      }
-//    })
-//    return result
-//  }
 }
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)

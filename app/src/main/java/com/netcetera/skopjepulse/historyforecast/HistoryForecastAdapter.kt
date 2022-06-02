@@ -114,15 +114,15 @@ class HistoryForecastAdapter(
     cal.add(Calendar.DATE, -7)
     val dateOneWeekAgo = cal.time
 
-    when {
-      dateShownInsteadDayOfWeek(timeStamp) <= dateShownInsteadDayOfWeek(dateOneWeekAgo) -> {
-        return dateShownInsteadDayOfWeek(timeStamp)
+    return when {
+      yearMonthDayDateFormat(timeStamp) <= yearMonthDayDateFormat(dateOneWeekAgo) -> {
+        dateShownInsteadDayOfWeek(timeStamp)
       }
       dateShownInsteadDayOfWeek(timeStamp) == dateShownInsteadDayOfWeek(todayDate) -> {
-        return context.getText(R.string.today).toString()
+        context.getText(R.string.today).toString()
       }
       else -> {
-        return dayOfWeekShown(timeStamp)
+        dayOfWeekShown(timeStamp)
       }
     }
   }
@@ -142,6 +142,11 @@ class HistoryForecastAdapter(
   private fun dayOfWeekShown(stamp: Date?): String {
     val formatWeekDay = SimpleDateFormat("EEE")
     return formatWeekDay.format(stamp)
+  }
+
+  private fun yearMonthDayDateFormat(stamp: Date?): String{
+    val format = SimpleDateFormat("yyyy-MM-dd")
+    return format.format(stamp)
   }
 
 }

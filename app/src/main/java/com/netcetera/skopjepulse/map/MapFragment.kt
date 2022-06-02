@@ -277,7 +277,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     list.add(HistoryForecastDataModel(null, null,
       HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
-    for (i in 0 until dataModel.data.size) {
+    for (i in 1 until dataModel.data.size) {
       val band = getBand(dataModel.data[i].value.toInt())
       list.add(HistoryForecastDataModel(dataModel.data[i], band,
         HistoryForecastAdapter.VIEW_TYPE_DATE))
