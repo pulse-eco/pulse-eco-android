@@ -127,6 +127,25 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     })
   }
 
+  fun getSensorValue(selectedMeasurementType: MeasurementType?,fromDate: String, toDate: String) : LiveData<Resource<List<SensorReading>>> {
+    val result = MutableLiveData<Resource<List<SensorReading>>> ()
+
+    apiService.getSensorValuesForValueType(selectedMeasurementType!!,fromDate,toDate).enqueue(object : Callback<List<SensorReading>> {
+
+      override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
+        result.postValue(Resource.error(null, t))
+      }
+
+      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
+        if (response.isSuccessful && response.body() != null) {
+          result.postValue(Resource.success(response.body()!!))
+        }
+      }
+    })
+
+    return result
+  }
+
   fun getAverageWeeklyData(sensorId: String?, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>>()
     val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY

@@ -24,7 +24,10 @@ class HistoryForecastAdapter(
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2
     const val VIEW_TYPE_DATE_FORECAST = 3
+    lateinit var TIME_STAMP: Date
   }
+  var onItemClick: ((Date) -> Unit)? = null
+
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
     val context = parent.context
@@ -83,16 +86,27 @@ class HistoryForecastAdapter(
     private val bodyDayAmount = view.textViewPollutionAmount
     override fun bind() {
       val timeStamp = items[adapterPosition].averageWeeklyDataModel?.stamp
+      val valueDouble = items[adapterPosition].averageWeeklyDataModel?.value
       val value = items[adapterPosition].averageWeeklyDataModel?.value?.toInt().toString()
       val color = items[adapterPosition].sensorValueColor
 
       titleDayDate.text = formatDayTitle(context, timeStamp)
-      bodyDayAmount.text = value
-      color?.let { bodyDayAmount.setBackgroundColor(it.legendColor) }
-
+      if(valueDouble == -1.0)
+      {
+        bodyDayAmount.text = "N\\A"
+        bodyDayAmount.setBackgroundResource(R.color.graph_grid)
+        cardView.alpha = 0.7F
+      }
+      else {
+        bodyDayAmount.text = value
+        color?.let { bodyDayAmount.setBackgroundColor(it.legendColor) }
+        cardView.alpha = 1F
+      }
       cardView.setOnClickListener {
         selectedPosition = adapterPosition
         notifyDataSetChanged()
+        TIME_STAMP = timeStamp!!
+        onItemClick?.invoke(timeStamp)
       }
       if (selectedPosition > 0) {
         if (selectedPosition == adapterPosition) {

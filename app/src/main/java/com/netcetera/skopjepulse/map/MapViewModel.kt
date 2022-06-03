@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
+import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
 import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
@@ -73,7 +74,6 @@ class MapViewModel(
     get() = _isSpecificSensorSelected
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
-//  var cityOverallData: LiveData<CityOverallDataModel>
 
 
   init {
@@ -85,14 +85,13 @@ class MapViewModel(
     val currentReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.currentReadings) { current ->
         Pair(dataDefinition,
-            current.data.orEmpty().mapNotNull { currentSensorReading ->
-              currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
-            })
+          current.data.orEmpty().mapNotNull { currentSensorReading ->
+            currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
+          })
       }
     }
 
-    val calculatedMapMarkers = Transformations.map(
-        currentReadings) { (dataDefinition, measurements) ->
+    val calculatedMapMarkers = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
       measurements.map { (sensor, reading) ->
         val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
         MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
@@ -183,6 +182,8 @@ class MapViewModel(
     }
 
 
+
+
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {
         return@switchMap Transformations.map(hasFavouriteSensors) { it.not() }
@@ -232,8 +233,8 @@ class MapViewModel(
     mapPolygons = Transformations.distinctUntilChanged(
         preferences.filter(calculatedMapPolygons, MutableLiveData(emptyList())) {
           it.dataVisualization.contains(VORONOI)
-        }
-    )
+        })
+
 
     loadingResources.addResource(cityPulseRepository.currentReadings.toLoadingLiveDataResource())
     loadingResources.addResource(cityPulseRepository.historicalReadings.toLoadingLiveDataResource())
@@ -244,6 +245,10 @@ class MapViewModel(
   override fun refreshData(forceRefresh: Boolean) {
     super.refreshData(forceRefresh)
     cityPulseRepository.refreshCurrent(forceRefresh)
+  }
+
+  fun getSensorValues(selectedMeasurementType: MeasurementType?,fromDate: String, toDate: String) : LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getSensorValue(selectedMeasurementType,fromDate, toDate)
   }
 
   /**

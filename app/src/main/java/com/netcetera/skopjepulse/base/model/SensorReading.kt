@@ -14,6 +14,8 @@ data class SensorReading(
   val stamp: Date,
   @Json(name = "type")
   val type: MeasurementType,
+  @Json(name = "position")
+  val position: String,
   @Json(name = "value")
   val value: Double
 )
