@@ -35,6 +35,7 @@ import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
 import com.netcetera.skopjepulse.map.model.BottomSheetPeekViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
+import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.OverallBannerView
 import com.netcetera.skopjepulse.map.preferences.MapPreferencesPopup
 import com.netcetera.skopjepulse.showDisclaimerDialog
@@ -50,6 +51,7 @@ import kotlinx.android.synthetic.main.history_and_forecast.*
 import kotlinx.android.synthetic.main.map_fragment_layout.*
 import kotlinx.android.synthetic.main.map_loading_indicator.*
 import kotlinx.android.synthetic.main.overall_banner_layout.*
+import kotlinx.android.synthetic.main.overall_banner_layout.view.*
 import kotlinx.android.synthetic.main.weekly_average.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -70,9 +72,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   private var pastWeekDataLabelForCityName: Boolean = true
   lateinit var historyForecastAdapter: HistoryForecastAdapter
-  lateinit var sensorValue: List<SensorReading>
 
   val city: City by lazy { requireArguments().getParcelable("city")!! }
+
 
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
@@ -85,6 +87,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     GraphView(sensorMeasurementsGraph)
   }
   private lateinit var mapMarkersController: MapMarkersController
+  private lateinit var mapMarkersControllerSensorReading: MapMarkersController
 
   private val overallBanner by lazy {
     OverallBannerView(overallBannerView)
@@ -96,7 +99,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         "city" to city
       )
     }
-
     var overAllData: List<CityOverall>? = null
   }
 
@@ -110,17 +112,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
-
     // Declarations and interactions
-    mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
-
+    mapMarkersController = MapMarkersController(map) {viewModel.selectSensor(it) }
 
     mainViewModel.overall(this.city.name).observe(viewLifecycleOwner, object : Observer<Resource<List<CityOverall>>> {
         override fun onChanged(t: Resource<List<CityOverall>>?) {
           overAllData = t?.data
         }
       })
-
 
     /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
@@ -129,28 +128,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
       progressBarForWeeklyAverageData.visibility = View.VISIBLE
       weeklyAverageView.visibility = View.GONE
       setDaysNames()
+
+      viewModel.overallBannerData.observe(viewLifecycleOwner, overallBanner)
+      setMapValuesToday()
+
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
         setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
-      }
-      val date = Calendar.getInstance()
-      val date2 = Calendar.getInstance()
-      date2.add(Calendar.DATE, -3)
-      date.add(Calendar.DATE,-4)
-      val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
-      val fromDate = formatter.format(date.time)
-      val toDate = formatter.format(date2.time)
-//      val fromDate2 = fromDate.substring(0,10)  + "T00:00:01%2b02:00"
-//      Log.d("Form date", fromDate2 )
-//      val toDate = wholeDate.substring(0,10)  + "T23:59:59%2b02:00"
-
-
-      viewModel.getSensorValues(sensorType,fromDate, toDate).observe(viewLifecycleOwner)
-      {
-        sensorValue = it.data !!
-        Log.d("Sensor type",sensorType)
-        Log.d("Sensor",sensorValue.toString())
-
       }
     }
 
@@ -172,34 +156,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
 
-    // Data observers
-    viewModel.overallData.observe(viewLifecycleOwner, overallBanner)
-    map.getMapAsync { googleMap ->
-      googleMap.applyPulseStyling(requireContext())
-      viewModel.preferences.observe(viewLifecycleOwner) {
-        googleMap.pulseMapType = it.mapType
-      }
-      googleMap.updateForCity(city)
-      viewModel.mapMarkers.observe(
-        viewLifecycleOwner
-      ) { mapMarkersController.showMarkers(it ?: emptyList()) }
-
-      val previousPolygons: MutableList<Polygon> = ArrayList()
-      viewModel.mapPolygons.observe(viewLifecycleOwner) { mapPolygons ->
-        previousPolygons.forEach { it.remove() }
-        previousPolygons.clear()
-        mapPolygons.mapTo(previousPolygons) { googleMap.addPolygon(it) }
-      }
-
-
-      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner) {
-        viewModel.deselectSensor()
-      }
-    }
     viewModel.bottomSheetPeek.observe(viewLifecycleOwner) { peekViewModel ->
-      displayPeekContent(
-        peekViewModel
-      )
+      displayPeekContent(peekViewModel)
     }
     viewModel.graphData.observe(viewLifecycleOwner) { showGraphData(it) }
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner) {
@@ -219,7 +177,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
           }
         }
       }
-
       selectSensorsButton.setOnClickListener(editFavouriteSensorsClickListener)
       editSelectedSensors.setOnClickListener(editFavouriteSensorsClickListener)
       sensorFavouriteButtonOverlay.setOnClickListener {
@@ -235,6 +192,20 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }
     }
 
+    // Data observers
+    viewModel.overallBannerData.observe(viewLifecycleOwner, overallBanner)
+    map.getMapAsync { googleMap ->
+      googleMap.clear()
+      googleMap.applyPulseStyling(requireContext())
+      viewModel.preferences.observe(viewLifecycleOwner) {
+        googleMap.pulseMapType = it.mapType
+      }
+      googleMap.updateForCity(city)
+      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner) {
+        viewModel.deselectSensor()
+      }
+    }
+
     // Bottom sheet behavioral stuff
     val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
     bottomSheetBehavior.onStateChange(arrayOf(
@@ -246,10 +217,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
         viewModel.averageWeeklyData.value?.let {
           setValueForAverageDailyData(it)
         }
-      }
-    ))
+      }))
     peekPull.setOnClickListener { bottomSheetBehavior.toggle() }
-    bottomSheetBackgroundOverlay.setOnClickListener { bottomSheetBehavior.toggle() }
+    bottomSheetBackgroundOverlay.setOnClickListener { bottomSheetBehavior.toggle()
+    }
 
     // Pulse loading
     viewModel.showLoading.observe(viewLifecycleOwner, loadingIndicator)
@@ -257,10 +228,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
     mapLayersPick.setOnClickListener { anchor ->
       mapPreferencesPopup.toggleShown(anchor)
     }
+
     viewModel.preferences.observe(viewLifecycleOwner, mapPreferencesPopup)
+
     mapPreferencesPopup.onPreferenceChange {
       viewModel.updatePreference(it)
     }
+
     viewModel.selectedSensor.observe(viewLifecycleOwner, Observer {
       setValueForAverageDailyData(viewModel.averageWeeklyData.value)
       setDaysNames()
@@ -295,40 +269,91 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun setValueForSevenDaysRange(
-    dataModel: AverageWeeklyDataModel,
-    todayButtonData: CityOverall?,
-    mesType: MeasurementType
-  ) {
+  private fun setValuesForOverallBannerData(title: String,backgroundColor: Int,value:String,valueUnit:String,description:String,legend: Legend){
+    overallBannerView.title.text = title
+    overallBannerView.setCardBackgroundColor(backgroundColor)
+    overallBannerView.value.text = value
+    overallBannerView.valueUnit.text = valueUnit
+    overallBannerView.description.text = description
+    overallBannerView.legendView.legend = legend
+  }
 
-    historyAndForecastRecyclerView.layoutManager =
-      LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-    historyForecastAdapter = HistoryForecastAdapter(
-      requireContext(),
-      getDateButtonsList(dataModel, todayButtonData, mesType)
-    )
+  private fun setMapValuesSensorValuesDaysRange() {
+    map.getMapAsync { googleMap ->
+      googleMap.clear()
+      googleMap.applyPulseStyling(requireContext())
+      viewModel.preferences.observe(viewLifecycleOwner) {
+        googleMap.pulseMapType = it.mapType
+      }
+      viewModel.mapMarkersSensorReadingDaysRange.observe(viewLifecycleOwner){
+        mapMarkersController.showMarkers(it?: emptyList())
+      }
+
+      val previousPolygons: MutableList<Polygon> = ArrayList()
+      viewModel.mapPolygonsSensorReadingDaysRange.observe(viewLifecycleOwner) { mapPolygons ->
+        previousPolygons.forEach { it.remove() }
+        previousPolygons.clear()
+        mapPolygons.mapTo(previousPolygons) { googleMap.addPolygon(it) }
+      }
+
+      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner) {
+        viewModel.deselectSensor()
+      }
+    }
+  }
+
+  private fun setMapValuesToday() {
+    map.getMapAsync { googleMap ->
+      googleMap.clear()
+      googleMap.applyPulseStyling(requireContext())
+      viewModel.preferences.observe(viewLifecycleOwner) {
+        googleMap.pulseMapType = it.mapType
+      }
+      viewModel.mapMarkers.observe(viewLifecycleOwner)
+      { mapMarkersController.showMarkers(it ?: emptyList()) }
+
+      val previousPolygons: MutableList<Polygon> = ArrayList()
+      viewModel.mapPolygons.observe(viewLifecycleOwner) { mapPolygons ->
+        previousPolygons.forEach { it.remove() }
+        previousPolygons.clear()
+        mapPolygons.mapTo(previousPolygons) { googleMap.addPolygon(it) }
+      }
+      googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner) {
+        viewModel.deselectSensor()
+      }
+    }
+  }
+
+  private fun setValueForSevenDaysRange(dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?, mesType: MeasurementType) {
+
+    historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    historyForecastAdapter = HistoryForecastAdapter(requireContext(), getDateButtonsList(dataModel, todayButtonData, mesType))
     historyAndForecastRecyclerView.adapter = historyForecastAdapter
-    historyAndForecastRecyclerView.scrollToPosition(
-      getDateButtonsList(
-        dataModel,
-        todayButtonData,
-        mesType
-      ).size - 1
-    )
+    historyAndForecastRecyclerView.scrollToPosition(getDateButtonsList(dataModel,todayButtonData,mesType).size - 1)
+    val today = Calendar.getInstance().time
+    val formatter = SimpleDateFormat("yyyy-MM-dd")
 
     historyForecastAdapter.onItemClick = {
-      val dateForClickedItem = HistoryForecastAdapter.TIME_STAMP
-      Log.d("Clicked item date", dateForClickedItem.toString())
+      viewModel.getSensorValues(mesType).observe(viewLifecycleOwner) {
 
+        val bannerData =  viewModel.createAverageOverallBannerData(HistoryForecastAdapter.selectedSensorReading!!,dataDef)
+        setValuesForOverallBannerData(bannerData.title,bannerData.backgroundColor, bannerData.value,bannerData.valueUnit,bannerData.description,bannerData.legend)
+
+        setMapValuesSensorValuesDaysRange()
+
+        if (formatter.format(HistoryForecastAdapter.TIME_STAMP) == formatter.format(today)) {
+          val bannerData =  viewModel.createAverageOverallBannerData(HistoryForecastAdapter.selectedSensorReading!!,dataDef)
+          setValuesForOverallBannerData(bannerData.title,bannerData.backgroundColor, bannerData.value,bannerData.valueUnit,bannerData.description,bannerData.legend)
+
+          setMapValuesToday()
+        }
+      }
     }
 
   }
 
 
-  private fun getDateButtonsList(
-    dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?,
-    mesType: MeasurementType
-  ): ArrayList<HistoryForecastDataModel> {
+  private fun getDateButtonsList(dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?, mesType: MeasurementType): ArrayList<HistoryForecastDataModel> {
 
     val list = ArrayList<HistoryForecastDataModel>()
     val cal = Calendar.getInstance()
@@ -345,7 +370,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       data = todayButtonData.values[sensorType]?.toDouble() !!
     }
 
-    val sensorReadingFromOverall = todayButtonData?.values?.get(sensorType)?.let{
+    todayButtonData?.values?.get(sensorType)?.let{
       val sensorReadingFromOverall = SensorReading(todayButtonData.cityName, todayDate, mesType, "", data)
       val bandToday = getBand(sensorReadingFromOverall.value.toInt())
       list.add(HistoryForecastDataModel(sensorReadingFromOverall, bandToday, HistoryForecastAdapter.VIEW_TYPE_DATE))
@@ -507,8 +532,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
               bottomSheetBehavior.peekHeight = it.animatedValue as Int
               googleMap.setPadding(0, 0, 0, it.animatedValue as Int)
               if (crowdsourcingDisclaimerText != null) {
-                val params =
-                  crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
+                val params = crowdsourcingDisclaimerText.layoutParams as ConstraintLayout.LayoutParams
                 params.setMargins(0, 0, 8, it.animatedValue as Int + 8)
                 crowdsourcingDisclaimerText.layoutParams = params
                 crowdsourcingDisclaimerText.setOnClickListener { view ->

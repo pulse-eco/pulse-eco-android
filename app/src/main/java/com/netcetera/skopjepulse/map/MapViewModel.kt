@@ -52,8 +52,9 @@ class MapViewModel(
   val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
   var dataDefinitionDataPublicHelper :LiveData<DataDefinition>
 
-  val overallData: LiveData<OverallBannerData>
+  val overallBannerData: LiveData<OverallBannerData>
   val mapMarkers: LiveData<List<MapMarkerModel>>
+  val mapMarkersSensorReadingDaysRange: LiveData<List<MapMarkerModel>>
   val graphData: LiveData<GraphModel>
   /**
    * True/false if there are any favourited sensors by the user for the current city.
@@ -67,6 +68,7 @@ class MapViewModel(
   val favouriteSensorsPicking: LiveData<Pair<Sensors, Sensors>>
   val preferences = mapPreferencesStorage.preferences
   val mapPolygons: LiveData<List<PolygonOptions>>
+  val  mapPolygonsSensorReadingDaysRange: LiveData<List<PolygonOptions>>
   val bottomSheetPeek: LiveData<BottomSheetPeekViewModel>
 
   private val _isSpecificSensorSelected = MutableLiveData<Boolean>()
@@ -91,28 +93,53 @@ class MapViewModel(
       }
     }
 
-    val calculatedMapMarkers = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
-      measurements.map { (sensor, reading) ->
-        val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
-        MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
+    val sensorReadingsDaysRange = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+      Transformations.map(cityPulseRepository.sensorReadings) { current ->
+        Pair(dataDefinition,
+          current.data.orEmpty().mapNotNull { currentSensorReading ->
+            currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
+          })
       }
     }
-    mapMarkers = Transformations.distinctUntilChanged(
-        preferences.filter(calculatedMapMarkers, MutableLiveData(emptyList())) {
-          it.dataVisualization.contains(MARKERS)
+    val calculatedMapMarkersSensorReadingsDaysRange = Transformations.map(sensorReadingsDaysRange) { (dataDefinition, measurements) ->
+        measurements.map { (sensor, reading) ->
+          val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
+          MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
         }
+      }
+
+    val calculatedMapMarkers = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
+        measurements.map { (sensor, reading) ->
+          val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
+          MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
+        }
+      }
+
+    mapMarkersSensorReadingDaysRange = Transformations.distinctUntilChanged(
+      preferences.filter(calculatedMapMarkersSensorReadingsDaysRange, MutableLiveData(emptyList())) {
+        it.dataVisualization.contains(MARKERS)
+      }
     )
 
-    overallData = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
-      measurements.map { (_, reading) -> reading.value }.average().takeUnless { it.isNaN() }?.roundToInt()?.let {
+    mapMarkers = Transformations.distinctUntilChanged(
+      preferences.filter(calculatedMapMarkers, MutableLiveData(emptyList())) {
+        it.dataVisualization.contains(MARKERS)
+      }
+    )
+
+
+    overallBannerData = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
+      measurements.map { (_, reading) -> reading.value }.average().takeUnless { it.isNaN() }
+        ?.roundToInt()?.let {
         val valueBand = dataDefinition.findBandByValue(it)
         OverallBannerData(
-            context.getString(string.average),
-            it.toString(),
-            dataDefinition.unit,
-            valueBand.grade,
-            valueBand.legendColor,
-            calculateLegend(dataDefinition, it))
+          context.getString(string.average),
+          it.toString(),
+          dataDefinition.unit,
+          valueBand.grade,
+          valueBand.legendColor,
+          calculateLegend(dataDefinition, it)
+        )
       }
     }
 
@@ -182,8 +209,6 @@ class MapViewModel(
     }
 
 
-
-
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {
         return@switchMap Transformations.map(hasFavouriteSensors) { it.not() }
@@ -197,13 +222,11 @@ class MapViewModel(
       Pair(favourite.toList(), all.data?.filter { !favourite.contains(it) } ?: emptyList())
     }
 
-    val calculatedMapPolygons = Transformations.map(
-        currentReadings) { (dataDefinition, measurements) ->
+    val calculatedMapPolygons = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
       val dataToVisualise = measurements.map { (sensor, sensorReadings) ->
         val measurement = sensorReadings.value.roundToInt()
         sensor to measurement
       }
-
       val sensorPoints = dataToVisualise.map { (sensor, _) ->
         PointD(sensor.position!!.latitude, sensor.position.longitude)
       }
@@ -230,10 +253,47 @@ class MapViewModel(
         }
       }
     }
+
+    val calculatedMapPolygonsSensorReadingDaysRange = Transformations.map(sensorReadingsDaysRange) { (dataDefinition, measurements) ->
+      val dataToVisualise = measurements.map { (sensor, sensorReadings) ->
+        val measurement = sensorReadings.value.roundToInt()
+        sensor to measurement
+      }
+      val sensorPoints = dataToVisualise.map { (sensor, _) ->
+        PointD(sensor.position!!.latitude, sensor.position.longitude)
+      }
+      if (sensorPoints.isEmpty()) {
+        return@map emptyList<PolygonOptions>()
+      }
+      val voronoiPoints = sensorPoints.union(
+        city.cityBorderPoints.map { PointD(it.latitude, it.longitude) })
+      val voronoiResult = Voronoi.findAll(voronoiPoints.toTypedArray(), city.voronoiCityBounds)
+
+      val dataToDraw = dataToVisualise.map { (sensor, measurement) ->
+        voronoiResult.voronoiRegions().first { region ->
+          GeoUtils.pointInPolygon(PointD(sensor.position!!.latitude, sensor.position.longitude),
+            region) == PolygonLocation.INSIDE
+        } to measurement
+      }
+
+      return@map dataToDraw.map { (region, measurement) ->
+        PolygonOptions().apply {
+          addAll(region.map { LatLng(it.x, it.y) })
+          strokeWidth(0f)
+          fillColor(dataDefinition.interpolateColor(measurement).withAlpha(146))
+        }
+      }
+    }
+
     mapPolygons = Transformations.distinctUntilChanged(
         preferences.filter(calculatedMapPolygons, MutableLiveData(emptyList())) {
           it.dataVisualization.contains(VORONOI)
         })
+
+    mapPolygonsSensorReadingDaysRange =  Transformations.distinctUntilChanged(
+      preferences.filter(calculatedMapPolygonsSensorReadingDaysRange, MutableLiveData(emptyList())) {
+        it.dataVisualization.contains(VORONOI)
+      })
 
 
     loadingResources.addResource(cityPulseRepository.currentReadings.toLoadingLiveDataResource())
@@ -247,8 +307,8 @@ class MapViewModel(
     cityPulseRepository.refreshCurrent(forceRefresh)
   }
 
-  fun getSensorValues(selectedMeasurementType: MeasurementType?,fromDate: String, toDate: String) : LiveData<Resource<List<SensorReading>>>{
-    return cityPulseRepository.getSensorValue(selectedMeasurementType,fromDate, toDate)
+  fun getSensorValues(selectedMeasurementType: MeasurementType?) :LiveData<Resource<List<SensorReading>>> {
+    return cityPulseRepository.getSensorValue(selectedMeasurementType)
   }
 
   /**
@@ -303,6 +363,20 @@ class MapViewModel(
     return GraphModel(graphBands, graphDataSet)
   }
 
+  fun createAverageOverallBannerData(sensorReading: SensorReading, dataDefinitionData: DataDefinition): OverallBannerData {
+
+    val sensorValueInt = sensorReading.value.toInt()
+    val valueBand = dataDefinitionData.findBandByValue(sensorValueInt)
+    return OverallBannerData(
+      context.getString(string.average),
+      sensorValueInt.toString(),
+      dataDefinitionData.unit,
+      valueBand.grade,
+      valueBand.legendColor,
+      calculateLegend(dataDefinitionData, sensorValueInt)
+    )
+  }
+
   private fun calculateLegend(dataDefinition: DataDefinition, value: Int): Legend {
     val legendMin = dataDefinition.legendMin
     val legendMax = dataDefinition.legendMax
@@ -321,9 +395,6 @@ class MapViewModel(
           labelStart, labelEnd
       )
     }
-    return Legend(
-        currentLegendValue,
-        legendBands
-    )
+    return Legend(currentLegendValue, legendBands)
   }
 }

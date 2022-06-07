@@ -9,6 +9,7 @@ import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.model.Sensor
 import com.netcetera.skopjepulse.base.model.SensorReading
 import com.netcetera.skopjepulse.extensions.resourceCombine
+import com.netcetera.skopjepulse.historyforecast.HistoryForecastAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,15 +23,21 @@ import java.util.*
 class CityPulseRepository(private val apiService : CityPulseApiService) : BasePulseRepository() {
 
   private val _sensors = MutableLiveData<Resource<Sensors>>()
+  private val _sensorReading = MutableLiveData<Resource<SensorReadings>>()
   private val _current = MutableLiveData<Resource<SensorReadings>>()
   private val _data24 = MutableLiveData<Resource<SensorReadings>>()
 
   val sensors: LiveData<Resource<Sensors>>
     get() = _sensors
+
+
   val currentReadings : LiveData<Resource<List<CurrentSensorReading>>>
   val historicalReadings : LiveData<Resource<List<HistoricalSensorReadings>>>
+  val sensorReadings : LiveData<Resource<List<CurrentSensorReading>>>
+
 
   init {
+
     currentReadings = sensors.resourceCombine(_current) { sensors, readings ->
       sensors.map { sensor ->
         CurrentSensorReading(
@@ -41,6 +48,18 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
                 .toMap())
       }
     }
+
+    sensorReadings = sensors.resourceCombine(_sensorReading) { sensors, readings ->
+      sensors.map { sensor ->
+        CurrentSensorReading(sensor,
+          readings
+            .filter { reading -> sensor.id == reading.sensorId}
+            .map { reading -> reading.type to reading }
+            .toMap()
+        )
+      }
+    }
+
 
     historicalReadings = sensors.resourceCombine(_data24) { sensors, readings ->
       sensors.map { sensor ->
@@ -62,6 +81,7 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     }
     _sensors.value = Resource.loading(sensors.value?.data)
     apiService.getSensors().enqueue(object : Callback<Sensors> {
+
       override fun onResponse(call: Call<Sensors>, response: Response<Sensors>) {
         if (response.isSuccessful && response.body() != null) {
           _sensors.value = Resource.success(response.body()!!)
@@ -127,22 +147,32 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     })
   }
 
-  fun getSensorValue(selectedMeasurementType: MeasurementType?,fromDate: String, toDate: String) : LiveData<Resource<List<SensorReading>>> {
+  fun getSensorValue(selectedMeasurementType: MeasurementType?) : LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>> ()
+    val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
+    val formatterWithoutTimeZone = SimpleDateFormat("yyyy-MM-dd'T'")
+    val mutableList = mutableListOf<SensorReading>()
+    val fromDate = formatterWithoutTimeZone.format(HistoryForecastAdapter.TIME_STAMP) + "00:00:00+02:00"
+    val t = HistoryForecastAdapter.TIME_STAMP.time + (1000 * 60 * 60 * 24)
+    val toDate = formatter.format(t)
+    val checkFormater = SimpleDateFormat("yyyy-MM-dd")
 
     apiService.getSensorValuesForValueType(selectedMeasurementType!!,fromDate,toDate).enqueue(object : Callback<List<SensorReading>> {
+
+      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
+        for (i in 0 until response.body()!!.size) {
+          if (checkFormater.format(response.body()!![i].stamp) == checkFormater.format(HistoryForecastAdapter.TIME_STAMP) && response.isSuccessful && response.body() != null) {
+            mutableList+=response.body()!![i]
+          }
+        }
+        result.postValue(Resource.success(mutableList))
+        _sensorReading.value = Resource.success(mutableList)
+      }
 
       override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
         result.postValue(Resource.error(null, t))
       }
-
-      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
-        if (response.isSuccessful && response.body() != null) {
-          result.postValue(Resource.success(response.body()!!))
-        }
-      }
     })
-
     return result
   }
 
@@ -171,7 +201,6 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
         }
       }
     })
-
     return result
   }
 }

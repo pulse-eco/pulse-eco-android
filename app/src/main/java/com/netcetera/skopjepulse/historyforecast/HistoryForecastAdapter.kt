@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.base.model.SensorReading
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
 import java.text.SimpleDateFormat
@@ -24,7 +25,8 @@ class HistoryForecastAdapter(
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2
     const val VIEW_TYPE_DATE_FORECAST = 3
-    lateinit var TIME_STAMP: Date
+    var TIME_STAMP: Date = Calendar.getInstance().time
+    var selectedSensorReading : SensorReading? = null
   }
   var onItemClick: ((Date) -> Unit)? = null
 
@@ -89,6 +91,8 @@ class HistoryForecastAdapter(
       val valueDouble = items[adapterPosition].averageWeeklyDataModel?.value
       val value = items[adapterPosition].averageWeeklyDataModel?.value?.toInt().toString()
       val color = items[adapterPosition].sensorValueColor
+      val sensorId = items[adapterPosition].averageWeeklyDataModel?.sensorId
+      val measurementType = items[adapterPosition].averageWeeklyDataModel?.type
 
       titleDayDate.text = formatDayTitle(context, timeStamp)
       if(valueDouble == -1.0)
@@ -104,6 +108,8 @@ class HistoryForecastAdapter(
       }
       cardView.setOnClickListener {
         selectedPosition = adapterPosition
+        val res = SensorReading(sensorId!!,timeStamp!!,measurementType!!,"",valueDouble!!)
+        HistoryForecastAdapter.selectedSensorReading = res
         notifyDataSetChanged()
         TIME_STAMP = timeStamp!!
         onItemClick?.invoke(timeStamp)
