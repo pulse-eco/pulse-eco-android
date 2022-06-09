@@ -36,11 +36,11 @@ abstract class PulseViewModel(
     pulseCityPulseRepository.refreshSensors(forceRefresh)
   }
 
-  fun favouriteSensor(sensor: Sensor) {
+  fun addToFavoriteSensors(sensor: Sensor) {
     favouriteSensorsStorage.addSensorAsFavourite(sensor)
   }
 
-  fun unFavouriteSensor(sensor: Sensor) {
+  fun removeFromFavoriteSensors(sensor: Sensor) {
     favouriteSensorsStorage.removeSensorFromFavourite(sensor)
   }
 }

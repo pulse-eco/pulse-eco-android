@@ -61,6 +61,14 @@ interface CityPulseApiService {
     @Query("from")from:String,
     @Query("to")to:String
   ) : Call<List<SensorReading>>
+
+  @GET("dataRaw")
+  fun getSensorValuesForValueType(
+    @Query("type")type:String,
+    @Query("from")from:String,
+    @Query("to")to:String
+  ) : Call<List<SensorReading>>
+
 }
 
 private const val PULSE_BASE_URL: String = "https://pulse.eco/rest/"
