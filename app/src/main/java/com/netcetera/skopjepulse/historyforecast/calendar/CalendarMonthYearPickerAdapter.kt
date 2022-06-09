@@ -1,4 +1,4 @@
-package com.netcetera.skopjepulse.historyforecast
+package com.netcetera.skopjepulse.historyforecast.calendar
 
 
 import android.annotation.SuppressLint
@@ -14,7 +14,8 @@ import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.month_year_picker_button.view.*
 import java.util.*
 
-class CalendarAdapter(val context: Context, private val items: Array<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CalendarMonthYearPickerAdapter(val context: Context, private val items: Array<String>) :
+  RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   var selectedPosition = -1
 
@@ -30,7 +31,8 @@ class CalendarAdapter(val context: Context, private val items: Array<String>) : 
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.month_year_picker_button, parent, false)
+    val view =
+      LayoutInflater.from(parent.context).inflate(R.layout.month_year_picker_button, parent, false)
     return ViewHolder(view)
   }
 
