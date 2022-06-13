@@ -1,19 +1,18 @@
 package com.netcetera.skopjepulse.historyforecast.calendar
-
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.calendar_dialog.*
-import java.time.ZoneOffset
-
-
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 
 
@@ -25,9 +24,6 @@ class CalendarDialog : DialogFragment() {
     var YEAR: Int? = 0
   }
 
-  @RequiresApi(Build.VERSION_CODES.O)
-  var zoneOffset: ZoneOffset = ZoneOffset.ofHours(0)
-
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -36,12 +32,17 @@ class CalendarDialog : DialogFragment() {
     return inflater.inflate(R.layout.calendar_dialog, container)
   }
 
-  @RequiresApi(Build.VERSION_CODES.O)
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+    val date = LocalDate.parse("01/06/2022", formatter) // LocalDate = 2010-02-23
+    val dow: DayOfWeek = date.dayOfWeek // Extracts a `DayOfWeek` enum object.
+    val output: String = dow.getDisplayName(TextStyle.SHORT, Locale.US)
+    Log.d("day of week",output)
 
-    val arrayOfMonths = arrayOf(
+
+  val arrayOfMonths = arrayOf(
       requireContext().getString(R.string.january),
       requireContext().getString(R.string.february),
       requireContext().getString(R.string.march),
@@ -69,7 +70,7 @@ class CalendarDialog : DialogFragment() {
     val recyclerView = calendarRecyclerView
     recyclerView.layoutManager = layoutManager
     recyclerView.visibility = View.INVISIBLE
-    recyclerView.adapter = CalendarAdapter(requireContext(), zoneOffset)
+    recyclerView.adapter = CalendarAdapter(requireContext())
 
 
     calendarMonthYearText.setOnClickListener {

@@ -11,7 +11,7 @@ import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.calendar_slot.view.*
 import java.time.ZoneOffset
 
-class CalendarAdapter(val context: Context, private val zoneOffset: ZoneOffset) :
+class CalendarAdapter(val context: Context) :
   RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
 
