@@ -68,7 +68,7 @@
   <dimen name="calendar_circle_shape_width_height">120dp</dimen>
   <dimen name="calendar_buttons_font_size">14sp</dimen>
   <dimen name="calendar_recycler_view_margin">5dp</dimen>
-  <dimen name="calendar_month_year_picker_card_view_width_height">85dp</dimen>
+  <dimen name="calendar_month_year_picker_card_view_width_height">70dp</dimen>
   <dimen name="calendar_month_year_picker_card_view_margin">10dp</dimen>
   <dimen name="calendar_month_year_picker_card_view_radius">40dp</dimen>
   <dimen name="calendar_month_year_picker_card_view_elevation">0.5dp</dimen>
