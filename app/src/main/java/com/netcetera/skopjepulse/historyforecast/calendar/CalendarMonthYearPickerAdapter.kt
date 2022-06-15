@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import kotlinx.android.synthetic.main.month_year_picker_button.view.*
@@ -26,8 +26,8 @@ class CalendarMonthYearPickerAdapter(val context: Context, private val items: Ar
   var onItemClick: ((String) -> Unit)? = null
 
   inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val textView: TextView = view.findViewById(R.id.textButtonMonthYearPicker)
-    val montYearPickerButton: CardView = view.monthYearPickerButton
+    val textView: TextView = view.findViewById(R.id.monthYearTextView)
+    val montYearPickerButton: ConstraintLayout = view.yearMonthConstraintLayout
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -62,7 +62,7 @@ class CalendarMonthYearPickerAdapter(val context: Context, private val items: Ar
         holder.montYearPickerButton.setBackgroundResource(R.drawable.circle_shape_calendar_dark_blue)
         holder.textView.setTextColor(Color.WHITE)
       } else {
-        holder.montYearPickerButton.setBackgroundResource(R.drawable.circle_shape_calendar_white)
+        holder.montYearPickerButton.setBackgroundResource(R.drawable.month_year_item)
         holder.textView.setTextColor(Color.BLACK)
       }
     }
@@ -71,6 +71,7 @@ class CalendarMonthYearPickerAdapter(val context: Context, private val items: Ar
   override fun getItemCount(): Int {
     return items.size
   }
+
 
   private fun getMonthName(numberOfMonth: Int): String {
     when (numberOfMonth) {

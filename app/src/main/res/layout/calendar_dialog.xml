@@ -8,29 +8,53 @@
   tools:background="@color/white">
 
 
-  <ImageButton
+  <TextView
     android:id="@+id/calendarPreviousArrow"
-    android:layout_width="25dp"
-    android:layout_height="25dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@color/white"
-    app:layout_constraintBottom_toBottomOf="@+id/calendarMonthYearText"
-    app:layout_constraintEnd_toStartOf="@+id/calendarMonthYearText"
+    android:background="@drawable/ic_arrow_back"
+    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
+    app:layout_constraintEnd_toStartOf="@id/calendarMonthYearText"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/calendarMonthYearText"
-    app:srcCompat="@drawable/ic_previous_arrow" />
+    app:layout_constraintTop_toTopOf="parent" />
 
+  <TextView
+    android:id="@+id/calendarMonthYearText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:textColor="@color/colorPrimary"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
+    tools:text="June 2022" />
+
+  <TextView
+    android:id="@+id/calendarNextArrow"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/ic_arrow_next"
+    app:layout_constraintBottom_toBottomOf="@id/calendarMonthYearText"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/calendarMonthYearText"
+    app:layout_constraintTop_toTopOf="@id/calendarMonthYearText" />
 
   <ImageButton
-    android:id="@+id/calendarNextArrow"
+    android:id="@+id/calendarNextArrowUnavailable"
     android:layout_width="25dp"
     android:layout_height="25dp"
     android:layout_marginTop="10dp"
     android:background="@color/white"
-    app:layout_constraintBottom_toBottomOf="@+id/calendarMonthYearText"
+    android:alpha="0.3"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="@id/calendarMonthYearText"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@+id/calendarMonthYearText"
-    app:layout_constraintTop_toTopOf="@+id/calendarMonthYearText"
+    app:layout_constraintStart_toEndOf="@id/calendarMonthYearText"
+    app:layout_constraintTop_toTopOf="@id/calendarMonthYearText"
     app:srcCompat="@drawable/ic_next_arrow" />
 
   <LinearLayout
@@ -135,18 +159,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
-
-  <TextView
-    android:id="@+id/calendarMonthYearText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:textColor="@color/colorPrimary"
-    android:textSize="18sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:text="June 2022" />
 
   <View
     android:id="@+id/calendarLine"

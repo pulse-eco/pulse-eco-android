@@ -16,6 +16,7 @@ import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
 import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.LegendBand
@@ -31,6 +32,7 @@ import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation
 import org.kynosarges.tektosyne.geometry.Voronoi
+import java.time.LocalDate
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -76,6 +78,7 @@ class MapViewModel(
     get() = _isSpecificSensorSelected
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
+  var averageDataMonthDays: LiveData<AverageWeeklyDataModel>
 
 
   init {
@@ -208,6 +211,17 @@ class MapViewModel(
       }
     }
 
+    averageDataMonthDays = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.DATE_INPUT!!)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
 
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {
@@ -364,7 +378,6 @@ class MapViewModel(
   }
 
   fun createAverageOverallBannerData(sensorReading: SensorReading, dataDefinitionData: DataDefinition): OverallBannerData {
-
     val sensorValueInt = sensorReading.value.toInt()
     val valueBand = dataDefinitionData.findBandByValue(sensorValueInt)
     return OverallBannerData(
@@ -373,8 +386,7 @@ class MapViewModel(
       dataDefinitionData.unit,
       valueBand.grade,
       valueBand.legendColor,
-      calculateLegend(dataDefinitionData, sensorValueInt)
-    )
+      calculateLegend(dataDefinitionData, sensorValueInt))
   }
 
   private fun calculateLegend(dataDefinition: DataDefinition, value: Int): Legend {
@@ -397,4 +409,6 @@ class MapViewModel(
     }
     return Legend(currentLegendValue, legendBands)
   }
+
+
 }

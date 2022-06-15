@@ -82,7 +82,6 @@ class HistoryForecastAdapter(
       exploreView.setOnClickListener {
         val calendarDialog = CalendarDialog()
         calendarDialog.show(fragmentManager, "calendar_dialog")
-
       }
     }
   }
@@ -112,7 +111,7 @@ class HistoryForecastAdapter(
       cardView.setOnClickListener {
         selectedPosition = adapterPosition
         val res = SensorReading(sensorId!!, timeStamp!!, measurementType!!, "", valueDouble!!)
-        HistoryForecastAdapter.selectedSensorReading = res
+        selectedSensorReading = res
         notifyDataSetChanged()
         TIME_STAMP = timeStamp!!
         onItemClick?.invoke(timeStamp)

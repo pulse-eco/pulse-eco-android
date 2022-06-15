@@ -30,6 +30,8 @@ import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastAdapter
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastDataModel
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarItemDataModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
@@ -57,6 +59,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -100,6 +104,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
       )
     }
     var overAllData: List<CityOverall>? = null
+    var RESULT_MONTH_VALUES : List<SensorReading>? = null
+    var CALENDAR_ITEM_RESULT : List<CalendarItemDataModel> = listOf()
   }
 
   override fun onCreateView(
@@ -121,7 +127,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
       })
 
-    /* Observe on what Measurement Type to show */
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+    val date = LocalDate.parse("01/06/2022", formatter)
+
+
+    if(CalendarAdapter.DATE_INPUT == null) {
+      CalendarAdapter.DATE_INPUT = date
+    }
+
+      /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
       viewModel.showDataForMeasurementType(it)
       sensorType = it
@@ -136,11 +150,36 @@ class MapFragment : BaseFragment<MapViewModel>() {
         setValueForAverageDailyData(weeklyAverageDataModel)
         setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
       }
+      val resMonths = mutableListOf<CalendarItemDataModel>()
+      viewModel.averageDataMonthDays.value?.let {
+        val res = it.data
+        for (i in res.indices)
+        {
+          val band = getBand(res[i].value.toInt())
+          resMonths.add(CalendarItemDataModel(res[i],band))
+        }
+        CALENDAR_ITEM_RESULT = resMonths.toList()
+
+      }
+
+
     }
+
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(it)
       setValueForSevenDaysRange(it, overAllData?.last(), sensorType)
+    }
+
+    viewModel.averageDataMonthDays.observe(viewLifecycleOwner){
+      val res = it.data
+      val resMonths = mutableListOf<CalendarItemDataModel>()
+      for (i in res.indices)
+      {
+        val band = getBand(res[i].value.toInt())
+        resMonths.add(CalendarItemDataModel(res[i],band))
+      }
+      CALENDAR_ITEM_RESULT = resMonths.toList()
     }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner) {
