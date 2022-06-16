@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +29,7 @@ import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastAdapter
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastDataModel
-import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
-import com.netcetera.skopjepulse.historyforecast.calendar.CalendarItemDataModel
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarValuesDataModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
@@ -80,7 +78,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
   val city: City by lazy { requireArguments().getParcelable("city")!! }
 
 
-
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
   }
@@ -91,7 +88,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     GraphView(sensorMeasurementsGraph)
   }
   private lateinit var mapMarkersController: MapMarkersController
-  private lateinit var mapMarkersControllerSensorReading: MapMarkersController
 
   private val overallBanner by lazy {
     OverallBannerView(overallBannerView)
@@ -104,8 +100,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       )
     }
     var overAllData: List<CityOverall>? = null
-    var RESULT_MONTH_VALUES : List<SensorReading>? = null
-    var CALENDAR_ITEM_RESULT : List<CalendarItemDataModel> = listOf()
+    var calendarValuesResult : List<CalendarValuesDataModel> = listOf()
   }
 
   override fun onCreateView(
@@ -127,13 +122,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
       })
 
-    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
-    val date = LocalDate.parse("01/06/2022", formatter)
-
-
-    if(CalendarAdapter.DATE_INPUT == null) {
-      CalendarAdapter.DATE_INPUT = date
-    }
 
       /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
@@ -150,21 +138,18 @@ class MapFragment : BaseFragment<MapViewModel>() {
         setValueForAverageDailyData(weeklyAverageDataModel)
         setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
       }
-      val resMonths = mutableListOf<CalendarItemDataModel>()
+      val resMonths = mutableListOf<CalendarValuesDataModel>()
       viewModel.averageDataMonthDays.value?.let {
         val res = it.data
         for (i in res.indices)
         {
           val band = getBand(res[i].value.toInt())
-          resMonths.add(CalendarItemDataModel(res[i],band))
+          resMonths.add(CalendarValuesDataModel(res[i],band))
         }
-        CALENDAR_ITEM_RESULT = resMonths.toList()
+        calendarValuesResult = resMonths.toList()
 
       }
-
-
     }
-
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(it)
@@ -173,13 +158,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     viewModel.averageDataMonthDays.observe(viewLifecycleOwner){
       val res = it.data
-      val resMonths = mutableListOf<CalendarItemDataModel>()
+      val resMonths = mutableListOf<CalendarValuesDataModel>()
       for (i in res.indices)
       {
         val band = getBand(res[i].value.toInt())
-        resMonths.add(CalendarItemDataModel(res[i],band))
+        resMonths.add(CalendarValuesDataModel(res[i],band))
       }
-      CALENDAR_ITEM_RESULT = resMonths.toList()
+      calendarValuesResult = resMonths.toList()
     }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner) {

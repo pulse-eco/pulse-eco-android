@@ -7,12 +7,12 @@
   android:layout_gravity="center"
   tools:background="@color/white">
 
-
   <TextView
     android:id="@+id/calendarPreviousArrow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
+    android:padding="5dp"
     android:background="@drawable/ic_arrow_back"
     app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
     app:layout_constraintEnd_toStartOf="@id/calendarMonthYearText"
@@ -26,6 +26,7 @@
     android:layout_marginTop="10dp"
     android:textColor="@color/colorPrimary"
     android:textSize="15sp"
+    android:padding="5dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
@@ -38,24 +39,26 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:background="@drawable/ic_arrow_next"
-    app:layout_constraintBottom_toBottomOf="@id/calendarMonthYearText"
+    android:padding="5dp"
+    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@id/calendarMonthYearText"
-    app:layout_constraintTop_toTopOf="@id/calendarMonthYearText" />
+    app:layout_constraintStart_toEndOf="@+id/calendarMonthYearText"
+    app:layout_constraintTop_toTopOf="parent" />
 
-  <ImageButton
+
+  <TextView
     android:id="@+id/calendarNextArrowUnavailable"
-    android:layout_width="25dp"
-    android:layout_height="25dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@color/white"
-    android:alpha="0.3"
+    android:alpha="0.5"
+    android:padding="5dp"
     android:visibility="gone"
-    app:layout_constraintBottom_toBottomOf="@id/calendarMonthYearText"
+    android:background="@drawable/ic_arrow_next"
+    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@id/calendarMonthYearText"
-    app:layout_constraintTop_toTopOf="@id/calendarMonthYearText"
-    app:srcCompat="@drawable/ic_next_arrow" />
+    app:layout_constraintStart_toEndOf="@+id/calendarMonthYearText"
+    app:layout_constraintTop_toTopOf="parent"  />
 
   <LinearLayout
     android:id="@+id/calendarDialogTwoButtonsLayout"
@@ -74,18 +77,6 @@
       android:textAllCaps="true"
       android:textColor="@color/calendar_cancel_button"
       android:textSize="@dimen/calendar_buttons_font_size"
-      tools:textColor="@color/white" />
-
-    <Button
-      android:id="@+id/calendarDialogOkButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="@android:color/transparent"
-      android:text="@string/ok"
-      android:textAllCaps="true"
-      android:textColor="@color/calendar_ok_button"
-      android:textSize="@dimen/calendar_buttons_font_size"
-      android:textStyle="bold"
       tools:textColor="@color/white" />
   </LinearLayout>
 
@@ -197,8 +188,10 @@
     android:nestedScrollingEnabled="false"
     app:layout_constraintBottom_toTopOf="@+id/calendarDialogTwoButtonsLayout"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/calendarLine"
+    app:layout_constraintVertical_bias="1.0"
     tools:layout_height="100dp" />
 
 
