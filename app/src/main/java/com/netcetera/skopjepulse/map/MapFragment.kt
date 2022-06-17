@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,8 +58,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+
+
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -93,6 +94,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     OverallBannerView(overallBannerView)
   }
 
+
+
   companion object {
     fun newInstance(city: City) = MapFragment().apply {
       arguments = bundleOf(
@@ -101,6 +104,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
     var overAllData: List<CityOverall>? = null
     var calendarValuesResult : List<CalendarValuesDataModel> = listOf()
+    lateinit var SENSOR_TYPE: MeasurementType
+    var bandValueOverallData: Int? = null
   }
 
   override fun onCreateView(
@@ -122,11 +127,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
       })
 
-
       /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
       viewModel.showDataForMeasurementType(it)
       sensorType = it
+      SENSOR_TYPE = sensorType
       progressBarForWeeklyAverageData.visibility = View.VISIBLE
       weeklyAverageView.visibility = View.GONE
       setDaysNames()
@@ -134,10 +139,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.overallBannerData.observe(viewLifecycleOwner, overallBanner)
       setMapValuesToday()
 
+
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
+//        setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
+      }
+      viewModel.averageDataGivenRange.value?.let { weeklyAverageDataModel ->
         setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
       }
+
+
       val resMonths = mutableListOf<CalendarValuesDataModel>()
       viewModel.averageDataMonthDays.value?.let {
         val res = it.data
@@ -151,9 +162,37 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }
     }
 
-    viewModel.averageWeeklyData.observe(viewLifecycleOwner) {
-      setValueForAverageDailyData(it)
-      setValueForSevenDaysRange(it, overAllData?.last(), sensorType)
+    viewModel.averageWeeklyData.observe(viewLifecycleOwner) { weeklyAvg ->
+
+      setValueForAverageDailyData(weeklyAvg)
+//      setValueForSevenDaysRange(weeklyAvg, overAllData?.last(), sensorType)
+//
+//      if (overAllData?.last()?.values?.get(sensorType) != null && overAllData?.last()?.values?.get(sensorType) != "N/A") {
+//      val overallDataValue = overAllData?.last()?.values?.get(sensorType)?.toDouble()
+//      val band = overallDataValue?.let { value -> getBand(value.toInt()) }
+//      bandValueOverallData = band?.legendColor
+//      }else{
+//        bandValueOverallData = null
+//      }
+    }
+
+    viewModel.averageDataGivenRange.observe(viewLifecycleOwner) { weeklyAvg ->
+
+      Log.d("TINA",weeklyAvg.data.toString())
+      setValueForAverageDailyData(weeklyAvg)
+      setValueForSevenDaysRange(weeklyAvg, overAllData?.last(), sensorType)
+
+      if (overAllData?.last()?.values?.get(sensorType) != null && overAllData?.last()?.values?.get(sensorType) != "N/A") {
+        val overallDataValue = overAllData?.last()?.values?.get(sensorType)?.toDouble()
+        val band = overallDataValue?.let { value -> getBand(value.toInt()) }
+        bandValueOverallData = band?.legendColor
+      }else{
+        bandValueOverallData = null
+      }
+    }
+
+    viewModel.averageDataGivenRange.observe(viewLifecycleOwner) {
+      Log.d("Tina",it.data.toString())
     }
 
     viewModel.averageDataMonthDays.observe(viewLifecycleOwner){
@@ -166,6 +205,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }
       calendarValuesResult = resMonths.toList()
     }
+
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner) {
       pastWeekDataLabelForCityName = it
@@ -274,6 +314,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         )
       }.applyTo(mapConstraintLayout)
     }
+
   }
 
   private fun getBand(intValue: Int): Band {
@@ -349,6 +390,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   }
 
   private fun setValueForSevenDaysRange(dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?, mesType: MeasurementType) {
+
 
     historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     historyForecastAdapter = HistoryForecastAdapter(requireContext(), getDateButtonsList(dataModel, todayButtonData, mesType))
@@ -442,8 +484,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   }
 
   private fun getLanguage(context: Context?): String {
-    return context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)
-      ?.getString(Constants.LANGUAGE_CODE, "en") ?: "en"
+    return context?.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)?.getString(Constants.LANGUAGE_CODE, "en") ?: "en"
   }
 
   private fun getBoundsDays(): List<TextView> {

@@ -1,5 +1,6 @@
 package com.netcetera.skopjepulse.historyforecast.calendar
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
+
 import kotlinx.android.synthetic.main.calendar_slot.view.*
 import java.time.LocalDate
 import java.time.ZoneId
@@ -20,8 +22,8 @@ class CalendarAdapter(
   val context: Context,
   private val items: ArrayList<CalendarItemsDataModel>,
   val date: LocalDate,
-  val values: List<CalendarValuesDataModel>
-) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+  val values: List<CalendarValuesDataModel>,
+  val todayValue: Int?) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
   var onItemClick: ((String) -> Unit)? = null
 
@@ -57,6 +59,7 @@ class CalendarAdapter(
     val dateYear = DATE_INPUT?.year
     val today = LocalDate.now()
     val todayDate = today.dayOfMonth
+    @SuppressLint("ResourceType")
     fun bind() {
       val newList = mutableListOf<CalendarValuesDataModel>()
       for (i in 0 until items[adapterPosition].startDayOfMonth)
@@ -89,9 +92,14 @@ class CalendarAdapter(
             slotContainer.isClickable = false
           }
           if (items[adapterPosition].day == todayDate) {
-            dayOfMonth.setTextColor(Color.WHITE)
-            slotContainer.setBackgroundResource(R.drawable.calendar_circle_clicked)
-            dayOfMonth.setBackgroundResource(0)
+
+            if(todayValue!=null){
+              slotContainer.setBackgroundColor(todayValue)
+              slotContainer.setBackgroundResource(0)
+              dayOfMonth.setTextColor(Color.WHITE)
+              dayOfMonth.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(todayValue, BlendModeCompat.SRC_ATOP)
+            }
+
           }
         }
 
@@ -107,7 +115,7 @@ class CalendarAdapter(
             val domInputs = items[i].day
             if (stampMonth == dateMonth && stampYear == dateYear) {
               slotContainer.setOnClickListener {
-                val date = "${items[adapterPosition].day}/${dateMonthValue}/$dateYear STAMP $stamp"
+                val date = "${items[adapterPosition].day}/${dateMonthValue}/$dateYear"
                 DATE_CLICKED = date
                 onItemClick?.invoke(date)
               }
@@ -115,10 +123,8 @@ class CalendarAdapter(
                 color?.let {
                   slotContainer.setBackgroundColor(it.legendColor)
                   slotContainer.setBackgroundResource(R.drawable.calendar_circle)
-                  slotContainer.background.colorFilter =
-                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                      color.legendColor,
-                      BlendModeCompat.SRC_ATOP) }
+                  dayOfMonth.setTextColor(it.legendColor)
+                  slotContainer.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color.legendColor, BlendModeCompat.SRC_ATOP) }
               }
             }
           }

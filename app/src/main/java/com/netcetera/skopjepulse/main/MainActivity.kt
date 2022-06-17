@@ -157,6 +157,9 @@ class MainActivity : AppCompatActivity() {
       }
     })
 
+
+
+
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
     errorView?.let { errorTextView ->

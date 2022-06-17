@@ -17,6 +17,7 @@ import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarDialog
 import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.LegendBand
@@ -32,7 +33,6 @@ import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation
 import org.kynosarges.tektosyne.geometry.Voronoi
-import java.time.LocalDate
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -79,6 +79,7 @@ class MapViewModel(
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
   var averageDataMonthDays: LiveData<AverageWeeklyDataModel>
+  var averageDataGivenRange: LiveData<AverageWeeklyDataModel>
 
 
   init {
@@ -202,6 +203,18 @@ class MapViewModel(
     averageWeeklyData = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
         val averageLiveData = cityPulseRepository.getAverageWeeklyData(sensor?.id, measurementType)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
+
+    averageDataGivenRange = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(sensor?.id, measurementType,CalendarDialog.fromDate,CalendarDialog.toDate)
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData.data?.let { readings ->
@@ -359,11 +372,6 @@ class MapViewModel(
    */
   fun updatePreference(newPreferences: Preferences) {
     mapPreferencesStorage.updatePreferences(newPreferences)
-  }
-
-  fun getAvgDataMonthDays(fromDate:LocalDate) : LiveData<Resource<List<SensorReading>>>
-  {
-    return cityPulseRepository.getAverageDataMonthDays(selectedSensor.value?.id,selectedMeasurementType.value,fromDate)
   }
 
   private fun createGraphModel(dataDefinition: DataDefinition,
