@@ -14,7 +14,6 @@ import com.netcetera.skopjepulse.map.MapViewModel
 import kotlinx.android.synthetic.main.calendar_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.component.KoinApiExtension
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -30,6 +29,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
   private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
   private val currentMonthRequestRes = MapFragment.calendarValuesResult
+  lateinit var CALENDAR_ADAPTER: CalendarAdapter
 
 
 
@@ -39,6 +39,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
     var toDate  = LocalDate.parse("20/06/2022", formatter)
     var fromDate = toDate.minusDays(8)
+    var adapter: CalendarAdapter? = null
   }
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -66,10 +67,11 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     }
 
 
-
     //Set calendar
     CalendarAdapter.DATE_INPUT = null
     update(CalendarAdapter.DATE_INPUT)
+
+    adapter = CALENDAR_ADAPTER
 
     val arrayOfMonths = arrayOf(
       requireContext().getString(R.string.january).substring(0, 3),
@@ -239,6 +241,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     recyclerView.layoutManager = layoutManager
     val adapter =  CalendarAdapter(requireContext(), list, dateInput,currentMonthRequestRes,MapFragment.bandValueOverallData)
     recyclerView.adapter = adapter
+    CALENDAR_ADAPTER = adapter
     adapter.onItemClick = {
       val clickedDate  = LocalDate.parse(CalendarAdapter.DATE_CLICKED, Companion.formatter)
       val fromClickedDate = clickedDate.plusDays(4)
@@ -246,6 +249,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       fromDate = toDate.minusDays(8)
       dismiss()
     }
+
     recyclerView.suppressLayout(true)
 
   }
@@ -454,22 +458,22 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
   private fun intValueForDayOfWeek(day: String): Int {
     when (day) {
-      getString(R.string.monday_short) -> {
+      requireContext().getString(R.string.monday_short)-> {
         return 0
       }
-      getString(R.string.tuesday_short) -> {
+      requireContext().getString(R.string.tuesday_short) -> {
         return 1
       }
-      getString(R.string.wednesday_short) -> {
+      requireContext().getString(R.string.wednesday_short) -> {
         return 2
       }
-      getString(R.string.thursday_short) -> {
+      requireContext().getString(R.string.thursday_short) -> {
         return 3
       }
-      getString(R.string.friday_short) -> {
+      requireContext().getString(R.string.friday_short) -> {
         return 4
       }
-      getString(R.string.saturday_short) -> {
+      requireContext().getString(R.string.saturday_short) -> {
         return 5
       }
       else -> {
@@ -477,6 +481,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       }
     }
   }
+
 
   private fun updateFromMonthYearPicker(date: LocalDate){
     CalendarAdapter.DATE_INPUT = date

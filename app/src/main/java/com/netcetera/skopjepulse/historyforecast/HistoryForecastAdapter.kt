@@ -32,6 +32,7 @@ class HistoryForecastAdapter(
   }
 
   var onItemClick: ((Date) -> Unit)? = null
+  var onItemClickExplore: ((String) -> Unit)? = null
 
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -80,6 +81,7 @@ class HistoryForecastAdapter(
       context as FragmentActivity
       val fragmentManager = context.supportFragmentManager
       exploreView.setOnClickListener {
+        onItemClickExplore?.invoke("calendar")
         val calendarDialog = CalendarDialog()
         calendarDialog.show(fragmentManager, "calendar_dialog")
       }
@@ -157,7 +159,7 @@ class HistoryForecastAdapter(
   }
 
   private fun dateShownInsteadDayOfWeek(stamp: Date?): String {
-    val format = SimpleDateFormat("dd MMM")
+    val format = SimpleDateFormat("d MMM")
     return format.format(stamp)
   }
 

@@ -31,7 +31,7 @@ class CalendarAdapter(
     private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
     var DATE_INPUT_TODAY: LocalDate = LocalDate.parse("01/06/2022", formatter)
     var DATE_INPUT: LocalDate? = null
-    var DATE_CLICKED: String = toString()
+    var DATE_CLICKED: String = "20/6/2022"
   }
 
 

@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
@@ -30,6 +31,9 @@ import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastAdapter
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastDataModel
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarDialog
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarItemsDataModel
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarValuesDataModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.mapvisualization.MapMarkersController
@@ -58,6 +62,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 import java.util.*
@@ -130,6 +136,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     CITY = city
 
+
       /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
       viewModel.showDataForMeasurementType(it)
@@ -148,7 +155,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 //        setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
       }
       viewModel.averageDataGivenRange.value?.let { weeklyAverageDataModel ->
-        setValueForSevenDaysRange(weeklyAverageDataModel, overAllData?.last(), sensorType)
+        setValueForSevenDaysRange(weeklyAverageDataModel.data, overAllData?.last(), sensorType)
       }
 
 
@@ -181,7 +188,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     viewModel.averageDataGivenRange.observe(viewLifecycleOwner) { weeklyAvg ->
       setValueForAverageDailyData(weeklyAvg)
-      setValueForSevenDaysRange(weeklyAvg, overAllData?.last(), sensorType)
+      setValueForSevenDaysRange(weeklyAvg.data, overAllData?.last(), sensorType)
 
       if (overAllData?.last()?.values?.get(sensorType) != null && overAllData?.last()?.values?.get(sensorType) != "N/A") {
         val overallDataValue = overAllData?.last()?.values?.get(sensorType)?.toDouble()
@@ -386,7 +393,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun setValueForSevenDaysRange(dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?, mesType: MeasurementType) {
+  private fun setValueForSevenDaysRange(dataModel: List<SensorReading>, todayButtonData: CityOverall?, mesType: MeasurementType) {
 
 
     historyAndForecastRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -395,6 +402,21 @@ class MapFragment : BaseFragment<MapViewModel>() {
     historyAndForecastRecyclerView.scrollToPosition(getDateButtonsList(dataModel,todayButtonData,mesType).size - 1)
     val today = Calendar.getInstance().time
     val formatter = SimpleDateFormat("yyyy-MM-dd")
+//    val list = ArrayList <CalendarItemsDataModel> ()
+//    val values = listOf<CalendarValuesDataModel>()
+//    val calendarAdapter =  CalendarAdapter(requireContext(), list, CalendarAdapter.DATE_INPUT!!,values,bandValueOverallData)
+
+    historyForecastAdapter.onItemClickExplore = {
+
+        viewModel.getAvgDataRangeGiven(sensorId = null, sensorType,CalendarDialog.fromDate,CalendarDialog.toDate).observe(viewLifecycleOwner) {
+            Log.d("I'm working till here",":) ")
+            setValueForSevenDaysRange(it.data!!,todayButtonData,mesType)
+            Log.d("Data result",it.data.toString())
+
+          }
+
+    }
+
 
     historyForecastAdapter.onItemClick = {
       viewModel.getSensorValues(mesType).observe(viewLifecycleOwner) {
@@ -416,7 +438,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
   }
 
 
-  private fun getDateButtonsList(dataModel: AverageWeeklyDataModel, todayButtonData: CityOverall?, mesType: MeasurementType): ArrayList<HistoryForecastDataModel> {
+  private fun getDateButtonsList(dataModel:List<SensorReading>, todayButtonData: CityOverall?, mesType: MeasurementType): ArrayList<HistoryForecastDataModel> {
 
     val list = ArrayList<HistoryForecastDataModel>()
     val cal = Calendar.getInstance()
@@ -424,9 +446,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
     var data: Double = -1.0
 
     list.add(HistoryForecastDataModel(null, null, HistoryForecastAdapter.VIEW_TYPE_EXPLORE))
-    for (i in 1 until dataModel.data.size) {
-      val band = getBand(dataModel.data[i].value.toInt())
-      list.add(HistoryForecastDataModel(dataModel.data[i],band, HistoryForecastAdapter.VIEW_TYPE_DATE))
+    for (i in 1 until dataModel.size) {
+      val band = getBand(dataModel[i].value.toInt())
+      list.add(HistoryForecastDataModel(dataModel[i],band, HistoryForecastAdapter.VIEW_TYPE_DATE))
     }
 
     if (todayButtonData?.values?.get(sensorType) != null && todayButtonData.values[sensorType]!! != "N/A") {

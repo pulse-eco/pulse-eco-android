@@ -33,6 +33,7 @@ import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation
 import org.kynosarges.tektosyne.geometry.Voronoi
+import java.time.LocalDate
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -337,6 +338,10 @@ class MapViewModel(
 
   fun getSensorValues(selectedMeasurementType: MeasurementType?) :LiveData<Resource<List<SensorReading>>> {
     return cityPulseRepository.getSensorValue(selectedMeasurementType)
+  }
+
+  fun getAvgDataRangeGiven(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate, toDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getAverageDataGivenRange(sensorId,selectedMeasurementType,fromDate,toDate)
   }
 
   /**
