@@ -106,6 +106,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     var calendarValuesResult : List<CalendarValuesDataModel> = listOf()
     lateinit var SENSOR_TYPE: MeasurementType
     var bandValueOverallData: Int? = null
+    lateinit var CITY: City
   }
 
   override fun onCreateView(
@@ -126,6 +127,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
           overAllData = t?.data
         }
       })
+
+    CITY = city
 
       /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
@@ -177,8 +180,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     viewModel.averageDataGivenRange.observe(viewLifecycleOwner) { weeklyAvg ->
-
-      Log.d("TINA",weeklyAvg.data.toString())
       setValueForAverageDailyData(weeklyAvg)
       setValueForSevenDaysRange(weeklyAvg, overAllData?.last(), sensorType)
 
@@ -189,10 +190,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }else{
         bandValueOverallData = null
       }
-    }
-
-    viewModel.averageDataGivenRange.observe(viewLifecycleOwner) {
-      Log.d("Tina",it.data.toString())
     }
 
     viewModel.averageDataMonthDays.observe(viewLifecycleOwner){

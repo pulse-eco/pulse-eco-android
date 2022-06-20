@@ -42,6 +42,7 @@ import kotlin.math.roundToInt
  * Implementation of [androidx.lifecycle.ViewModel] for the [MapFragment] that is used for
  * displaying of data of a single [City].
  */
+
 class MapViewModel(
     city: City,
     private val dataDefinitionProvider: DataDefinitionProvider,

@@ -1,39 +1,43 @@
 package com.netcetera.skopjepulse.historyforecast.calendar
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.MapFragment
+import com.netcetera.skopjepulse.map.MapViewModel
 import kotlinx.android.synthetic.main.calendar_dialog.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinApiExtension
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 import kotlin.collections.ArrayList
+import org.koin.core.parameter.parametersOf
 
 
-class CalendarDialog : DialogFragment() {
-
+class CalendarDialog : BaseDialogFragment<MapViewModel>() {
+  override val viewModel: MapViewModel by viewModel {parametersOf(MapFragment.CITY)}
+  private val mainViewModel: MainViewModel by sharedViewModel()
 
   private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
   private val currentMonthRequestRes = MapFragment.calendarValuesResult
-//  private val mainViewModel: MainViewModel by sharedViewModel()
-//  val mapViewModel: MapViewModel by sharedViewModel { parametersOf(city) }
-//  val city: City by lazy { requireArguments().getParcelable("city")!! }
+
+
 
   companion object {
     var newMonth: String? = null
     var newYear: String? = null
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
-    var toDate  = LocalDate.parse("17/06/2022", formatter)
+    var toDate  = LocalDate.parse("20/06/2022", formatter)
     var fromDate = toDate.minusDays(8)
   }
   override fun onCreateView(
@@ -41,17 +45,31 @@ class CalendarDialog : DialogFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.calendar_dialog, container)
+    return inflater.inflate(R.layout.calendar_dialog, container,false)
   }
 
   @SuppressLint("LogNotTimber")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+
+    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner){ mesType->
+      Log.d("Result ",mesType.toString())
+    }
+
+    viewModel.averageDataGivenRange.observe(viewLifecycleOwner) { avg ->
+      Log.d("Result ",avg.toString())
+
+      viewModel.averageDataGivenRange.value?.let { avgValue ->
+        Log.d("Result ",avgValue.toString())
+      }
+    }
+
+
+
     //Set calendar
     CalendarAdapter.DATE_INPUT = null
     update(CalendarAdapter.DATE_INPUT)
-
 
     val arrayOfMonths = arrayOf(
       requireContext().getString(R.string.january).substring(0, 3),
