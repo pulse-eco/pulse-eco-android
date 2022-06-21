@@ -29,7 +29,6 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
   private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
   private val currentMonthRequestRes = MapFragment.calendarValuesResult
-  lateinit var CALENDAR_ADAPTER: CalendarAdapter
 
 
 
@@ -37,9 +36,6 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     var newMonth: String? = null
     var newYear: String? = null
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
-    var toDate  = LocalDate.parse("20/06/2022", formatter)
-    var fromDate = toDate.minusDays(8)
-    var adapter: CalendarAdapter? = null
   }
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -53,25 +49,13 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-
-    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner){ mesType->
-      Log.d("Result ",mesType.toString())
-    }
-
-    viewModel.averageDataGivenRange.observe(viewLifecycleOwner) { avg ->
-      Log.d("Result ",avg.toString())
-
-      viewModel.averageDataGivenRange.value?.let { avgValue ->
-        Log.d("Result ",avgValue.toString())
-      }
-    }
-
-
     //Set calendar
     CalendarAdapter.DATE_INPUT = null
     update(CalendarAdapter.DATE_INPUT)
 
-    adapter = CALENDAR_ADAPTER
+    viewModel.averageWeeklyData.observe(viewLifecycleOwner){
+      Log.d("Data",it.toString())
+    }
 
     val arrayOfMonths = arrayOf(
       requireContext().getString(R.string.january).substring(0, 3),
@@ -88,9 +72,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       requireContext().getString(R.string.december).substring(0, 3))
 
     val arrayOfYear = arrayOf("2017", "2018", "2019", "2020", "2021", "2022")
-    calendarCancelButton()
 
-    calendarPreviousArrow.setOnClickListener {  update(CalendarAdapter.DATE_INPUT) }
 
     val currentYear = CalendarAdapter.DATE_INPUT?.year.toString()
     val month = CalendarAdapter.DATE_INPUT?.month?.name
@@ -244,12 +226,11 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     recyclerView.layoutManager = layoutManager
     val adapter =  CalendarAdapter(requireContext(), list, dateInput,currentMonthRequestRes,MapFragment.bandValueOverallData)
     recyclerView.adapter = adapter
-    CALENDAR_ADAPTER = adapter
     adapter.onItemClick = {
       val clickedDate  = LocalDate.parse(CalendarAdapter.DATE_CLICKED, Companion.formatter)
       val fromClickedDate = clickedDate.plusDays(4)
-      toDate = fromClickedDate
-      fromDate = toDate.minusDays(8)
+      MapFragment.toDate = fromClickedDate
+      MapFragment.fromDate = MapFragment.toDate.minusDays(8)
       dismiss()
     }
 
@@ -266,7 +247,6 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
   private fun update(date: LocalDate?)
   {
-    val today = LocalDate.parse("01/06/2022", formatter)
 
     if (date == null) {
       val date = LocalDate.parse("01/06/2022", formatter)
@@ -281,7 +261,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-      calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
+      calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
 
 
       val list = ArrayList<CalendarItemsDataModel>()
@@ -338,7 +318,6 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
         nextMonthClick(prev)
       }
     }
-
 
   }
 
@@ -539,7 +518,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       calendarNextArrow.visibility = View.GONE
       calendarNextArrowUnavailable.visibility = View.VISIBLE
     }
-    
+
 
     val listOfDaysMonth = ArrayList<CalendarItemsDataModel>()
     for (i in 0 until intValueDayOfWeek){

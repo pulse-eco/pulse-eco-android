@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.SensorReading
-import com.netcetera.skopjepulse.historyforecast.calendar.CalendarDialog
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
 import java.text.SimpleDateFormat
@@ -78,12 +77,9 @@ class HistoryForecastAdapter(
   inner class ExploreViewHolder(view: View) : BaseViewHolder<HistoryForecastDataModel>(view) {
     private val exploreView = view.exploreButton
     override fun bind() {
-      context as FragmentActivity
-      val fragmentManager = context.supportFragmentManager
       exploreView.setOnClickListener {
         onItemClickExplore?.invoke("calendar")
-        val calendarDialog = CalendarDialog()
-        calendarDialog.show(fragmentManager, "calendar_dialog")
+
       }
     }
   }

@@ -216,7 +216,7 @@ class MapViewModel(
 
     averageDataGivenRange = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
-        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(sensor?.id, measurementType,CalendarDialog.fromDate,CalendarDialog.toDate)
+        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(sensor?.id, measurementType,MapFragment.fromDate,MapFragment.toDate)
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData.data?.let { readings ->
