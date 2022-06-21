@@ -102,7 +102,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       calendarLine.visibility = View.GONE
       calendarMonthYearText.visibility = View.GONE
       calendarYearPicker.visibility = View.VISIBLE
-      calendarYearPicker.text = newYear ?: currentYear
+      calendarYearPicker.text = "${CalendarAdapter.DATE_INPUT?.year}"
       calendarPreviousArrow.visibility = View.GONE
       calendarNextArrow.visibility = View.GONE
       calendarHeader.visibility = View.GONE
@@ -122,7 +122,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
         calendarMonthYearText.visibility = View.VISIBLE
         val month = CalendarAdapter.DATE_INPUT?.month.toString()
         val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-        calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+        calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
         calendarPreviousArrow.visibility = View.VISIBLE
         calendarNextArrow.visibility = View.VISIBLE
         calendarHeader.visibility = View.VISIBLE
@@ -159,7 +159,10 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
             newMonth = getFullMonthName(CalendarMonthYearPickerAdapter.MONTH_YEAR_VALUE)
             calendarLine.visibility = View.VISIBLE
             calendarYearPicker.visibility = View.GONE
-            val newInputs = "${newMonth ?: currentMonth} ${newYear ?: currentYear}"
+            val month = CalendarAdapter.DATE_INPUT?.month.toString()
+            val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
+            val newInputs = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
+
 
             val newDate = LocalDate.parse("01/${getMonthNumber(newMonth!!) ?: monthValue }/${newYear ?: yearValue}",formatter)
             Log.d("New date",newDate.toString())
@@ -180,7 +183,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
               calendarMonthYearText.visibility = View.VISIBLE
               val month = CalendarAdapter.DATE_INPUT?.month.toString()
               val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-              calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+              calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
               calendarPreviousArrow.visibility = View.VISIBLE
               calendarNextArrow.visibility = View.VISIBLE
               calendarHeader.visibility = View.VISIBLE
@@ -203,10 +206,9 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       val lengthOfNextMonth = next.lengthOfMonth()
       val intValueDow = intValueForDayOfWeek(nextDow)
       CalendarAdapter.DATE_INPUT = next
-
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-      calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+      calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
 
       val list = ArrayList<CalendarItemsDataModel>()
       for (i in 0 until intValueDow) {
@@ -216,7 +218,8 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
         list.add(CalendarItemsDataModel(j, intValueDow))
       }
 
-      if((today.month.name > next.month.name && today.year > next.year) || (today.month.name == next.month.name && today.year == next.year)){
+      if((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
+        || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value&& CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)){
         calendarNextArrow.visibility = View.GONE
         calendarNextArrowUnavailable.visibility = View.VISIBLE
       }
@@ -272,12 +275,13 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       val lengthOfMonth = date.lengthOfMonth()
       val output: String = dow.getDisplayName(TextStyle.SHORT, Locale.US)
       val intValueDow = intValueForDayOfWeek(output)
+
       calendarNextArrow.visibility = View.GONE
       calendarNextArrowUnavailable.visibility = View.VISIBLE
 
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-      calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+      calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
 
 
       val list = ArrayList<CalendarItemsDataModel>()
@@ -313,12 +317,13 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       setUpCalendarRecyclerView(list,prev)
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-      calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+      calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
 
       calendarMonthYearText.visibility = View.VISIBLE
       calendarRecyclerView.visibility = View.VISIBLE
 
-      if((today.month.name > prev.month.name && today.year > prev.year) || (today.month.name == prev.month.name && today.year == prev.year)){
+      if((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
+        || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value&& CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)){
         calendarNextArrow.visibility = View.GONE
         calendarNextArrowUnavailable.visibility = View.VISIBLE
       }
@@ -346,7 +351,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     calendarMonthYearText.visibility = View.VISIBLE
     val month = CalendarAdapter.DATE_INPUT?.month.toString()
     val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-    calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+    calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
     calendarLine.visibility = View.VISIBLE
     calendarRecyclerView.visibility = View.VISIBLE
     monthYearPickerRecyclerView.visibility = View.GONE
@@ -361,47 +366,47 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
   private fun getFullMonthName(short: String): String {
     when (short) {
-      "Jan" -> {
+      requireContext().getString(R.string.january).substring(0,3) -> {
         return getString(R.string.january)
       }
 
-      "Feb" -> {
+      requireContext().getString(R.string.february).substring(0,3) -> {
         return getString(R.string.february)
       }
 
-      "Mar" -> {
+      requireContext().getString(R.string.march).substring(0,3) -> {
         return getString(R.string.march)
       }
 
-      "Apr" -> {
+      requireContext().getString(R.string.april).substring(0,3) -> {
         return getString(R.string.april)
       }
 
-      "May" -> {
+      requireContext().getString(R.string.may).substring(0,3) -> {
         return getString(R.string.may)
       }
 
-      "Jun" -> {
+      requireContext().getString(R.string.june).substring(0,3) -> {
         return getString(R.string.june)
       }
 
-      "Jul" -> {
+      requireContext().getString(R.string.july).substring(0,3) -> {
         return getString(R.string.july)
       }
 
-      "Aug" -> {
+      requireContext().getString(R.string.august).substring(0,3) -> {
         return getString(R.string.august)
       }
 
-      "Sep" -> {
+      requireContext().getString(R.string.september).substring(0,3) -> {
         return getString(R.string.september)
       }
 
-      "Oct" -> {
+      requireContext().getString(R.string.october).substring(0,3) -> {
         return getString(R.string.october)
       }
 
-      "Nov" -> {
+      requireContext().getString(R.string.november).substring(0,3) -> {
         return getString(R.string.november)
       }
       else -> {
@@ -409,6 +414,46 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
       }
 
 
+    }
+  }
+  private fun getMonthByLanguage(month: String): String {
+    when (month) {
+      "January" -> {
+        return requireContext().getString(R.string.january)
+      }
+     "February" -> {
+        return requireContext().getString(R.string.february)
+      }
+      "March" -> {
+        return requireContext().getString(R.string.march)
+      }
+      "April" -> {
+        return requireContext().getString(R.string.april)
+      }
+      "May" -> {
+        return requireContext().getString(R.string.may)
+      }
+     "June" -> {
+        return requireContext().getString(R.string.june)
+      }
+      "July" -> {
+        return requireContext().getString(R.string.july)
+      }
+      "August" -> {
+        return requireContext().getString(R.string.august)
+      }
+      "September" -> {
+        return requireContext().getString(R.string.september)
+      }
+      "October" -> {
+        return requireContext().getString(R.string.october)
+      }
+      "November" -> {
+        return requireContext().getString(R.string.november)
+      }
+      else -> {
+        return requireContext().getString(R.string.december)
+      }
     }
   }
 
@@ -458,22 +503,22 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
 
   private fun intValueForDayOfWeek(day: String): Int {
     when (day) {
-      requireContext().getString(R.string.monday_short)-> {
+      "Mon" -> {
         return 0
       }
-      requireContext().getString(R.string.tuesday_short) -> {
+      "Tue" -> {
         return 1
       }
-      requireContext().getString(R.string.wednesday_short) -> {
+      "Wed" -> {
         return 2
       }
-      requireContext().getString(R.string.thursday_short) -> {
+      "Thu" -> {
         return 3
       }
-      requireContext().getString(R.string.friday_short) -> {
+      "Fri" -> {
         return 4
       }
-      requireContext().getString(R.string.saturday_short) -> {
+      "Sat" -> {
         return 5
       }
       else -> {
@@ -489,15 +534,12 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     val intValueDayOfWeek = intValueForDayOfWeek(dayOfWeek)
     val lengthOfMonth = date.lengthOfMonth()
 
-    if((CalendarAdapter.DATE_INPUT_TODAY.month.name > date.month.name && CalendarAdapter.DATE_INPUT_TODAY.year > date.year)
-      || (CalendarAdapter.DATE_INPUT_TODAY.month.name == date.month.name && CalendarAdapter.DATE_INPUT_TODAY.year == date.year)){
+    if((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
+      || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value&& CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)){
       calendarNextArrow.visibility = View.GONE
       calendarNextArrowUnavailable.visibility = View.VISIBLE
     }
-
-    calendarRecyclerView.visibility = View.GONE
-    calendarMonthYearText.visibility = View.GONE
-    CalendarAdapter.DATE_INPUT = date
+    
 
     val listOfDaysMonth = ArrayList<CalendarItemsDataModel>()
     for (i in 0 until intValueDayOfWeek){
@@ -509,9 +551,13 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     setUpCalendarRecyclerView(listOfDaysMonth,date)
     val month = CalendarAdapter.DATE_INPUT?.month.toString()
     val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-    calendarMonthYearText.text = "$monthFirstUpper ${CalendarAdapter.DATE_INPUT?.year}"
+    calendarMonthYearText.text = "${getMonthByLanguage(monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
     calendarMonthYearText.visibility = View.VISIBLE
     calendarRecyclerView.visibility = View.VISIBLE
+
+    calendarNextArrow.setOnClickListener {
+      nextMonthClick(date)
+    }
 
   }
 }
