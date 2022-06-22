@@ -240,7 +240,7 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     val fromDateLen = fromDate.lengthOfMonth() - 1
     val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
-    val toDate = fromDate.plusDays(fromDateLen.toLong())
+    val toDate = fromDate.plusDays(fromDateLen.toLong()+1)
     val systemTimeZone: ZoneId = ZoneId.systemDefault()
 
     val dateFrom = fromDate.atStartOfDay(systemTimeZone)
@@ -264,7 +264,6 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     })
     return result
   }
-
 }
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netcetera.skopjepulse.R
@@ -23,8 +24,7 @@ import kotlin.collections.ArrayList
 import org.koin.core.parameter.parametersOf
 
 
-class CalendarDialog : BaseDialogFragment<MapViewModel>() {
-  override val viewModel: MapViewModel by viewModel {parametersOf(MapFragment.CITY)}
+class CalendarDialog: DialogFragment() {
   private val mainViewModel: MainViewModel by sharedViewModel()
 
   private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
@@ -53,9 +53,7 @@ class CalendarDialog : BaseDialogFragment<MapViewModel>() {
     CalendarAdapter.DATE_INPUT = null
     update(CalendarAdapter.DATE_INPUT)
 
-    viewModel.averageWeeklyData.observe(viewLifecycleOwner){
-      Log.d("Data",it.toString())
-    }
+
 
     val arrayOfMonths = arrayOf(
       requireContext().getString(R.string.january).substring(0, 3),

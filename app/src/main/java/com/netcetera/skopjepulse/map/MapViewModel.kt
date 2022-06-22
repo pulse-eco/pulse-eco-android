@@ -226,6 +226,8 @@ class MapViewModel(
       }
     }
 
+
+
     averageDataMonthDays = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
         val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.DATE_INPUT_TODAY)
@@ -342,6 +344,10 @@ class MapViewModel(
 
   fun getAvgDataRangeGiven(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate, toDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
     return cityPulseRepository.getAverageDataGivenRange(sensorId,selectedMeasurementType,fromDate,toDate)
+  }
+
+  fun getAvgDataMonthPreviuosMonth(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getAverageDataMonthDays(sensorId, selectedMeasurementType, fromDate)
   }
 
   /**
