@@ -591,6 +591,35 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setCalendarAdapter(requireContext(),list, recyclerView, alertDialog,resMonths.toList())
     }
   }
+
+  private fun monthYearPickersMonthAverageValues(recyclerView: RecyclerView,alertDialog: AlertDialog){
+    val fromDate= CalendarAdapter.DATE_INPUT!!
+    val dow: DayOfWeek = fromDate.dayOfWeek
+    val lengthOfMonth = fromDate.lengthOfMonth()
+    val output: String = dow.getDisplayName(TextStyle.SHORT, Locale.US)
+    val intValueDow = CalendarUtils.intValueForDayOfWeek(output)
+
+    val list = ArrayList<CalendarItemsDataModel>()
+    for (i in 0 until intValueDow) {
+      list.add(CalendarItemsDataModel(0, intValueDow))
+    }
+    for (j in 1..lengthOfMonth) {
+      list.add(CalendarItemsDataModel(j, intValueDow))
+    }
+    viewModel.getAvgDataMonthPreviuosMonth(sensorId = null,sensorType,fromDate).observe(viewLifecycleOwner){
+      Log.d("VALUE",it.data.toString())
+
+      val resMonths = mutableListOf<CalendarValuesDataModel>()
+      val res = it.data
+      for (i in res!!.indices)
+      {
+        val band = getBand(res[i].value.toInt())
+        resMonths.add(CalendarValuesDataModel(res[i],band))
+      }
+      setCalendarAdapter(requireContext(),list, recyclerView, alertDialog,resMonths.toList())
+    }
+  }
+
   private fun nextMonthAverageValues(recyclerView: RecyclerView,alertDialog: AlertDialog){
     val fromDate= CalendarAdapter.DATE_INPUT!!.plusMonths(1)
     val dow: DayOfWeek = fromDate.dayOfWeek
@@ -739,6 +768,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
           val newDate = LocalDate.parse("01/${CalendarUtils.getMonthNumber(requireContext(),CalendarDialog.newMonth!!)}/${CalendarDialog.newYear ?: yearValue}",formatterLocalDate)
           updateFromMonthYearPicker(requireContext(),newDate,recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarMonthYearText, calendarPreviousArrow, alertDialog)
 
+          monthYearPickersMonthAverageValues(recyclerView, alertDialog)
+
           calendarMonthYearText.visibility = View.VISIBLE
           val month = CalendarAdapter.DATE_INPUT?.month.toString()
           val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
@@ -788,6 +819,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
               val newDate = LocalDate.parse("01/${CalendarUtils.getMonthNumber(requireContext(),CalendarDialog.newMonth!!) ?: monthValue }/${CalendarDialog.newYear ?: yearValue}",formatterLocalDate)
               Log.d("New date",newDate.toString())
               updateFromMonthYearPicker(requireContext(),newDate,recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarMonthYearText, calendarPreviousArrow, alertDialog)
+              monthYearPickersMonthAverageValues(recyclerView, alertDialog)
 
               calendarMonthYearText.visibility = View.VISIBLE
               calendarMonthYearText.text = newInputs
