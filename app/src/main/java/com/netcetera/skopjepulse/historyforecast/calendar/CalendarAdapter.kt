@@ -29,9 +29,9 @@ class CalendarAdapter(
 
   companion object {
     private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
-    var DATE_INPUT_TODAY: LocalDate = LocalDate.parse("01/06/2022", formatter)
+    var DATE_INPUT_TODAY: LocalDate = LocalDate.parse("01/${LocalDate.now().monthValue}/${LocalDate.now().year}", formatter)
     var DATE_INPUT: LocalDate? = null
-    var DATE_CLICKED: String = "20/6/2022"
+    var DATE_CLICKED: String = "${LocalDate.now()}"
   }
 
 
@@ -51,7 +51,7 @@ class CalendarAdapter(
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val dayOfMonth = itemView.dayTextView
     val slotContainer = itemView.slotConstraintLayout
-    val TODAYdate = LocalDate.parse("01/06/2022", formatter)
+    val TODAYdate = LocalDate.parse("01/${LocalDate.now().monthValue}/${LocalDate.now().year}", formatter)
     val todayMonth = TODAYdate.month.name
     val todayYear = TODAYdate.year
     val dateMonth = DATE_INPUT?.month?.name

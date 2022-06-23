@@ -16,6 +16,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.*
 
 /**
@@ -152,14 +153,16 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   fun getSensorValue(selectedMeasurementType: MeasurementType?) : LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>> ()
     val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
-    val formatterWithoutTimeZone = SimpleDateFormat("yyyy-MM-dd'T'")
     val mutableList = mutableListOf<SensorReading>()
-    val fromDate = formatterWithoutTimeZone.format(HistoryForecastAdapter.TIME_STAMP) + "00:00:00+02:00"
-    val t = HistoryForecastAdapter.TIME_STAMP.time + (1000 * 60 * 60 * 24)
-    val toDate = formatter.format(t)
+    val fromDate = formatter.format(HistoryForecastAdapter.TIME_STAMP)
+    val localFromDate = ZonedDateTime.parse(fromDate)//.withZoneSameInstant(ZoneId.systemDefault())
+    val toDateCalculation = HistoryForecastAdapter.TIME_STAMP.time + (1000 * 60 * 60 * 24)
+    val toDate = formatter.format(toDateCalculation)
+    val localToDate = ZonedDateTime.parse(toDate)//.withZoneSameInstant(ZoneId.systemDefault())
+
     val checkFormater = SimpleDateFormat("yyyy-MM-dd")
 
-    apiService.getSensorValuesForValueType(selectedMeasurementType!!,fromDate,toDate).enqueue(object : Callback<List<SensorReading>> {
+    apiService.getSensorValuesForValueType(selectedMeasurementType!!,localFromDate.toString(),localToDate.toString()).enqueue(object : Callback<List<SensorReading>> {
 
       override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
         for (i in 0 until response.body()!!.size) {
