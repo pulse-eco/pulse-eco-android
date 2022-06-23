@@ -243,7 +243,7 @@ class MapViewModel(
 
    averageMonthDataByYear = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
-        val averageLiveData = cityPulseRepository.getAverageMonthlyData(sensor?.id,measurementType,LocalDate.ofYearDay(CalendarAdapter.DATE_INPUT?.year?:LocalDate.now().year,1),LocalDate.ofYearDay((CalendarAdapter.DATE_INPUT?.year?:LocalDate.now().year)+1,1))
+        val averageLiveData = cityPulseRepository.getAverageMonthlyData(sensor?.id,measurementType,MapFragment.fromDateMonthAvgByYear,MapFragment.toDateMonthAvgByYear)
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData?.data?.let { readings ->
