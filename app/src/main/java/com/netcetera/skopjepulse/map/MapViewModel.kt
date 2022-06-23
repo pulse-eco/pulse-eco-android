@@ -82,6 +82,7 @@ class MapViewModel(
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
   var averageDataMonthDays: LiveData<AverageWeeklyDataModel>
   var averageDataGivenRange: LiveData<AverageWeeklyDataModel>
+  var averageMonthDataByYear: LiveData<AverageWeeklyDataModel>
 
 
   init {
@@ -233,7 +234,19 @@ class MapViewModel(
         val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.DATE_INPUT_TODAY)
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
-          responseData.data?.let { readings ->
+          responseData?.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
+
+   averageMonthDataByYear = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageMonthlyData(sensor?.id,measurementType,LocalDate.ofYearDay(CalendarAdapter.DATE_INPUT?.year?:LocalDate.now().year,1),LocalDate.ofYearDay((CalendarAdapter.DATE_INPUT?.year?:LocalDate.now().year)+1,1))
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData?.data?.let { readings ->
             AverageWeeklyDataModel(readings)
           }
         }
@@ -346,8 +359,12 @@ class MapViewModel(
     return cityPulseRepository.getAverageDataGivenRange(sensorId,selectedMeasurementType,fromDate,toDate)
   }
 
-  fun getAvgDataMonthPreviuosMonth(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
+  fun getAvgDataMonthPreviuosMonth(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate): LiveData<Resource<List<SensorReading>>?> {
     return cityPulseRepository.getAverageDataMonthDays(sensorId, selectedMeasurementType, fromDate)
+  }
+
+  fun getAverageMonthlyData(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate, toDate: LocalDate) : LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getAverageMonthlyData(sensorId,selectedMeasurementType, fromDate, toDate)
   }
 
   /**

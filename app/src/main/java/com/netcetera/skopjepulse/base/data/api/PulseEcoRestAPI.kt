@@ -69,6 +69,13 @@ interface CityPulseApiService {
     @Query("to")to:String
   ) : Call<List<SensorReading>>
 
+  @GET("avgData/month")
+  fun getAvgMonthData(
+    @Query("sensorId")sensorId :String,
+    @Query("type")type:String,
+    @Query("from")from:String,
+    @Query("to")to:String
+  ) : Call<List<SensorReading>>
 }
 
 private const val PULSE_BASE_URL: String = "https://pulse.eco/rest/"

@@ -98,7 +98,7 @@ class HistoryForecastAdapter(
 
       titleDayDate.text = formatDayTitle(context, timeStamp)
       if (valueDouble == -1.0) {
-        bodyDayAmount.text = "N\\A"
+        bodyDayAmount.text = context.getString(R.string.not_available)
         bodyDayAmount.setBackgroundResource(R.color.graph_grid)
         cardView.alpha = 0.7F
       } else {

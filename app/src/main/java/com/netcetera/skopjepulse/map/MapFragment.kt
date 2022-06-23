@@ -86,7 +86,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
   val city: City by lazy { requireArguments().getParcelable("city")!! }
 
-  private val formatterLocalDate: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
@@ -112,12 +112,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
     var overAllData: List<CityOverall>? = null
     var calendarValuesResult : List<CalendarValuesDataModel> = listOf()
+    var monthAvgByYearValues : List<CalendarValuesDataModel> = listOf()
     var bandValueOverallData: Int? = null
-    var toDate  = LocalDate.parse("22/06/2022", CalendarDialog.formatter)
+    val formatterLocalDate: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+    var toDate  = LocalDate.parse("23/06/2022", formatterLocalDate )
     var fromDate = toDate.minusDays(8)
 
     var DATE_MONTH_REQUEST: LocalDate = CalendarAdapter.DATE_INPUT_TODAY
   }
+
 
 
 
@@ -142,6 +145,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
       /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
+
       viewModel.showDataForMeasurementType(it)
       sensorType = it
       progressBarForWeeklyAverageData.visibility = View.VISIBLE
@@ -170,6 +174,19 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
         calendarValuesResult = resMonths.toList()
       }
+
+      val result = mutableListOf<CalendarValuesDataModel>()
+      viewModel.averageMonthDataByYear.value?.let {
+        val res = it.data
+        for (i in res.indices)
+        {
+          val band = getBand(res[i].value.toInt())
+          result.add(CalendarValuesDataModel(res[i],band))
+        }
+        monthAvgByYearValues = result.toList()
+      }
+
+
     }
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) { weeklyAvg ->
@@ -201,6 +218,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
 
+    viewModel.averageMonthDataByYear.observe(viewLifecycleOwner){
+      val res = it.data
+      val resMonths = mutableListOf<CalendarValuesDataModel>()
+      for (i in res.indices)
+      {
+        val band = getBand(res[i].value.toInt())
+        resMonths.add(CalendarValuesDataModel(res[i],band))
+      }
+      monthAvgByYearValues = resMonths.toList()
+    }
 
     viewModel.isSpecificSensorSelected.observe(viewLifecycleOwner) {
       pastWeekDataLabelForCityName = it
@@ -329,8 +356,20 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  fun check(){
+  private fun monthlyAverageByYear(year:Int){
 
+    val resMonths = mutableListOf<CalendarValuesDataModel>()
+
+    val fromDate = LocalDate.ofYearDay(year,1)
+    val toDate = LocalDate.ofYearDay(year+1,1)
+    viewModel.getAverageMonthlyData(null,sensorType,fromDate,toDate).value?.let{ monthAvg->
+      val res = monthAvg.data
+      for (i in res!!.indices) {
+        val band = getBand(res[i].value.toInt())
+        resMonths.add(CalendarValuesDataModel(res[i],band))
+      }
+      monthAvgByYearValues = resMonths.toList()
+    }
   }
 
   private fun setValuesForOverallBannerData(title: String,backgroundColor: Int,value:String,valueUnit:String,description:String,legend: Legend){
@@ -446,6 +485,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       alertDialog.dismiss()
     }
   }
+
 
   private fun update(context: Context,date: LocalDate?,calendarMonthYearText:TextView,recyclerView:RecyclerView,calendarNextArrow:TextView,
                      calendarNextArrowUnavailable:TextView,calendarPreviousArrow:TextView,alertDialog: AlertDialog) {
@@ -579,14 +619,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
       list.add(CalendarItemsDataModel(j, intValueDow))
     }
     viewModel.getAvgDataMonthPreviuosMonth(sensorId = null,sensorType,fromDate).observe(viewLifecycleOwner){
-      Log.d("VALUE",it.data.toString())
+      Log.d("VALUE",it?.data.toString())
 
       val resMonths = mutableListOf<CalendarValuesDataModel>()
-      val res = it.data
-      for (i in res!!.indices)
-      {
-        val band = getBand(res[i].value.toInt())
-        resMonths.add(CalendarValuesDataModel(res[i],band))
+      val res = it?.data
+      if (!res.isNullOrEmpty()) {
+        for (i in res.indices) {
+          val band = getBand(res[i].value.toInt())
+          resMonths.add(CalendarValuesDataModel(res[i], band))
+        }
       }
       setCalendarAdapter(requireContext(),list, recyclerView, alertDialog,resMonths.toList())
     }
@@ -607,14 +648,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
       list.add(CalendarItemsDataModel(j, intValueDow))
     }
     viewModel.getAvgDataMonthPreviuosMonth(sensorId = null,sensorType,fromDate).observe(viewLifecycleOwner){
-      Log.d("VALUE",it.data.toString())
+      Log.d("VALUE",it?.data.toString())
 
       val resMonths = mutableListOf<CalendarValuesDataModel>()
-      val res = it.data
-      for (i in res!!.indices)
-      {
-        val band = getBand(res[i].value.toInt())
-        resMonths.add(CalendarValuesDataModel(res[i],band))
+      val res = it?.data
+      if (!res.isNullOrEmpty()) {
+        for (i in res!!.indices) {
+          val band = getBand(res[i].value.toInt())
+          resMonths.add(CalendarValuesDataModel(res[i], band))
+        }
       }
       setCalendarAdapter(requireContext(),list, recyclerView, alertDialog,resMonths.toList())
     }
@@ -635,15 +677,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
       list.add(CalendarItemsDataModel(j, intValueDow))
     }
     viewModel.getAvgDataMonthPreviuosMonth(sensorId = null,sensorType,fromDate).observe(viewLifecycleOwner){
-      Log.d("VALUE",it.data.toString())
 
       val resMonths = mutableListOf<CalendarValuesDataModel>()
-      val res = it.data
-      for (i in res!!.indices)
+      val res = it?.data
+      if (!res.isNullOrEmpty()){
+      for (i in res.indices)
       {
         val band = getBand(res[i].value.toInt())
         resMonths.add(CalendarValuesDataModel(res[i],band))
-      }
+      }}
       setCalendarAdapter(requireContext(),list, recyclerView, alertDialog,resMonths.toList())
     }
   }
@@ -745,7 +787,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       val monthValue = CalendarAdapter.DATE_INPUT?.month?.value
       val currentYear = CalendarAdapter.DATE_INPUT?.year.toString()
       val yearValue = CalendarAdapter.DATE_INPUT?.year
-      val currentMonth = month?.substring(0, 1)?.toUpperCase() + month?.substring(1)?.toLowerCase()
       calendarMonthYearText.setOnClickListener {
         calendarNextArrowUnavailable.visibility = View.GONE
         calendarLine.visibility = View.GONE
@@ -757,7 +798,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
         calendarHeader.visibility = View.GONE
         recyclerView.visibility = View.GONE
         monthYearPickerRecyclerView.visibility = View.VISIBLE
-        val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), arrayOfMonths)
+        monthlyAverageByYear(CalendarAdapter.DATE_INPUT?.year?:LocalDate.now().year)
+        val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), arrayOfMonths, monthAvgByYearValues)
         monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
         monthYearPickerRecyclerView.adapter = monthAdapter
         monthYearPickerRecyclerView.suppressLayout(true)
@@ -798,12 +840,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
           recyclerView.visibility = View.GONE
           monthYearPickerRecyclerView.visibility = View.VISIBLE
           monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
-          val yearAdapter = CalendarMonthYearPickerAdapter(requireContext(), arrayOfYear)
+          val yearAdapter = CalendarMonthYearPickerAdapter(requireContext(), arrayOfYear,null)
           monthYearPickerRecyclerView.adapter = yearAdapter
           monthYearPickerRecyclerView.suppressLayout(true)
           yearAdapter.onItemClick = {
             CalendarDialog.newYear = CalendarMonthYearPickerAdapter.MONTH_YEAR_VALUE
-            val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), arrayOfMonths)
+            monthlyAverageByYear(CalendarAdapter.DATE_INPUT?.year?:LocalDate.now().year)
+            val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), arrayOfMonths, monthAvgByYearValues)
             monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
             monthYearPickerRecyclerView.adapter = monthAdapter
             monthYearPickerRecyclerView.suppressLayout(true)

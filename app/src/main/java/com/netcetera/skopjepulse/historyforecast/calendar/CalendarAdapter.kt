@@ -22,7 +22,7 @@ class CalendarAdapter(
   val context: Context,
   private val items: ArrayList<CalendarItemsDataModel>,
   val date: LocalDate,
-  val values: List<CalendarValuesDataModel>,
+  val values: List<CalendarValuesDataModel>?,
   val todayValue: Int?) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
   var onItemClick: ((String) -> Unit)? = null
@@ -66,9 +66,10 @@ class CalendarAdapter(
       {
         newList.add(CalendarValuesDataModel(null,null))
       }
-      for (element in values)
-      {
-        newList.add(element)
+      if (values != null) {
+        for (element in values) {
+          newList.add(element)
+        }
       }
       newList.toList()
       if (adapterPosition > items[adapterPosition].startDayOfMonth || adapterPosition == items[adapterPosition].startDayOfMonth) {
