@@ -7,9 +7,9 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
-import com.netcetera.skopjepulse.historyforecast.calendar.CalendarDialog
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarItemsDataModel
 import com.netcetera.skopjepulse.map.MapFragment
 import java.time.LocalDate
@@ -17,7 +17,37 @@ import java.util.*
 
 object CalendarUtils {
 
-   fun intValueForDayOfWeek(day: String): Int {
+  fun getMonths(context: Context): Array<String> {
+    return arrayOf(
+      context.getString(R.string.january).substring(0, 3),
+      context.getString(R.string.february).substring(0, 3),
+      context.getString(R.string.march).substring(0, 3),
+      context.getString(R.string.april).substring(0, 3),
+      context.getString(R.string.may).substring(0, 3),
+      context.getString(R.string.june).substring(0, 3),
+      context.getString(R.string.july).substring(0, 3),
+      context.getString(R.string.august).substring(0, 3),
+      context.getString(R.string.september).substring(0, 3),
+      context.getString(R.string.october).substring(0, 3),
+      context.getString(R.string.november).substring(0, 3),
+      context.getString(R.string.december).substring(0, 3)
+    )
+  }
+
+  //We have data from 2017:
+  fun getArrayYears(): Array<String> {
+    val startDate = LocalDate.parse("01/01/2017", MapFragment.formatterLocalDate)
+    val maxYear = (startDate.year).downTo(CalendarAdapter.DATE_INPUT_TODAY.year).last
+
+    val mutableListYears = mutableListOf<String>()
+    for (year in startDate.year .. maxYear)
+    {
+      mutableListYears.add(year.toString())
+    }
+    return mutableListYears.toTypedArray()
+  }
+
+  fun intValueForDayOfWeek(day: String): Int {
     when (day) {
       "Mon" -> {
         return 0
@@ -84,7 +114,7 @@ object CalendarUtils {
     }
   }
 
-  fun getMonthNumber(context: Context,month: String): Int {
+  fun getMonthNumber(context: Context,month: String?): Int? {
     when (month) {
       context.getString(R.string.january) -> {
         return 1
@@ -123,7 +153,7 @@ object CalendarUtils {
         return 12
       }
       else -> {
-        return Calendar.MONTH
+        return null
       }
     }
   }
@@ -140,7 +170,7 @@ object CalendarUtils {
     val adapter =  CalendarAdapter(context, list, dateInput,MapFragment.calendarValuesResult, MapFragment.bandValueOverallData)
     recyclerView.adapter = adapter
     adapter.onItemClick = {
-      val clickedDate  = LocalDate.parse(CalendarAdapter.DATE_CLICKED, CalendarDialog.formatter)
+      val clickedDate  = LocalDate.parse(CalendarAdapter.DATE_CLICKED, MapFragment.formatterLocalDate)
       val fromClickedDate = clickedDate.plusDays(4)
       MapFragment.toDate = fromClickedDate
       MapFragment.fromDate = MapFragment.toDate.minusDays(8)
@@ -220,4 +250,72 @@ fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextVi
     monthYearPickerRecyclerView.visibility = View.GONE
     calendarYearPicker.visibility = View.GONE
   }
+
+  fun calendarCancelButton(alertDialog: AlertDialog,calendarDialogCancelButton:TextView ) {
+    calendarDialogCancelButton.setOnClickListener {
+      alertDialog.dismiss()
+    }
+  }
+
+  fun calendarViewSetView(calendarNextArrowUnavailable:TextView,calendarLine:View, calendarMonthYearText:TextView,calendarYearPicker:TextView,
+                          calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
+                          recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView,alertDialog: AlertDialog,calendarDialogCancelButton:TextView) {
+    calendarNextArrowUnavailable.visibility = View.GONE
+    calendarLine.visibility = View.VISIBLE
+    calendarMonthYearText.visibility = View.VISIBLE
+    calendarYearPicker.visibility = View.GONE
+    calendarPreviousArrow.visibility = View.VISIBLE
+    calendarNextArrow.visibility = View.VISIBLE
+    calendarHeader.visibility = View.VISIBLE
+    recyclerView.visibility = View.VISIBLE
+    monthYearPickerRecyclerView.visibility = View.GONE
+    calendarCancelButton(alertDialog,calendarDialogCancelButton)
+  }
+
+  fun monthRecyclerViewSetView(calendarNextArrowUnavailable:TextView,calendarLine:View, calendarMonthYearText:TextView,calendarYearPicker:TextView,
+                                   calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
+                                   recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView) {
+    calendarNextArrowUnavailable.visibility = View.GONE
+    calendarLine.visibility = View.GONE
+    calendarMonthYearText.visibility = View.GONE
+    calendarYearPicker.visibility = View.VISIBLE
+    calendarYearPicker.text = "${MapFragment.CHOSEN_YEAR ?:CalendarAdapter.DATE_INPUT?.year}"
+    calendarPreviousArrow.visibility = View.GONE
+    calendarNextArrow.visibility = View.GONE
+    calendarHeader.visibility = View.GONE
+    recyclerView.visibility = View.GONE
+    monthYearPickerRecyclerView.visibility = View.VISIBLE
+  }
+
+   fun yearRecyclerViewSetView(calendarNextArrowUnavailable:TextView, calendarMonthYearText:TextView,calendarYearPicker:TextView,
+                               calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
+                               recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView)
+   {
+     calendarNextArrowUnavailable.visibility = View.GONE
+     calendarYearPicker.visibility = View.GONE
+     calendarMonthYearText.visibility = View.GONE
+     calendarPreviousArrow.visibility = View.GONE
+     calendarNextArrow.visibility = View.GONE
+     calendarHeader.visibility = View.GONE
+     recyclerView.visibility = View.GONE
+     monthYearPickerRecyclerView.visibility = View.VISIBLE
+     monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+   }
+
+  fun backToCalendarFromMonth(context: Context,calendarMonthYearText: TextView,calendarPreviousArrow: TextView,calendarNextArrow: TextView,
+  calendarHeader: TableLayout,recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView)
+  {
+    val month = CalendarAdapter.DATE_INPUT?.month.toString()
+    val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
+    val newInputs = "${getMonthByLanguage(context,monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
+
+    calendarMonthYearText.visibility = View.VISIBLE
+    calendarMonthYearText.text = newInputs
+    calendarPreviousArrow.visibility = View.VISIBLE
+    calendarNextArrow.visibility = View.VISIBLE
+    calendarHeader.visibility = View.VISIBLE
+    recyclerView.visibility = View.VISIBLE
+    monthYearPickerRecyclerView.visibility = View.GONE
+  }
+
 }

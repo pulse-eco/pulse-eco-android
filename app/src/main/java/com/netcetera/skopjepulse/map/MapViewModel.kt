@@ -17,7 +17,6 @@ import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
-import com.netcetera.skopjepulse.historyforecast.calendar.CalendarDialog
 import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.LegendBand
