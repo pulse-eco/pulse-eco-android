@@ -17,5 +17,5 @@ data class SensorReading(
   @Json(name = "position")
   val position: String,
   @Json(name = "value")
-  val value: Double
+  var value: Double
 )

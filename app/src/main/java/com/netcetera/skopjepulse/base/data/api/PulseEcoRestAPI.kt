@@ -62,8 +62,12 @@ interface CityPulseApiService {
     @Query("to")to:String
   ) : Call<List<SensorReading>>
 
+  /*
+    Returns a list of all the values received for valueType for all
+    the sensors in the time period of fromDateTime to toDateTime.
+   */
   @GET("dataRaw")
-  fun getSensorValuesForValueType(
+  fun getAllSensorsAllValuesForTypeInRange(
     @Query("type")type:String,
     @Query("from")from:String,
     @Query("to")to:String

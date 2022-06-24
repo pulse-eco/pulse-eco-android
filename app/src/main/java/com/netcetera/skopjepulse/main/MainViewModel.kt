@@ -47,7 +47,6 @@ class MainViewModel(
    */
   val measurementTypeTabs: LiveData<List<MeasurementTypeTab>>
 
-
   init {
     activeCity = Transformations.distinctUntilChanged(
       MediatorLiveData<City>().apply {

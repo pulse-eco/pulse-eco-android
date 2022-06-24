@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.SensorReading
@@ -30,7 +29,7 @@ class HistoryForecastAdapter(
     var selectedSensorReading: SensorReading? = null
   }
 
-  var onItemClick: ((Date) -> Unit)? = null
+  var onItemClick: ((Date?) -> Unit)? = null
   var onItemClickExplore: ((String) -> Unit)? = null
 
 
@@ -79,7 +78,6 @@ class HistoryForecastAdapter(
     override fun bind() {
       exploreView.setOnClickListener {
         onItemClickExplore?.invoke("calendar")
-
       }
     }
   }
@@ -89,30 +87,26 @@ class HistoryForecastAdapter(
     private val titleDayDate = view.textViewDayDate
     private val bodyDayAmount = view.textViewPollutionAmount
     override fun bind() {
-      val timeStamp = items[adapterPosition].averageWeeklyDataModel?.stamp
-      val valueDouble = items[adapterPosition].averageWeeklyDataModel?.value
-      val value = items[adapterPosition].averageWeeklyDataModel?.value?.toInt().toString()
+      val sensorReading = items[adapterPosition].averageWeeklyDataModel
       val color = items[adapterPosition].sensorValueColor
-      val sensorId = items[adapterPosition].averageWeeklyDataModel?.sensorId
-      val measurementType = items[adapterPosition].averageWeeklyDataModel?.type
+      titleDayDate.text = formatDayTitle(context, sensorReading?.stamp)
 
-      titleDayDate.text = formatDayTitle(context, timeStamp)
-      if (valueDouble == -1.0) {
+      if (sensorReading?.value == -1.0) {
         bodyDayAmount.text = context.getString(R.string.not_available)
-        bodyDayAmount.setBackgroundResource(R.color.graph_grid)
+        bodyDayAmount.setBackgroundResource(R.color.gray)
         cardView.alpha = 0.7F
       } else {
-        bodyDayAmount.text = value
+        bodyDayAmount.text = sensorReading?.value?.toInt().toString()
         color?.let { bodyDayAmount.setBackgroundColor(it.legendColor) }
         cardView.alpha = 1F
       }
+
       cardView.setOnClickListener {
         selectedPosition = adapterPosition
-        val res = SensorReading(sensorId!!, timeStamp!!, measurementType!!, "", valueDouble!!)
-        selectedSensorReading = res
+        selectedSensorReading = sensorReading
         notifyDataSetChanged()
-        TIME_STAMP = timeStamp!!
-        onItemClick?.invoke(timeStamp)
+        TIME_STAMP = sensorReading!!.stamp
+        onItemClick?.invoke(TIME_STAMP)
       }
       if (selectedPosition > 0) {
         if (selectedPosition == adapterPosition) {
@@ -155,18 +149,18 @@ class HistoryForecastAdapter(
   }
 
   private fun dateShownInsteadDayOfWeek(stamp: Date?): String {
-    val format = SimpleDateFormat("d MMM")
-    return format.format(stamp)
+    val format = SimpleDateFormat("d MMM", Locale.getDefault())
+    return format.format(stamp!!)
   }
 
   private fun dayOfWeekShown(stamp: Date?): String {
-    val formatWeekDay = SimpleDateFormat("EEE")
-    return formatWeekDay.format(stamp)
+    val formatWeekDay = SimpleDateFormat("EEE", Locale.getDefault())
+    return formatWeekDay.format(stamp!!)
   }
 
   private fun yearMonthDayDateFormat(stamp: Date?): String {
-    val format = SimpleDateFormat("yyyy-MM-dd")
-    return format.format(stamp)
+    val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return format.format(stamp!!)
   }
 
 }

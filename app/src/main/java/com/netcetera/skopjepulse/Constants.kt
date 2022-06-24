@@ -11,5 +11,6 @@ class Constants {
     const val DAY_MONTH_YEAR = "dd/MM/yyyy"
     const val FULL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
     const val SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY = "-1"
+    const val DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24
   }
 }
