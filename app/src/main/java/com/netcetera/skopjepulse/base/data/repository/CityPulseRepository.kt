@@ -17,6 +17,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.*
 
 /**
@@ -166,28 +167,23 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
 
   fun getSensorsValuesFromType(selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>> ()
-    val formatterWithoutTimeZone = SimpleDateFormat("yyyy-MM-dd'T'")
     val mutableList = mutableListOf<SensorReading>()
-    val fromDate = formatterWithoutTimeZone.format(HistoryForecastAdapter.TIME_STAMP) + "00:00:00+02:00"
-    val t = HistoryForecastAdapter.TIME_STAMP.time + DAY_IN_MILLISECONDS
-    val toDate = fullDateFormatter.format(t)
+    val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
+    val fromDate = formatter.format(HistoryForecastAdapter.TIME_STAMP)
+    val localFromDate = ZonedDateTime.parse(fromDate).withZoneSameInstant(ZoneId.systemDefault())
+    val toDateCalculation = HistoryForecastAdapter.TIME_STAMP.time + DAY_IN_MILLISECONDS
+    val toDate = formatter.format(toDateCalculation)
+    val localToDate = ZonedDateTime.parse(toDate).withZoneSameInstant(ZoneId.systemDefault())
     val checkFormatter = SimpleDateFormat("yyyy-MM-dd")
 
-    apiService.getAllSensorsAllValuesForTypeInRange(selectedMeasurementType!!, fromDate, toDate)
-      .enqueue(object : Callback<List<SensorReading>> {
+    apiService.getAllSensorsAllValuesForTypeInRange(selectedMeasurementType!!,localFromDate.toString(), localToDate.toString()).enqueue(object : Callback<List<SensorReading>> {
         override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
           result.postValue(Resource.error(null, t))
         }
 
-        override fun onResponse(
-          call: Call<List<SensorReading>>,
-          response: Response<List<SensorReading>>
-        ) {
+        override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
           for (i in 0 until response.body()!!.size) {
-            if (checkFormatter.format(response.body()!![i].stamp) == checkFormatter.format(
-                HistoryForecastAdapter.TIME_STAMP
-              )
-            ) {
+            if (checkFormatter.format(response.body()!![i].stamp) == checkFormatter.format(HistoryForecastAdapter.TIME_STAMP)) {
               mutableList += response.body()!![i]
             }
           }
@@ -198,10 +194,7 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     return result
   }
 
-  fun getAverageWeeklyData(
-    sensorId: String?,
-    selectedMeasurementType: MeasurementType?
-  ): LiveData<Resource<List<SensorReading>>> {
+  fun getAverageWeeklyData(sensorId: String?, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>>()
     val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     val cal: Calendar = Calendar.getInstance()
@@ -211,8 +204,7 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     val date = cal2.time
     val fromDate: String = fullDateFormatter.format(date)
 
-    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate)
-      .enqueue(object : Callback<List<SensorReading>> {
+    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate).enqueue(object : Callback<List<SensorReading>> {
         override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
           result.postValue(Resource.error(null, t))
         }
@@ -289,11 +281,7 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     return result
   }
 
-  fun getAverageDataMonthDays(
-    sensorId: String?,
-    selectedMeasurementType: MeasurementType?,
-    fromDate: LocalDate
-  ): LiveData<Resource<List<SensorReading>>> {
+  fun getAverageDataMonthDays(sensorId: String?, selectedMeasurementType: MeasurementType?, fromDate: LocalDate): LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>>()
     val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     val fromDateLen = fromDate.lengthOfMonth() - 1
@@ -306,20 +294,12 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     val dateTo = toDate.atStartOfDay(systemTimeZone)
     val utilDateTo = Date.from(dateTo.toInstant())
 
-    apiService.getAvgDailyData(
-      id,
-      selectedMeasurementType!!,
-      fullDateFormatter.format(utilDateFrom),
-      fullDateFormatter.format(utilDateTo)
-    ).enqueue(object : Callback<List<SensorReading>> {
+    apiService.getAvgDailyData(id, selectedMeasurementType!!, fullDateFormatter.format(utilDateFrom), fullDateFormatter.format(utilDateTo)).enqueue(object : Callback<List<SensorReading>> {
       override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
         result.postValue(Resource.error(null, t))
       }
 
-      override fun onResponse(
-        call: Call<List<SensorReading>>,
-        response: Response<List<SensorReading>>
-      ) {
+      override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
         if (response.isSuccessful && response.body() != null) {
           result.postValue(Resource.success(response.body()!!))
         }
