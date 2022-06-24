@@ -1,10 +1,11 @@
 package com.netcetera.skopjepulse.historyforecast
 
 import android.content.Context
-
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.SensorReading
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class HistoryForecastAdapter(
   val context: Context,
@@ -90,17 +91,19 @@ class HistoryForecastAdapter(
       val sensorReading = items[adapterPosition].averageWeeklyDataModel
       val color = items[adapterPosition].sensorValueColor
       titleDayDate.text = formatDayTitle(context, sensorReading?.stamp)
+      val gd = GradientDrawable()
+      gd.cornerRadius = 10f
 
       if (sensorReading?.value == -1.0) {
         bodyDayAmount.text = context.getString(R.string.not_available)
-        bodyDayAmount.setBackgroundResource(R.color.gray)
+        gd.setColor(ContextCompat.getColor(context, R.color.gray))
         cardView.alpha = 0.7F
       } else {
         bodyDayAmount.text = sensorReading?.value?.toInt().toString()
-        color?.let { bodyDayAmount.setBackgroundColor(it.legendColor) }
+        color?.let { gd.setColor(it.legendColor) }
         cardView.alpha = 1F
       }
-
+      bodyDayAmount.background = gd
       cardView.setOnClickListener {
         selectedPosition = adapterPosition
         selectedSensorReading = sensorReading

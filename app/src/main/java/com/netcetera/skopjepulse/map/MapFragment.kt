@@ -881,8 +881,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     todayButtonData?.values?.get(sensorType)?.let {
-      val sensorReadingFromOverall = SensorReading(todayButtonData.cityName, todayDate, mesType, "", data)
-      todayButtonData?.values?.get(sensorType)?.let {
         val sensorReadingFromOverall =
           SensorReading(todayButtonData.cityName, todayDate, mesType, "", data)
         val bandToday = getBand(sensorReadingFromOverall.value.toInt())
@@ -893,7 +891,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
             HistoryForecastAdapter.VIEW_TYPE_DATE
           )
         )
-      }
     }
     return list
   }
