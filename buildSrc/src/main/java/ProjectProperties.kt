@@ -7,6 +7,6 @@ object ProjectProperties {
 object PulseEco {
   const val applicationId = "com.netcetera.skopjepulse"
 
-  const val versionCode = 33
+  const val versionCode = 34
   const val versionName = "4.2.0-10082022"
 }
