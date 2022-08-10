@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
+import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.repository.CityPulseRepository
 import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
@@ -15,6 +16,7 @@ import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
+import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
 import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
 import com.netcetera.skopjepulse.map.overallbanner.LegendBand
@@ -30,6 +32,8 @@ import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation
 import org.kynosarges.tektosyne.geometry.Voronoi
+import java.time.LocalDate
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -38,6 +42,7 @@ import kotlin.math.roundToInt
  * Implementation of [androidx.lifecycle.ViewModel] for the [MapFragment] that is used for
  * displaying of data of a single [City].
  */
+
 class MapViewModel(
     city: City,
     private val dataDefinitionProvider: DataDefinitionProvider,
@@ -50,8 +55,9 @@ class MapViewModel(
   val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
   var dataDefinitionDataPublicHelper :LiveData<DataDefinition>
 
-  val overallData: LiveData<OverallBannerData>
+  val overallBannerData: LiveData<OverallBannerData>
   val mapMarkers: LiveData<List<MapMarkerModel>>
+  val mapMarkersSensorReadingDaysRange: LiveData<List<MapMarkerModel>>
   val graphData: LiveData<GraphModel>
   /**
    * True/false if there are any favourited sensors by the user for the current city.
@@ -65,6 +71,7 @@ class MapViewModel(
   val favouriteSensorsPicking: LiveData<Pair<Sensors, Sensors>>
   val preferences = mapPreferencesStorage.preferences
   val mapPolygons: LiveData<List<PolygonOptions>>
+  val  mapPolygonsSensorReadingDaysRange: LiveData<List<PolygonOptions>>
   val bottomSheetPeek: LiveData<BottomSheetPeekViewModel>
 
   private val _isSpecificSensorSelected = MutableLiveData<Boolean>()
@@ -72,6 +79,10 @@ class MapViewModel(
     get() = _isSpecificSensorSelected
 
   var averageWeeklyData: LiveData<AverageWeeklyDataModel>
+  var averageDataMonthDays: LiveData<AverageWeeklyDataModel>
+  var averageDataGivenRange: LiveData<AverageWeeklyDataModel>
+  var averageMonthDataByYear: LiveData<AverageWeeklyDataModel>
+
 
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
@@ -82,35 +93,59 @@ class MapViewModel(
     val currentReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.currentReadings) { current ->
         Pair(dataDefinition,
-            current.data.orEmpty().mapNotNull { currentSensorReading ->
-              currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
-            })
+          current.data.orEmpty().mapNotNull { currentSensorReading ->
+            currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
+          })
       }
     }
 
-    val calculatedMapMarkers = Transformations.map(
-        currentReadings) { (dataDefinition, measurements) ->
-      measurements.map { (sensor, reading) ->
-        val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
-        MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
+    val sensorReadingsDaysRange = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+      Transformations.map(cityPulseRepository.sensorReadings) { current ->
+        Pair(dataDefinition, current.data.orEmpty().mapNotNull { currentSensorReading ->
+          currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
+        })
       }
     }
-    mapMarkers = Transformations.distinctUntilChanged(
-        preferences.filter(calculatedMapMarkers, MutableLiveData(emptyList())) {
-          it.dataVisualization.contains(MARKERS)
+
+    val calculatedMapMarkersSensorReadingsDaysRange =
+      Transformations.map(sensorReadingsDaysRange) { (dataDefinition, measurements) ->
+        measurements.map { (sensor, reading) ->
+          val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
+          MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
         }
+      }
+
+    val calculatedMapMarkers = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
+        measurements.map { (sensor, reading) ->
+          val markerColor = dataDefinition.findBandByValue(reading.value).markerColor
+          MapMarkerModel(sensor, reading.value.roundToInt(), markerColor)
+        }
+      }
+
+    mapMarkersSensorReadingDaysRange = Transformations.distinctUntilChanged(
+      preferences.filter(calculatedMapMarkersSensorReadingsDaysRange, MutableLiveData(emptyList())) {
+        it.dataVisualization.contains(MARKERS)
+      }
     )
 
-    overallData = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
-      measurements.map { (_, reading) -> reading.value }.average().takeUnless { it.isNaN() }?.roundToInt()?.let {
+    mapMarkers = Transformations.distinctUntilChanged(
+      preferences.filter(calculatedMapMarkers, MutableLiveData(emptyList())) {
+        it.dataVisualization.contains(MARKERS)
+      }
+    )
+
+    overallBannerData = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
+      measurements.map { (_, reading) -> reading.value }.average().takeUnless { it.isNaN() }
+        ?.roundToInt()?.let {
         val valueBand = dataDefinition.findBandByValue(it)
         OverallBannerData(
-            context.getString(string.average),
-            it.toString(),
-            dataDefinition.unit,
-            valueBand.grade,
-            valueBand.legendColor,
-            calculateLegend(dataDefinition, it))
+          context.getString(string.average),
+          it.toString(),
+          dataDefinition.unit,
+          valueBand.grade,
+          valueBand.legendColor,
+          calculateLegend(dataDefinition, it)
+        )
       }
     }
 
@@ -140,9 +175,9 @@ class MapViewModel(
 
     val historicalSensorReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.historicalReadings) { sensorReadings ->
-        dataDefinition to (sensorReadings.data?.map {
+        dataDefinition to (sensorReadings.data?.associate {
           (it.sensor to (it.readings[dataDefinition.id] ?: emptyList()))
-        }?.toMap() ?: emptyMap())
+        } ?: emptyMap())
       }
     }
 
@@ -179,6 +214,42 @@ class MapViewModel(
       }
     }
 
+    averageDataGivenRange = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(sensor?.id, measurementType,MapFragment.fromDate,MapFragment.toDate)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
+
+    averageDataMonthDays = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.DATE_INPUT_TODAY)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData?.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
+
+   averageMonthDataByYear = Transformations.switchMap(selectedMeasurementType) { measurementType ->
+      Transformations.switchMap(selectedSensor) { sensor ->
+        val averageLiveData = cityPulseRepository.getAverageMonthlyData(sensor?.id,measurementType,MapFragment.fromDateMonthAvgByYear,MapFragment.toDateMonthAvgByYear)
+        _isSpecificSensorSelected.value = sensor == null
+        Transformations.map(averageLiveData) { responseData ->
+          responseData?.data?.let { readings ->
+            AverageWeeklyDataModel(readings)
+          }
+        }
+      }
+    }
+
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {
         return@switchMap Transformations.map(hasFavouriteSensors) { it.not() }
@@ -192,13 +263,11 @@ class MapViewModel(
       Pair(favourite.toList(), all.data?.filter { !favourite.contains(it) } ?: emptyList())
     }
 
-    val calculatedMapPolygons = Transformations.map(
-        currentReadings) { (dataDefinition, measurements) ->
+    val calculatedMapPolygons = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
       val dataToVisualise = measurements.map { (sensor, sensorReadings) ->
         val measurement = sensorReadings.value.roundToInt()
         sensor to measurement
       }
-
       val sensorPoints = dataToVisualise.map { (sensor, _) ->
         PointD(sensor.position!!.latitude, sensor.position.longitude)
       }
@@ -225,11 +294,48 @@ class MapViewModel(
         }
       }
     }
+
+    val calculatedMapPolygonsSensorReadingDaysRange = Transformations.map(sensorReadingsDaysRange) { (dataDefinition, measurements) ->
+      val dataToVisualise = measurements.map { (sensor, sensorReadings) ->
+        val measurement = sensorReadings.value.roundToInt()
+        sensor to measurement
+      }
+      val sensorPoints = dataToVisualise.map { (sensor, _) ->
+        PointD(sensor.position!!.latitude, sensor.position.longitude)
+      }
+      if (sensorPoints.isEmpty()) {
+        return@map emptyList<PolygonOptions>()
+      }
+      val voronoiPoints = sensorPoints.union(
+        city.cityBorderPoints.map { PointD(it.latitude, it.longitude) })
+      val voronoiResult = Voronoi.findAll(voronoiPoints.toTypedArray(), city.voronoiCityBounds)
+
+      val dataToDraw = dataToVisualise.map { (sensor, measurement) ->
+        voronoiResult.voronoiRegions().first { region ->
+          GeoUtils.pointInPolygon(PointD(sensor.position!!.latitude, sensor.position.longitude),
+            region) == PolygonLocation.INSIDE
+        } to measurement
+      }
+
+      return@map dataToDraw.map { (region, measurement) ->
+        PolygonOptions().apply {
+          addAll(region.map { LatLng(it.x, it.y) })
+          strokeWidth(0f)
+          fillColor(dataDefinition.interpolateColor(measurement).withAlpha(146))
+        }
+      }
+    }
+
     mapPolygons = Transformations.distinctUntilChanged(
         preferences.filter(calculatedMapPolygons, MutableLiveData(emptyList())) {
           it.dataVisualization.contains(VORONOI)
-        }
-    )
+        })
+
+    mapPolygonsSensorReadingDaysRange =  Transformations.distinctUntilChanged(
+      preferences.filter(calculatedMapPolygonsSensorReadingDaysRange, MutableLiveData(emptyList())) {
+        it.dataVisualization.contains(VORONOI)
+      })
+
 
     loadingResources.addResource(cityPulseRepository.currentReadings.toLoadingLiveDataResource())
     loadingResources.addResource(cityPulseRepository.historicalReadings.toLoadingLiveDataResource())
@@ -240,6 +346,22 @@ class MapViewModel(
   override fun refreshData(forceRefresh: Boolean) {
     super.refreshData(forceRefresh)
     cityPulseRepository.refreshCurrent(forceRefresh)
+  }
+
+  fun getSensorsValuesTypeRaw(selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
+    return cityPulseRepository.getSensorsValuesFromType(selectedMeasurementType)
+  }
+
+  fun getAvgDataRangeGiven(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate, toDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getAverageDataGivenRange(sensorId,selectedMeasurementType,fromDate,toDate)
+  }
+
+  fun getAvgDataMonthPreviousMonth(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getAverageDataMonthDays(sensorId, selectedMeasurementType, fromDate)
+  }
+
+  fun getAverageMonthlyData(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate, toDate: LocalDate) : LiveData<Resource<List<SensorReading>>>{
+    return cityPulseRepository.getAverageMonthlyData(sensorId,selectedMeasurementType, fromDate, toDate)
   }
 
   /**
@@ -288,10 +410,22 @@ class MapViewModel(
       val measurementsForType = sensorReadings.filter { dataDefinition.id == it.type }
       return@map GraphSeries(
           measurementsForType.map { Pair(it.stamp.time, it.value) },
-          sensor.description.toUpperCase(),
+          sensor.description.toUpperCase(Locale.getDefault()),
           colorIterator.nextInt())
     }.filter { it.measurements.isNotEmpty() }
     return GraphModel(graphBands, graphDataSet)
+  }
+
+  fun createAverageOverallBannerData(sensorReading: SensorReading, dataDefinitionData: DataDefinition): OverallBannerData {
+    val sensorValueInt = sensorReading.value.toInt()
+    val valueBand = dataDefinitionData.findBandByValue(sensorValueInt)
+    return OverallBannerData(
+      context.getString(string.average),
+      sensorValueInt.toString(),
+      dataDefinitionData.unit,
+      valueBand.grade,
+      valueBand.legendColor,
+      calculateLegend(dataDefinitionData, sensorValueInt))
   }
 
   private fun calculateLegend(dataDefinition: DataDefinition, value: Int): Legend {
@@ -312,9 +446,7 @@ class MapViewModel(
           labelStart, labelEnd
       )
     }
-    return Legend(
-        currentLegendValue,
-        legendBands
-    )
+    return Legend(currentLegendValue, legendBands)
   }
+
 }

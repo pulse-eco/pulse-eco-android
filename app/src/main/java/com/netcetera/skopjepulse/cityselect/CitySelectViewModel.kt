@@ -8,10 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.netcetera.skopjepulse.Constants
-import com.netcetera.skopjepulse.CurrentLocationProvider
-import com.netcetera.skopjepulse.LocationServicesDisabled
-import com.netcetera.skopjepulse.MissingLocationPermission
+import com.netcetera.skopjepulse.*
 import com.netcetera.skopjepulse.R.string
 import com.netcetera.skopjepulse.base.Event
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
@@ -175,7 +172,6 @@ class CitySelectViewModel(
           cities.data?.sortedBy { city -> city.location.distanceTo(location.data) }
         } ?: emptyList()
       }
-
     }
 
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
@@ -184,7 +180,7 @@ class CitySelectViewModel(
 
     allCityItems = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       sortedCities.combine(pulseRepository.citiesOverall) { cities, overalls ->
-        return@combine cities.mapNotNull { city ->
+        return@combine cities.map { city ->
           val cityOverall = overalls.data?.firstOrNull { it.cityName == city.name }
           val measurement = cityOverall?.values?.get(dataDefinition.id)
 
@@ -211,10 +207,10 @@ class CitySelectViewModel(
       }
     }
 
-    citySelectItems = Transformations.map(allCityItems) {
-      it.filter {
+    citySelectItems = Transformations.map(allCityItems) { it ->
+      it.filter { it1 ->
         selectedCitiesSet.map { it.name.toLowerCase(Locale.ROOT) }
-          .contains(it.city.name.toLowerCase(Locale.ROOT))
+          .contains(it1.city.name.toLowerCase(Locale.ROOT))
       }
     }
 

@@ -19,6 +19,6 @@ class ConnectivityInterceptor(private val mContext: Context) : Interceptor {
 }
 
 class NoConnectivityException : IOException() {
-  override val message: String?
+  override val message: String
     get() = "No network connectivity exception"
 }

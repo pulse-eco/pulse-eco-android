@@ -5,6 +5,8 @@
   android:layout_height="match_parent"
   android:layout_width="match_parent">
 
+
+
   <com.google.android.gms.maps.MapView
     android:id="@+id/map"
     android:layout_width="match_parent"
@@ -21,6 +23,12 @@
       app:layout_constraintTop_toTopOf="parent"
       android:id="@+id/errorView"/>
 
+    <include
+      android:id="@+id/history_and_forecast"
+      layout="@layout/history_and_forecast"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
     <!-- Note: overviewBannerView has some special constraints also in MapFragment -->
     <include
         layout="@layout/overall_banner_layout"
@@ -30,7 +38,7 @@
         android:layout_marginTop="@dimen/components_between_spacing"
         android:layout_marginEnd="@dimen/components_corner_radius"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/history_and_forecast"
         />
 
     <!-- Note: mapLayersPick has some special constraints also in MapFragment -->
@@ -38,8 +46,8 @@
         android:id="@+id/mapLayersPick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/overallBannerView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/history_and_forecast"
         android:layout_margin="@dimen/components_between_spacing"
         android:src="@drawable/ic_map_layers"
         app:borderWidth="0dp"

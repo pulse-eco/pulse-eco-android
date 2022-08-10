@@ -102,7 +102,6 @@ class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: (
   inner class CityViewHolder(val view: View) : BaseViewHolder<CityItem>(view) {
     private val cityItemRow = view.cityItemRow
     private val cityName = view.txtCityName
-    //private val countryName = view.txtCountryNameSmall
 
     override fun bind(item: CityItem) {
       cityName.text = item.displayName

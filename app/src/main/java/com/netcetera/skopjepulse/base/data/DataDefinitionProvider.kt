@@ -20,7 +20,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Date
 
-class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseApiService: PulseApiService) {
+class DataDefinitionProvider(val context: Context, val moshi: Moshi, private val pulseApiService: PulseApiService) {
 
   private val _definitionsMap: MutableMap<MeasurementType, MutableLiveData<DataDefinition>> = HashMap()
   var definitions: LiveData<List<DataDefinition>> = MutableLiveData()
@@ -34,7 +34,7 @@ class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseAp
     val assetsMeasuresProvider = AssetsMeasuresProvider(context, moshi)
 
     val offlineDefinitions =
-      persistedMeasuresProvider.persistedDefenitions?.second ?: assetsMeasuresProvider.definitions
+      persistedMeasuresProvider.persistedDefinitions?.second ?: assetsMeasuresProvider.definitions
       ?: emptyList()
     val mutableDefinitions = MutableLiveData(offlineDefinitions)
     definitions = mutableDefinitions
@@ -43,10 +43,13 @@ class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseAp
       _definitionsMap.getOrPut(it.id) { MutableLiveData() }.value = it
     }
 
-    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_CODE, null)
+    val lang = context.getSharedPreferences(Constants.LANGUAGE_CODE, Context.MODE_PRIVATE)
+      .getString(Constants.LANGUAGE_CODE, null)
     pulseApiService.measures((lang)).enqueue(object : Callback<List<DataDefinition>> {
-      override fun onResponse(call: Call<List<DataDefinition>>,
-                              response: Response<List<DataDefinition>>) {
+      override fun onResponse(
+        call: Call<List<DataDefinition>>,
+        response: Response<List<DataDefinition>>
+      ) {
         response.body()?.let { dataDefinitions ->
           mutableDefinitions.value = dataDefinitions
           dataDefinitions.forEach {
@@ -59,9 +62,7 @@ class DataDefinitionProvider(val context: Context, val moshi: Moshi, val pulseAp
       override fun onFailure(call: Call<List<DataDefinition>>, t: Throwable) {
         // maybe retry?
       }
-
     })
-
   }
 
   operator fun get(type: MeasurementType): LiveData<DataDefinition> {
@@ -77,7 +78,7 @@ class PersistedMeasuresProvider(context: Context, moshi: Moshi) {
   val jsonAdapter: JsonAdapter<List<DataDefinition>> = moshi.adapter<List<DataDefinition>>(
       Types.newParameterizedType(List::class.java, DataDefinition::class.java))
 
-  val persistedDefenitions: Pair<Date, List<DataDefinition>>?
+  val persistedDefinitions: Pair<Date, List<DataDefinition>>?
     get() {
       val timestamp = Date(sharedPreferences.getLong(PERSISTED_TIMESTAMP, Long.MIN_VALUE))
 

@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
+
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
         Constants.LANGUAGE_CODE,
@@ -82,19 +83,31 @@ class MainActivity : AppCompatActivity() {
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("en") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("en") }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("mk") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("mk") }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("de") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("de") }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) { changeLanguage("ro") }
+            showConformationDialog(
+              this,
+              getString(R.string.change_language_message_android)
+            ) { changeLanguage("ro") }
           }
         }
       }
@@ -105,12 +118,12 @@ class MainActivity : AppCompatActivity() {
         if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
     }
 
-    mainViewModel.measurementTypeTabs.observe(this, Observer {
+    mainViewModel.measurementTypeTabs.observe(this) {
       measurementTypeTabBarView.availableMeasurementTypes = it ?: emptyList()
-    })
-    measurementTypeTabBarView.selectedMeasurementType.observe(this, Observer {
+    }
+    measurementTypeTabBarView.selectedMeasurementType.observe(this) {
       mainViewModel.showForMeasurement(it)
-    })
+    }
 
     appBarView.onCitySelectRequest {
       pulseAppbarDropDown.visibility = View.GONE

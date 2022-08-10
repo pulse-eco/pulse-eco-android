@@ -9,16 +9,19 @@ import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.data.repository.PulseRepository
 import com.netcetera.skopjepulse.base.model.City
+import com.netcetera.skopjepulse.base.model.CityOverall
 import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
+import org.koin.core.component.KoinApiExtension
 
 /**
  * The main [androidx.lifecycle.ViewModel] used in [MainActivity] and shared across fragments.
  * Responsible for manging on what [City] and [MeasurementType] are shown in the fragments.
  */
+@KoinApiExtension
 class MainViewModel(
   private val pulseRepository: PulseRepository,
   cityStorage: PreferredCityStorage,
@@ -118,4 +121,9 @@ class MainViewModel(
       showForCity(foundCity)
     }
   }
+
+  fun overall(city: String): LiveData<Resource<List<CityOverall>>> {
+    return pulseRepository.getDataCitiesOverall(listOf(city))
+  }
+
 }

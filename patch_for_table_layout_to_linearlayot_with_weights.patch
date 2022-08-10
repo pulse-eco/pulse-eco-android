@@ -1,0 +1,347 @@
+Index: app/src/main/res/layout/calendar_dialog.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/calendar_dialog.xml b/app/src/main/res/layout/calendar_dialog.xml
+--- a/app/src/main/res/layout/calendar_dialog.xml	(revision c9758b568d2dad65044e58aca8339dee8259c9e4)
++++ b/app/src/main/res/layout/calendar_dialog.xml	(date 1660051694891)
+@@ -6,150 +6,163 @@
+   android:layout_height="wrap_content"
+   android:layout_gravity="center"
+   tools:background="@color/white">
++ 
++  <androidx.constraintlayout.widget.Guideline
++    android:id="@+id/guideline_start_5"
++    android:layout_width="wrap_content"
++    android:layout_height="wrap_content"
++    android:orientation="vertical"
++    app:layout_constraintGuide_percent="0.05" />
+ 
++  <androidx.constraintlayout.widget.Guideline
++    android:id="@+id/guideline_end_95"
++    android:layout_width="wrap_content"
++    android:layout_height="wrap_content"
++    android:orientation="vertical"
++    app:layout_constraintGuide_percent="0.95" />
++
+   <TextView
+     android:id="@+id/calendarPreviousArrow"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+-    android:layout_marginTop="10dp"
+-    android:padding="5dp"
++    android:layout_marginTop="16dp"
++    android:layout_marginBottom="16dp"
+     android:background="@drawable/ic_arrow_back"
+-    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
++    android:padding="5dp"
+     app:layout_constraintEnd_toStartOf="@id/calendarMonthYearText"
+-    app:layout_constraintStart_toStartOf="parent"
+-    app:layout_constraintTop_toTopOf="parent" />
++    app:layout_constraintStart_toStartOf="@id/guideline_start_5"
++    app:layout_constraintBottom_toTopOf="@id/calendarHeader"
++    app:layout_constraintTop_toTopOf="parent"/>
+ 
+   <TextView
+     android:id="@+id/calendarMonthYearText"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+-    android:layout_marginTop="10dp"
++    android:layout_marginTop="16dp"
++    android:layout_marginBottom="16dp"
++    android:padding="5dp"
+     android:textColor="@color/colorPrimary"
+     android:textSize="17sp"
+-    android:padding="5dp"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintStart_toStartOf="parent"
++    app:layout_constraintEnd_toStartOf="@id/guideline_end_95"
++    app:layout_constraintStart_toEndOf="@id/guideline_start_5"
++    app:layout_constraintBottom_toTopOf="@id/calendarHeader"
+     app:layout_constraintTop_toTopOf="parent"
+-    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
+     tools:text="June 2022" />
+ 
+   <TextView
+     android:id="@+id/calendarNextArrow"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+-    android:layout_marginTop="10dp"
++    android:layout_marginTop="16dp"
++    android:layout_marginBottom="16dp"
+     android:background="@drawable/ic_arrow_next"
+     android:padding="5dp"
+-    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintStart_toEndOf="@+id/calendarMonthYearText"
++    app:layout_constraintEnd_toEndOf="@id/guideline_end_95"
++    app:layout_constraintStart_toEndOf="@id/calendarMonthYearText"
++    app:layout_constraintBottom_toTopOf="@id/calendarHeader"
+     app:layout_constraintTop_toTopOf="parent" />
+ 
+-
+   <TextView
+-    android:id="@+id/calendarNextArrowUnavailable"
++    android:id="@+id/calendarYearPicker"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+-    android:layout_marginTop="10dp"
+-    android:alpha="0.5"
++    android:layout_marginTop="32dp"
++    android:layout_marginBottom="16dp"
+     android:padding="5dp"
++    android:textColor="@color/colorPrimary"
++    android:textSize="17sp"
+     android:visibility="gone"
+-    android:background="@drawable/ic_arrow_next"
+-    app:layout_constraintBottom_toBottomOf="@id/calendarHeader"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintStart_toEndOf="@+id/calendarMonthYearText"
+-    app:layout_constraintTop_toTopOf="parent"  />
++    app:layout_constraintEnd_toEndOf="@id/guideline_end_95"
++    app:layout_constraintStart_toStartOf="@id/guideline_start_5"
++    app:layout_constraintBottom_toTopOf="@id/monthYearPickerRecyclerView"
++    app:layout_constraintTop_toTopOf="parent"
++    tools:text="2022" />
+ 
+   <LinearLayout
+-    android:id="@+id/calendarDialogTwoButtonsLayout"
+-    android:layout_width="wrap_content"
+-    android:layout_height="wrap_content"
+-    android:orientation="horizontal"
+-    app:layout_constraintBottom_toBottomOf="parent"
+-    app:layout_constraintEnd_toEndOf="parent">
+-
+-    <Button
+-      android:id="@+id/calendarDialogCancelButton"
+-      android:layout_width="wrap_content"
+-      android:layout_height="wrap_content"
+-      android:background="@android:color/transparent"
+-      android:text="@string/cancel"
+-      android:textAllCaps="true"
+-      android:textColor="@color/calendar_cancel_button"
+-      android:textSize="@dimen/calendar_buttons_font_size"
+-      tools:textColor="@color/white" />
+-  </LinearLayout>
+-
+-  <TableLayout
+     android:id="@+id/calendarHeader"
+     android:layout_width="0dp"
+     android:layout_height="wrap_content"
+-    android:layout_marginStart="26dp"
+     android:layout_marginTop="16dp"
+-    android:stretchColumns="0,1,2,3,4,5,6"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintStart_toStartOf="parent"
+-    app:layout_constraintTop_toBottomOf="@id/calendarMonthYearText">
+-
+-    <TableRow android:id="@+id/daysNameHeader">
++    android:layout_marginBottom="16dp"
++    android:layout_marginStart="16dp"
++    android:layout_marginEnd="16dp"
++    android:orientation="horizontal"
++    android:weightSum="7"
++    app:layout_constraintEnd_toEndOf="@id/guideline_end_95"
++    app:layout_constraintStart_toStartOf="@id/guideline_start_5"
++    app:layout_constraintBottom_toTopOf="@id/calendarRecyclerView">
+ 
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="0"
+-        android:text="M"
+-
+-        android:textAlignment="textStart" />
++    <TextView
++      android:id="@+id/monday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/monday_short" />
+ 
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="1"
+-        android:text="T"
+-        android:textAlignment="textStart" />
++    <TextView
++      android:id="@+id/tuesday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/tuesday_short" />
+ 
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="2"
+-        android:text="W"
+-        android:textAlignment="textStart" />
++    <TextView
++      android:id="@+id/wednesday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/wednesday_short"/>
+ 
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="3"
+-        android:text="T"
+-        android:textAlignment="textStart" />
+-
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="4"
+-        android:text="F"
+-        android:textAlignment="textStart" />
++    <TextView
++      android:id="@+id/thursday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/thursday_short"/>
+ 
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="5"
+-        android:text="S"
+-        android:textAlignment="textStart" />
++    <TextView
++      android:id="@+id/friday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/friday_short"/>
+ 
+-      <TextView
+-        android:layout_width="5dp"
+-        android:layout_column="6"
+-        android:text="S"
+-        android:textAlignment="textStart" />
+-    </TableRow>
+-  </TableLayout>
++    <TextView
++      android:id="@+id/saturday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/saturday_short"/>
+ 
+-  <TextView
+-    android:id="@+id/calendarYearPicker"
+-    android:layout_width="wrap_content"
+-    android:layout_height="wrap_content"
+-    android:layout_marginTop="10dp"
+-    android:textColor="@color/colorPrimary"
+-    android:textSize="18sp"
+-    android:visibility="gone"
+-    app:layout_constraintBottom_toTopOf="@id/monthYearPickerRecyclerView"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintStart_toStartOf="parent"
+-    app:layout_constraintTop_toTopOf="parent" />
++    <TextView
++      android:id="@+id/sunday_short"
++      android:layout_width="0dp"
++      android:layout_height="wrap_content"
++      android:layout_weight="1"
++      android:gravity="center"
++      android:layout_gravity="center"
++      android:paddingEnd="@dimen/calendar_day_of_week_right_padding"
++      android:text="@string/sunday_short"/>
++
++  </LinearLayout>
+ 
+   <View
+     android:id="@+id/calendarLine"
+@@ -159,40 +172,52 @@
+     android:layout_marginStart="16dp"
+     android:layout_marginTop="8dp"
+     android:background="@color/gray"
++    android:visibility="gone"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@id/calendarHeader" />
+ 
+   <androidx.recyclerview.widget.RecyclerView
+-    android:id="@+id/monthYearPickerRecyclerView"
+-    android:layout_width="wrap_content"
++    android:id="@+id/calendarRecyclerView"
++    android:layout_width="0dp"
+     android:layout_height="wrap_content"
+-    android:layout_marginEnd="8dp"
+-    android:layout_marginStart="20dp"
+-    android:layout_marginTop="8dp"
++    android:layout_marginTop="32dp"
++    android:layout_marginStart="16dp"
++    android:layout_marginEnd="16dp"
++    android:padding="0dp"
+     android:nestedScrollingEnabled="false"
+-    android:visibility="gone"
+-    app:layout_constraintBottom_toTopOf="@+id/calendarDialogTwoButtonsLayout"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintStart_toStartOf="parent"
+-    app:layout_constraintTop_toBottomOf="@id/calendarLine"
++    app:layout_constraintBottom_toTopOf="@id/calendarDialogCancelButton"
++    app:layout_constraintStart_toEndOf="@id/guideline_start_5"
++    app:layout_constraintEnd_toStartOf="@id/guideline_end_95"
+     tools:layout_height="100dp" />
+ 
+   <androidx.recyclerview.widget.RecyclerView
+-    android:id="@+id/calendarRecyclerView"
++    android:id="@+id/monthYearPickerRecyclerView"
+     android:layout_width="0dp"
+     android:layout_height="wrap_content"
+-    android:layout_marginEnd="8dp"
+-    android:layout_marginStart="20dp"
+-    android:layout_marginTop="12dp"
++    android:layout_marginTop="32dp"
++    android:layout_marginStart="16dp"
++    android:layout_marginEnd="16dp"
++    android:paddingTop="16dp"
+     android:nestedScrollingEnabled="false"
+-    app:layout_constraintBottom_toTopOf="@+id/calendarDialogTwoButtonsLayout"
+-    app:layout_constraintEnd_toEndOf="parent"
+-    app:layout_constraintHorizontal_bias="0.0"
+-    app:layout_constraintStart_toStartOf="parent"
+-    app:layout_constraintTop_toBottomOf="@id/calendarLine"
+-    app:layout_constraintVertical_bias="1.0"
++    android:visibility="gone"
++    app:layout_constraintBottom_toTopOf="@id/calendarDialogCancelButton"
++    app:layout_constraintStart_toStartOf="@id/guideline_start_5"
++    app:layout_constraintEnd_toEndOf="@id/guideline_end_95"
+     tools:layout_height="100dp" />
+ 
++  <Button
++    android:id="@+id/calendarDialogCancelButton"
++    android:layout_width="wrap_content"
++    android:layout_height="wrap_content"
++    android:layout_marginBottom="5dp"
++    android:background="@android:color/transparent"
++    android:text="@string/cancel"
++    android:textAllCaps="true"
++    android:textColor="@color/calendar_cancel_button"
++    android:textSize="@dimen/calendar_buttons_font_size"
++    app:layout_constraintBottom_toBottomOf="parent"
++    app:layout_constraintEnd_toEndOf="@id/guideline_end_95"
++    tools:textColor="@color/black" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file

@@ -21,6 +21,7 @@ object Libs {
     const val targetTooltip = "2.0.3"
     const val gson = "2.8.6"
     const val swipeRefreshLayout = "1.1.0"
+    const val desugaring = "1.1.5"
 
     // Crashlytics
     const val playServicesFirebaseAnalytics = "18.0.0"
@@ -58,6 +59,7 @@ object Libs {
   const val timber = "com.github.ajalt:timberkt:${Versions.timerKt}"
   const val okHttpLogging = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttpLogging}"
   const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
+  const val desugar = "com.android.tools:desugar_jdk_libs:${Versions.desugaring}"
 
   const val gson = "com.google.code.gson:gson:${Versions.gson}"
 

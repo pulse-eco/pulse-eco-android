@@ -11,6 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.Date
 
+
 typealias Cities = List<City>
 typealias Sensors = List<Sensor>
 typealias SensorReadings = List<SensorReading>
@@ -22,6 +23,7 @@ typealias SensorReadings = List<SensorReading>
 open class PulseRepository(var apiService: PulseApiService) : BasePulseRepository() {
   private val _cities = MutableLiveData<Resource<Cities>>()
   private val _citiesOverall = MutableLiveData<Resource<List<CityOverall>>>()
+  private val _cityOverall = MutableLiveData<Resource<List<CityOverall>>>()
   private val _countries = MutableLiveData<Resource<List<Country>>>()
 
   val cities: LiveData<Resource<Cities>>
@@ -94,21 +96,46 @@ open class PulseRepository(var apiService: PulseApiService) : BasePulseRepositor
     })
   }
 
-  fun loadCitiesOverall(cities : List<City>? = this.cities.value?.data) {
+  fun loadCitiesOverall(cities: List<City>? = this.cities.value?.data) {
     _citiesOverall.value = Resource.loading(citiesOverall.value?.data)
-    apiService.citiesOverall(cities!!.map { it.name }).enqueue(object : Callback<List<CityOverall>?> {
-      override fun onResponse(call: Call<List<CityOverall>?>, response: Response<List<CityOverall>?>) {
+    apiService.citiesOverall(cities!!.map { it.name })
+      .enqueue(object : Callback<List<CityOverall>?> {
+        override fun onResponse(
+          call: Call<List<CityOverall>?>,
+          response: Response<List<CityOverall>?>
+        ) {
+          if (response.isSuccessful && response.body() != null) {
+            _citiesOverall.value = Resource.success(response.body()!!)
+            refreshStamps[citiesOverall] = Date().time
+          } else {
+            _citiesOverall.value = Resource.error(citiesOverall.value?.data, null)
+          }
+        }
+
+        override fun onFailure(call: Call<List<CityOverall>?>, t: Throwable) {
+          _citiesOverall.value = Resource.error(citiesOverall.value?.data, t)
+        }
+      })
+  }
+
+  fun getDataCitiesOverall(cities: List<String>): LiveData<Resource<List<CityOverall>>> {
+    _cityOverall.value = Resource.loading(_cityOverall.value?.data)
+    apiService.citiesOverall(cities).enqueue(object : Callback<List<CityOverall>?> {
+      override fun onResponse(
+        call: Call<List<CityOverall>?>,
+        response: Response<List<CityOverall>?>
+      ) {
         if (response.isSuccessful && response.body() != null) {
-          _citiesOverall.value = Resource.success(response.body()!!)
-          refreshStamps[citiesOverall] = Date().time
+          _cityOverall.value = Resource.success(response.body()!!)
         } else {
-          _citiesOverall.value = Resource.error(citiesOverall.value?.data, null)
+          _cityOverall.value = Resource.error(_cityOverall.value?.data, null)
         }
       }
 
       override fun onFailure(call: Call<List<CityOverall>?>, t: Throwable) {
-        _citiesOverall.value = Resource.error(citiesOverall.value?.data, t)
+        _cityOverall.value = Resource.error(_cityOverall.value?.data, t)
       }
     })
+    return _cityOverall
   }
 }
