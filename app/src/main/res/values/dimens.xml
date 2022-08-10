@@ -49,6 +49,8 @@
   <dimen name="rectangle_for_weekly_data_view_width">45dp</dimen>
   <dimen name="rectangle_for_weekly_data_view_height">4dp</dimen>
 
+  <dimen name="overall_banner_layout_number_amount_distance">5dp</dimen>
+
   <dimen name="history_forecast_container_height">84dp</dimen>
   <dimen name="history_forecast_button_width_height">64dp</dimen>
   <dimen name="history_forecast_card_view_radius">3dp</dimen>
@@ -63,7 +65,8 @@
   <dimen name="history_forecast_explore_text_size">14sp</dimen>
   <dimen name="history_forecast_date_text_size">14sp</dimen>
   <dimen name="history_forecast_pollution_text_size">12sp</dimen>
-  <dimen name="history_forecast_clicked_button_stroke_width">1.5dp</dimen>
+  <dimen name="history_forecast_pollution_radius">3dp</dimen>
+  <dimen name="history_forecast_clicked_button_stroke_width">1dp</dimen>
 
   <dimen name="calendar_circle_shape_width_height">120dp</dimen>
   <dimen name="calendar_buttons_font_size">14sp</dimen>
@@ -72,7 +75,9 @@
   <dimen name="calendar_month_year_picker_card_view_margin">10dp</dimen>
   <dimen name="calendar_month_year_picker_card_view_radius">40dp</dimen>
   <dimen name="calendar_month_year_picker_card_view_elevation">0.5dp</dimen>
-  <dimen name="calendar_month_year_picker_card_view_font_size">11sp</dimen>
+  <dimen name="calendar_month_year_text_view_font_size">14sp</dimen>
   <dimen name="calendar_month_year_buttons_width">140dp</dimen>
   <dimen name="calendar_month_year_buttons_height">70dp</dimen>
+  <dimen name="calendar_day_of_week_right_padding">6dp</dimen>
+
 </resources>

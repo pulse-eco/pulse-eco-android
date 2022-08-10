@@ -9,19 +9,17 @@
   android:layout_margin="10dp"
   tools:background="@drawable/month_year_item">
 
-
   <TextView
     android:id="@+id/monthYearTextView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:textSize="15sp"
+    android:textSize="@dimen/calendar_month_year_text_view_font_size"
     android:background="@drawable/month_year_item_text_view"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:text="Jan" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

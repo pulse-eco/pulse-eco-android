@@ -5,19 +5,17 @@ import android.content.Context
 import android.view.View
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
-import com.netcetera.skopjepulse.historyforecast.calendar.CalendarItemsDataModel
 import com.netcetera.skopjepulse.map.MapFragment
 import java.time.LocalDate
 import java.util.*
 
 object CalendarUtils {
 
-  fun getMonths(context: Context): Array<String> {
+  fun getCalendarCircledMonths(context: Context): Array<String> {
     return arrayOf(
       context.getString(R.string.january).substring(0, 3),
       context.getString(R.string.february).substring(0, 3),
@@ -35,13 +33,12 @@ object CalendarUtils {
   }
 
   //We have data from 2017:
-  fun getArrayYears(): Array<String> {
+  fun getCalendarCircledYears(): Array<String> {
     val startDate = LocalDate.parse("01/01/2017", MapFragment.formatterLocalDate)
     val maxYear = (startDate.year).downTo(CalendarAdapter.DATE_INPUT_TODAY.year).last
 
     val mutableListYears = mutableListOf<String>()
-    for (year in startDate.year .. maxYear)
-    {
+    for (year in startDate.year .. maxYear) {
       mutableListYears.add(year.toString())
     }
     return mutableListYears.toTypedArray()
@@ -158,29 +155,7 @@ object CalendarUtils {
     }
   }
 
-
-  fun setUpCalendarRecyclerView(calendarRecyclerView: RecyclerView,context: Context,list:ArrayList<CalendarItemsDataModel>, dateInput: LocalDate,alertDialog: AlertDialog){
-    val layoutManager = object : GridLayoutManager(context, 7) {
-      override fun supportsPredictiveItemAnimations(): Boolean {
-        return false
-      }
-    }
-    val recyclerView = calendarRecyclerView
-    recyclerView.layoutManager = layoutManager
-    val adapter =  CalendarAdapter(context, list, dateInput,MapFragment.calendarValuesResult, MapFragment.bandValueOverallData)
-    recyclerView.adapter = adapter
-    adapter.onItemClick = {
-      val clickedDate  = LocalDate.parse(CalendarAdapter.DATE_CLICKED, MapFragment.formatterLocalDate)
-      val fromClickedDate = clickedDate.plusDays(4)
-      MapFragment.toDate = fromClickedDate
-      MapFragment.fromDate = MapFragment.toDate.minusDays(8)
-      alertDialog.dismiss()
-    }
-    recyclerView.suppressLayout(true)
-
-  }
-
-  fun getFullMonthName(context: Context,short: String): String {
+  fun getFullMonthName(context: Context, short: String): String {
     when (short) {
      context.getString(R.string.january).substring(0,3) -> {
         return context.getString(R.string.january)
@@ -242,10 +217,9 @@ fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextVi
     calendarHeader.visibility = View.VISIBLE
     calendarYearPicker.visibility = View.GONE
     calendarMonthYearText.visibility = View.VISIBLE
-    val month = CalendarAdapter.DATE_INPUT?.month.toString()
-    val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-    calendarMonthYearText.text = "${CalendarUtils.getMonthByLanguage(context,monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
-    calendarLine.visibility = View.VISIBLE
+    val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
+    calendarMonthYearText.text = "${getMonthByLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
+
     recyclerView.visibility = View.VISIBLE
     monthYearPickerRecyclerView.visibility = View.GONE
     calendarYearPicker.visibility = View.GONE

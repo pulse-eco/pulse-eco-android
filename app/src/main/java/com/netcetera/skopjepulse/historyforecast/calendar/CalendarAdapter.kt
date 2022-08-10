@@ -125,7 +125,12 @@ class CalendarAdapter(
                   slotContainer.setBackgroundColor(it.legendColor)
                   slotContainer.setBackgroundResource(R.drawable.calendar_circle)
                   dayOfMonth.setTextColor(it.legendColor)
-                  slotContainer.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color.legendColor, BlendModeCompat.SRC_ATOP) }
+                  slotContainer.background.colorFilter =
+                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                      color.legendColor,
+                      BlendModeCompat.SRC_ATOP
+                    )
+                }
               }
             }
           }

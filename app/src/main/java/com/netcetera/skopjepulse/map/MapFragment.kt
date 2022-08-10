@@ -494,7 +494,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       val intValueDow = CalendarUtils.intValueForDayOfWeek(output)
 
       calendarNextArrow.visibility = View.GONE
-      calendarNextArrowUnavailable.visibility = View.VISIBLE
 
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
@@ -751,7 +750,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         CalendarUtils.monthRecyclerViewSetView(calendarNextArrowUnavailable, calendarLine, calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
 
-        val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getMonths(requireContext()), monthAvgByYearValues)
+        val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarCircledMonths(requireContext()), monthAvgByYearValues)
         monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
         monthYearPickerRecyclerView.adapter = monthAdapter
         monthYearPickerRecyclerView.suppressLayout(true)
@@ -790,7 +789,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
           CalendarUtils.yearRecyclerViewSetView(calendarNextArrowUnavailable, calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
 
-          val yearAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getArrayYears(), null)
+          val yearAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarCircledYears(), null)
           monthYearPickerRecyclerView.adapter = yearAdapter
           monthYearPickerRecyclerView.suppressLayout(true)
           yearAdapter.onItemClick = { year ->
@@ -811,7 +810,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
               }
               monthAvgByYearValues = resMonths.toList()
 
-              val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getMonths(requireContext()), monthAvgByYearValues)
+              val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarCircledMonths(requireContext()), monthAvgByYearValues)
               monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
               monthYearPickerRecyclerView.adapter = monthAdapter
               monthYearPickerRecyclerView.suppressLayout(true)

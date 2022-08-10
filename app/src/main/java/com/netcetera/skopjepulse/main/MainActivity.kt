@@ -118,12 +118,12 @@ class MainActivity : AppCompatActivity() {
         if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
     }
 
-    mainViewModel.measurementTypeTabs.observe(this, Observer {
+    mainViewModel.measurementTypeTabs.observe(this) {
       measurementTypeTabBarView.availableMeasurementTypes = it ?: emptyList()
-    })
-    measurementTypeTabBarView.selectedMeasurementType.observe(this, Observer {
+    }
+    measurementTypeTabBarView.selectedMeasurementType.observe(this) {
       mainViewModel.showForMeasurement(it)
-    })
+    }
 
     appBarView.onCitySelectRequest {
       pulseAppbarDropDown.visibility = View.GONE
@@ -156,9 +156,6 @@ class MainActivity : AppCompatActivity() {
         }
       }
     })
-
-
-
 
     mainViewModel.showLoading.observe(this, loadingIndicator)
 

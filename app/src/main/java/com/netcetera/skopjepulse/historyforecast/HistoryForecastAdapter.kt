@@ -14,13 +14,11 @@ import kotlinx.android.synthetic.main.explore_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class HistoryForecastAdapter(
   val context: Context,
   private val items: ArrayList<HistoryForecastDataModel>
 ) : RecyclerView.Adapter<HistoryForecastAdapter.BaseViewHolder<*>>() {
 
-  var selectedPosition = -1
 
   companion object {
     const val VIEW_TYPE_EXPLORE = 1
@@ -30,6 +28,7 @@ class HistoryForecastAdapter(
     var selectedSensorReading: SensorReading? = null
   }
 
+  var selectedPosition = -1
   var onItemClick: ((Date?) -> Unit)? = null
   var onItemClickExplore: ((String) -> Unit)? = null
 
