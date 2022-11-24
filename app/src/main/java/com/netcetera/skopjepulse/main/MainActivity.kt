@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.Constants
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
         Constants.LANGUAGE_CODE,
-        Context.MODE_PRIVATE
+        MODE_PRIVATE
       ).getString(Constants.LANGUAGE_CODE, "")
       val pickerView =
         LayoutInflater.from(this).inflate(R.layout.language_picker_dilog, null) as ViewGroup
@@ -124,25 +125,34 @@ class MainActivity : AppCompatActivity() {
     measurementTypeTabBarView.selectedMeasurementType.observe(this) {
       mainViewModel.showForMeasurement(it)
     }
-
+ //ovde treba da se cacka za bug 121
     appBarView.onCitySelectRequest {
-      pulseAppbarDropDown.visibility = View.GONE
-      pulseAppbarDropUp.visibility = View.VISIBLE
+
+      //I TUKA SET IMAGE RESOURCE, pri klik na gradot da se otvori i da e nagore
+     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_up_24)
+
       val citySelectShown =
         supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
+
+      //ova e za da dodademe nov grad vo nasata lista
       if (!citySelectShown) {
         supportFragmentManager.beginTransaction()
           .add(R.id.content, citySelectFragment)
           .addToBackStack(null).commit()
       }
+
     }
 
-    mainViewModel.activeCity.observe(this, Observer { activeCity ->
+    mainViewModel.activeCity.observe(this) { activeCity ->
       if (activeCity == null) {
         appBarView.displayNoCityName()
         showCitySelectIfNotShown()
-      } else {
+      }
+      else {
         appBarView.displayCityName(activeCity)
+        //tuka go dodadov
+        pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
+
         val existingMapFragment =
           supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
         if (existingMapFragment == null) {
@@ -150,12 +160,17 @@ class MainActivity : AppCompatActivity() {
             .replace(
               R.id.content,
               MapFragment.newInstance(activeCity),
-              activeCity.name
+              activeCity.name,
             )
             .commit()
         }
+
       }
-    })
+    }
+
+//    mainViewModel.sameCity.observe(this) { _ ->
+//      //smeni ja crtata da pokazhuva nadole
+//    }
 
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
@@ -163,14 +178,14 @@ class MainActivity : AppCompatActivity() {
       errorTextView.setOnClickListener {
         mainViewModel.refreshData(true)
       }
-      mainViewModel.errorMessage.observe(this, Observer {
+      mainViewModel.errorMessage.observe(this) {
         errorTextView.text = it
         if (it?.isNotBlank() == true) {
           errorTextView.visibility = View.VISIBLE
         } else {
           errorTextView.visibility = View.GONE
         }
-      })
+      }
     }
   }
 
@@ -213,11 +228,15 @@ class MainActivity : AppCompatActivity() {
           val result = data.getStringExtra(NEW_CITY_NAME_RESULT)
           if (result != null) {
             mainViewModel.showForCity(result)
-
           }
         }
       }
     }
     super.onActivityResult(requestCode, resultCode, data)
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
   }
 }

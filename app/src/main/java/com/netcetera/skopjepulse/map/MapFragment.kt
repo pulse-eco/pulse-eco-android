@@ -301,6 +301,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         dimOnExpand(bottomSheetBackgroundOverlay),
         onExpanded {
           viewModel.loadHistoricalReadings(false)
+
           displayUnit()
           setDaysNames()
           viewModel.averageWeeklyData.value?.let {

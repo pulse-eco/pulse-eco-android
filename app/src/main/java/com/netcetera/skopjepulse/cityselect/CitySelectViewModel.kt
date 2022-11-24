@@ -143,6 +143,7 @@ class CitySelectViewModel(
     if (pulseRepository.cities.value?.data.isNullOrEmpty()) {
       pulseRepository.loadCities(true)
     } else {
+
       pulseRepository.loadCitiesOverall()
     }
   }

@@ -22,6 +22,7 @@ import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_REQUEST_CO
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.utils.ui.SwipeHelper
 import kotlinx.android.synthetic.main.city_select_fragment_layout.*
+import kotlinx.android.synthetic.main.pulse_app_bar.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -78,9 +79,9 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       parentFragmentManager.popBackStack()
     }
 
-    mainViewModel.activeCity.observe(viewLifecycleOwner, Observer { activeCity ->
+    mainViewModel.activeCity.observe(viewLifecycleOwner) { activeCity ->
       handleCityLists(viewModel.citySelectItems.value)
-    })
+    }
 
     history.observe(viewLifecycleOwner, historyCitySelectAdapter)
     currentlySelected.observe(viewLifecycleOwner, currentlyCitySelectAdapter)
@@ -95,28 +96,24 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       viewModel.refreshData(true)
     }
 
-    viewModel.showLoading.observe(viewLifecycleOwner, Observer {
+    viewModel.showLoading.observe(viewLifecycleOwner) {
       citySelectRefreshView.isRefreshing = it == true
-    })
+    }
 
-    /*viewModel.shouldRefreshSelectedCities.observe(viewLifecycleOwner, Observer {
-      viewModel.citySelectItems.observe(viewLifecycleOwner, historyCitySelectAdapter)
-    })*/
-
-    viewModel.requestLocationPermission.observe(viewLifecycleOwner, Observer { event ->
+    viewModel.requestLocationPermission.observe(viewLifecycleOwner) { event ->
       event?.getContentIfNotHandled()?.let {
         requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 24)
       }
-    })
+    }
 
-    viewModel.citySelectItems.observe(viewLifecycleOwner, {
+    viewModel.citySelectItems.observe(viewLifecycleOwner) {
       handleCityLists(it)
-    })
+    }
 
     /* Observe on what Measurement Type to show */
-    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner, Observer {
+    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
       viewModel.showDataForMeasurementType(it)
-    })
+    }
 
     historySelectRecyclerView.addItemDecoration(
       DividerItemDecoration(

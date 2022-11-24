@@ -48,12 +48,14 @@
                 />
 
               <androidx.recyclerview.widget.RecyclerView
-                android:overScrollMode="never"
                 android:id="@+id/currentlyCityRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"
+                android:overScrollMode="never"
                 >
+
+
 
               </androidx.recyclerview.widget.RecyclerView>
 
@@ -68,8 +70,7 @@
 
               <include
                 android:id="@+id/historyView"
-                layout="@layout/history"
-                />
+                layout="@layout/history" />
 
               <androidx.recyclerview.widget.RecyclerView
                 android:overScrollMode="never"

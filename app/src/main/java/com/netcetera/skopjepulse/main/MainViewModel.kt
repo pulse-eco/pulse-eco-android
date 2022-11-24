@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.PreferredCityStorage
 import com.netcetera.skopjepulse.base.data.DataDefinitionProvider
 import com.netcetera.skopjepulse.base.data.Resource
@@ -15,6 +16,7 @@ import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
+import kotlinx.android.synthetic.main.pulse_app_bar.*
 import org.koin.core.component.KoinApiExtension
 
 /**
@@ -33,8 +35,10 @@ class MainViewModel(
    */
   val activeCity: LiveData<City?>
   private val selectableCity = MutableLiveData<City?>()
-
   private val selectableMeasurementType: MutableLiveData<MeasurementType>
+
+
+  val sameCity: LiveData<City?>
 
   /**
    * The [MeasurementType] that data shall be shown for.
@@ -57,10 +61,16 @@ class MainViewModel(
         addSource(selectableCity) {
           value = it
           cityStorage.cityId = it?.name ?: ""
-
         }
 
       })
+    sameCity = Transformations.distinctUntilChanged(
+      MediatorLiveData<City>().apply {
+        addSource(pulseRepository.cities) { cities ->
+          value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
+        }
+      }
+    )
     selectableMeasurementType = MediatorLiveData<MeasurementType>().apply {
       addSource(dataDefinitionProvider.definitions) {
         // Workaround to make selection from the available types if nothing is selected
@@ -107,6 +117,8 @@ class MainViewModel(
   fun showForCity(city: City?) {
     if (activeCity.value != city) {
       selectableCity.value = city
+    } else {
+//      sameCity = true
     }
   }
 
