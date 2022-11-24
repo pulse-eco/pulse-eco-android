@@ -210,8 +210,7 @@ object CalendarUtils {
 
 
 fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextView, calendarNextArrow: TextView,
-                                 calendarHeader: TableLayout, calendarYearPicker: TextView, calendarMonthYearText: TextView,
-                                 calendarLine: View, recyclerView: RecyclerView, monthYearPickerRecyclerView:RecyclerView) {
+                                 calendarHeader: TableLayout, calendarYearPicker: TextView, calendarMonthYearText: TextView, recyclerView: RecyclerView, monthYearPickerRecyclerView:RecyclerView) {
     calendarPreviousArrow.visibility = View.VISIBLE
     calendarNextArrow.visibility = View.VISIBLE
     calendarHeader.visibility = View.VISIBLE
@@ -231,11 +230,9 @@ fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextVi
     }
   }
 
-  fun calendarViewSetView(calendarNextArrowUnavailable:TextView,calendarLine:View, calendarMonthYearText:TextView,calendarYearPicker:TextView,
+  fun calendarViewSetView(calendarMonthYearText:TextView,calendarYearPicker:TextView,
                           calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
                           recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView,alertDialog: AlertDialog,calendarDialogCancelButton:TextView) {
-    calendarNextArrowUnavailable.visibility = View.GONE
-    calendarLine.visibility = View.VISIBLE
     calendarMonthYearText.visibility = View.VISIBLE
     calendarYearPicker.visibility = View.GONE
     calendarPreviousArrow.visibility = View.VISIBLE
@@ -246,11 +243,9 @@ fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextVi
     calendarCancelButton(alertDialog,calendarDialogCancelButton)
   }
 
-  fun monthRecyclerViewSetView(calendarNextArrowUnavailable:TextView,calendarLine:View, calendarMonthYearText:TextView,calendarYearPicker:TextView,
+  fun monthRecyclerViewSetView(calendarMonthYearText:TextView,calendarYearPicker:TextView,
                                    calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
                                    recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView) {
-    calendarNextArrowUnavailable.visibility = View.GONE
-    calendarLine.visibility = View.GONE
     calendarMonthYearText.visibility = View.GONE
     calendarYearPicker.visibility = View.VISIBLE
     calendarYearPicker.text = "${MapFragment.CHOSEN_YEAR ?:CalendarAdapter.DATE_INPUT?.year}"
@@ -261,11 +256,10 @@ fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextVi
     monthYearPickerRecyclerView.visibility = View.VISIBLE
   }
 
-   fun yearRecyclerViewSetView(calendarNextArrowUnavailable:TextView, calendarMonthYearText:TextView,calendarYearPicker:TextView,
+   fun yearRecyclerViewSetView(calendarMonthYearText:TextView,calendarYearPicker:TextView,
                                calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
                                recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView)
    {
-     calendarNextArrowUnavailable.visibility = View.GONE
      calendarYearPicker.visibility = View.GONE
      calendarMonthYearText.visibility = View.GONE
      calendarPreviousArrow.visibility = View.GONE

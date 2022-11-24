@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.map.model.MapMarkerModel
-import org.jetbrains.anko.withAlpha
+//import org.jetbrains.anko.withAlpha
 
 class MapMarkerProvider(val context: Context) {
 

@@ -5,8 +5,8 @@
   android:id="@+id/slotConstraintLayout"
   android:layout_width="30dp"
   android:layout_height="30dp"
+  android:layout_marginTop="6dp"
   android:layout_gravity="center"
-  android:layout_marginBottom="10dp"
   tools:background="@drawable/calendar_circle">
 
   <TextView
@@ -15,9 +15,8 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:textColor="@color/black"
+    android:textSize="@dimen/calendar_element_text_size"
     android:background="@drawable/calendar_circle_text_view"
-    android:textSize="13sp"
-    android:padding="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

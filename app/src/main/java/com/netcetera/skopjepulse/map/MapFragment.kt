@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +27,6 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
-import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
@@ -62,7 +59,9 @@ import kotlinx.android.synthetic.main.overall_banner_layout.view.*
 import kotlinx.android.synthetic.main.weekly_average.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber.d
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -78,11 +77,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
   override val viewModel: MapViewModel by viewModel { parametersOf(city) }
   private val mainViewModel: MainViewModel by sharedViewModel()
 
-  lateinit var dataDef: DataDefinition
-  lateinit var sensorType: MeasurementType
+  private lateinit var dataDef: DataDefinition
+  private lateinit var sensorType: MeasurementType
 
   private var pastWeekDataLabelForCityName: Boolean = true
-  lateinit var historyForecastAdapter: HistoryForecastAdapter
+  private lateinit var historyForecastAdapter: HistoryForecastAdapter
 
   val city: City by lazy { requireArguments().getParcelable("city")!! }
 
@@ -142,14 +141,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
 
     mainViewModel.overall(this.city.name)
-      .observe(viewLifecycleOwner, object : Observer<Resource<List<CityOverall>>> {
-        override fun onChanged(t: Resource<List<CityOverall>>?) {
-          overAllData = t?.data
-        }
-      })
+      .observe(
+        viewLifecycleOwner
+      ) { t -> overAllData = t?.data }
 
     /* Observe on what Measurement Type to show */
-    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
+    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) { it ->
       viewModel.showDataForMeasurementType(it)
       sensorType = it
       progressBarForWeeklyAverageData.visibility = View.VISIBLE
@@ -222,7 +219,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     viewModel.averageMonthDataByYear.observe(viewLifecycleOwner) {
       val res = it.data
-      if (!res.isNullOrEmpty()) {
+      if (res.isNotEmpty()) {
         val resMonths = mutableListOf<CalendarValuesDataModel>()
         for (i in res.indices) {
           val band = getBand(res[i].value.toInt())
@@ -326,10 +323,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.updatePreference(it)
     }
 
-    viewModel.selectedSensor.observe(viewLifecycleOwner, Observer {
+    viewModel.selectedSensor.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(viewModel.averageWeeklyData.value)
       setDaysNames()
-    })
+    }
 
     overallBanner.onToggled { isOpen ->
       TransitionManager.beginDelayedTransition(mapConstraintLayout)
@@ -417,7 +414,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun nextMonthClick(context: Context, dateInput: LocalDate?, calendarMonthYearText: TextView, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarNextArrowUnavailable: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
+  private fun nextMonthClick(context: Context, dateInput: LocalDate?, calendarMonthYearText: TextView, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
     if (dateInput != null) {
       val next = dateInput.plusMonths(1)
       val nextDow = next.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)
@@ -449,17 +446,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
         || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)
       ) {
         calendarNextArrow.visibility = View.GONE
-        calendarNextArrowUnavailable.visibility = View.VISIBLE
+//        calendarNextArrowUnavailable.visibility = View.VISIBLE
       }
 
       calendarPreviousArrow.setOnClickListener {
         previousMonthAverageValues(recyclerView, alertDialog)
-        update(context, next, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+        update(context, next, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       }
 
       calendarNextArrow.setOnClickListener {
         nextMonthAverageValues(recyclerView, alertDialog)
-        nextMonthClick(context, next, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+        nextMonthClick(context, next, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       }
     }
   }
@@ -481,7 +478,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun update(context: Context, date: LocalDate?, calendarMonthYearText: TextView, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarNextArrowUnavailable: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
+  private fun update(context: Context, date: LocalDate?, calendarMonthYearText: TextView, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
     if (date == null) {
       val date = LocalDate.parse(
         "01/${LocalDate.now().monthValue}/${LocalDate.now().year}",
@@ -511,7 +508,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     } else {
 
       calendarNextArrow.visibility = View.VISIBLE
-      calendarNextArrowUnavailable.visibility = View.GONE
+//      calendarNextArrowUnavailable.visibility = View.GONE
       recyclerView.visibility = View.GONE
       calendarMonthYearText.visibility = View.GONE
       val prev = date.minusMonths(1)
@@ -543,25 +540,25 @@ class MapFragment : BaseFragment<MapViewModel>() {
       if ((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
         || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)) {
         calendarNextArrow.visibility = View.GONE
-        calendarNextArrowUnavailable.visibility = View.VISIBLE
+//        calendarNextArrowUnavailable.visibility = View.VISIBLE
       }
 
       calendarPreviousArrow.setOnClickListener {
         previousMonthAverageValues(recyclerView, alertDialog)
-        update(context, prev, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+        update(context, prev, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       }
-      calendarNextArrowUnavailable.visibility = View.GONE
+//      calendarNextArrowUnavailable.visibility = View.GONE
       calendarNextArrow.visibility = View.VISIBLE
 
       calendarNextArrow.setOnClickListener {
         nextMonthAverageValues(recyclerView, alertDialog)
-        nextMonthClick(context, prev, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+        nextMonthClick(context, prev, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       }
     }
 
   }
 
-  private fun updateFromMonthYearPicker(context: Context, date: LocalDate, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarNextArrowUnavailable: TextView, calendarMonthYearText: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
+  private fun updateFromMonthYearPicker(context: Context, date: LocalDate, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarMonthYearText: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
     CalendarAdapter.DATE_INPUT = date
     val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)
     val intValueDayOfWeek = CalendarUtils.intValueForDayOfWeek(dayOfWeek)
@@ -571,7 +568,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)
     ) {
       calendarNextArrow.visibility = View.GONE
-      calendarNextArrowUnavailable.visibility = View.VISIBLE
+//      calendarNextArrowUnavailable.visibility = View.VISIBLE
     }
 
     val listOfDaysMonth = ArrayList<CalendarItemsDataModel>()
@@ -594,7 +591,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     calendarNextArrow.setOnClickListener {
       nextMonthAverageValues(recyclerView, alertDialog)
-      nextMonthClick(context, date, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+      nextMonthClick(context, date, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
     }
 
   }
@@ -615,7 +612,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
     viewModel.getAvgDataMonthPreviousMonth(sensorId = null, sensorType, fromDate)
       .observe(viewLifecycleOwner) {
-        Log.d("VALUE", it.data.toString())
+//        Log.d("VALUE", it.data.toString())
+        ƒ.d("VALUE", it.data.toString())
 
         val resMonths = mutableListOf<CalendarValuesDataModel>()
         val res = it?.data
@@ -690,9 +688,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }
   }
 
-  private fun calendarCancelButtonFromMonthAndYearPicker(context: Context, calendarPreviousArrow: TextView, calendarNextArrow: TextView, calendarHeader: TableLayout, calendarYearPicker: TextView, calendarMonthYearText: TextView, calendarLine: View, recyclerView: RecyclerView, monthYearPickerRecyclerView: RecyclerView, alertDialog: AlertDialog, calendarDialogCancelButton: TextView) {
+  private fun calendarCancelButtonFromMonthAndYearPicker(context: Context, calendarPreviousArrow: TextView, calendarNextArrow: TextView, calendarHeader: TableLayout, calendarYearPicker: TextView, calendarMonthYearText: TextView, recyclerView: RecyclerView, monthYearPickerRecyclerView: RecyclerView, alertDialog: AlertDialog, calendarDialogCancelButton: TextView) {
     calendarDialogCancelButton.setOnClickListener {
-      CalendarUtils.showCalendarHideRecyclerView(context, calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, calendarLine, recyclerView, monthYearPickerRecyclerView)
+      CalendarUtils.showCalendarHideRecyclerView(context, calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, recyclerView, monthYearPickerRecyclerView)
       CalendarUtils.calendarCancelButton(alertDialog, calendarDialogCancelButton)
     }
   }
@@ -723,10 +721,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     val recyclerView = dialogView.findViewById<RecyclerView>(R.id.calendarRecyclerView)
     val calendarNextArrow = dialogView.findViewById<TextView>(R.id.calendarNextArrow)
     val calendarPreviousArrow = dialogView.findViewById<TextView>(R.id.calendarPreviousArrow)
-    val calendarNextArrowUnavailable = dialogView.findViewById<TextView>(R.id.calendarNextArrowUnavailable)
     val calendarMonthYearText = dialogView.findViewById<TextView>(R.id.calendarMonthYearText)
     val calendarHeader = dialogView.findViewById<TableLayout>(R.id.calendarHeader)
-    val calendarLine = dialogView.findViewById<View>(R.id.calendarLine)
     val calendarYearPicker = dialogView.findViewById<TextView>(R.id.calendarYearPicker)
     val calendarDialogCancelButton = dialogView.findViewById<TextView>(R.id.calendarDialogCancelButton)
     val monthYearPickerRecyclerView = dialogView.findViewById<RecyclerView>(R.id.monthYearPickerRecyclerView)
@@ -735,20 +731,20 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
 
     historyForecastAdapter.onItemClickExplore = {
-      CalendarUtils.calendarViewSetView(calendarNextArrowUnavailable, calendarLine, calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView, alertDialog, calendarDialogCancelButton)
+      CalendarUtils.calendarViewSetView(calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView, alertDialog, calendarDialogCancelButton)
       CalendarUtils.calendarCancelButton(alertDialog, calendarDialogCancelButton)
 
       //Set calendar
-      update(requireContext(), null, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+      update(requireContext(), null, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       calendarPreviousArrow.setOnClickListener {
         previousMonthAverageValues(recyclerView, alertDialog)
-        update(requireContext(), CalendarAdapter.DATE_INPUT, calendarMonthYearText, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarPreviousArrow, alertDialog)
+        update(requireContext(), CalendarAdapter.DATE_INPUT, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       }
       alertDialog.show()
 
       calendarMonthYearText.setOnClickListener {
 
-        CalendarUtils.monthRecyclerViewSetView(calendarNextArrowUnavailable, calendarLine, calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
+        CalendarUtils.monthRecyclerViewSetView(calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
 
         val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarCircledMonths(requireContext()), monthAvgByYearValues)
         monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
@@ -756,10 +752,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
         monthYearPickerRecyclerView.suppressLayout(true)
         monthAdapter.onItemClick = {
           newMonth = CalendarUtils.getFullMonthName(requireActivity(), CalendarMonthYearPickerAdapter.MONTH_YEAR_VALUE)
-          calendarLine.visibility = View.VISIBLE
           calendarYearPicker.visibility = View.GONE
           val newDate = LocalDate.parse("01/${CalendarUtils.getMonthNumber(requireContext(), newMonth)}/${newYear ?: CalendarAdapter.DATE_INPUT?.year}", formatterLocalDate)
-          updateFromMonthYearPicker(requireContext(), newDate, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarMonthYearText, calendarPreviousArrow, alertDialog)
+          updateFromMonthYearPicker(requireContext(), newDate, recyclerView, calendarNextArrow, calendarMonthYearText, calendarPreviousArrow, alertDialog)
 
           monthYearPickersMonthAverageValues(recyclerView, alertDialog)
 
@@ -775,19 +770,19 @@ class MapFragment : BaseFragment<MapViewModel>() {
           recyclerView.visibility = View.VISIBLE
           monthYearPickerRecyclerView.visibility = View.GONE
 
-          CalendarUtils.showCalendarHideRecyclerView(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, calendarLine, recyclerView, monthYearPickerRecyclerView)
+          CalendarUtils.showCalendarHideRecyclerView(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, recyclerView, monthYearPickerRecyclerView)
 
           CalendarUtils.calendarCancelButton(alertDialog, calendarDialogCancelButton)
         }
         calendarDialogCancelButton.setOnClickListener {
-          CalendarUtils.showCalendarHideRecyclerView(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, calendarLine, recyclerView, monthYearPickerRecyclerView)
+          CalendarUtils.showCalendarHideRecyclerView(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, recyclerView, monthYearPickerRecyclerView)
           CalendarUtils.calendarCancelButton(alertDialog, calendarDialogCancelButton)
         }
 
         //Year Picker
         calendarYearPicker.setOnClickListener {
 
-          CalendarUtils.yearRecyclerViewSetView(calendarNextArrowUnavailable, calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
+          CalendarUtils.yearRecyclerViewSetView(calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
 
           val yearAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarCircledYears(), null)
           monthYearPickerRecyclerView.adapter = yearAdapter
@@ -816,18 +811,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
               monthYearPickerRecyclerView.suppressLayout(true)
               monthAdapter.onItemClick = {
                 newMonth = CalendarUtils.getFullMonthName(requireContext(), CalendarMonthYearPickerAdapter.MONTH_YEAR_VALUE)
-                calendarLine.visibility = View.VISIBLE
                 calendarYearPicker.visibility = View.GONE
 
                 val newDate = LocalDate.parse("01/${CalendarUtils.getMonthNumber(requireContext(), newMonth) ?: CalendarAdapter.DATE_INPUT?.month?.value}/${newYear ?: CalendarAdapter.DATE_INPUT?.year}", formatterLocalDate)
-                updateFromMonthYearPicker(requireContext(), newDate, recyclerView, calendarNextArrow, calendarNextArrowUnavailable, calendarMonthYearText, calendarPreviousArrow, alertDialog)
+                updateFromMonthYearPicker(requireContext(), newDate, recyclerView, calendarNextArrow, calendarMonthYearText, calendarPreviousArrow, alertDialog)
                 monthYearPickersMonthAverageValues(recyclerView, alertDialog)
 
                 CalendarUtils.backToCalendarFromMonth(requireContext(), calendarMonthYearText, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
-                CalendarUtils.showCalendarHideRecyclerView(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, calendarLine, recyclerView, monthYearPickerRecyclerView)
+                CalendarUtils.showCalendarHideRecyclerView(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, recyclerView, monthYearPickerRecyclerView)
                 CalendarUtils.calendarCancelButton(alertDialog, calendarDialogCancelButton)
                 monthAdapter.onItemClick = {
-                  calendarLine.visibility = View.VISIBLE
                   calendarYearPicker.visibility = View.GONE
                   calendarMonthYearText.visibility = View.VISIBLE
                   val month = CalendarAdapter.DATE_INPUT?.month.toString()
@@ -839,7 +832,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
                   recyclerView.visibility = View.VISIBLE
                   monthYearPickerRecyclerView.visibility = View.GONE
 
-                  calendarCancelButtonFromMonthAndYearPicker(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, calendarLine, recyclerView, monthYearPickerRecyclerView, alertDialog, calendarDialogCancelButton)
+                  calendarCancelButtonFromMonthAndYearPicker(requireContext(), calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, recyclerView, monthYearPickerRecyclerView, alertDialog, calendarDialogCancelButton)
                 }
               }
             }

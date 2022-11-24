@@ -10,7 +10,6 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
-
 import kotlinx.android.synthetic.main.calendar_slot.view.*
 import java.time.LocalDate
 import java.time.ZoneId
