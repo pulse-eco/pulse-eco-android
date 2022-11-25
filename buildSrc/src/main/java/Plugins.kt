@@ -11,7 +11,7 @@ object ProjectVersions {
 object BuildPlugins {
   const val androidGradlePlugin = "com.android.tools.build:gradle:7.2.2"
   const val googlePlayServices = "com.google.gms:google-services:4.3.14"
-  const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21"
+  const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.21"
   const val tremaGradlePlugin = "com.netcetera.android.gradle:trema-gradle-plugin:2.1.9"
 
   // Crashlytics
@@ -25,7 +25,4 @@ object Plugins {
   const val kotlinKapt = "kotlin-kapt"
   const val kotlinKsp = "kotlin-ksp"
   const val trema = "com.netcetera.trema"
-
-  // Crashlytics
-//  const val fabric = "io.fabric"
 }

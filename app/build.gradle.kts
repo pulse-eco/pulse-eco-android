@@ -2,6 +2,7 @@ plugins {
   id("com.android.application")
   id(Plugins.kotlinAndroid)
   id(Plugins.kotlinKapt)
+  id("kotlin-parcelize")
 //  id(Plugins.kotlinKsp)
   id(Plugins.trema)
 }
@@ -41,10 +42,13 @@ android {
       sourceCompatibility = JavaVersion.VERSION_1_8
       targetCompatibility = JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+      jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
   }
 
   dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.21")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("com.google.android.material:material:1.7.0")
@@ -58,7 +62,7 @@ android {
     implementation("com.squareup.moshi:moshi-adapters:1.11.0")
 //    implementation("org.jetbrains.anko:anko-commons:0.10.8")
     implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation("com.google.android.gms:play-services-location::18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.firebase:firebase-analytics:21.2.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.airbnb.android:lottie:3.5.0")

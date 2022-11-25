@@ -12,7 +12,6 @@ import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-//import org.jetbrains.anko.defaultSharedPreferences
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -75,7 +74,8 @@ private const val PERSISTED_DEFINITIONS = "persisted-data-definitions"
 
 class PersistedMeasuresProvider(context: Context, moshi: Moshi) {
 //  private val sharedPreferences = context.defaultSharedPreferences
-  val jsonAdapter: JsonAdapter<List<DataDefinition>> = moshi.adapter<List<DataDefinition>>(
+  private val sharedPreferences = context.getSharedPreferences("default", Context.MODE_PRIVATE)
+  val jsonAdapter: JsonAdapter<List<DataDefinition>> = moshi.adapter(
       Types.newParameterizedType(List::class.java, DataDefinition::class.java))
 
   val persistedDefinitions: Pair<Date, List<DataDefinition>>?
