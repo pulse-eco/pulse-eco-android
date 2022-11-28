@@ -12,10 +12,10 @@
     tools:context="com.netcetera.skopjepulse.main.MainActivity">
 
     <include
-      layout="@layout/pulse_app_bar"
       android:id="@+id/pulse_app_bar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content"
+      layout="@layout/pulse_app_bar"/>
 
     <include
       android:id="@+id/errorView"

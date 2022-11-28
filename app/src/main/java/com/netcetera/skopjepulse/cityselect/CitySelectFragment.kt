@@ -79,7 +79,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       parentFragmentManager.popBackStack()
     }
 
-    mainViewModel.activeCity.observe(viewLifecycleOwner) { activeCity ->
+    mainViewModel.activeCity.observe(viewLifecycleOwner) {
       handleCityLists(viewModel.citySelectItems.value)
     }
 

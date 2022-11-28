@@ -19,9 +19,9 @@ class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: (
   private var dataShow: List<CountryCityItem>
 
   companion object {
-    private val TYPE_COUNTRY = 0
-    private val TYPE_CITY = 1
-    private val EMPTY_LIST_PLACEHOLDER = 2
+    private const val TYPE_COUNTRY = 0
+    private const val TYPE_CITY = 1
+    private const val EMPTY_LIST_PLACEHOLDER = 2
   }
 
   init {
@@ -64,8 +64,7 @@ class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: (
     return if(dataShow.isEmpty())
       EMPTY_LIST_PLACEHOLDER
     else {
-      val comparable = dataShow[position]
-      when (comparable) {
+      when (dataShow[position]) {
         is CityItem -> TYPE_CITY
         is CountryItem -> TYPE_COUNTRY
         else -> throw IllegalArgumentException("Invalid type of data " + position)

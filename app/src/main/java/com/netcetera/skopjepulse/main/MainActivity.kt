@@ -1,16 +1,13 @@
 package com.netcetera.skopjepulse.main
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
@@ -125,22 +122,17 @@ class MainActivity : AppCompatActivity() {
     measurementTypeTabBarView.selectedMeasurementType.observe(this) {
       mainViewModel.showForMeasurement(it)
     }
- //ovde treba da se cacka za bug 121
+
     appBarView.onCitySelectRequest {
-
-      //I TUKA SET IMAGE RESOURCE, pri klik na gradot da se otvori i da e nagore
      pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_up_24)
-
       val citySelectShown =
         supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
 
-      //ova e za da dodademe nov grad vo nasata lista
       if (!citySelectShown) {
         supportFragmentManager.beginTransaction()
           .add(R.id.content, citySelectFragment)
           .addToBackStack(null).commit()
       }
-
     }
 
     mainViewModel.activeCity.observe(this) { activeCity ->
@@ -148,11 +140,8 @@ class MainActivity : AppCompatActivity() {
         appBarView.displayNoCityName()
         showCitySelectIfNotShown()
       }
-      else {
         appBarView.displayCityName(activeCity)
-        //tuka go dodadov
         pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
-
         val existingMapFragment =
           supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
         if (existingMapFragment == null) {
@@ -168,9 +157,6 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-//    mainViewModel.sameCity.observe(this) { _ ->
-//      //smeni ja crtata da pokazhuva nadole
-//    }
 
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
@@ -239,4 +225,5 @@ class MainActivity : AppCompatActivity() {
     super.onBackPressed()
     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
   }
+
 }
