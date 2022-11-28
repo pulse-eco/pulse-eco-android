@@ -55,13 +55,13 @@ class MainViewModel(
         addSource(pulseRepository.cities) { cities ->
           value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
         }
-
         addSource(selectableCity) {
           value = it
           cityStorage.cityId = it?.name ?: ""
         }
 
-      })
+      }
+    )
     sameCity = Transformations.distinctUntilChanged(
       MediatorLiveData<City>().apply {
         addSource(pulseRepository.cities) { cities ->

@@ -14,11 +14,10 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
-import com.netcetera.skopjepulse.showConformationDialog
+import com.netcetera.skopjepulse.showConfirmDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
-import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
-import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
@@ -73,47 +72,46 @@ class MainActivity : AppCompatActivity() {
       )
 
       val popupWindow = PopupWindow(
-        pickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+        pickerView,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
         true
       )
 
-      pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
+      pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { _, i ->
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("en") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("en")
+            }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("mk") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("mk")
+            }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("de") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("de")
+            }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("ro") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("ro")
+            }
           }
         }
       }
 
-      if (popupWindow.isShowing)
+      if (popupWindow.isShowing) {
         popupWindow.dismiss()
-      else
+      } else {
         if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
+      }
     }
 
     mainViewModel.measurementTypeTabs.observe(this) {
@@ -124,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     appBarView.onCitySelectRequest {
-     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_up_24)
+      pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_up_24)
       val citySelectShown =
         supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
 
@@ -139,25 +137,20 @@ class MainActivity : AppCompatActivity() {
       if (activeCity == null) {
         appBarView.displayNoCityName()
         showCitySelectIfNotShown()
-      }
+      } else {
         appBarView.displayCityName(activeCity)
         pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
         val existingMapFragment =
           supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
         if (existingMapFragment == null) {
-          supportFragmentManager.beginTransaction()
-            .replace(
-              R.id.content,
-              MapFragment.newInstance(activeCity),
-              activeCity.name,
-            )
-            .commit()
+          supportFragmentManager.beginTransaction().replace(
+            R.id.content,
+            MapFragment.newInstance(activeCity),
+            activeCity.name,
+          ).commit()
         }
-
       }
     }
-
-
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
     errorView?.let { errorTextView ->

@@ -104,7 +104,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
 
   companion object {
-    fun newInstance(city: City) = MapFragment().apply {
+    fun newInstance(city: City?) = MapFragment().apply {
       arguments = bundleOf(
         "city" to city
       )

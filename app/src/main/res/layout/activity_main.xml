@@ -19,9 +19,9 @@
 
     <include
       android:id="@+id/errorView"
-      layout="@layout/simple_error_layout"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content"
+      layout="@layout/simple_error_layout"/>
 
     <FrameLayout
       android:id="@+id/content"

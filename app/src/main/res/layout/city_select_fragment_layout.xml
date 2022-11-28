@@ -14,17 +14,15 @@
 
       <include
         android:id="@+id/errorView"
-        layout="@layout/simple_error_layout"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        layout="@layout/simple_error_layout"/>
 
       <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/citySelectRefreshView"
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
         <androidx.core.widget.NestedScrollView
           android:layout_width="match_parent"
@@ -44,20 +42,14 @@
 
               <include
                 android:id="@+id/currentlySelectedView"
-                layout="@layout/currently_selected"
-                />
+                layout="@layout/currently_selected" />
 
               <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/currentlyCityRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"
-                android:overScrollMode="never"
-                >
-
-
-
-              </androidx.recyclerview.widget.RecyclerView>
+                android:overScrollMode="never"/>
 
             </LinearLayout>
 

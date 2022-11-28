@@ -22,7 +22,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
     this.selectedCityListener = citySelectRequestListener
 
     pulseAppBarView.pulseCityPicker.apply {
-      setImageResource(R.drawable.ic_arrow_drop_down_24)
+      setImageResource(R.drawable.ic_arrow_drop_up_24)
     }
   }
 
