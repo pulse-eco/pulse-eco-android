@@ -228,7 +228,6 @@ class MainActivity : AppCompatActivity() {
     super.onActivityResult(requestCode, resultCode, data)
   }
 
-<<<<<<< Updated upstream
 
   override fun onBackPressed() {
 
@@ -239,6 +238,6 @@ class MainActivity : AppCompatActivity() {
 
 
 }
-=======
-}
->>>>>>> Stashed changes
+
+
+
