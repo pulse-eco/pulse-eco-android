@@ -20,10 +20,10 @@ class PulseAppBarView(private val pulseAppBarView: View) {
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
     this.selectedCityListener = citySelectRequestListener
-    pulseAppBarView.pulseAppbarDropDown.apply {
+    pulseAppBarView.pulseCityPicker.apply {
       visibility = View.GONE
     }
-    pulseAppBarView.pulseAppbarDropUp.apply {
+    pulseAppBarView.pulseCityPicker.apply {
       visibility = View.VISIBLE
     }
   }
@@ -47,11 +47,11 @@ class PulseAppBarView(private val pulseAppBarView: View) {
       visibility = View.VISIBLE
     }
 
-    pulseAppBarView.pulseAppbarDropDown.apply {
+    pulseAppBarView.pulseCityPicker.apply {
       visibility = View.VISIBLE
     }
 
-    pulseAppBarView.pulseAppbarDropUp.apply {
+    pulseAppBarView.pulseCityPicker.apply {
       visibility = View.GONE
     }
   }
