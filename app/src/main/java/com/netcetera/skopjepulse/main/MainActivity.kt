@@ -15,7 +15,7 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
-import com.netcetera.skopjepulse.showConfirmDialog
+import com.netcetera.skopjepulse.showConformationDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
@@ -87,25 +87,25 @@ class MainActivity : AppCompatActivity() {
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+            showConformationDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("en")
             }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+            showConformationDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("mk")
             }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+            showConformationDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("de")
             }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+            showConformationDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("ro")
             }
           }
@@ -228,6 +228,7 @@ class MainActivity : AppCompatActivity() {
     super.onActivityResult(requestCode, resultCode, data)
   }
 
+<<<<<<< Updated upstream
 
   override fun onBackPressed() {
 
@@ -238,3 +239,6 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+=======
+}
+>>>>>>> Stashed changes
