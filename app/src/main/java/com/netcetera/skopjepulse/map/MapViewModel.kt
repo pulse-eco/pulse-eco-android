@@ -343,6 +343,7 @@ class MapViewModel(
     errorResources.addResource(cityPulseRepository.historicalReadings.toErrorLiveDataResource())
   }
 
+
   override fun refreshData(forceRefresh: Boolean) {
     super.refreshData(forceRefresh)
     cityPulseRepository.refreshCurrent(forceRefresh)

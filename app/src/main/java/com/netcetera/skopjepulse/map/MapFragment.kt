@@ -12,9 +12,12 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TableLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.transition.TransitionManager
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.netcetera.skopjepulse.Constants
@@ -51,6 +55,7 @@ import it.sephiroth.android.library.xtooltip.Tooltip
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_content_layout.*
 import kotlinx.android.synthetic.main.bottom_sheet_default_peek.*
+import kotlinx.android.synthetic.main.bottom_sheet_default_peek.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_no_sensors_layout.*
 import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.*
 import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.*
@@ -129,11 +134,41 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
 
   override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?,
+    inflater: LayoutInflater,
+    container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
+
+
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//      super.onCreate(savedInstanceState)
+//      activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+//        override fun handleOnBackPressed() {
+//
+//
+//        }
+//         if (shouldInterceptBackPress()){
+//            Toast.makeText(requireContext(), "Back press intercepted in:${BottomSheetBehavior.STATE_COLLAPSED}", Toast.LENGTH_SHORT).show()
+//          }
+//          else {
+//            isEnabled = false
+//            activity?.onBackPressed()
+//          }
+//        })
+//
+//        private fun shouldInterceptBackPress(): Int{
+//          if (bottomSheetContainer.getState())
+//          if(BottomSheetBehavior.STATE_EXPANDED)
+//        }
+//      })
+//
+//
+//    fun shouldInterceptBackPress() = true
+//
+//  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -265,6 +300,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
           }
         }
       }
+
       selectSensorsButton.setOnClickListener(editFavouriteSensorsClickListener)
       editSelectedSensors.setOnClickListener(editFavouriteSensorsClickListener)
       sensorFavouriteButtonOverlay.setOnClickListener {
@@ -313,6 +349,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       bottomSheetBehavior.toggle()
     }
 
+
     // Pulse loading
     viewModel.showLoading.observe(viewLifecycleOwner, loadingIndicator)
 
@@ -342,7 +379,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }.applyTo(mapConstraintLayout)
     }
 
+
   }
+
+
 
   private fun getBand(intValue: Int): Band {
     return dataDef.findBandByValue(intValue)
@@ -1071,6 +1111,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
+
+
   override fun onSaveInstanceState(outState: Bundle) {
     map.onSaveInstanceState(outState)
     super.onSaveInstanceState(outState)
@@ -1086,5 +1128,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     super.onStop()
   }
 }
+
+
+
 
 data class MeasurementOverviewModel(val measurement: Double, val dataDefinition: DataDefinition)

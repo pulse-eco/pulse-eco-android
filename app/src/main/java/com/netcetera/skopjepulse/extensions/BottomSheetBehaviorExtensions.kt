@@ -21,7 +21,7 @@ fun BottomSheetBehavior<out View>.onStateChange(callbacks : Array<BottomSheetCal
 }
 
 fun dimOnExpand(what : View) : BottomSheetCallback {
-  return object : BottomSheetBehavior.BottomSheetCallback() {
+  return object : BottomSheetCallback() {
     override fun onSlide(bottomSheet: View, slideOffset: Float) {
       what.alpha = abs(slideOffset * 0.45f)
     }
@@ -49,5 +49,6 @@ fun BottomSheetBehavior<out View>.toggle() {
     state = STATE_EXPANDED
   } else if (state == STATE_EXPANDED) {
     state = BottomSheetBehavior.STATE_COLLAPSED
+
   }
 }

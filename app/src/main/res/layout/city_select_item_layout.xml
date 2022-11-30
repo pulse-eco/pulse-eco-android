@@ -11,6 +11,7 @@
     android:layout_height="wrap_content"
     android:background="@color/cityselect_item_overlay">
 
+
     <TextView
       android:id="@+id/citySelectCityLabel"
       android:layout_width="wrap_content"
