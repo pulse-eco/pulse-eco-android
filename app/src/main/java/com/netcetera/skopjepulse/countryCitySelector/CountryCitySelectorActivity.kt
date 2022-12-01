@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_city_selector.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_NAME_RESULT
 
-
 /**
  * Implementation of [AppCompatActivity] for displaying Country/Cities List
  */

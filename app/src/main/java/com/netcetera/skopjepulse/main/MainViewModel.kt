@@ -59,7 +59,6 @@ class MainViewModel(
           value = it
           cityStorage.cityId = it?.name ?: ""
         }
-
       }
     )
     sameCity = Transformations.distinctUntilChanged(

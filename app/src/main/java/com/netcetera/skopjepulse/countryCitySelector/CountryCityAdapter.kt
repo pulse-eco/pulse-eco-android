@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.item_country.view.*
 * Implementation of [RecyclerView.Adapter] and Holders for [RecyclerView] in the [CountryCitySelectorActivity]
 */
 
-class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: (String) -> Unit) : RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable{
+class CountryCityAdapter(var data: List<CountryCityItem>?, val onCitySelected: (String) -> Unit) :
+  RecyclerView.Adapter<CountryCityAdapter.BaseViewHolder<*>>(), Filterable {
 
   private var dataShow: List<CountryCityItem>
 

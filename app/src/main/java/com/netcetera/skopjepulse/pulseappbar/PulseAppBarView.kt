@@ -48,8 +48,5 @@ class PulseAppBarView(private val pulseAppBarView: View) {
       text = name
       visibility = View.VISIBLE
     }
-
   }
-
-
 }

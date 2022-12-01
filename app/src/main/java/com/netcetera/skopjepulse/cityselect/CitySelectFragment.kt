@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,9 +21,9 @@ import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_REQUEST_CO
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.utils.ui.SwipeHelper
 import kotlinx.android.synthetic.main.city_select_fragment_layout.*
-import kotlinx.android.synthetic.main.pulse_app_bar.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinApiExtension
 
 /**
  * Implementation of [CitySelectFragment] that is used for displaying of selected cities
@@ -49,6 +48,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     return inflater.inflate(R.layout.city_select_fragment_layout, container, false)
   }
 
+  @OptIn(KoinApiExtension::class)
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 

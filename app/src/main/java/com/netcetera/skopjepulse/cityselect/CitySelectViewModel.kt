@@ -24,12 +24,14 @@ import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.countryCitySelector.CityItem
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.isInt
+import org.koin.core.component.KoinApiExtension
 import java.util.*
 
 
 /**
  * Implementation of [BaseViewModel] that is used for displaying of cities to select from in [CitySelectFragment].
  */
+@OptIn(KoinApiExtension::class)
 class CitySelectViewModel(
   private val pulseRepository: PulseRepository,
   private val locationProvider: CurrentLocationProvider,
@@ -143,7 +145,6 @@ class CitySelectViewModel(
     if (pulseRepository.cities.value?.data.isNullOrEmpty()) {
       pulseRepository.loadCities(true)
     } else {
-
       pulseRepository.loadCitiesOverall()
     }
   }

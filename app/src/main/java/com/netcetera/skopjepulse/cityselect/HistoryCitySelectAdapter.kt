@@ -36,7 +36,7 @@ class HistoryCitySelectAdapter : RecyclerView.Adapter<HistorySelectItemViewHolde
   }
 
   fun del(position: Int): String {
-    var list = arrayListOf<CitySelectItem>()
+    val list = arrayListOf<CitySelectItem>()
     list.addAll(differ.currentList)
     val city = list[position]
     list.removeAt(position)

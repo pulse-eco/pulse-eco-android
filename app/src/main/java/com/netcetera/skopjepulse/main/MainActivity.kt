@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
-
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
         Constants.LANGUAGE_CODE,
@@ -151,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
     errorView?.let { errorTextView ->

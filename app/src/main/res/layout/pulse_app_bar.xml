@@ -42,7 +42,8 @@
       android:src="@drawable/ic_arrow_drop_down_24"
       app:layout_constraintBottom_toTopOf="@id/measurementTypeTabBarView"
       app:layout_constraintStart_toEndOf="@id/townLabel"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent"
+      android:contentDescription="city picker arrow" />
 
     <ImageView
       android:id="@+id/pulseAppbarLogo"
@@ -58,7 +59,8 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="1.0"
       android:debuggable="true"
-      android:focusable="true" />
+      android:focusable="true"
+      android:contentDescription="pulse eco logo" />
 
     <ImageView
       android:id="@+id/btn_language"
@@ -74,7 +76,8 @@
       android:src="@drawable/ic_language"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
-      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo" />
+      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"
+      android:contentDescription="language picker" />
 
     <com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTabBarView
       android:id="@+id/measurementTypeTabBarView"
