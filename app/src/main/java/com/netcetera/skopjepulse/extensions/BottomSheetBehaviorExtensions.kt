@@ -5,7 +5,6 @@ import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.google.android.material.bottomsheet.BottomSheetBehavior.State
 import kotlin.math.abs
 
 fun BottomSheetBehavior<out View>.onStateChange(callbacks : Array<BottomSheetCallback>) {

@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
@@ -24,6 +26,8 @@ import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.netcetera.skopjepulse.extensions.closeDrawer
+import com.netcetera.skopjepulse.extensions.getCurrentState
 
 
 class MainActivity : AppCompatActivity() {
@@ -216,8 +220,22 @@ class MainActivity : AppCompatActivity() {
   }
 
   override fun onBackPressed() {
-    super.onBackPressed()
+
+    if(BottomSheetBehavior<View>().getCurrentState() == BottomSheetBehavior.STATE_EXPANDED)
+    {
+
+      val toast = Toast.makeText(applicationContext, "raboti", Toast.LENGTH_LONG)
+      toast.show()
+    }else {
+
+      val toast = Toast.makeText(applicationContext, "ne raboti", Toast.LENGTH_LONG)
+      toast.show()
+    }
+
     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
+//    super.onBackPressed()
+
+    }
   }
 
-}
+

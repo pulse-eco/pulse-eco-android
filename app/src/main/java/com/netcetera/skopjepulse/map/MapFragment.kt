@@ -1086,6 +1086,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     map.onStop()
     super.onStop()
   }
+
 }
 
 data class MeasurementOverviewModel(val measurement: Double, val dataDefinition: DataDefinition)
