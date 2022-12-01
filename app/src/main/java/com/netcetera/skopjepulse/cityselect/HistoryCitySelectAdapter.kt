@@ -15,10 +15,10 @@ import kotlinx.android.synthetic.main.city_select_item_layout.view.*
 
 typealias HistorySelectListener = (city: City) -> Unit
 
-class HistoryCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(),
+class HistoryCitySelectAdapter : RecyclerView.Adapter<HistorySelectItemViewHolder>(),
   Observer<List<CitySelectItem>> {
 
-  private var citySelectListener: CitySelectListener? = null
+  private var citySelectListener: HistorySelectListener? = null
 
   private val differ =
     AsyncListDiffer<CitySelectItem>(this, object : DiffUtil.ItemCallback<CitySelectItem?>() {
@@ -36,7 +36,7 @@ class HistoryCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(
   }
 
   fun del(position: Int): String {
-    var list = arrayListOf<CitySelectItem>()
+    val list = arrayListOf<CitySelectItem>()
     list.addAll(differ.currentList)
     val city = list[position]
     list.removeAt(position)
@@ -45,24 +45,24 @@ class HistoryCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder>(
     return city.city.name
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitySelectItemViewHolder {
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistorySelectItemViewHolder {
     val view =
       LayoutInflater.from(parent.context).inflate(R.layout.city_select_item_layout, parent, false)
-    return CitySelectItemViewHolder(view) { city -> citySelectListener?.invoke(city) }
+    return HistorySelectItemViewHolder(view) { city -> citySelectListener?.invoke(city) }
   }
 
   override fun getItemCount(): Int = differ.currentList.size
 
-  override fun onBindViewHolder(holder: CitySelectItemViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: HistorySelectItemViewHolder, position: Int) {
     holder.bind(differ.currentList[position])
   }
 
-  fun onCitySelected(listener: CitySelectListener) {
+  fun onCitySelected(listener: HistorySelectListener) {
     citySelectListener = listener
   }
 }
 
-class HistorySelectItemViewHolder(view: View, citySelectListener: CitySelectListener) :
+class HistorySelectItemViewHolder(view: View, citySelectListener: HistorySelectListener) :
   RecyclerView.ViewHolder(view) {
   lateinit var googleMap: GoogleMap
 

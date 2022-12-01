@@ -1,7 +1,6 @@
 package com.netcetera.skopjepulse.main
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,18 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
-import com.netcetera.skopjepulse.showConformationDialog
+import com.netcetera.skopjepulse.showConfirmDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
-import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
-import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
@@ -55,11 +52,10 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
-
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
         Constants.LANGUAGE_CODE,
-        Context.MODE_PRIVATE
+        MODE_PRIVATE
       ).getString(Constants.LANGUAGE_CODE, "")
       val pickerView =
         LayoutInflater.from(this).inflate(R.layout.language_picker_dilog, null) as ViewGroup
@@ -75,47 +71,46 @@ class MainActivity : AppCompatActivity() {
       )
 
       val popupWindow = PopupWindow(
-        pickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+        pickerView,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
         true
       )
 
-      pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
+      pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { _, i ->
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("en") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("en")
+            }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("mk") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("mk")
+            }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("de") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("de")
+            }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConformationDialog(
-              this,
-              getString(R.string.change_language_message_android)
-            ) { changeLanguage("ro") }
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+              changeLanguage("ro")
+            }
           }
         }
       }
 
-      if (popupWindow.isShowing)
+      if (popupWindow.isShowing) {
         popupWindow.dismiss()
-      else
+      } else {
         if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
+      }
     }
 
     mainViewModel.measurementTypeTabs.observe(this) {
@@ -126,10 +121,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     appBarView.onCitySelectRequest {
-      pulseAppbarDropDown.visibility = View.GONE
-      pulseAppbarDropUp.visibility = View.VISIBLE
+      pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_up_24)
       val citySelectShown =
         supportFragmentManager.findFragmentById(R.id.content) is CitySelectFragment
+
       if (!citySelectShown) {
         supportFragmentManager.beginTransaction()
           .add(R.id.content, citySelectFragment)
@@ -137,25 +132,24 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    mainViewModel.activeCity.observe(this, Observer { activeCity ->
+    mainViewModel.activeCity.observe(this) { activeCity ->
       if (activeCity == null) {
         appBarView.displayNoCityName()
         showCitySelectIfNotShown()
       } else {
         appBarView.displayCityName(activeCity)
+        pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
         val existingMapFragment =
           supportFragmentManager.findFragmentByTag(activeCity.name) as? MapFragment
         if (existingMapFragment == null) {
-          supportFragmentManager.beginTransaction()
-            .replace(
-              R.id.content,
-              MapFragment.newInstance(activeCity),
-              activeCity.name
-            )
-            .commit()
+          supportFragmentManager.beginTransaction().replace(
+            R.id.content,
+            MapFragment.newInstance(activeCity),
+            activeCity.name,
+          ).commit()
         }
       }
-    })
+    }
 
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
@@ -163,14 +157,14 @@ class MainActivity : AppCompatActivity() {
       errorTextView.setOnClickListener {
         mainViewModel.refreshData(true)
       }
-      mainViewModel.errorMessage.observe(this, Observer {
+      mainViewModel.errorMessage.observe(this) {
         errorTextView.text = it
         if (it?.isNotBlank() == true) {
           errorTextView.visibility = View.VISIBLE
         } else {
           errorTextView.visibility = View.GONE
         }
-      })
+      }
     }
   }
 
@@ -213,11 +207,16 @@ class MainActivity : AppCompatActivity() {
           val result = data.getStringExtra(NEW_CITY_NAME_RESULT)
           if (result != null) {
             mainViewModel.showForCity(result)
-
           }
         }
       }
     }
     super.onActivityResult(requestCode, resultCode, data)
   }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
+  }
+
 }
