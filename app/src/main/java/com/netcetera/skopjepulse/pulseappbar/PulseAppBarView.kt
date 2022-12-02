@@ -20,11 +20,9 @@ class PulseAppBarView(private val pulseAppBarView: View) {
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
     this.selectedCityListener = citySelectRequestListener
-    pulseAppBarView.pulseAppbarDropDown.apply {
-      visibility = View.GONE
-    }
-    pulseAppBarView.pulseAppbarDropUp.apply {
-      visibility = View.VISIBLE
+
+    pulseAppBarView.pulseCityPicker.apply {
+      setImageResource(R.drawable.ic_arrow_drop_up_24)
     }
   }
 
@@ -41,18 +39,14 @@ class PulseAppBarView(private val pulseAppBarView: View) {
     displayCityName(city.displayName.toUpperCase(Locale.getDefault()))
   }
 
+  fun retrieveCityName(): String {
+    return pulseAppBarView.townLabel.text.toString()
+  }
+
   private fun displayCityName(name: String) {
     pulseAppBarView.townLabel.apply {
       text = name
       visibility = View.VISIBLE
-    }
-
-    pulseAppBarView.pulseAppbarDropDown.apply {
-      visibility = View.VISIBLE
-    }
-
-    pulseAppBarView.pulseAppbarDropUp.apply {
-      visibility = View.GONE
     }
   }
 }

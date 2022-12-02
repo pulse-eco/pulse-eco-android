@@ -3,7 +3,7 @@ package com.netcetera.skopjepulse
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 
-fun showConformationDialog(context: Context, message: String, onConfirmation: () -> Unit) {
+fun showConfirmDialog(context: Context, message: String, onConfirmation: () -> Unit) {
   val builder = AlertDialog.Builder(context)
 
   builder.setTitle(context.getString(R.string.confirmation))

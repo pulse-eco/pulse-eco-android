@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_city_selector.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_NAME_RESULT
 
-
 /**
  * Implementation of [AppCompatActivity] for displaying Country/Cities List
  */
@@ -34,7 +33,7 @@ class CountryCitySelectorActivity : AppCompatActivity(){
 
     setContentView(R.layout.activity_city_selector)
 
-    var toolbar = findViewById<Toolbar>(R.id.toolbar_to_go_back)
+    val toolbar = findViewById<Toolbar>(R.id.toolbar_to_go_back)
 
     setSupportActionBar(toolbar)
     supportActionBar?.title = ""
@@ -86,7 +85,7 @@ class CountryCitySelectorActivity : AppCompatActivity(){
     countryCityRecyclerView.addOnScrollListener(scrollListener)
   }
 
-  val onCitySelected: (String) -> Unit = {
+  private val onCitySelected: (String) -> Unit = {
     countryCityViewModel.saveCheckedCities()
     val intent = Intent()
     intent.putExtra(NEW_CITY_NAME_RESULT, it)

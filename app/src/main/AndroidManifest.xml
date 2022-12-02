@@ -15,9 +15,6 @@
     android:supportsRtl="false"
     android:theme="@style/AppTheme">
 
-    <activity android:name=".countryCitySelector.CountryCitySelectorActivity"
-      android:screenOrientation="portrait"/>
-
     <activity
       android:name=".main.MainActivity"
       android:screenOrientation="portrait"
@@ -30,6 +27,9 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <activity android:name=".countryCitySelector.CountryCitySelectorActivity"
+      android:screenOrientation="portrait"/>
 
     <meta-data
       android:name="com.google.android.geo.API_KEY"
