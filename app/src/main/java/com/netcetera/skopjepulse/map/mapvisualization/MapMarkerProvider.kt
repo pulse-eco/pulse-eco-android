@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.map.model.MapMarkerModel
-import org.jetbrains.anko.withAlpha
+//import org.jetbrains.anko.withAlpha
 
 class MapMarkerProvider(val context: Context) {
 
@@ -88,7 +88,7 @@ class MapMarkerProvider(val context: Context) {
     paint.apply {
       reset()
       isAntiAlias = true
-      color = Color.BLACK.withAlpha(200)
+//      color = Color.BLACK.withAlpha(200)
       maskFilter = BlurMaskFilter(height * .09f, BlurMaskFilter.Blur.NORMAL)
       isFilterBitmap = true
     }
