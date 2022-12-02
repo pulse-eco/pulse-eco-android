@@ -1,10 +1,10 @@
 package com.netcetera.skopjepulse.base
 
-import android.app.Application
 import android.content.Context
+import org.jetbrains.anko.defaultSharedPreferences
 
-class PreferredCityStorage(context: Application) {
-  private val storage = context.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
+class PreferredCityStorage(context: Context) {
+  private val storage = context.defaultSharedPreferences
 
   var cityId: String
     get() = storage.getString(javaClass.simpleName, null) ?: ""

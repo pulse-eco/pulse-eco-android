@@ -27,7 +27,7 @@ import com.netcetera.skopjepulse.map.preferences.MapPreferencesStorage
 import com.netcetera.skopjepulse.map.preferences.Preferences
 import com.netcetera.skopjepulse.map.preferences.filter
 import com.netcetera.skopjepulse.voronoi.voronoiCityBounds
-//import org.jetbrains.anko.withAlpha
+import org.jetbrains.anko.withAlpha
 import org.kynosarges.tektosyne.geometry.GeoUtils
 import org.kynosarges.tektosyne.geometry.PointD
 import org.kynosarges.tektosyne.geometry.PolygonLocation

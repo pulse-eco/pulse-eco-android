@@ -5,14 +5,14 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-//import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.defaultSharedPreferences
 
 private const val PREFERENCES_KEY = "map-layer-picker-preferences"
 private const val PREFERENCES_KEY_MAP_TYPE = "$PREFERENCES_KEY-map-type"
 private const val PREFERENCES_KEY_VISUALIZATION = "$PREFERENCES_KEY-data-visualization"
 
 class MapPreferencesStorage(context: Context) {
-//  private val storage: SharedPreferences = context.defaultSharedPreferences
+  private val storage: SharedPreferences = context.defaultSharedPreferences
 
   private val _preferences: MutableLiveData<Preferences>
   val preferences: LiveData<Preferences>

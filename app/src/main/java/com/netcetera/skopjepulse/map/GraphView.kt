@@ -15,7 +15,7 @@ import com.netcetera.skopjepulse.base.XAxisDateValueFormatter
 import com.netcetera.skopjepulse.map.model.GraphBand
 import com.netcetera.skopjepulse.map.model.GraphModel
 import com.netcetera.skopjepulse.map.model.GraphSeries
-//import org.jetbrains.anko.withAlpha
+import org.jetbrains.anko.withAlpha
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.min
@@ -119,7 +119,7 @@ private fun LineDataSet.applyPulseStyling(graphSeries: GraphSeries): LineDataSet
 
 
 private fun LimitLine.applyPulseStyling(graphBand: GraphBand) : LimitLine {
-//  lineColor = graphBand.color.withAlpha(150)
+  lineColor = graphBand.color.withAlpha(150)
   textColor = graphBand.color
   lineWidth = 1f
   textSize = 14f

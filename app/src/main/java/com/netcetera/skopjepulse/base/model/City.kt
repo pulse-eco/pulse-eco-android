@@ -7,8 +7,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.android.parcel.Parcelize
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -34,8 +34,8 @@ data class City(
   @IgnoredOnParcel val cityBounds: LatLngBounds by lazy {
     cityBorderPoints.run {
       LatLngBounds(
-        LatLng(minBy { it.latitude }.latitude, minBy { it.longitude }.longitude),
-        LatLng(maxBy { it.latitude }.latitude, maxBy { it.longitude }.longitude)
+        LatLng(minBy { it.latitude }!!.latitude, minBy { it.longitude }!!.longitude),
+        LatLng(maxBy { it.latitude }!!.latitude, maxBy { it.longitude }!!.longitude)
       )
     }
   }

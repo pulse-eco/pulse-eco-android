@@ -24,7 +24,10 @@
     android:id="@+id/calendarMonthYearText"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/calendar_border_margin"
+    android:layout_marginTop="32dp"
+    android:layout_marginBottom="@dimen/calendar_border_margin"
+    android:layout_marginStart="@dimen/calendar_border_margin"
+    android:layout_marginEnd="@dimen/calendar_border_margin"
     android:padding="@dimen/calendar_element_padding"
     android:textColor="@color/colorPrimary"
     android:textSize="@dimen/calendar_title_text_size"
@@ -64,42 +67,42 @@
         android:layout_gravity="center"
         android:text="M"
 
-        android:textAlignment="textStart" />
+        android:textAlignment="center" />
 
       <TextView
         android:layout_width="5dp"
         android:layout_column="1"
         android:layout_gravity="center"
         android:text="T"
-        android:textAlignment="textStart" />
+        android:textAlignment="center" />
 
       <TextView
         android:layout_width="5dp"
         android:layout_column="2"
         android:layout_gravity="center"
         android:text="W"
-        android:textAlignment="textStart" />
+        android:textAlignment="center" />
 
       <TextView
         android:layout_width="5dp"
         android:layout_column="3"
         android:layout_gravity="center"
         android:text="T"
-        android:textAlignment="textStart" />
+        android:textAlignment="center" />
 
       <TextView
         android:layout_width="5dp"
         android:layout_column="4"
         android:layout_gravity="center"
         android:text="F"
-        android:textAlignment="textStart" />
+        android:textAlignment="center" />
 
       <TextView
         android:layout_width="5dp"
         android:layout_column="5"
         android:layout_gravity="center"
         android:text="S"
-        android:textAlignment="textStart" />
+        android:textAlignment="center" />
 
       <TextView
         android:layout_width="5dp"
@@ -114,7 +117,7 @@
     android:id="@+id/calendarYearPicker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
+    android:layout_margin="@dimen/calendar_border_margin"
     android:textColor="@color/colorPrimary"
     android:textSize="18sp"
     android:visibility="gone"
@@ -127,9 +130,10 @@
     android:id="@+id/monthYearPickerRecyclerView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="@dimen/calendar_border_margin"
+    android:layout_marginStart="@dimen/calendar_border_margin"
+    android:layout_marginEnd="@dimen/calendar_border_margin"
+    android:layout_marginBottom="@dimen/calendar_border_half_margin"
     android:nestedScrollingEnabled="false"
     android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/calendarDialogCancelButton"
@@ -142,7 +146,12 @@
     android:id="@+id/calendarRecyclerView"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/calendar_border_margin"
+    android:layout_marginStart="@dimen/calendar_border_margin"
+    android:layout_marginEnd="@dimen/calendar_border_half_margin"
+    android:layout_marginTop="@dimen/calendar_border_half_margin"
+    android:layout_marginBottom="@dimen/calendar_border_margin"
+    android:paddingStart="@dimen/calendar_element_padding"
+    android:paddingEnd="@dimen/calendar_element_padding"
     android:nestedScrollingEnabled="false"
     app:layout_constraintBottom_toTopOf="@id/calendarDialogCancelButton"
     app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +163,7 @@
     android:id="@+id/calendarDialogCancelButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/calendar_border_margin"
+    android:layout_margin="@dimen/calendar_border_half_margin"
     android:background="@android:color/transparent"
     android:text="@string/cancel"
     android:textAllCaps="true"
