@@ -1,21 +1,16 @@
 package com.netcetera.skopjepulse.historyforecast
 
-import android.app.AlertDialog
 import android.content.Context
-import android.view.View
-import android.widget.TableLayout
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
 import com.netcetera.skopjepulse.map.MapFragment
 import java.time.LocalDate
-import java.util.*
 
 object CalendarUtils {
 
-  fun getCalendarCircledMonths(context: Context): Array<String> {
+
+
+  fun getCalendarMonthNames(context: Context): Array<String> {
     return arrayOf(
       context.getString(R.string.january).substring(0, 3),
       context.getString(R.string.february).substring(0, 3),
@@ -33,18 +28,20 @@ object CalendarUtils {
   }
 
   //We have data from 2017:
-  fun getCalendarCircledYears(): Array<String> {
+  fun getCalendarYears(): Array<String> {
     val startDate = LocalDate.parse("01/01/2017", MapFragment.formatterLocalDate)
     val maxYear = (startDate.year).downTo(CalendarAdapter.DATE_INPUT_TODAY.year).last
 
     val mutableListYears = mutableListOf<String>()
-    for (year in startDate.year .. maxYear) {
+    var year = startDate.year
+    while (year <= maxYear) {
       mutableListYears.add(year.toString())
+      year ++
     }
     return mutableListYears.toTypedArray()
   }
 
-  fun intValueForDayOfWeek(day: String): Int {
+  fun getOrderFromWeekDay(day: String): Int {
     when (day) {
       "Mon" -> {
         return 0
@@ -70,7 +67,7 @@ object CalendarUtils {
     }
   }
 
- fun getMonthByLanguage(context: Context,month: String): String {
+ fun getMonthInAppLanguage(context: Context, month: String): String {
     when (month) {
       "January" -> {
         return context.getString(R.string.january)
@@ -111,7 +108,7 @@ object CalendarUtils {
     }
   }
 
-  fun getMonthNumber(context: Context,month: String?): Int? {
+  fun getOrderFromMonthName(context: Context, month: String?): Int? {
     when (month) {
       context.getString(R.string.january) -> {
         return 1
@@ -206,84 +203,4 @@ object CalendarUtils {
 
     }
   }
-
-
-
-fun showCalendarHideRecyclerView(context: Context, calendarPreviousArrow: TextView, calendarNextArrow: TextView,
-                                 calendarHeader: TableLayout, calendarYearPicker: TextView, calendarMonthYearText: TextView, recyclerView: RecyclerView, monthYearPickerRecyclerView:RecyclerView) {
-    calendarPreviousArrow.visibility = View.VISIBLE
-    calendarNextArrow.visibility = View.VISIBLE
-    calendarHeader.visibility = View.VISIBLE
-    calendarYearPicker.visibility = View.GONE
-    calendarMonthYearText.visibility = View.VISIBLE
-    val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
-    calendarMonthYearText.text = "${getMonthByLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
-
-    recyclerView.visibility = View.VISIBLE
-    monthYearPickerRecyclerView.visibility = View.GONE
-    calendarYearPicker.visibility = View.GONE
-  }
-
-  fun calendarCancelButton(alertDialog: AlertDialog,calendarDialogCancelButton:TextView ) {
-    calendarDialogCancelButton.setOnClickListener {
-      alertDialog.dismiss()
-    }
-  }
-
-  fun calendarViewSetView(calendarMonthYearText:TextView,calendarYearPicker:TextView,
-                          calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
-                          recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView,alertDialog: AlertDialog,calendarDialogCancelButton:TextView) {
-    calendarMonthYearText.visibility = View.VISIBLE
-    calendarYearPicker.visibility = View.GONE
-    calendarPreviousArrow.visibility = View.VISIBLE
-    calendarNextArrow.visibility = View.VISIBLE
-    calendarHeader.visibility = View.VISIBLE
-    recyclerView.visibility = View.VISIBLE
-    monthYearPickerRecyclerView.visibility = View.GONE
-    calendarCancelButton(alertDialog,calendarDialogCancelButton)
-  }
-
-  fun monthRecyclerViewSetView(calendarMonthYearText:TextView,calendarYearPicker:TextView,
-                                   calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
-                                   recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView) {
-    calendarMonthYearText.visibility = View.GONE
-    calendarYearPicker.visibility = View.VISIBLE
-    calendarYearPicker.text = "${MapFragment.CHOSEN_YEAR ?:CalendarAdapter.DATE_INPUT?.year}"
-    calendarPreviousArrow.visibility = View.GONE
-    calendarNextArrow.visibility = View.GONE
-    calendarHeader.visibility = View.GONE
-    recyclerView.visibility = View.GONE
-    monthYearPickerRecyclerView.visibility = View.VISIBLE
-  }
-
-   fun yearRecyclerViewSetView(calendarMonthYearText:TextView,calendarYearPicker:TextView,
-                               calendarPreviousArrow:TextView,calendarNextArrow:TextView,calendarHeader:TableLayout,
-                               recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView)
-   {
-     calendarYearPicker.visibility = View.GONE
-     calendarMonthYearText.visibility = View.GONE
-     calendarPreviousArrow.visibility = View.GONE
-     calendarNextArrow.visibility = View.GONE
-     calendarHeader.visibility = View.GONE
-     recyclerView.visibility = View.GONE
-     monthYearPickerRecyclerView.visibility = View.VISIBLE
-     monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
-   }
-
-  fun backToCalendarFromMonth(context: Context,calendarMonthYearText: TextView,calendarPreviousArrow: TextView,calendarNextArrow: TextView,
-  calendarHeader: TableLayout,recyclerView: RecyclerView,monthYearPickerRecyclerView: RecyclerView)
-  {
-    val month = CalendarAdapter.DATE_INPUT?.month.toString()
-    val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-    val newInputs = "${getMonthByLanguage(context,monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
-
-    calendarMonthYearText.visibility = View.VISIBLE
-    calendarMonthYearText.text = newInputs
-    calendarPreviousArrow.visibility = View.VISIBLE
-    calendarNextArrow.visibility = View.VISIBLE
-    calendarHeader.visibility = View.VISIBLE
-    recyclerView.visibility = View.VISIBLE
-    monthYearPickerRecyclerView.visibility = View.GONE
-  }
-
 }

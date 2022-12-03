@@ -19,7 +19,6 @@ class HistoryForecastAdapter(
   private val items: ArrayList<HistoryForecastDataModel>
 ) : RecyclerView.Adapter<HistoryForecastAdapter.BaseViewHolder<*>>() {
 
-
   companion object {
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2

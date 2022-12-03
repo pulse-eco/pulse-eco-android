@@ -3,9 +3,9 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/slotConstraintLayout"
-  android:layout_width="30dp"
-  android:layout_height="30dp"
-  android:layout_marginTop="6dp"
+  android:layout_width="36dp"
+  android:layout_height="36dp"
+  android:layout_marginTop="@dimen/calendar_border_half_margin"
   android:layout_gravity="center"
   tools:background="@drawable/calendar_circle">
 
@@ -21,6 +21,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:text="13" />
+    tools:text="13"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

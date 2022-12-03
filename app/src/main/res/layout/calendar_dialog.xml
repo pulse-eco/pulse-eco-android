@@ -4,15 +4,17 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginTop="100dp"
   android:layout_gravity="center"
   tools:background="@color/white">
 
   <TextView
     android:id="@+id/calendarPreviousArrow"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/calendar_border_margin"
+    android:layout_width="@dimen/calendar_navigation_arrow_width"
+    android:layout_height="@dimen/calendar_navigation_arrow_height"
+    android:layout_marginTop="@dimen/calendar_border_double_margin"
+    android:layout_marginBottom="@dimen/calendar_border_margin"
+    android:layout_marginStart="@dimen/calendar_border_margin"
+    android:layout_marginEnd="@dimen/calendar_border_margin"
     android:padding="@dimen/calendar_element_padding"
     android:background="@drawable/ic_arrow_back"
     app:layout_constraintBottom_toTopOf="@id/calendarHeader"
@@ -24,8 +26,8 @@
     android:id="@+id/calendarMonthYearText"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:layout_marginBottom="@dimen/calendar_border_margin"
+    android:layout_marginTop="@dimen/calendar_border_double_margin"
+    android:layout_marginBottom="@dimen/calendar_border_double_margin"
     android:layout_marginStart="@dimen/calendar_border_margin"
     android:layout_marginEnd="@dimen/calendar_border_margin"
     android:padding="@dimen/calendar_element_padding"
@@ -39,9 +41,12 @@
 
   <TextView
     android:id="@+id/calendarNextArrow"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/calendar_border_margin"
+    android:layout_width="@dimen/calendar_navigation_arrow_width"
+    android:layout_height="@dimen/calendar_navigation_arrow_height"
+    android:layout_marginTop="@dimen/calendar_border_double_margin"
+    android:layout_marginBottom="@dimen/calendar_border_margin"
+    android:layout_marginStart="@dimen/calendar_border_margin"
+    android:layout_marginEnd="@dimen/calendar_border_margin"
     android:padding="@dimen/calendar_element_padding"
     android:background="@drawable/ic_arrow_next"
     app:layout_constraintBottom_toTopOf="@id/calendarHeader"
@@ -66,7 +71,7 @@
         android:layout_column="0"
         android:layout_gravity="center"
         android:text="M"
-
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="center" />
 
       <TextView
@@ -74,6 +79,7 @@
         android:layout_column="1"
         android:layout_gravity="center"
         android:text="T"
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="center" />
 
       <TextView
@@ -81,6 +87,7 @@
         android:layout_column="2"
         android:layout_gravity="center"
         android:text="W"
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="center" />
 
       <TextView
@@ -88,6 +95,7 @@
         android:layout_column="3"
         android:layout_gravity="center"
         android:text="T"
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="center" />
 
       <TextView
@@ -95,6 +103,7 @@
         android:layout_column="4"
         android:layout_gravity="center"
         android:text="F"
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="center" />
 
       <TextView
@@ -102,6 +111,7 @@
         android:layout_column="5"
         android:layout_gravity="center"
         android:text="S"
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="center" />
 
       <TextView
@@ -109,6 +119,7 @@
         android:layout_column="6"
         android:layout_gravity="center"
         android:text="S"
+        android:textSize="@dimen/calendar_days_short_size"
         android:textAlignment="textStart" />
     </TableRow>
   </TableLayout>
@@ -117,20 +128,25 @@
     android:id="@+id/calendarYearPicker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/calendar_border_margin"
+    android:layout_marginTop="@dimen/calendar_border_triple_margin"
+    android:layout_marginStart="@dimen/calendar_border_margin"
+    android:layout_marginEnd="@dimen/calendar_border_margin"
+    android:layout_marginBottom="@dimen/calendar_border_margin"
     android:textColor="@color/colorPrimary"
     android:textSize="18sp"
+    android:nestedScrollingEnabled="false"
     android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/monthYearPickerRecyclerView"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    tools:layout_height="100dp"/>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/monthYearPickerRecyclerView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/calendar_border_margin"
+    android:layout_marginTop="@dimen/calendar_border_triple_margin"
     android:layout_marginStart="@dimen/calendar_border_margin"
     android:layout_marginEnd="@dimen/calendar_border_margin"
     android:layout_marginBottom="@dimen/calendar_border_half_margin"
@@ -169,7 +185,6 @@
     android:textAllCaps="true"
     android:textColor="@color/calendar_cancel_button"
     android:textSize="@dimen/calendar_buttons_font_size"
-    android:lineHeight="@dimen/calendar_buttons_line_height"
     tools:textColor="@color/white"
     android:orientation="horizontal"
     app:layout_constraintBottom_toBottomOf="parent"

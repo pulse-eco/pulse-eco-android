@@ -22,7 +22,8 @@ class CalendarAdapter(
   private val items: ArrayList<CalendarItemsDataModel>,
   val date: LocalDate,
   val values: List<CalendarValuesDataModel>?,
-  val todayValue: Int?) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+  val todayValue: Int?
+) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
   var onItemClick: ((String) -> Unit)? = null
 
