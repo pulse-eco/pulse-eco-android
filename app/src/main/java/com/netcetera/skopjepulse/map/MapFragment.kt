@@ -101,7 +101,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     OverallBannerView(overallBannerView)
   }
 
-
   companion object {
     fun newInstance(city: City?) = MapFragment().apply {
       arguments = bundleOf(
@@ -414,7 +413,15 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
   }
 
-  private fun nextMonthClick(context: Context, dateInput: LocalDate?, calendarMonthYearText: TextView, recyclerView: RecyclerView, calendarNextArrow: TextView, calendarPreviousArrow: TextView, alertDialog: AlertDialog) {
+  private fun nextMonthClick(
+    context: Context,
+    dateInput: LocalDate?,
+    calendarMonthYearText: TextView,
+    recyclerView: RecyclerView,
+    calendarNextArrow: TextView,
+    calendarPreviousArrow: TextView,
+    alertDialog: AlertDialog
+  ) {
     if (dateInput != null) {
       val next = dateInput.plusMonths(1)
       val nextDow = next.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)
@@ -423,14 +430,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
       CalendarAdapter.DATE_INPUT = next
       DATE_MONTH_REQUEST = next
 
-      val month = CalendarAdapter.DATE_INPUT?.month.toString()
-      val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-      calendarMonthYearText.text = "${
-        CalendarUtils.getMonthInAppLanguage(
-          context,
-          monthFirstUpper
-        )
-      } ${CalendarAdapter.DATE_INPUT?.year}"
+      val year = CalendarAdapter.DATE_INPUT?.year
+      val appLanguage = CalendarUtils.getMonthInAppLanguage(context, CalendarAdapter.DATE_INPUT?.month.toString().capitalize())
+      calendarMonthYearText.text = String.format("%s %s", appLanguage, year)
 
       val list = ArrayList<CalendarItemsDataModel>()
       for (i in 0 until intValueDow) {
@@ -688,9 +690,29 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }
   }
 
-  private fun calendarCancelButtonFromMonthAndYearPicker(context: Context, calendarPreviousArrow: TextView, calendarNextArrow: TextView, calendarHeader: TableLayout, calendarYearPicker: TextView, calendarMonthYearText: TextView, recyclerView: RecyclerView, monthYearPickerRecyclerView: RecyclerView, alertDialog: AlertDialog, calendarDialogCancelButton: TextView) {
+  private fun calendarCancelButtonFromMonthAndYearPicker(
+    context: Context,
+    calendarPreviousArrow: TextView,
+    calendarNextArrow: TextView,
+    calendarHeader: TableLayout,
+    calendarYearPicker: TextView,
+    calendarMonthYearText: TextView,
+    recyclerView: RecyclerView,
+    monthYearPickerRecyclerView: RecyclerView,
+    alertDialog: AlertDialog,
+    calendarDialogCancelButton: TextView
+  ) {
     calendarDialogCancelButton.setOnClickListener {
-      UseCases.showCalendarHideRecyclerView(context, calendarPreviousArrow, calendarNextArrow, calendarHeader, calendarYearPicker, calendarMonthYearText, recyclerView, monthYearPickerRecyclerView)
+      UseCases.showCalendarHideRecyclerView(
+        context,
+        calendarPreviousArrow,
+        calendarNextArrow,
+        calendarHeader,
+        calendarYearPicker,
+        calendarMonthYearText,
+        recyclerView,
+        monthYearPickerRecyclerView
+      )
       UseCases.calendarCancelButton(alertDialog, calendarDialogCancelButton)
     }
   }
@@ -745,7 +767,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         UseCases.monthRecyclerViewSetView(calendarMonthYearText, calendarYearPicker, calendarPreviousArrow, calendarNextArrow, calendarHeader, recyclerView, monthYearPickerRecyclerView)
 
-        val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarMonthNames(requireContext()), monthAvgByYearValues)
+        val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getShortMonthNames(requireContext()), monthAvgByYearValues)
         monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
         monthYearPickerRecyclerView.adapter = monthAdapter
         monthYearPickerRecyclerView.suppressLayout(true)
@@ -759,8 +781,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
           calendarMonthYearText.visibility = View.VISIBLE
           val month = CalendarAdapter.DATE_INPUT?.month.toString()
-          val monthFirstUpper =
-            month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
+          val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
           calendarMonthYearText.text = "${CalendarUtils.getMonthInAppLanguage(requireContext(), monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year ?: CalendarAdapter.DATE_INPUT?.year.toString()}"
 
           calendarPreviousArrow.visibility = View.VISIBLE
@@ -804,7 +825,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
               }
               monthAvgByYearValues = resMonths.toList()
 
-              val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getCalendarMonthNames(requireContext()), monthAvgByYearValues)
+              val monthAdapter = CalendarMonthYearPickerAdapter(requireContext(), CalendarUtils.getShortMonthNames(requireContext()), monthAvgByYearValues)
               monthYearPickerRecyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
               monthYearPickerRecyclerView.adapter = monthAdapter
               monthYearPickerRecyclerView.suppressLayout(true)
