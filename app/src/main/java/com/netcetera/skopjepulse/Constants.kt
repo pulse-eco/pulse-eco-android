@@ -9,6 +9,9 @@ class Constants {
     const val LANGUAGE_CODE = "language_code"
     const val MONTH_DAY_YEAR_DATE_FORMAT = "MMM dd yyyy"
     const val DAY_MONTH_YEAR = "dd/MM/yyyy"
+    const val YEAR_MONTH_DAY = "yyyy/MM/dd"
+    const val d_MMM = "d MMM"
+    const val EEE = "EEE"
     const val FULL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
     const val SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY = "-1"
     const val DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24

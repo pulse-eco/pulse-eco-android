@@ -1,30 +1,87 @@
 package com.netcetera.skopjepulse.historyforecast
 
 import android.content.Context
+import com.netcetera.skopjepulse.Constants.Companion.EEE
+import com.netcetera.skopjepulse.Constants.Companion.d_MMM
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
 import com.netcetera.skopjepulse.map.MapFragment
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.*
 
 object CalendarUtils {
 
+  val SHORT_START = 0;
+  val SHORT_END = 3;
 
-
-  fun getCalendarMonthNames(context: Context): Array<String> {
+  fun getShortMonthNames(context: Context, ): Array<String> {
     return arrayOf(
-      context.getString(R.string.january).substring(0, 3),
-      context.getString(R.string.february).substring(0, 3),
-      context.getString(R.string.march).substring(0, 3),
-      context.getString(R.string.april).substring(0, 3),
-      context.getString(R.string.may).substring(0, 3),
-      context.getString(R.string.june).substring(0, 3),
-      context.getString(R.string.july).substring(0, 3),
-      context.getString(R.string.august).substring(0, 3),
-      context.getString(R.string.september).substring(0, 3),
-      context.getString(R.string.october).substring(0, 3),
-      context.getString(R.string.november).substring(0, 3),
-      context.getString(R.string.december).substring(0, 3)
+      context.getString(R.string.january).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.february).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.march).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.april).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.may).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.june).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.july).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.august).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.september).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.october).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.november).substring(SHORT_START, SHORT_END),
+      context.getString(R.string.december).substring(SHORT_START, SHORT_END)
     )
+  }
+
+  fun getFullMonthName(context: Context, short: String): String {
+    when (short) {
+      context.getString(R.string.january).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.january)
+      }
+
+      context.getString(R.string.february).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.february)
+      }
+
+      context.getString(R.string.march).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.march)
+      }
+
+      context.getString(R.string.april).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.april)
+      }
+
+      context.getString(R.string.may).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.may)
+      }
+
+      context.getString(R.string.june).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.june)
+      }
+
+      context.getString(R.string.july).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.july)
+      }
+
+      context.getString(R.string.august).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.august)
+      }
+
+      context.getString(R.string.september).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.september)
+      }
+
+      context.getString(R.string.october).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.october)
+      }
+
+      context.getString(R.string.november).substring(SHORT_START, SHORT_END) -> {
+        return context.getString(R.string.november)
+      }
+      else -> {
+        return context.getString(R.string.december)
+      }
+
+    }
   }
 
   //We have data from 2017:
@@ -152,55 +209,17 @@ object CalendarUtils {
     }
   }
 
-  fun getFullMonthName(context: Context, short: String): String {
-    when (short) {
-     context.getString(R.string.january).substring(0,3) -> {
-        return context.getString(R.string.january)
-      }
-
-      context.getString(R.string.february).substring(0,3) -> {
-        return context.getString(R.string.february)
-      }
-
-      context.getString(R.string.march).substring(0,3) -> {
-        return context.getString(R.string.march)
-      }
-
-      context.getString(R.string.april).substring(0,3) -> {
-        return context.getString(R.string.april)
-      }
-
-      context.getString(R.string.may).substring(0,3) -> {
-        return context.getString(R.string.may)
-      }
-
-      context.getString(R.string.june).substring(0,3) -> {
-        return context.getString(R.string.june)
-      }
-
-      context.getString(R.string.july).substring(0,3) -> {
-        return context.getString(R.string.july)
-      }
-
-      context.getString(R.string.august).substring(0,3) -> {
-        return context.getString(R.string.august)
-      }
-
-      context.getString(R.string.september).substring(0,3) -> {
-        return context.getString(R.string.september)
-      }
-
-      context.getString(R.string.october).substring(0,3) -> {
-        return context.getString(R.string.october)
-      }
-
-      context.getString(R.string.november).substring(0,3) -> {
-        return context.getString(R.string.november)
-      }
-      else -> {
-        return context.getString(R.string.december)
-      }
-
-    }
+  fun formatWeekday(context: Context?, date: Date?): String {
+    return formatDate(date, EEE)
   }
+
+  fun showDayAndMonth(context: Context?, date: Date?): String {
+    return formatDate(date, d_MMM)
+  }
+
+  fun formatDate(date: Date?, format: String): String {
+    val formatDate = SimpleDateFormat(format, Locale.getDefault())
+    return formatDate.format(date!!)
+  }
+
 }

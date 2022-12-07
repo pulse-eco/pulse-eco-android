@@ -18,38 +18,49 @@ class CalendarMonthYearPickerAdapter(
 ) :
   RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-  var selectedPosition = -1
-
   companion object {
     var MONTH_YEAR_VALUE: String = ""
+    var selectedPosition = -1
   }
 
   var onItemClick: ((String) -> Unit)? = null
 
   inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val textView: TextView = view.findViewById(R.id.monthYearTextView)
-    val montYearPickerButton: ConstraintLayout = view.findViewById(R.id.yearMonthConstraintLayout)
-    fun bind(){
+    private val monthYearText: TextView = view.findViewById(R.id.monthYearTextView)
+    private val monthYearBackground: ConstraintLayout = view.findViewById(R.id.monthYearLayout)
+    fun bind() {
       val item = items[adapterPosition]
-      textView.text = item
+      monthYearText.text = item
       itemView.setOnClickListener {
         selectedPosition = adapterPosition
         notifyDataSetChanged()
         MONTH_YEAR_VALUE = item
         onItemClick?.invoke(item)
       }
-      montYearPickerButton.setBackgroundResource(R.drawable.month_year_item)
-      textView.setTextColor(Color.BLACK)
-      if(!values.isNullOrEmpty()){
-        for(i in values.indices){
-          if (i == adapterPosition){
-        val color = values[adapterPosition].sensorValueColor
-        color?.let {
-          textView.setTextColor(it.legendColor)
-          montYearPickerButton.setBackgroundColor(it.legendColor)
-          montYearPickerButton.setBackgroundResource(R.drawable.month_year_item)
-          montYearPickerButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color.legendColor, BlendModeCompat.SRC_ATOP) }
-          }}}
+      setStyles(monthYearText, monthYearBackground, adapterPosition)
+    }
+  }
+
+  private fun setStyles(monthYearText: TextView, monthYearBackground: ConstraintLayout, adapterPosition: Int) {
+    monthYearBackground.setBackgroundResource(R.drawable.month_year_item)
+    if (!values.isNullOrEmpty()) {
+      for (i in values.indices) {
+        if (i == adapterPosition) {
+          val color = values[adapterPosition].sensorValueColor
+          color?.let {
+            monthYearText.setTextColor(it.legendColor)
+            monthYearBackground.setBackgroundColor(it.legendColor)
+            monthYearBackground.setBackgroundResource(R.drawable.month_year_item)
+            monthYearBackground.background.colorFilter =
+              BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                color.legendColor,
+                BlendModeCompat.SRC_ATOP
+              )
+          }
+        } else {
+          monthYearText.setTextColor(Color.BLACK)
+        }
+      }
     }
   }
 

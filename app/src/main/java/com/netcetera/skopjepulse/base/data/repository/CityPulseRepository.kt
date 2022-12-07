@@ -169,9 +169,9 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     val result = MutableLiveData<Resource<List<SensorReading>>> ()
     val mutableList = mutableListOf<SensorReading>()
     val formatter = SimpleDateFormat(Constants.FULL_DATE_FORMAT)
-    val fromDate = formatter.format(HistoryForecastAdapter.TIME_STAMP)
+    val fromDate = formatter.format(HistoryForecastAdapter.SELECTED_DATE)
     val localFromDate = ZonedDateTime.parse(fromDate).withZoneSameInstant(ZoneId.systemDefault())
-    val toDateCalculation = HistoryForecastAdapter.TIME_STAMP.time + DAY_IN_MILLISECONDS
+    val toDateCalculation = HistoryForecastAdapter.SELECTED_DATE.time + DAY_IN_MILLISECONDS
     val toDate = formatter.format(toDateCalculation)
     val localToDate = ZonedDateTime.parse(toDate).withZoneSameInstant(ZoneId.systemDefault())
     val checkFormatter = SimpleDateFormat("yyyy-MM-dd")
@@ -183,7 +183,7 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
 
         override fun onResponse(call: Call<List<SensorReading>>, response: Response<List<SensorReading>>) {
           for (i in 0 until response.body()!!.size) {
-            if (checkFormatter.format(response.body()!![i].stamp) == checkFormatter.format(HistoryForecastAdapter.TIME_STAMP)) {
+            if (checkFormatter.format(response.body()!![i].stamp) == checkFormatter.format(HistoryForecastAdapter.SELECTED_DATE)) {
               mutableList += response.body()!![i]
             }
           }

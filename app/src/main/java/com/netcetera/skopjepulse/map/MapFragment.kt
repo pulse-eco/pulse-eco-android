@@ -25,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.netcetera.skopjepulse.Constants
+import com.netcetera.skopjepulse.Constants.Companion.FULL_DATE_FORMAT
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
@@ -866,13 +867,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.getSensorsValuesTypeRaw(mesType).observe(viewLifecycleOwner) {
         val bannerData = viewModel.createAverageOverallBannerData(HistoryForecastAdapter.selectedSensorReading!!, dataDef)
         setValuesForOverallBannerData(bannerData.title, bannerData.backgroundColor, bannerData.value, bannerData.valueUnit, bannerData.description, bannerData.legend)
-        if (formatter.format(HistoryForecastAdapter.TIME_STAMP) == formatter.format(today)) {
+          if (formatter.format(HistoryForecastAdapter.SELECTED_DATE) == formatter.format(today)) {
           setMapValuesToday()
         } else {
           setMapValuesSensorValuesDaysRange()
         }
       }
     }
+
   }
 
   private fun getDateButtonsList(dataModel: List<SensorReading>, todayButtonData: CityOverall?, mesType: MeasurementType): ArrayList<HistoryForecastDataModel> {
@@ -915,10 +917,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
     dataModel?.data?.let { readings ->
       readings.forEach { sensorReading ->
         val cal = Calendar.getInstance()
-        val format = SimpleDateFormat(
-          Constants.MONTH_DAY_YEAR_DATE_FORMAT,
-          Locale(getLanguage(context))
-        )
+
+        val format = SimpleDateFormat(Constants.MONTH_DAY_YEAR_DATE_FORMAT, Locale(getLanguage(context)))
+
         val dateOfSensorToString = format.format(sensorReading.stamp)
         cal.add(Calendar.DATE, -7)
         for (i in 0..6) {
@@ -940,10 +941,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
   private fun setDaysNames() {
     val cal = Calendar.getInstance()
     val listOfDaysNames = getBoundsDays()
-    val formatter = SimpleDateFormat("EEE", Locale(getLanguage(context)))
     listOfDaysNames.forEach {
       cal.add(Calendar.DATE, -1)
-      it.text = formatter.format(cal.time)
+      it.text = CalendarUtils.formatWeekday(context, cal.time)
     }
   }
 

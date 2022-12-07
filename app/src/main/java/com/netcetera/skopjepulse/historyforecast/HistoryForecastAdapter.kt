@@ -5,13 +5,19 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.netcetera.skopjepulse.Constants.Companion.YEAR_MONTH_DAY
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.base.model.Band
 import com.netcetera.skopjepulse.base.model.SensorReading
+import com.netcetera.skopjepulse.historyforecast.CalendarUtils.formatDate
+import com.netcetera.skopjepulse.historyforecast.CalendarUtils.formatWeekday
+import com.netcetera.skopjepulse.historyforecast.CalendarUtils.showDayAndMonth
 import kotlinx.android.synthetic.main.date_button.view.*
 import kotlinx.android.synthetic.main.explore_button.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class HistoryForecastAdapter(
@@ -23,14 +29,13 @@ class HistoryForecastAdapter(
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2
     const val VIEW_TYPE_DATE_FORECAST = 3
-    var TIME_STAMP: Date = Calendar.getInstance().time
+    var SELECTED_DATE: Date = Calendar.getInstance().time
     var selectedSensorReading: SensorReading? = null
   }
 
   var selectedPosition = -1
-  var onItemClick: ((Date?) -> Unit)? = null
   var onItemClickExplore: ((String) -> Unit)? = null
-
+  var onItemClick: ((Date?) -> Unit)? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
     val context = parent.context
@@ -82,62 +87,80 @@ class HistoryForecastAdapter(
   }
 
   inner class DateViewHolder(view: View) : BaseViewHolder<HistoryForecastDataModel>(view) {
-    private val cardView = view.cardViewDateButton
-    private val titleDayDate = view.textViewDayDate
-    private val bodyDayAmount = view.textViewPollutionAmount
+    private val dateButton = view.cardViewDateButton
+    private val dateTitle = view.textViewDayDate
+    private val dateAmount = view.textViewPollutionAmount
+    private val gradientDrawable = GradientDrawable()
+
     override fun bind() {
       val sensorReading = items[adapterPosition].averageWeeklyDataModel
-      val color = items[adapterPosition].sensorValueColor
-      titleDayDate.text = formatDayTitle(context, sensorReading?.stamp)
-      val gd = GradientDrawable()
-      gd.cornerRadius = 10f
+      val sensorValueColor = items[adapterPosition].sensorValueColor
+      dateTitle.text = setDate(context, sensorReading?.stamp)
+      gradientDrawable.cornerRadius = 10f
 
-      if (sensorReading?.value == -1.0) {
-        bodyDayAmount.text = context.getString(R.string.not_available)
-        gd.setColor(ContextCompat.getColor(context, R.color.gray))
-        cardView.alpha = 0.7F
+      if (sensorReading?.value == -1.0) {//Ask Pance about invalid measurement
+        noSensorDataAvailable(dateButton, dateAmount, gradientDrawable)
       } else {
-        bodyDayAmount.text = sensorReading?.value?.toInt().toString()
-        color?.let { gd.setColor(it.legendColor) }
-        cardView.alpha = 1F
+        sensorDataAvailable(dateAmount, gradientDrawable, sensorReading, sensorValueColor)
       }
-      bodyDayAmount.background = gd
-      cardView.setOnClickListener {
+
+      dateAmount.background = gradientDrawable
+
+      dateButton.setOnClickListener {
         selectedPosition = adapterPosition
-        selectedSensorReading = sensorReading
+        selectedSensorReading = sensorReading!!
         notifyDataSetChanged()
-        TIME_STAMP = sensorReading!!.stamp
-        onItemClick?.invoke(TIME_STAMP)
+        SELECTED_DATE = sensorReading.stamp
+        onItemClick?.invoke(SELECTED_DATE)
       }
+
       if (selectedPosition > 0) {
         if (selectedPosition == adapterPosition) {
-          cardView.setBackgroundResource(R.drawable.date_button_clicked_shape)
-        } else {
-          cardView.setBackgroundResource(R.drawable.date_button_unclicked_shape)
+          dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
         }
-      } else {
+        else {
+          dateButton.setBackgroundResource(R.drawable.date_button_unclicked_shape)
+        }
+      }
+      else {
         if (adapterPosition == itemCount - 1) {
-          cardView.setBackgroundResource(R.drawable.date_button_clicked_shape)
+          dateButton.setBackgroundResource(R.drawable.date_button_clicked_shape)
         }
       }
     }
   }
 
-  fun formatDayTitle(context: Context, timeStamp: Date?): String {
+  private fun noSensorDataAvailable(button: CardView, amount: TextView, drawable: GradientDrawable) {
+    button.alpha = 0.7F
+    amount.text = context.getString(R.string.not_available)
+    drawable.setColor(ContextCompat.getColor(context, R.color.gray))
+  }
+
+  private fun sensorDataAvailable(
+    amount: TextView,
+    drawable: GradientDrawable,
+    sensorReading: SensorReading?,
+    sensorValueColor: Band?
+  ) {
+    amount.text = sensorReading?.value?.toInt().toString()
+    sensorValueColor?.legendColor?.let { drawable.setColor(it) }
+  }
+
+  fun setDate(context: Context, date: Date?): String {
     val cal = Calendar.getInstance()
     val todayDate = cal.time
     cal.add(Calendar.DATE, -7)
-    val dateOneWeekAgo = cal.time
+    val previousDate = cal.time
 
     return when {
-      yearMonthDayDateFormat(timeStamp) <= yearMonthDayDateFormat(dateOneWeekAgo) -> {
-        dateShownInsteadDayOfWeek(timeStamp)
+      formatDate(date, YEAR_MONTH_DAY) == formatDate(todayDate, YEAR_MONTH_DAY) -> {
+        return context.getText(R.string.today).toString()
       }
-      dateShownInsteadDayOfWeek(timeStamp) == dateShownInsteadDayOfWeek(todayDate) -> {
-        context.getText(R.string.today).toString()
+      formatDate(date, YEAR_MONTH_DAY) <= formatDate(previousDate, YEAR_MONTH_DAY) -> {
+        showDayAndMonth(context, date)
       }
       else -> {
-        dayOfWeekShown(timeStamp)
+        formatWeekday(context, date)
       }
     }
   }
@@ -147,21 +170,6 @@ class HistoryForecastAdapter(
     override fun bind() {
       dateButton.visibility = View.GONE
     }
-  }
-
-  private fun dateShownInsteadDayOfWeek(stamp: Date?): String {
-    val format = SimpleDateFormat("d MMM", Locale.getDefault())
-    return format.format(stamp!!)
-  }
-
-  private fun dayOfWeekShown(stamp: Date?): String {
-    val formatWeekDay = SimpleDateFormat("EEE", Locale.getDefault())
-    return formatWeekDay.format(stamp!!)
-  }
-
-  private fun yearMonthDayDateFormat(stamp: Date?): String {
-    val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    return format.format(stamp!!)
   }
 
 }
