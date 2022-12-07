@@ -431,9 +431,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
       CalendarAdapter.DATE_INPUT = next
       DATE_MONTH_REQUEST = next
 
-      val year = CalendarAdapter.DATE_INPUT?.year
-      val appLanguage = CalendarUtils.getMonthInAppLanguage(context, CalendarAdapter.DATE_INPUT?.month.toString().capitalize())
-      calendarMonthYearText.text = String.format("%s %s", appLanguage, year)
+      val month = CalendarAdapter.DATE_INPUT?.month.toString()
+      val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
+      //val year = CalendarAdapter.DATE_INPUT?.year
+      //val appLanguage = CalendarUtils.getMonthInAppLanguage(context, CalendarAdapter.DATE_INPUT?.month.toString().capitalize())
+      calendarMonthYearText.text = "${CalendarUtils.getMonthInAppLanguage(context, monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
+      //calendarMonthYearText.text = String.format("%s %s", appLanguage, year)
 
       val list = ArrayList<CalendarItemsDataModel>()
       for (i in 0 until intValueDow) {
@@ -445,11 +448,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
       setCalendarAdapter(requireContext(), list, recyclerView, alertDialog, calendarValuesResult)
 
-      if ((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
-        || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)
+      val todayMonth =CalendarAdapter.DATE_INPUT_TODAY.month.value
+      val december = CalendarUtils.getOrderFromMonthName(context,"December")
+      val inputMonth = CalendarAdapter.DATE_INPUT!!.month.value
+      val currYear = CalendarAdapter.DATE_INPUT_TODAY.year
+      val inputYear = CalendarAdapter.DATE_INPUT!!.year
+
+      if ((todayMonth > inputMonth && currYear > inputYear)
+        || (todayMonth == inputMonth && currYear == inputYear) || (todayMonth>inputMonth && currYear<inputYear)
       ) {
         calendarNextArrow.visibility = View.GONE
-//        calendarNextArrowUnavailable.visibility = View.VISIBLE
       }
 
       calendarPreviousArrow.setOnClickListener {
@@ -511,7 +519,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     } else {
 
       calendarNextArrow.visibility = View.VISIBLE
-//      calendarNextArrowUnavailable.visibility = View.GONE
       recyclerView.visibility = View.GONE
       calendarMonthYearText.visibility = View.GONE
       val prev = date.minusMonths(1)
