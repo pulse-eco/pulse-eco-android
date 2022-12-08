@@ -1,6 +1,7 @@
 package com.netcetera.skopjepulse.historyforecast
 
 import android.content.Context
+import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.Constants.Companion.EEE
 import com.netcetera.skopjepulse.Constants.Companion.d_MMM
 import com.netcetera.skopjepulse.R
@@ -8,12 +9,15 @@ import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
 import com.netcetera.skopjepulse.map.MapFragment
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 
 object CalendarUtils {
 
   val SHORT_START = 0;
   val SHORT_END = 3;
+  val EARLIEST_MEASUREMENT = "01/01/2017"
 
   fun getShortMonthNames(context: Context, ): Array<String> {
     return arrayOf(
@@ -84,16 +88,14 @@ object CalendarUtils {
     }
   }
 
-  //We have data from 2017:
   fun getCalendarYears(): Array<String> {
-    val startDate = LocalDate.parse("01/01/2017", MapFragment.formatterLocalDate)
-    val maxYear = (startDate.year).downTo(CalendarAdapter.DATE_INPUT_TODAY.year).last
+    var startYear = getYear().year
+    val endYear = (startYear).downTo(getCurrentDate().year).last
 
     val mutableListYears = mutableListOf<String>()
-    var year = startDate.year
-    while (year <= maxYear) {
-      mutableListYears.add(year.toString())
-      year ++
+    while (startYear <= endYear) {
+      mutableListYears.add(startYear.toString())
+      startYear ++
     }
     return mutableListYears.toTypedArray()
   }
@@ -221,5 +223,49 @@ object CalendarUtils {
     val formatDate = SimpleDateFormat(format, Locale.getDefault())
     return formatDate.format(date!!)
   }
+
+  fun createFormatter(format: String): SimpleDateFormat {
+    return SimpleDateFormat(format, Locale.getDefault())
+  }
+
+  fun getDayOfWeek(month: LocalDate, locale: Locale): String {
+    return month.dayOfWeek.getDisplayName(TextStyle.SHORT, locale)
+  }
+
+  fun capitalize(word: String?): String {
+    return word?.substring(0, 1)?.toUpperCase(Locale.getDefault()) + word?.substring(1)
+      ?.toLowerCase(Locale.getDefault())
+  }
+
+  fun concatenateMonthYear(month: String, year: Int): String {
+    return "$month $year";
+  }
+
+  fun getCurrentDate(): LocalDate {
+    return LocalDate.parse(
+      "${LocalDate.now().dayOfMonth}/${LocalDate.now().monthValue}/${LocalDate.now().year}",
+      DateTimeFormatter.ofPattern(Constants.LOCAL_DATE)
+    )
+  }
+
+  fun getRangeOneWeek(): LocalDate {
+    val date = LocalDate.parse(
+      "${LocalDate.now().dayOfMonth}/${LocalDate.now().monthValue}/${LocalDate.now().year}",
+      DateTimeFormatter.ofPattern(Constants.LOCAL_DATE)
+    )
+    return date.minusDays(8)
+  }
+
+  fun getYear(): LocalDate {
+    return LocalDate.parse(EARLIEST_MEASUREMENT, DateTimeFormatter.ofPattern(Constants.LOCAL_DATE))
+  }
+
+  fun getWholeMonth(): LocalDate {
+    return LocalDate.parse(
+      "01/${LocalDate.now().monthValue}/${LocalDate.now().year}",
+      DateTimeFormatter.ofPattern(Constants.LOCAL_DATE)
+    )
+  }
+
 
 }

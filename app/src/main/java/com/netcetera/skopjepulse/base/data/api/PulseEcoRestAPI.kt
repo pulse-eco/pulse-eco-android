@@ -62,9 +62,8 @@ interface CityPulseApiService {
     @Query("to")to:String
   ) : Call<List<SensorReading>>
 
-  /*
-    Returns a list of all the values received for valueType for all
-    the sensors in the time period of fromDateTime to toDateTime.
+  /**
+   * Returns list with all measurements for all sensors in a city in the specified time range.
    */
   @GET("dataRaw")
   fun getAllSensorsAllValuesForTypeInRange(
@@ -73,6 +72,9 @@ interface CityPulseApiService {
     @Query("to")to:String
   ) : Call<List<SensorReading>>
 
+  /**
+   * Returns average monthly data of single sensor for a single measurement in a specified range.
+   */
   @GET("avgData/month")
   fun getAvgMonthData(
     @Query("sensorId")sensorId :String,
@@ -129,4 +131,5 @@ object TimberHttpLogger : HttpLoggingInterceptor.Logger {
   override fun log(message: String) {
     i { message }
   }
+
 }

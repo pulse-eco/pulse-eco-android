@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.netcetera.skopjepulse.Constants.Companion.YEAR_MONTH_DAY
+import com.netcetera.skopjepulse.Constants.Companion.YEAR_MONTH_DAY_SLASH
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.Band
 import com.netcetera.skopjepulse.base.model.SensorReading
@@ -29,13 +29,12 @@ class HistoryForecastAdapter(
     const val VIEW_TYPE_EXPLORE = 1
     const val VIEW_TYPE_DATE = 2
     const val VIEW_TYPE_DATE_FORECAST = 3
-    var SELECTED_DATE: Date = Calendar.getInstance().time
     var selectedSensorReading: SensorReading? = null
   }
 
   var selectedPosition = -1
   var onItemClickExplore: ((String) -> Unit)? = null
-  var onItemClick: ((Date?) -> Unit)? = null
+  var onItemClick: ((Date) -> Unit)? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
     val context = parent.context
@@ -110,8 +109,7 @@ class HistoryForecastAdapter(
         selectedPosition = adapterPosition
         selectedSensorReading = sensorReading!!
         notifyDataSetChanged()
-        SELECTED_DATE = sensorReading.stamp
-        onItemClick?.invoke(SELECTED_DATE)
+        onItemClick?.invoke(sensorReading.stamp)
       }
 
       if (selectedPosition > 0) {
@@ -153,10 +151,10 @@ class HistoryForecastAdapter(
     val previousDate = cal.time
 
     return when {
-      formatDate(date, YEAR_MONTH_DAY) == formatDate(todayDate, YEAR_MONTH_DAY) -> {
+      formatDate(date, YEAR_MONTH_DAY_SLASH) == formatDate(todayDate, YEAR_MONTH_DAY_SLASH) -> {
         return context.getText(R.string.today).toString()
       }
-      formatDate(date, YEAR_MONTH_DAY) <= formatDate(previousDate, YEAR_MONTH_DAY) -> {
+      formatDate(date, YEAR_MONTH_DAY_SLASH) <= formatDate(previousDate, YEAR_MONTH_DAY_SLASH) -> {
         showDayAndMonth(context, date)
       }
       else -> {

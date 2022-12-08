@@ -16,6 +16,7 @@ import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
 import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.interpolateColor
+import com.netcetera.skopjepulse.historyforecast.CalendarUtils
 import com.netcetera.skopjepulse.historyforecast.calendar.CalendarAdapter
 import com.netcetera.skopjepulse.map.model.*
 import com.netcetera.skopjepulse.map.overallbanner.Legend
@@ -173,8 +174,8 @@ class MapViewModel(
       }
     }
 
-    val historicalSensorReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
-      Transformations.map(cityPulseRepository.historicalReadings) { sensorReadings ->
+    val fullDaySensorReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+      Transformations.map(cityPulseRepository.fullDaySensorReadings) { sensorReadings ->
         dataDefinition to (sensorReadings.data?.associate {
           (it.sensor to (it.readings[dataDefinition.id] ?: emptyList()))
         } ?: emptyMap())
@@ -183,7 +184,7 @@ class MapViewModel(
 
     val measurementsForFavouriteSensors = Transformations.switchMap(
         favouriteSensors) { favouriteSensors ->
-      Transformations.map(historicalSensorReadings) { (dataDefinition, sensorReadings) ->
+      Transformations.map(fullDaySensorReadings) { (dataDefinition, sensorReadings) ->
         return@map Pair(dataDefinition,
             sensorReadings.filter { (sensor, _) -> favouriteSensors.contains(sensor) })
       }
@@ -196,7 +197,7 @@ class MapViewModel(
           createGraphModel(dataDefinition, data)
         }
       } else {
-        return@switchMap Transformations.map(historicalSensorReadings) { (dataDefinition, data) ->
+        return@switchMap Transformations.map(fullDaySensorReadings) { (dataDefinition, data) ->
           return@map createGraphModel(dataDefinition, data.filter { it.key == selectedSensor })
         }
       }
@@ -216,7 +217,12 @@ class MapViewModel(
 
     averageDataGivenRange = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
-        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(sensor?.id, measurementType,MapFragment.fromDate,MapFragment.toDate)
+        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(
+          sensor?.id,
+          measurementType,
+          CalendarUtils.getCurrentDate(),
+          CalendarUtils.getRangeOneWeek()
+        )
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData.data?.let { readings ->
@@ -228,7 +234,7 @@ class MapViewModel(
 
     averageDataMonthDays = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
-        val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.DATE_INPUT_TODAY)
+        val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.CURRENT_MONTH)
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData?.data?.let { readings ->
@@ -338,9 +344,9 @@ class MapViewModel(
 
 
     loadingResources.addResource(cityPulseRepository.currentReadings.toLoadingLiveDataResource())
-    loadingResources.addResource(cityPulseRepository.historicalReadings.toLoadingLiveDataResource())
+    loadingResources.addResource(cityPulseRepository.fullDaySensorReadings.toLoadingLiveDataResource())
     errorResources.addResource(cityPulseRepository.currentReadings.toErrorLiveDataResource())
-    errorResources.addResource(cityPulseRepository.historicalReadings.toErrorLiveDataResource())
+    errorResources.addResource(cityPulseRepository.fullDaySensorReadings.toErrorLiveDataResource())
   }
 
   override fun refreshData(forceRefresh: Boolean) {
@@ -348,8 +354,8 @@ class MapViewModel(
     cityPulseRepository.refreshCurrent(forceRefresh)
   }
 
-  fun getSensorsValuesTypeRaw(selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
-    return cityPulseRepository.getSensorsValuesFromType(selectedMeasurementType)
+  fun getSensorsValuesTypeRaw(selectedDate: Date, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
+    return cityPulseRepository.getAllSensorsAllValuesForType(selectedDate, selectedMeasurementType)
   }
 
   fun getAvgDataRangeGiven(sensorId:String?, selectedMeasurementType:MeasurementType?, fromDate: LocalDate, toDate: LocalDate): LiveData<Resource<List<SensorReading>>>{
@@ -367,7 +373,7 @@ class MapViewModel(
   /**
    * Request loading of historical data. Not part of [MapViewModel.refreshData] since this data is quite big and rarely needed.
    */
-  fun loadHistoricalReadings(forceRefresh: Boolean = false) {
+  fun loadFullDayReadings(forceRefresh: Boolean = false) {
     cityPulseRepository.refreshData24(forceRefresh)
   }
 
