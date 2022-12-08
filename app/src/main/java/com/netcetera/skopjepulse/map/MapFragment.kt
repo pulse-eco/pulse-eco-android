@@ -12,13 +12,9 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TableLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +22,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.transition.TransitionManager
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.netcetera.skopjepulse.Constants
@@ -55,7 +50,6 @@ import it.sephiroth.android.library.xtooltip.Tooltip
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_content_layout.*
 import kotlinx.android.synthetic.main.bottom_sheet_default_peek.*
-import kotlinx.android.synthetic.main.bottom_sheet_default_peek.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_no_sensors_layout.*
 import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.*
 import kotlinx.android.synthetic.main.bottom_sheet_sensor_overview_peek.view.*
@@ -90,7 +84,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
   lateinit var historyForecastAdapter: HistoryForecastAdapter
 
   val city: City by lazy { requireArguments().getParcelable("city")!! }
-
 
   private val loadingIndicator: PulseLoadingIndicator by lazy {
     PulseLoadingIndicator(loadingIndicatorContainer)
@@ -141,35 +134,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     return inflater.inflate(R.layout.map_fragment_layout, container, false)
   }
 
-
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//      super.onCreate(savedInstanceState)
-//      activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-//        override fun handleOnBackPressed() {
-//
-//
-//        }
-//         if (shouldInterceptBackPress()){
-//            Toast.makeText(requireContext(), "Back press intercepted in:${BottomSheetBehavior.STATE_COLLAPSED}", Toast.LENGTH_SHORT).show()
-//          }
-//          else {
-//            isEnabled = false
-//            activity?.onBackPressed()
-//          }
-//        })
-//
-//        private fun shouldInterceptBackPress(): Int{
-//          if (bottomSheetContainer.getState())
-//          if(BottomSheetBehavior.STATE_EXPANDED)
-//        }
-//      })
-//
-//
-//    fun shouldInterceptBackPress() = true
-//
-//  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     map.onCreate(savedInstanceState)
@@ -177,11 +141,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
 
     mainViewModel.overall(this.city.name)
-      .observe(viewLifecycleOwner, object : Observer<Resource<List<CityOverall>>> {
-        override fun onChanged(t: Resource<List<CityOverall>>?) {
-          overAllData = t?.data
-        }
-      })
+      .observe(viewLifecycleOwner
+      ) { t -> overAllData = t?.data }
 
     /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
@@ -194,14 +155,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.overallBannerData.observe(viewLifecycleOwner, overallBanner)
       setMapValuesToday()
 
-
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
       }
       viewModel.averageDataGivenRange.value?.let { weeklyAverageDataModel ->
         setValueForSevenDaysRange(weeklyAverageDataModel.data, overAllData?.last(), sensorType)
       }
-
 
       val resMonths = mutableListOf<CalendarValuesDataModel>()
       viewModel.averageDataMonthDays.value?.let {
@@ -349,7 +308,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       bottomSheetBehavior.toggle()
     }
 
-
     // Pulse loading
     viewModel.showLoading.observe(viewLifecycleOwner, loadingIndicator)
 
@@ -363,10 +321,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.updatePreference(it)
     }
 
-    viewModel.selectedSensor.observe(viewLifecycleOwner, Observer {
+    viewModel.selectedSensor.observe(viewLifecycleOwner) {
       setValueForAverageDailyData(viewModel.averageWeeklyData.value)
       setDaysNames()
-    })
+    }
 
     overallBanner.onToggled { isOpen ->
       TransitionManager.beginDelayedTransition(mapConstraintLayout)
@@ -378,11 +336,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         )
       }.applyTo(mapConstraintLayout)
     }
-
-
   }
-
-
 
   private fun getBand(intValue: Int): Band {
     return dataDef.findBandByValue(intValue)
@@ -400,7 +354,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       tvUnit?.text = resources.getString(R.string.past_week_for_specific_sensor, dataDef.unit)
     }
   }
-
 
   private fun setValuesForOverallBannerData(title: String, backgroundColor: Int, value: String, valueUnit: String, description: String, legend: Legend) {
     overallBannerView.title.text = title
@@ -752,7 +705,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     val today = Calendar.getInstance().time
     val formatter = SimpleDateFormat("yyyy-MM-dd")
 
-    // CALENDAR ADAPTER
     val layoutManager = object : GridLayoutManager(context, 7) {
       override fun supportsPredictiveItemAnimations(): Boolean {
         return false
@@ -887,7 +839,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
       }
     }
-
 
     historyForecastAdapter.onItemClick = {
       viewModel.getSensorsValuesTypeRaw(mesType).observe(viewLifecycleOwner) {

@@ -1,6 +1,5 @@
 package com.netcetera.skopjepulse.pulseappbar
 
-
 import android.view.View
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
@@ -15,7 +14,6 @@ class PulseAppBarView(private val pulseAppBarView: View) {
   init {
     pulseAppBarView.pulseAppbarLogo.setOnClickListener { refreshRequestedListener?.invoke() }
     pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke() }
-
   }
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {

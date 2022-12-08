@@ -25,14 +25,10 @@ import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
-//ova
   lateinit var imageView : ImageView
-
-
 
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
@@ -56,7 +52,6 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(this)
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
-
 
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
@@ -115,7 +110,7 @@ class MainActivity : AppCompatActivity() {
       if (popupWindow.isShowing) {
         popupWindow.dismiss()
       } else {
-        if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
+        popupWindow.showAsDropDown(it)
       }
     }
 
@@ -136,6 +131,10 @@ class MainActivity : AppCompatActivity() {
           .add(R.id.content, citySelectFragment)
           .addToBackStack(null).commit()
       }
+    }
+
+    appBarView.onRefreshRequested {
+
     }
 
     mainViewModel.activeCity.observe(this) { activeCity ->
@@ -172,14 +171,13 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    imageView = findViewById(R.id.pulseAppbarLogo)
-
-    imageView.setOnClickListener {
-      finish()
-      startActivity(intent)
-      overridePendingTransition(R.anim.fragment_open_enter,R.anim.fragment_fade_exit)
-    }
-
+//    imageView = findViewById(R.id.pulseAppbarLogo)
+//
+//    imageView.setOnClickListener {
+//      finish()
+//      startActivity(intent)
+//      overridePendingTransition(R.anim.fragment_open_enter,R.anim.fragment_fade_exit)
+//    }
   }
 
   private fun showCitySelectIfNotShown() {
@@ -228,16 +226,9 @@ class MainActivity : AppCompatActivity() {
     super.onActivityResult(requestCode, resultCode, data)
   }
 
-
   override fun onBackPressed() {
-
     super.onBackPressed()
     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
-
   }
 
-
 }
-
-
-
