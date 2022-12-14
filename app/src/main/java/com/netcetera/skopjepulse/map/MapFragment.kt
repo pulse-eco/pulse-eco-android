@@ -433,10 +433,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
-      //val year = CalendarAdapter.DATE_INPUT?.year
-      //val appLanguage = CalendarUtils.getMonthInAppLanguage(context, CalendarAdapter.DATE_INPUT?.month.toString().capitalize())
       calendarMonthYearText.text = "${CalendarUtils.getMonthInAppLanguage(context, monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
-      //calendarMonthYearText.text = String.format("%s %s", appLanguage, year)
 
       val list = ArrayList<CalendarItemsDataModel>()
       for (i in 0 until intValueDow) {
@@ -449,14 +446,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setCalendarAdapter(requireContext(), list, recyclerView, alertDialog, calendarValuesResult)
 
       val todayMonth =CalendarAdapter.DATE_INPUT_TODAY.month.value
-      val december = CalendarUtils.getOrderFromMonthName(context,"December")
       val inputMonth = CalendarAdapter.DATE_INPUT!!.month.value
       val currYear = CalendarAdapter.DATE_INPUT_TODAY.year
       val inputYear = CalendarAdapter.DATE_INPUT!!.year
 
-      if ((todayMonth > inputMonth && currYear > inputYear)
-        || (todayMonth == inputMonth && currYear == inputYear) || (todayMonth>inputMonth && currYear<inputYear)
-      ) {
+      //(inputYear > currYear) || (todayMonth > inputMonth && currYear > inputYear) || (todayMonth>inputMonth && currYear<inputYear) || (todayMonth==12 && inputMonth==12 && currYear == inputYear)
+      if ((inputYear>currYear)) {
         calendarNextArrow.visibility = View.GONE
       }
 
@@ -540,6 +535,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
       }
       setCalendarAdapter(requireContext(), list, recyclerView, alertDialog, calendarValuesResult)
 
+
+
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
       calendarMonthYearText.text = "${CalendarUtils.getMonthInAppLanguage(context, monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
@@ -550,14 +547,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
       if ((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
         || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)) {
         calendarNextArrow.visibility = View.GONE
-//        calendarNextArrowUnavailable.visibility = View.VISIBLE
+
       }
 
       calendarPreviousArrow.setOnClickListener {
         previousMonthAverageValues(recyclerView, alertDialog)
         update(context, prev, calendarMonthYearText, recyclerView, calendarNextArrow, calendarPreviousArrow, alertDialog)
       }
-//      calendarNextArrowUnavailable.visibility = View.GONE
       calendarNextArrow.visibility = View.VISIBLE
 
       calendarNextArrow.setOnClickListener {
@@ -578,7 +574,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
       || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)
     ) {
       calendarNextArrow.visibility = View.GONE
-//      calendarNextArrowUnavailable.visibility = View.VISIBLE
     }
 
     val listOfDaysMonth = ArrayList<CalendarItemsDataModel>()
