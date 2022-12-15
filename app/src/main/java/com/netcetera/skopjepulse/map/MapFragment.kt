@@ -876,7 +876,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
       }
     }
-
   }
 
   private fun getDateButtonsList(dataModel: List<SensorReading>, todayButtonData: CityOverall?, mesType: MeasurementType): ArrayList<HistoryForecastDataModel> {

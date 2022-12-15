@@ -29,9 +29,9 @@ object UseCases {
     calendarHeader.visibility = View.VISIBLE
     calendarYearPicker.visibility = View.GONE
     calendarMonthYearText.visibility = View.VISIBLE
-    val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
-    val newInputs = "${CalendarUtils.getMonthInAppLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
-    calendarMonthYearText.text = newInputs
+//    val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
+//    val newInputs = "${CalendarUtils.getMonthInAppLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
+//    calendarMonthYearText.text = newInputs
 
     recyclerView.visibility = View.VISIBLE
     monthYearPickerRecyclerView.visibility = View.GONE
@@ -109,9 +109,9 @@ object UseCases {
     monthYearPickerRecyclerView: RecyclerView
   ) {
     val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
-    val newInputs = "${CalendarUtils.getMonthInAppLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
+//    val newInputs = "${CalendarUtils.getMonthInAppLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
     calendarMonthYearText.visibility = View.VISIBLE
-    calendarMonthYearText.text = newInputs
+//    calendarMonthYearText.text = newInputs
     calendarPreviousArrow.visibility = View.VISIBLE
     calendarNextArrow.visibility = View.VISIBLE
     calendarHeader.visibility = View.VISIBLE
