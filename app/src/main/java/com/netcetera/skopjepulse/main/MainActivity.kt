@@ -21,6 +21,7 @@ import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
+import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,7 +29,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
-  lateinit var imageView : ImageView
+//  lateinit var imageView : ImageView
 
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(this)
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
+//    imageView = findViewById(R.id.pulseAppbarLogo)
 
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
@@ -112,6 +114,10 @@ class MainActivity : AppCompatActivity() {
       } else {
         popupWindow.showAsDropDown(it)
       }
+
+      appBarView.onRefreshRequested {
+      }
+
     }
 
     mainViewModel.measurementTypeTabs.observe(this) {
@@ -134,7 +140,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     appBarView.onRefreshRequested {
-
+//      measurementTypeTabBarView.selectedMeasurementType.observe(this) {
+//        mainViewModel.showForMeasurement(it)
+//      }
     }
 
     mainViewModel.activeCity.observe(this) { activeCity ->
@@ -171,12 +179,15 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-//    imageView = findViewById(R.id.pulseAppbarLogo)
-//
+////
 //    imageView.setOnClickListener {
-//      finish()
-//      startActivity(intent)
-//      overridePendingTransition(R.anim.fragment_open_enter,R.anim.fragment_fade_exit)
+//
+////      mainViewModel.refreshData(true)
+//        mainViewModel.showForMeasurement()
+////      mainViewModel.reloadDDPData()
+////      finish()
+////      startActivity(intent)
+////      overridePendingTransition(R.anim.fragment_open_enter,R.anim.fragment_fade_exit)
 //    }
   }
 
