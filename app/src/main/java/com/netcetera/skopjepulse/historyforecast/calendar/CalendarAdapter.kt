@@ -10,7 +10,9 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.netcetera.skopjepulse.R
+import kotlinx.android.synthetic.main.calendar_dialog.view.*
 import kotlinx.android.synthetic.main.calendar_slot.view.*
+import kotlinx.android.synthetic.main.month_year_picker_button.view.*
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -73,7 +75,6 @@ class CalendarAdapter(
       }
       newList.toList()
       if (adapterPosition > items[adapterPosition].startDayOfMonth || adapterPosition == items[adapterPosition].startDayOfMonth) {
-
         slotContainer.setOnClickListener {
           val date = "${items[adapterPosition].day}/${dateMonthValue}/$dateYear"
           DATE_CLICKED = date
@@ -85,6 +86,13 @@ class CalendarAdapter(
 
         slotContainer.setBackgroundResource(R.drawable.calendar_circle)
 
+        if (todayYear + 1 == dateYear) {
+          dayOfMonth.setTextColor(Color.GRAY)
+          slotContainer.setBackgroundResource(0)
+          slotContainer.alpha = 0.6F
+          slotContainer.isClickable = false
+        }
+
         if (todayMonth == dateMonth!! && todayYear == dateYear) {
           if (items[adapterPosition].day > todayDate) {
             dayOfMonth.setTextColor(Color.GRAY)
@@ -92,6 +100,7 @@ class CalendarAdapter(
             slotContainer.alpha = 0.6F
             slotContainer.isClickable = false
           }
+
           if (items[adapterPosition].day == todayDate) {
 
             if(todayValue!=null){
@@ -100,9 +109,9 @@ class CalendarAdapter(
               dayOfMonth.setTextColor(Color.WHITE)
               dayOfMonth.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(todayValue, BlendModeCompat.SRC_ATOP)
             }
+          }
 
           }
-        }
 
         val systemTimeZone: ZoneId = ZoneId.systemDefault()
           for (i in newList.indices) {

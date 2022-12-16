@@ -82,12 +82,12 @@
   <dimen name="calendar_day_of_week_right_padding">6dp</dimen>
 
   <dimen name="calendar_navigation_arrow_height">24dp</dimen>
-  <dimen name="calendar_navigation_arrow_width">20dp</dimen>
+  <dimen name="calendar_navigation_arrow_width">30dp</dimen>
   <dimen name="calendar_border_margin">16dp</dimen>
   <dimen name="calendar_border_double_margin">32dp</dimen>
   <dimen name="calendar_border_triple_margin">48dp</dimen>
   <dimen name="calendar_border_half_margin">8dp</dimen>
-  <dimen name="calendar_element_padding">6dp</dimen>
+  <dimen name="calendar_element_padding">15dp</dimen>
   <dimen name="calendar_title_text_size">17sp</dimen>
   <dimen name="calendar_days_short_size">12sp</dimen>
   <dimen name="calendar_element_text_size">16sp</dimen>

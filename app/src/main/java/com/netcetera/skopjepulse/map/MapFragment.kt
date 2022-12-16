@@ -450,8 +450,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
       val currYear = CalendarAdapter.DATE_INPUT_TODAY.year
       val inputYear = CalendarAdapter.DATE_INPUT!!.year
 
-      //(inputYear > currYear) || (todayMonth > inputMonth && currYear > inputYear) || (todayMonth>inputMonth && currYear<inputYear) || (todayMonth==12 && inputMonth==12 && currYear == inputYear)
-      if ((inputYear>currYear)) {
+
+      if ((todayMonth > inputMonth && currYear < inputYear) || (todayMonth==12 && inputMonth==12 && currYear == inputYear) || (CalendarAdapter.DATE_INPUT?.month.toString() == todayMonth.toString()))
+      {
         calendarNextArrow.visibility = View.GONE
       }
 
@@ -536,19 +537,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setCalendarAdapter(requireContext(), list, recyclerView, alertDialog, calendarValuesResult)
 
 
-
       val month = CalendarAdapter.DATE_INPUT?.month.toString()
       val monthFirstUpper = month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase()
       calendarMonthYearText.text = "${CalendarUtils.getMonthInAppLanguage(context, monthFirstUpper)} ${CalendarAdapter.DATE_INPUT?.year}"
 
       calendarMonthYearText.visibility = View.VISIBLE
       recyclerView.visibility = View.VISIBLE
-
-      if ((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
-        || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)) {
-        calendarNextArrow.visibility = View.GONE
-
-      }
 
       calendarPreviousArrow.setOnClickListener {
         previousMonthAverageValues(recyclerView, alertDialog)
@@ -569,12 +563,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)
     val intValueDayOfWeek = CalendarUtils.getOrderFromWeekDay(dayOfWeek)
     val lengthOfMonth = date.lengthOfMonth()
-
-    if ((CalendarAdapter.DATE_INPUT_TODAY.month.value > CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year > CalendarAdapter.DATE_INPUT!!.year)
-      || (CalendarAdapter.DATE_INPUT_TODAY.month.value == CalendarAdapter.DATE_INPUT!!.month.value && CalendarAdapter.DATE_INPUT_TODAY.year == CalendarAdapter.DATE_INPUT!!.year)
-    ) {
-      calendarNextArrow.visibility = View.GONE
-    }
 
     val listOfDaysMonth = ArrayList<CalendarItemsDataModel>()
     for (i in 0 until intValueDayOfWeek) {

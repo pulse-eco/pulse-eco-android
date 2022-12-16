@@ -108,7 +108,7 @@ object UseCases {
     recyclerView: RecyclerView,
     monthYearPickerRecyclerView: RecyclerView
   ) {
-    val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
+//    val month = CalendarAdapter.DATE_INPUT?.month.toString().capitalize(Locale.getDefault())
 //    val newInputs = "${CalendarUtils.getMonthInAppLanguage(context, month)} ${CalendarAdapter.DATE_INPUT?.year}"
     calendarMonthYearText.visibility = View.VISIBLE
 //    calendarMonthYearText.text = newInputs
