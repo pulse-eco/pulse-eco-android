@@ -23,10 +23,11 @@ import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
+import org.koin.core.component.KoinApiExtension
 
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
+  @OptIn(KoinApiExtension::class)
   private val mainViewModel: MainViewModel by viewModel()
 
   companion object {
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     PulseLoadingIndicator(loadingIndicatorContainer)
   }
 
+  @OptIn(KoinApiExtension::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Internationalisation.loadLocale(this)
@@ -116,7 +118,11 @@ class MainActivity : AppCompatActivity() {
     mainViewModel.measurementTypeTabs.observe(this) {
       measurementTypeTabBarView.availableMeasurementTypes = it ?: emptyList()
     }
+
     measurementTypeTabBarView.selectedMeasurementType.observe(this) {
+      //takes the selected measurement from the MeasurementTypeTabBar and updates the measurement
+      //in the viewModel. Takes the toolbar here in the activity - as it should and updates the
+      //view model, as it should. Does not keep a value here - locally
       mainViewModel.showForMeasurement(it)
     }
 
@@ -130,6 +136,10 @@ class MainActivity : AppCompatActivity() {
           .add(R.id.content, citySelectFragment)
           .addToBackStack(null).commit()
       }
+    }
+
+    appBarView.onRefreshRequested {
+//      mapViewModel.refreshData()
     }
 
     mainViewModel.activeCity.observe(this) { activeCity ->

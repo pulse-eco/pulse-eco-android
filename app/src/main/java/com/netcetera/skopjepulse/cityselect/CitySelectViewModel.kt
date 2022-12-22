@@ -157,8 +157,9 @@ class CitySelectViewModel(
   }
 
   fun showDataForMeasurementType(measurementType: MeasurementType) {
-    if (measurementType != selectedMeasurementType.value) selectedMeasurementType.value =
-      measurementType
+    if (selectedMeasurementType.value != measurementType) {
+      selectedMeasurementType.value = measurementType
+    }
   }
 
   private fun loadData() {

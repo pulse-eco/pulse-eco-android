@@ -52,6 +52,7 @@ class MeasurementTypeTabBarView : FrameLayout, Observer<MeasurementType> {
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
       _selectedMeasurementType.value = tab?.tag as MeasurementType?
+//      selectedMeasurementType.value = _selectedMeasurementType.value
     }
   }
 

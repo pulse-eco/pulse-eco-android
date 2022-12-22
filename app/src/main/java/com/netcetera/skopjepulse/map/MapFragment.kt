@@ -25,7 +25,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.netcetera.skopjepulse.Constants
-import com.netcetera.skopjepulse.Constants.Companion.FULL_DATE_FORMAT
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
@@ -146,9 +145,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
       ) { t -> overAllData = t?.data }
 
     /* Observe on what Measurement Type to show */
-    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) { it ->
-      viewModel.showDataForMeasurementType(it)
-      sensorType = it
+    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) { itMeasurement ->
+      //the active measurement tab here is taken from the toolbar through the main activity,
+      //than the viewmodel(main) is updated and than if different than previous selected is propagated
+      //here through the getter for selectedMeasurementType
+      viewModel.showDataForMeasurementType(itMeasurement)
+      sensorType = itMeasurement
       progressBarForWeeklyAverageData.visibility = View.VISIBLE
       weeklyAverageView.visibility = View.GONE
       setDaysNames()
@@ -469,13 +471,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
   }
 
   private fun setCalendarAdapter(context: Context, list: ArrayList<CalendarItemsDataModel>, recyclerView: RecyclerView, alertDialog: AlertDialog, values: List<CalendarValuesDataModel>) {
-    val adapter = CalendarAdapter(context, list, CalendarAdapter.DATE_INPUT_TODAY, values, bandValueOverallData)
-    recyclerView.adapter = adapter
+    val datePickAdapter = CalendarAdapter(context, list, CalendarAdapter.DATE_INPUT_TODAY, values, bandValueOverallData)
+    recyclerView.adapter = datePickAdapter
 
-    adapter.onItemClick = {
-      val clickedDate = LocalDate.parse(CalendarAdapter.DATE_CLICKED, formatterLocalDate)
-      val fromClickedDate = clickedDate.plusDays(4)
-      toDate = fromClickedDate
+    datePickAdapter.onItemClick = { date ->
+      val clickedDate = LocalDate.parse(date, formatterLocalDate)
+      val endOfRange = clickedDate.plusDays(4)
+      toDate = endOfRange
       fromDate = toDate.minusDays(8)
       viewModel.getAvgDataRangeGiven(sensorId = null, sensorType, fromDate, toDate)
         .observe(viewLifecycleOwner) {
@@ -853,7 +855,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
 
-    historyForecastAdapter.onItemClick = {
+    historyForecastAdapter.onItemClick = { date ->
       viewModel.getSensorsValuesTypeRaw(mesType).observe(viewLifecycleOwner) {
         val bannerData = viewModel.createAverageOverallBannerData(HistoryForecastAdapter.selectedSensorReading!!, dataDef)
         setValuesForOverallBannerData(bannerData.title, bannerData.backgroundColor, bannerData.value, bannerData.valueUnit, bannerData.description, bannerData.legend)

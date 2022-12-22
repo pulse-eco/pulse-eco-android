@@ -92,10 +92,9 @@ class MapViewModel(
 
     val currentReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.currentReadings) { current ->
-        Pair(dataDefinition,
-          current.data.orEmpty().mapNotNull { currentSensorReading ->
-            currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
-          })
+        Pair(dataDefinition, current.data.orEmpty().mapNotNull { currentSensorReading ->
+          currentSensorReading.readings[dataDefinition.id]?.let { currentSensorReading.sensor to it }
+        })
       }
     }
 
@@ -216,7 +215,12 @@ class MapViewModel(
 
     averageDataGivenRange = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
-        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(sensor?.id, measurementType,MapFragment.fromDate,MapFragment.toDate)
+        val averageLiveData = cityPulseRepository.getAverageDataGivenRange(
+          sensor?.id,
+          measurementType,
+          MapFragment.fromDate,
+          MapFragment.toDate
+        )
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData.data?.let { readings ->
@@ -228,7 +232,11 @@ class MapViewModel(
 
     averageDataMonthDays = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
-        val averageLiveData = cityPulseRepository.getAverageDataMonthDays(sensor?.id,measurementType,CalendarAdapter.DATE_INPUT_TODAY)
+        val averageLiveData = cityPulseRepository.getAverageDataMonthDays(
+          sensor?.id,
+          measurementType,
+          CalendarAdapter.DATE_INPUT_TODAY
+        )
         _isSpecificSensorSelected.value = sensor == null
         Transformations.map(averageLiveData) { responseData ->
           responseData?.data?.let { readings ->
@@ -372,7 +380,9 @@ class MapViewModel(
   }
 
   fun showDataForMeasurementType(measurementType: MeasurementType) {
-    if (selectedMeasurementType.value != measurementType) selectedMeasurementType.value = measurementType
+    if (selectedMeasurementType.value != measurementType)  {
+      selectedMeasurementType.value = measurementType
+    }
   }
 
   /**

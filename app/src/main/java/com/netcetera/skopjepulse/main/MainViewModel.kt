@@ -33,16 +33,17 @@ class MainViewModel(
    */
   val activeCity: LiveData<City?>
   private val selectableCity = MutableLiveData<City?>()
-  private val selectableMeasurementType: MutableLiveData<MeasurementType>
-
 
   val sameCity: LiveData<City?>
 
   /**
    * The [MeasurementType] that data shall be shown for.
    */
+  //activeMeasurementType is actually like a default measurement type
+  //that's it's always selected
   val activeMeasurementType: LiveData<MeasurementType>
     get() = selectableMeasurementType
+  private val selectableMeasurementType: MutableLiveData<MeasurementType>
 
   /**
    * The view model data for showing of possible [MeasurementType]s.

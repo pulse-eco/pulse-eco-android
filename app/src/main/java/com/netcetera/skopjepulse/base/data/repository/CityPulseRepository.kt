@@ -249,7 +249,12 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     return result
   }
 
-  fun getAverageDataGivenRange(sensorId:String?,selectedMeasurementType:MeasurementType?,fromDate:LocalDate, toDate: LocalDate) : LiveData<Resource<List<SensorReading>>> {
+  fun getAverageDataGivenRange(
+    sensorId: String?,
+    selectedMeasurementType: MeasurementType?,
+    fromDate: LocalDate,
+    toDate: LocalDate
+  ): LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>>()
     val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     val systemTimeZone: ZoneId = ZoneId.systemDefault()

@@ -9,13 +9,12 @@ import java.util.*
 
 class PulseAppBarView(private val pulseAppBarView: View) {
 
-  private var selectedCityListener: (() -> Unit)? = null
   private var refreshRequestedListener: (() -> Unit)? = null
+  private var selectedCityListener: (() -> Unit)? = null
 
   init {
     pulseAppBarView.pulseAppbarLogo.setOnClickListener { refreshRequestedListener?.invoke() }
     pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke() }
-
   }
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
@@ -26,8 +25,8 @@ class PulseAppBarView(private val pulseAppBarView: View) {
     }
   }
 
-  fun onRefreshRequested(func: () -> Unit) {
-    this.refreshRequestedListener = func
+  fun onRefreshRequested(refresh: () -> Unit) {
+    this.refreshRequestedListener = refresh
   }
 
   fun displayNoCityName() {
