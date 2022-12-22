@@ -67,8 +67,8 @@ android {
     implementation(Libs.anko)
     implementation(Libs.googleMaps)
     implementation(Libs.playServicesLocation)
-    implementation(Libs.firebaseAnalytics)
-    implementation(Libs.crashlytics)
+//    implementation(Libs.firebaseAnalytics)
+//    implementation(Libs.crashlytics)
     implementation(Libs.mpaAndroidChart)
     implementation(Libs.lottie)
     implementation(Libs.likeButton)
@@ -86,9 +86,9 @@ android {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
 
-    debugImplementation(Libs.leakcanary)
-    debugImplementation(Libs.leakcanaryFragment)
-    releaseImplementation(Libs.leakcanaryNoOp)
+//    debugImplementation(Libs.leakcanary)
+//    debugImplementation(Libs.leakcanaryFragment)
+//    releaseImplementation(Libs.leakcanaryNoOp)
 
     kapt(Libs.lifecycleCompiler)
     kapt(Libs.moshiCodegen)

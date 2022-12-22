@@ -16,17 +16,14 @@ import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.showConfirmDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
-import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinApiExtension
 
 class MainActivity : AppCompatActivity() {
-  private val refWatcher: RefWatcher by inject()
   @OptIn(KoinApiExtension::class)
   private val mainViewModel: MainViewModel by viewModel()
 
@@ -193,11 +190,6 @@ class MainActivity : AppCompatActivity() {
   override fun onResume() {
     super.onResume()
     mainViewModel.refreshData(false)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    refWatcher.watch(this)
   }
 
   private fun changeLanguage(localeName: String) {
