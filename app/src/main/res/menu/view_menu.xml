@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<item android:id="@+id/item1"
+  android:icon="@drawable/ic_view_menu_24"
+  android:title="Test"
+  app:showAsAction="ifRoom">
+</item>
+
+  <item android:id="@+id/item2"
+    android:title="Dashboard view"
+    app:showAsAction="never">
+  </item>
+  <item android:id="@+id/item3"
+    android:title="Map view"
+    app:showAsAction="never">
+  </item>
+  <item android:id="@+id/item4"
+    android:title="Settings"
+    app:showAsAction="never">
+  </item>
+</menu>
