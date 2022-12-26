@@ -1,9 +1,7 @@
 package com.netcetera.skopjepulse.main
 
-import com.netcetera.skopjepulse.R
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,19 +10,18 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
+import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
+import com.netcetera.skopjepulse.dashboard.DashboardFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
-import com.netcetera.skopjepulse.showConfirmDialog
+import com.netcetera.skopjepulse.settings.SettingsActivity
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.language_picker_dilog.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
-import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,27 +53,11 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(this)
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
+    val dashFragment = DashboardFragment()
 
     btn_menu.setOnClickListener {
 
       val pickerView = LayoutInflater.from(this).inflate(R.layout.view_picker_dilog,null) as ViewGroup
-
-//      val lang = getSharedPreferences(
-//        Constants.LANGUAGE_CODE,
-//        MODE_PRIVATE
-//      ).getString(Constants.LANGUAGE_CODE, "")
-//      val pickerView =
-//        LayoutInflater.from(this).inflate(R.layout.language_picker_dilog, null) as ViewGroup
-//
-//      pickerView.mapTypeRadioGroup.check(
-//        when (lang) {
-//          "mk" -> R.id.language_mk
-//          "en" -> R.id.language_en
-//          "de" -> R.id.language_de
-//          "ro" -> R.id.language_ro
-//          else -> 0
-//        }
-//      )
 
       val popupWindow = PopupWindow(
         pickerView,
@@ -88,46 +69,25 @@ class MainActivity : AppCompatActivity() {
       pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { _, i ->
         when (i) {
           R.id.dashboardView -> {
-            val toast = Toast.makeText(applicationContext, "DASHBOARD VIEW", Toast.LENGTH_LONG)
-            toast.show()
+            supportFragmentManager.beginTransaction().apply {
+              replace(R.id.content, dashFragment)
+              commit()
+            }
           }
-
           R.id.mapView -> {
-            val toast = Toast.makeText(applicationContext, "MAP VIEW", Toast.LENGTH_LONG)
-            toast.show()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
           }
 
           R.id.settingsView -> {
-            val toast = Toast.makeText(applicationContext, "SETTINGS VIEW", Toast.LENGTH_LONG)
-            toast.show()
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
           }
-
-//          R.id.language_en -> {
-//            popupWindow.dismiss()
-//            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
-//              changeLanguage("en")
-//            }
-//          }
-//          R.id.language_mk -> {
-//            popupWindow.dismiss()
-//            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
-//              changeLanguage("mk")
-//            }
-//          }
-//          R.id.language_de -> {
-//            popupWindow.dismiss()
-//            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
-//              changeLanguage("de")
-//            }
-//          }
-//          R.id.language_ro -> {
-//            popupWindow.dismiss()
-//            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
-//              changeLanguage("ro")
-//            }
-//          }
         }
+
       }
+      
 
       if (popupWindow.isShowing) {
         popupWindow.dismiss()
@@ -193,6 +153,7 @@ class MainActivity : AppCompatActivity() {
     }
 
   }
+
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     val inflater = menuInflater
