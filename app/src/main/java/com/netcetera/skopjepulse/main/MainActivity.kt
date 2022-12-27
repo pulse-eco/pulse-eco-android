@@ -1,5 +1,4 @@
 package com.netcetera.skopjepulse.main
-
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -20,9 +19,9 @@ import com.netcetera.skopjepulse.settings.SettingsActivity
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
+import kotlinx.android.synthetic.main.view_picker_dilog.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity() {
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
     const val NEW_CITY_NAME_RESULT = "cityName"
+    const val SETTINGS_ACTIVITY_CODE = 666
   }
 
   private val citySelectFragment: CitySelectFragment by lazy {
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         true
       )
 
-      pickerView.mapTypeRadioGroup.setOnCheckedChangeListener { _, i ->
+      pickerView.settingsRadioGroup.setOnCheckedChangeListener { _, i ->
         when (i) {
           R.id.dashboardView -> {
             supportFragmentManager.beginTransaction().apply {
@@ -74,20 +74,25 @@ class MainActivity : AppCompatActivity() {
               commit()
             }
           }
+
           R.id.mapView -> {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
           }
 
           R.id.settingsView -> {
+            if (popupWindow.isShowing) {
+              popupWindow.dismiss()
+            }
             val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
+            val toast = "Od MapView vo Setting Activity"
+            intent.putExtra("Ana", toast);
+            startActivityForResult(intent, SETTINGS_ACTIVITY_CODE)
+
           }
         }
 
       }
-      
 
       if (popupWindow.isShowing) {
         popupWindow.dismiss()
@@ -151,7 +156,6 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
-
   }
 
 
@@ -176,6 +180,7 @@ class MainActivity : AppCompatActivity() {
   override fun onResume() {
     super.onResume()
     mainViewModel.refreshData(false)
+
   }
 
   override fun onDestroy() {
@@ -204,6 +209,19 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+
+    else if (requestCode == SETTINGS_ACTIVITY_CODE && resultCode == Activity.RESULT_OK) {
+      //tuka
+//      val returnedResult = data?.data.toString()
+
+      val value = data?.extras?.get("Ana")
+      Toast.makeText(
+        this,
+        value.toString(),
+        Toast.LENGTH_SHORT
+      ).show()
+    }
+
     super.onActivityResult(requestCode, resultCode, data)
   }
 
@@ -211,5 +229,6 @@ class MainActivity : AppCompatActivity() {
     super.onBackPressed()
     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
   }
+
 
 }

@@ -24,47 +24,42 @@
       android:contentDescription="pulse eco logo"
       android:debuggable="true"
       android:focusable="true"
+      android:paddingTop="10dp"
       android:src="@drawable/ic_pulseappbar_logo"
-      app:layout_constraintBottom_toTopOf="@+id/settings_go_back"
-      app:layout_constraintEnd_toEndOf="parent"
-
-      app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/settings_go_back"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="10dp"
-      android:paddingRight="30dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+      android:id="@+id/btn_back"
+      android:layout_width="@dimen/settings_back_arrow"
+      android:layout_height="@dimen/settings_back_arrow"
+      android:background="@drawable/ic_left_arrow"
+      android:textColor="@color/white"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="1.0">
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/settingsText"
+      android:layout_marginStart="16dp"
+       />
 
 
-      <Button
-        android:id="@+id/btn_back"
-        android:layout_width="@dimen/country_city_selector_back_btn_size"
-        android:layout_height="@dimen/country_city_selector_back_btn_size"
-        android:layout_marginEnd="@dimen/country_city_selector_back_btn_margin_right"
-        android:background="@drawable/ic_left_arrow"
-        android:textColor="@color/white" />
-
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/sf_pro_display"
-        android:gravity="center_vertical"
-        android:text="Settings"
-        android:textColor="@color/black"
-        android:textFontWeight="500"
-        android:textSize="21sp"
-        tools:targetApi="p" />
-
-    </androidx.appcompat.widget.Toolbar>
+    <TextView
+      android:id="@+id/settingsText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:fontFamily="@font/sf_pro_display"
+      android:gravity="center_vertical"
+      android:text="Settings"
+      android:textColor="@color/black"
+      android:textFontWeight="500"
+      android:textSize="18sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toEndOf="@id/btn_back"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:targetApi="p" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

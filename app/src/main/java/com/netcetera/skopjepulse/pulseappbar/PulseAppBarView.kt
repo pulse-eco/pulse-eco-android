@@ -18,6 +18,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
 
   }
 
+
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
     this.selectedCityListener = citySelectRequestListener
 

@@ -20,7 +20,7 @@
       tools:background="@color/white">
 
       <RadioGroup
-        android:id="@+id/mapTypeRadioGroup"
+        android:id="@+id/settingsRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -48,9 +48,9 @@
           android:button="@drawable/custom_icon"
           android:layoutDirection="rtl"
           android:paddingBottom="10dp"
-          android:checked="true"
           android:paddingLeft="10dp"
           android:paddingTop="10dp"
+          android:checked="true"
           android:text="Map view"
           android:textAlignment="textStart"
           android:textColor="@drawable/custom_icon" />
