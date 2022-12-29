@@ -50,7 +50,6 @@
           android:paddingBottom="10dp"
           android:paddingLeft="10dp"
           android:paddingTop="10dp"
-          android:checked="true"
           android:text="Map view"
           android:textAlignment="textStart"
           android:textColor="@drawable/custom_icon" />
