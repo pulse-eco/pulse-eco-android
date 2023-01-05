@@ -1,7 +1,7 @@
 object ProjectVersions {
-  const val androidGradlePlugin = "4.0.0"
+  const val androidGradlePlugin = "4.2.2"
   const val googlePlayServices = "4.3.2"
-  const val kotlin = "1.4.21"
+  const val kotlin = "1.5.32"
   const val trema = "2.1.9"
 
   // Crashlytics

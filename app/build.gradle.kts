@@ -3,7 +3,7 @@ plugins {
   id(Plugins.kotlinAndroid)
   id(Plugins.kotlinAndroidExtensions)
   id(Plugins.kotlinKapt)
-  id(Plugins.fabric)
+//  id(Plugins.fabric)
   id(Plugins.trema)
 }
 
@@ -40,9 +40,9 @@ android {
     }
     compileOptions {
       // For AGP 4.1+
-      // isCoreLibraryDesugaringEnabled = true
+//       isCoreLibraryDesugaringEnabled = true
       // For AGP 4.0
-      coreLibraryDesugaringEnabled = true
+//      coreLibraryDesugaringEnabled = true
       sourceCompatibility = JavaVersion.VERSION_1_8
       targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -80,6 +80,14 @@ android {
     implementation(Libs.timber)
     implementation(Libs.okHttpLogging)
     implementation(Libs.swipeRefreshLayout)
+
+//    implementation (Libs.Compose.UI)
+//    implementation (Libs.Compose.UI_TOOLING)
+//    implementation (Libs.Compose.ANIMATION)
+//    implementation (Libs.Compose.ANIMATION_GRAPHICS)
+//    implementation (Libs.Compose.RUNTIME)
+//    implementation (Libs.Compose.MATERIAL_3)
+//    implementation (Libs.Compose.ICONS_EXTENDED)
 
     implementation(Libs.gson)
     //implementation(Libs.desugar)

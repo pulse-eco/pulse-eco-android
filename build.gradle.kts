@@ -20,7 +20,7 @@ buildscript {
     classpath(BuildPlugins.kotlinGradlePlugin)
 
     // Crashlytics
-    classpath(BuildPlugins.fabricGradlePlugin)
+//    classpath(BuildPlugins.fabricGradlePlugin)
   }
   allprojects {
     repositories {

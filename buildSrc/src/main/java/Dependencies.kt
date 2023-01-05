@@ -23,6 +23,9 @@ object Libs {
     const val swipeRefreshLayout = "1.1.0"
     const val desugaring = "1.1.5"
 
+    const val COMPOSE = "1.3.0"
+    const val COMPOSE_MD3 = "1.0.0"
+
     // Crashlytics
     const val playServicesFirebaseAnalytics = "18.0.0"
     const val crashlytics = "2.10.1"
@@ -66,4 +69,17 @@ object Libs {
   // Crashlytics
 //  const val firebaseAnalytics = "com.google.firebase:firebase-analytics:${Versions.playServicesFirebaseAnalytics}"
 //  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:${Versions.crashlytics}"
+
+  //Compose
+  object Compose {
+    const val UI = "androidx.compose.ui:ui:${Versions.COMPOSE}"
+    const val RUNTIME = "androidx.compose.runtime:runtime:${Versions.COMPOSE}"
+    //  const val MATERIAL_2 = "androidx.compose.material:material:${Versions.COMPOSE}"
+    const val MATERIAL_3 = "androidx.compose.material3:material3:${Versions.COMPOSE_MD3}"
+    const val UI_TOOLING = "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE}"
+    const val ICONS_EXTENDED = "androidx.compose.material:material-icons-extended:${Versions.COMPOSE}"
+    const val ANIMATION = "androidx.compose.animation:animation:${Versions.COMPOSE}"
+    const val ANIMATION_GRAPHICS = "androidx.compose.animation:animation-graphics:${Versions.COMPOSE}"
+  }
+
 }
