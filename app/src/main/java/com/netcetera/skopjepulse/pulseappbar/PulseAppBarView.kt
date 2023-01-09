@@ -1,7 +1,6 @@
 package com.netcetera.skopjepulse.pulseappbar
 
 import android.view.View
-import android.widget.Toast
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
 import kotlinx.android.synthetic.main.pulse_app_bar.view.*
@@ -24,13 +23,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
     }
   }
 
-  fun onRefreshRequested(refreshRequest: () -> Unit) {
-    this.refreshRequestedListener = refreshRequest
-    Toast.makeText(
-      pulseAppBarView.context,
-      "Fuck it",
-      Toast.LENGTH_SHORT
-    ).show()  }
+
 
   fun displayNoCityName() {
     val string = pulseAppBarView.context.getString(R.string.select_city)

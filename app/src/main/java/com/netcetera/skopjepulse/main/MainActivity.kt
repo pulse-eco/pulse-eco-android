@@ -1,12 +1,10 @@
 package com.netcetera.skopjepulse.main
-
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.Constants
@@ -21,7 +19,6 @@ import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
-import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +26,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
-//  lateinit var imageView : ImageView
 
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
@@ -115,9 +111,6 @@ class MainActivity : AppCompatActivity() {
         popupWindow.showAsDropDown(it)
       }
 
-      appBarView.onRefreshRequested {
-      }
-
     }
 
     mainViewModel.measurementTypeTabs.observe(this) {
@@ -137,12 +130,6 @@ class MainActivity : AppCompatActivity() {
           .add(R.id.content, citySelectFragment)
           .addToBackStack(null).commit()
       }
-    }
-
-    appBarView.onRefreshRequested {
-//      measurementTypeTabBarView.selectedMeasurementType.observe(this) {
-//        mainViewModel.showForMeasurement(it)
-//      }
     }
 
     mainViewModel.activeCity.observe(this) { activeCity ->
@@ -179,17 +166,11 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-////
-//    imageView.setOnClickListener {
-//
-////      mainViewModel.refreshData(true)
-//        mainViewModel.showForMeasurement()
-////      mainViewModel.reloadDDPData()
-////      finish()
-////      startActivity(intent)
-////      overridePendingTransition(R.anim.fragment_open_enter,R.anim.fragment_fade_exit)
-//    }
+    pulseAppbarLogo.setOnClickListener {
+      refreshMap()
+    }
   }
+
 
   private fun showCitySelectIfNotShown() {
     val someFragmentShown = supportFragmentManager.findFragmentById(R.id.content) != null
@@ -240,6 +221,16 @@ class MainActivity : AppCompatActivity() {
   override fun onBackPressed() {
     super.onBackPressed()
     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
+  }
+
+  fun refreshMap()
+  {
+    val actCit = mainViewModel.activeCity.value!!
+    supportFragmentManager.beginTransaction().replace(
+      R.id.content,
+      MapFragment.newInstance(actCit),
+      actCit.name,
+    ).commit()
   }
 
 }
