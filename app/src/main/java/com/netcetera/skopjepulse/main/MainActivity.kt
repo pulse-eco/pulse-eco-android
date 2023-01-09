@@ -1,19 +1,15 @@
 package com.netcetera.skopjepulse.main
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
-import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.dashboard.DashboardFragment
 import com.netcetera.skopjepulse.map.MapFragment
@@ -24,7 +20,6 @@ import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
-import kotlinx.android.synthetic.main.view_picker_dilog.*
 import kotlinx.android.synthetic.main.view_picker_dilog.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -95,14 +90,17 @@ class MainActivity : AppCompatActivity() {
 //              mapView.isChecked = true
             SELECTED_FRAGMENT = "map"
 
-//            supportFragmentManager.beginTransaction().apply {
-//              replace(R.id.content,  )
-//              commit()
-//            }
-
-              val intent = Intent(this, MainActivity::class.java)
-              startActivity(intent)
-          }
+            val actCity = mainViewModel.activeCity.value!!
+                val existingMapFragment =
+                  supportFragmentManager.findFragmentByTag(actCity.name) as? MapFragment
+                if (existingMapFragment == null) {
+                  supportFragmentManager.beginTransaction().replace(
+                    R.id.content,
+                    MapFragment.newInstance(actCity),
+                    actCity.name,
+                  ).commit()
+                }
+             }
 
           R.id.settingsView -> {
 //              settingsView.isChecked = true
@@ -151,6 +149,7 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
+    //pri start na app
     mainViewModel.activeCity.observe(this) { activeCity ->
       if (activeCity == null) {
         appBarView.displayNoCityName()
