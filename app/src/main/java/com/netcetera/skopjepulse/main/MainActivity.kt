@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
@@ -14,13 +15,14 @@ import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
-import com.netcetera.skopjepulse.showConformationDialog
+import com.netcetera.skopjepulse.showConfirmDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
 import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
+import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -81,25 +83,25 @@ class MainActivity : AppCompatActivity() {
         when (i) {
           R.id.language_en -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) {
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("en")
             }
           }
           R.id.language_mk -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) {
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("mk")
             }
           }
           R.id.language_de -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) {
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("de")
             }
           }
           R.id.language_ro -> {
             popupWindow.dismiss()
-            showConformationDialog(this, getString(R.string.change_language_message_android)) {
+            showConfirmDialog(this, getString(R.string.change_language_message_android)) {
               changeLanguage("ro")
             }
           }
@@ -112,10 +114,6 @@ class MainActivity : AppCompatActivity() {
         popupWindow.showAsDropDown(it)
       }
 
-    }
-
-    pulseAppbarLogo.setOnClickListener {
-      refreshMap()
     }
 
     mainViewModel.measurementTypeTabs.observe(this) {
@@ -170,6 +168,11 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+
+    pulseAppbarLogo.setOnClickListener {
+     refreshMap()
+    }
+
   }
 
   private fun showCitySelectIfNotShown() {

@@ -39,7 +39,7 @@
       android:clickable="true"
       android:debuggable="true"
       android:focusable="true"
-      android:src="@drawable/ic_arrow_drop_down"
+      android:src="@drawable/ic_arrow_drop_down_24"
       app:layout_constraintBottom_toTopOf="@+id/measurementTypeTabBarView"
       app:layout_constraintStart_toEndOf="@+id/townLabel"
       app:layout_constraintTop_toTopOf="parent"
