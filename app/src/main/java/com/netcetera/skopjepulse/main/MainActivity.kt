@@ -1,4 +1,5 @@
 package com.netcetera.skopjepulse.main
+
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -16,7 +17,8 @@ import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.showConformationDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
+import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
@@ -168,7 +170,6 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
-
   }
 
   private fun showCitySelectIfNotShown() {

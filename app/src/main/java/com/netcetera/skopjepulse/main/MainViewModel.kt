@@ -34,8 +34,10 @@ class MainViewModel(
   val activeCity: LiveData<City?>
   private val selectableCity = MutableLiveData<City?>()
 
-
   private val selectableMeasurementType: MutableLiveData<MeasurementType>
+
+  val sameCity: LiveData<City?>
+
   /**
    * The [MeasurementType] that data shall be shown for.
    */
@@ -53,14 +55,19 @@ class MainViewModel(
         addSource(pulseRepository.cities) { cities ->
           value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
         }
-
         addSource(selectableCity) {
           value = it
           cityStorage.cityId = it?.name ?: ""
-
         }
-
-      })
+      }
+    )
+    sameCity = Transformations.distinctUntilChanged(
+      MediatorLiveData<City>().apply {
+        addSource(pulseRepository.cities) { cities ->
+          value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
+        }
+      }
+    )
     selectableMeasurementType = MediatorLiveData<MeasurementType>().apply {
       addSource(dataDefinitionProvider.definitions) {
         // Workaround to make selection from the available types if nothing is selected
@@ -106,6 +113,9 @@ class MainViewModel(
    */
   fun showForCity(city: City?) {
     if (activeCity.value != city) {
+      selectableCity.value = city
+    }
+    else {
       selectableCity.value = city
     }
   }

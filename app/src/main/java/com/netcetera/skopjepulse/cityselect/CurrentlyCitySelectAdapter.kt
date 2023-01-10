@@ -20,8 +20,7 @@ class CurrentlyCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder
 
   private var citySelectListener: CitySelectListener? = null
 
-  private val differ =
-    AsyncListDiffer<CitySelectItem>(this, object : DiffUtil.ItemCallback<CitySelectItem?>() {
+  private val differ = AsyncListDiffer<CitySelectItem>(this, object : DiffUtil.ItemCallback<CitySelectItem?>() {
       override fun areItemsTheSame(oldItem: CitySelectItem, newItem: CitySelectItem): Boolean {
         return oldItem.city.name == newItem.city.name
       }
@@ -29,14 +28,15 @@ class CurrentlyCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder
       override fun areContentsTheSame(oldItem: CitySelectItem, newItem: CitySelectItem): Boolean {
         return oldItem == newItem
       }
-    })
+    }
+  )
 
   override fun onChanged(newItems: List<CitySelectItem>?) {
     differ.submitList(newItems)
   }
 
   fun del(position: Int): String {
-    var list = arrayListOf<CitySelectItem>()
+    val list = arrayListOf<CitySelectItem>()
     list.addAll(differ.currentList)
     val city = list[position]
     list.removeAt(position)

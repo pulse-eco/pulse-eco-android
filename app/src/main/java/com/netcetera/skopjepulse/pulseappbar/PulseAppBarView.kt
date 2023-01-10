@@ -24,7 +24,6 @@ class PulseAppBarView(private val pulseAppBarView: View) {
   }
 
 
-
   fun displayNoCityName() {
     val string = pulseAppBarView.context.getString(R.string.select_city)
     displayCityName(string)
@@ -32,6 +31,10 @@ class PulseAppBarView(private val pulseAppBarView: View) {
 
   fun displayCityName(city: City) {
     displayCityName(city.displayName.toUpperCase(Locale.getDefault()))
+  }
+
+  fun retrieveCityName(): String {
+    return pulseAppBarView.townLabel.text.toString()
   }
 
   private fun displayCityName(name: String) {
