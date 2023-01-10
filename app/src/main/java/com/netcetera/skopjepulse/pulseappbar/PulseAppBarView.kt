@@ -16,6 +16,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
     pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke() }
   }
 
+
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
     this.selectedCityListener = citySelectRequestListener
     pulseAppBarView.pulseCityPicker.apply {

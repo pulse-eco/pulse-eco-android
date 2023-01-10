@@ -80,4 +80,6 @@
   <dimen name="calendar_month_year_buttons_height">70dp</dimen>
   <dimen name="calendar_day_of_week_right_padding">6dp</dimen>
 
+  <dimen name="settings_back_arrow">18dp</dimen>
+
 </resources>
