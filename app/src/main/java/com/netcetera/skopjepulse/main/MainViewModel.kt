@@ -33,8 +33,8 @@ class MainViewModel(
    */
   val activeCity: LiveData<City?>
   private val selectableCity = MutableLiveData<City?>()
-  private val selectableMeasurementType: MutableLiveData<MeasurementType>
 
+  private val selectableMeasurementType: MutableLiveData<MeasurementType>
 
   val sameCity: LiveData<City?>
 

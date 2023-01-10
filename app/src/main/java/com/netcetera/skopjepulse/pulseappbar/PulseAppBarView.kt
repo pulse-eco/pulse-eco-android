@@ -1,6 +1,5 @@
 package com.netcetera.skopjepulse.pulseappbar
 
-
 import android.view.View
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
@@ -15,20 +14,15 @@ class PulseAppBarView(private val pulseAppBarView: View) {
   init {
     pulseAppBarView.pulseAppbarLogo.setOnClickListener { refreshRequestedListener?.invoke() }
     pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke() }
-
   }
 
   fun onCitySelectRequest(citySelectRequestListener: () -> Unit) {
     this.selectedCityListener = citySelectRequestListener
-
     pulseAppBarView.pulseCityPicker.apply {
-      setImageResource(R.drawable.ic_arrow_drop_up_24)
+      visibility = View.VISIBLE
     }
   }
 
-  fun onRefreshRequested(func: () -> Unit) {
-    this.refreshRequestedListener = func
-  }
 
   fun displayNoCityName() {
     val string = pulseAppBarView.context.getString(R.string.select_city)
@@ -46,6 +40,10 @@ class PulseAppBarView(private val pulseAppBarView: View) {
   private fun displayCityName(name: String) {
     pulseAppBarView.townLabel.apply {
       text = name
+      visibility = View.VISIBLE
+    }
+
+    pulseAppBarView.pulseCityPicker.apply {
       visibility = View.VISIBLE
     }
   }

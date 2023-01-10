@@ -3,7 +3,7 @@
 <item >
   <shape
     android:shape="rectangle">
-    <solid android:color="@color/countrycityselect_item_border"/>
+    <solid android:color="@color/country_city_select_item_border"/>
   </shape>
 </item>
 <item android:bottom="1dp">

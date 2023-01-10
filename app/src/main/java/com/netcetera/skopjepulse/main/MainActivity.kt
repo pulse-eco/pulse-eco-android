@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
@@ -17,13 +18,14 @@ import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.showConfirmDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
+import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
 import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
+import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
@@ -109,8 +111,9 @@ class MainActivity : AppCompatActivity() {
       if (popupWindow.isShowing) {
         popupWindow.dismiss()
       } else {
-        if (!popupWindow.isShowing) popupWindow.showAsDropDown(it)
+        popupWindow.showAsDropDown(it)
       }
+
     }
 
     mainViewModel.measurementTypeTabs.observe(this) {
@@ -150,7 +153,6 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
-
     mainViewModel.showLoading.observe(this, loadingIndicator)
 
     errorView?.let { errorTextView ->
@@ -166,6 +168,11 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+
+    pulseAppbarLogo.setOnClickListener {
+     refreshMap()
+    }
+
   }
 
   private fun showCitySelectIfNotShown() {
@@ -180,14 +187,13 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-    mainViewModel.refreshData(false)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    refWatcher.watch(this)
+  private fun refreshMap() {
+    val actCit = mainViewModel.activeCity.value!!
+    supportFragmentManager.beginTransaction().replace(
+      R.id.content,
+      MapFragment.newInstance(actCit),
+      actCit.name,
+    ).commit()
   }
 
   private fun changeLanguage(localeName: String) {
@@ -198,6 +204,16 @@ class MainActivity : AppCompatActivity() {
     val intent = Intent(this, MainActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     this.startActivity(intent)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    mainViewModel.refreshData(false)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    refWatcher.watch(this)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

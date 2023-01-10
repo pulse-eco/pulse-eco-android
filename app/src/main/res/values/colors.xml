@@ -45,14 +45,14 @@
   <color name="map_loading_indicator_background">@color/purple</color>
   
   <!-- City select -->
-  <color name="cityselect_item_overlay">#B2FFFFFF</color>
-  <color name="cityselect_label_text_color">@color/black</color>
-  <color name="cityselect_measure_text_color">@color/white</color>
+  <color name="city_select_item_overlay">#B2FFFFFF</color>
+  <color name="city_select_label_text_color">@color/black</color>
+  <color name="city_select_measure_text_color">@color/white</color>
 
   <!-- Country City select -->
-  <color name="countrycityselect_country_small">#373737</color>
-  <color name="countrycityselect_country">#f5f5f5</color>
-  <color name="countrycityselect_item_border">#c2c2c2</color>
+  <color name="country_city_select_country_small">#373737</color>
+  <color name="country_city_select_country">#f5f5f5</color>
+  <color name="country_city_select_item_border">#c2c2c2</color>
 
   <!-- Overall Banner -->
   <color name="overall_banner_title_section_background">@color/black_A20</color>
@@ -77,19 +77,14 @@
   <color name="history_and_forecast_orange">#FF9800</color>
   
   <color name="date_button_transparency">#C0C0C0</color>
-
-
   <color name="bg_city_selector">#f5f5f5</color>
   <color name="gray">#eeeeee</color>
-
   <color name="searchbar">#757575</color>
-
   <color name="hc_bg">#f5f5f5</color>
   <color name="hc_text">#757575</color>
 
   <!-- Calendar colors -->
   <color name="calendar_cancel_button">@color/black_disabled</color>
   <color name="calendar_ok_button">@color/colorPrimary</color>
-
 
 </resources>

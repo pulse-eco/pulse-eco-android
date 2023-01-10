@@ -15,10 +15,10 @@ abstract class BasePulseRepository {
 
   protected fun shouldRefresh(data: LiveData<out Resource<Any>>, forceRefresh: Boolean): Boolean {
     val stamp = refreshStamps[data]
-    when {
-      data.value?.status == Resource.Status.LOADING -> return false
-      stamp != null && stamp > Date().time - dataMaxStale -> return forceRefresh
-      else -> return true
+    return when {
+      data.value?.status == Resource.Status.LOADING -> false
+      stamp != null && stamp > Date().time - dataMaxStale -> forceRefresh
+      else -> true
     }
   }
 }

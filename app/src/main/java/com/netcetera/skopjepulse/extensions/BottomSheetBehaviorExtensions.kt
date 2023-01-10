@@ -7,8 +7,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import kotlin.math.abs
 
-fun BottomSheetBehavior<out View>.onStateChange(callbacks : Array<BottomSheetCallback>) {
-  setBottomSheetCallback(object : BottomSheetCallback() {
+fun BottomSheetBehavior<out View>.onStateChange(callbacks: Array<BottomSheetCallback>) {
+  addBottomSheetCallback(object : BottomSheetCallback() {
     override fun onSlide(bottomSheet: View, slideOffset: Float) {
       callbacks.forEach { it.onSlide(bottomSheet, slideOffset) }
     }
@@ -21,7 +21,7 @@ fun BottomSheetBehavior<out View>.onStateChange(callbacks : Array<BottomSheetCal
 }
 
 fun dimOnExpand(what : View) : BottomSheetCallback {
-  return object : BottomSheetBehavior.BottomSheetCallback() {
+  return object : BottomSheetCallback() {
     override fun onSlide(bottomSheet: View, slideOffset: Float) {
       what.alpha = abs(slideOffset * 0.45f)
     }
@@ -50,4 +50,5 @@ fun BottomSheetBehavior<out View>.toggle() {
   } else if (state == STATE_EXPANDED) {
     state = BottomSheetBehavior.STATE_COLLAPSED
   }
+
 }

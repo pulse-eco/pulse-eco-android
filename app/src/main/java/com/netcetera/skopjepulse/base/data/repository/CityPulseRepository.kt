@@ -194,7 +194,10 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     return result
   }
 
-  fun getAverageWeeklyData(sensorId: String?, selectedMeasurementType: MeasurementType?): LiveData<Resource<List<SensorReading>>> {
+  fun getAverageWeeklyData(
+    sensorId: String?,
+    selectedMeasurementType: MeasurementType?
+  ): LiveData<Resource<List<SensorReading>>> {
     val result = MutableLiveData<Resource<List<SensorReading>>>()
     val id = sensorId ?: Constants.SENSOR_ID_FOR_AVERAGE_WEEKLY_DATA_FOR_WHOLE_CITY
     val cal: Calendar = Calendar.getInstance()
@@ -204,7 +207,8 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     val date = cal2.time
     val fromDate: String = fullDateFormatter.format(date)
 
-    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate).enqueue(object : Callback<List<SensorReading>> {
+    apiService.getAvgDailyData(id, selectedMeasurementType!!, fromDate, toDate)
+      .enqueue(object : Callback<List<SensorReading>> {
         override fun onFailure(call: Call<List<SensorReading>>, t: Throwable) {
           result.postValue(Resource.error(null, t))
         }

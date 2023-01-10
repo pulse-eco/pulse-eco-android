@@ -26,11 +26,11 @@
       android:paddingTop="5dp"
       android:paddingBottom="5dp"
       android:visibility="gone"
-      tools:visibility="visible"
-      tools:text="SKOPJE"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
-      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"/>
+      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"
+      tools:text="SKOPJE"
+      tools:visibility="visible"/>
 
     <ImageView
       android:id="@+id/pulseCityPicker"
@@ -40,10 +40,10 @@
       android:debuggable="true"
       android:focusable="true"
       android:src="@drawable/ic_arrow_drop_down_24"
-      app:layout_constraintBottom_toTopOf="@id/measurementTypeTabBarView"
-      app:layout_constraintStart_toEndOf="@id/townLabel"
+      app:layout_constraintBottom_toTopOf="@+id/measurementTypeTabBarView"
+      app:layout_constraintStart_toEndOf="@+id/townLabel"
       app:layout_constraintTop_toTopOf="parent"
-      android:contentDescription="city picker arrow" />
+      android:visibility="gone"/>
 
     <ImageView
       android:id="@+id/pulseAppbarLogo"
@@ -59,8 +59,7 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="1.0"
       android:debuggable="true"
-      android:focusable="true"
-      android:contentDescription="pulse eco logo" />
+      android:focusable="true" />
 
     <ImageView
       android:id="@+id/btn_language"
@@ -76,8 +75,7 @@
       android:src="@drawable/ic_language"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
-      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"
-      android:contentDescription="language picker" />
+      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"/>
 
     <com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTabBarView
       android:id="@+id/measurementTypeTabBarView"
@@ -86,7 +84,5 @@
       tools:layout_height="20dp"
       tools:layout_editor_absoluteX="10dp"
       app:layout_constraintBottom_toBottomOf="parent"/>
-
   </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>

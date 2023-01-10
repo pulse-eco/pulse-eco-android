@@ -129,8 +129,8 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     )
 
     val historyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(historySelectRecyclerView) {
-      override fun instantiateUnderlayButton(position: Int): List<SwipeHelper.UnderlayButton> {
-        var buttons = listOf<SwipeHelper.UnderlayButton>()
+      override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+        val buttons: List<UnderlayButton>
         val deleteButton = historyDeleteButton(position)
         buttons = listOf(deleteButton)
         return buttons
@@ -138,8 +138,8 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     })
 
     val currentlyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(currentlyCityRecyclerView) {
-      override fun instantiateUnderlayButton(position: Int): List<SwipeHelper.UnderlayButton> {
-        var buttons = listOf<SwipeHelper.UnderlayButton>()
+      override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+        val buttons: List<UnderlayButton>
         val deleteButton = currentlyDeleteButton(position)
         buttons = listOf(deleteButton)
         return buttons
@@ -163,7 +163,6 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
           ).show()
         }
       })
-
   }
 
   private fun currentlyDeleteButton(position: Int): SwipeHelper.UnderlayButton {

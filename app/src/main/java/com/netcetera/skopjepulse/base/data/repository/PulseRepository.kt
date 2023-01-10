@@ -11,7 +11,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.Date
 
-
 typealias Cities = List<City>
 typealias Sensors = List<Sensor>
 typealias SensorReadings = List<SensorReading>
