@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
-import android.widget.Toast
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.PulseLoadingIndicator
@@ -19,13 +17,10 @@ import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.settings.SettingsActivity
 import com.netcetera.skopjepulse.utils.Internationalisation
 import com.squareup.leakcanary.RefWatcher
-import kotlinx.android.synthetic.main.activity_main.loadingIndicatorContainer
-import kotlinx.android.synthetic.main.activity_main.pulse_app_bar
-import kotlinx.android.synthetic.main.language_picker_dilog.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
-import kotlinx.android.synthetic.main.pulse_app_bar.view.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
+import kotlinx.android.synthetic.main.view_picker_dilog.*
 import kotlinx.android.synthetic.main.view_picker_dilog.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,7 +28,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
   private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
-
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
     const val NEW_CITY_NAME_RESULT = "cityName"
@@ -79,7 +73,6 @@ class MainActivity : AppCompatActivity() {
         ViewGroup.LayoutParams.WRAP_CONTENT,
         true
       )
-
       pickerView.settingsRadioGroup.setOnCheckedChangeListener { _, checkedId ->
        when (checkedId) {
           R.id.dashboardView -> {
@@ -88,7 +81,6 @@ class MainActivity : AppCompatActivity() {
               replace(R.id.content, dashFragment)
               commit()
             }
-
           }
 
           R.id.mapView -> {
@@ -123,12 +115,26 @@ class MainActivity : AppCompatActivity() {
 
       }
 
+      val fragmentInstance = supportFragmentManager.findFragmentById(R.id.content)
+
+      if(fragmentInstance is DashboardFragment){
+        val toast = Toast.makeText(applicationContext, "Dashboard view", Toast.LENGTH_SHORT)
+        toast.show()
+      }
+      else if (fragmentInstance is MapFragment){
+        val toast = Toast.makeText(applicationContext, "Map view", Toast.LENGTH_SHORT)
+        toast.show()
+      } else
+      {
+        val toast = Toast.makeText(applicationContext, "Settings view", Toast.LENGTH_SHORT)
+        toast.show()
+      }
+
       if (popupWindow.isShowing) {
         popupWindow.dismiss()
       } else {
         popupWindow.showAsDropDown(it)
       }
-
     }
 
 
@@ -213,15 +219,6 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-    mainViewModel.refreshData(false)
-
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    refWatcher.watch(this)
   private fun refreshMap() {
     val actCit = mainViewModel.activeCity.value!!
     supportFragmentManager.beginTransaction().replace(

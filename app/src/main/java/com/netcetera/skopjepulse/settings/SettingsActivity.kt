@@ -35,10 +35,10 @@ class SettingsActivity : AppCompatActivity() {
   }
 
   override fun onBackPressed() {
-    val data = Intent()
-    data.putExtra("Ana", "Nazad sme")
-    setResult(RESULT_OK, data)
-    finish()
+//    val data = Intent()
+//    data.putExtra("Ana", "Nazad sme")
+//    setResult(RESULT_OK, data)
+//    finish()
     super.onBackPressed()
   }
 }
