@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(this)
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
-//    imageView = findViewById(R.id.pulseAppbarLogo)
 
     btn_language.setOnClickListener {
       val lang = getSharedPreferences(
@@ -113,6 +112,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    pulseAppbarLogo.setOnClickListener {
+      refreshMap()
+    }
+
     mainViewModel.measurementTypeTabs.observe(this) {
       measurementTypeTabBarView.availableMeasurementTypes = it ?: emptyList()
     }
@@ -166,11 +169,7 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    pulseAppbarLogo.setOnClickListener {
-      refreshMap()
-    }
   }
-
 
   private fun showCitySelectIfNotShown() {
     val someFragmentShown = supportFragmentManager.findFragmentById(R.id.content) != null
@@ -184,14 +183,13 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-    mainViewModel.refreshData(false)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    refWatcher.watch(this)
+  private fun refreshMap() {
+    val actCit = mainViewModel.activeCity.value!!
+    supportFragmentManager.beginTransaction().replace(
+      R.id.content,
+      MapFragment.newInstance(actCit),
+      actCit.name,
+    ).commit()
   }
 
   private fun changeLanguage(localeName: String) {
@@ -202,6 +200,16 @@ class MainActivity : AppCompatActivity() {
     val intent = Intent(this, MainActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     this.startActivity(intent)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    mainViewModel.refreshData(false)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    refWatcher.watch(this)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -221,16 +229,6 @@ class MainActivity : AppCompatActivity() {
   override fun onBackPressed() {
     super.onBackPressed()
     pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_down_24)
-  }
-
-  fun refreshMap()
-  {
-    val actCit = mainViewModel.activeCity.value!!
-    supportFragmentManager.beginTransaction().replace(
-      R.id.content,
-      MapFragment.newInstance(actCit),
-      actCit.name,
-    ).commit()
   }
 
 }
