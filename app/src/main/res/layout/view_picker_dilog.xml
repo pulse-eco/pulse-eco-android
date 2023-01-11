@@ -37,7 +37,8 @@
           android:paddingTop="10dp"
           android:text="Dashboard view"
           android:textAlignment="textStart"
-          android:textColor="@drawable/custom_icon" />
+          android:textColor="@drawable/custom_icon"
+          android:checked="false"/>
 
         <RadioButton
           android:id="@+id/mapView"
@@ -52,7 +53,8 @@
           android:paddingTop="10dp"
           android:text="Map view"
           android:textAlignment="textStart"
-          android:textColor="@drawable/custom_icon" />
+          android:textColor="@drawable/custom_icon"
+          android:checked="false"/>
 
         <RadioButton
           android:id="@+id/settingsView"
@@ -68,8 +70,7 @@
           android:text="Settings"
           android:textAlignment="textStart"
           android:textColor="@drawable/custom_icon"
-
-          />
+          android:checked="false"/>
 
 
       </RadioGroup>

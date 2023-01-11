@@ -7,5 +7,6 @@
 
   <item android:state_checked="false"
     android:color="@color/pulse_primary_text_1"
-    android:drawable="@color/white"/>
+    android:drawable="@color/white"
+    />
 </selector>
