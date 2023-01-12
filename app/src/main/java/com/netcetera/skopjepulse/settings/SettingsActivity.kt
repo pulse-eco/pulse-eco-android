@@ -15,30 +15,25 @@ class SettingsActivity : AppCompatActivity() {
     setContentView(R.layout.activity_settings_layout)
     Internationalisation.loadLocale(this)
 
-    val value = intent.extras?.get("Ana")
-    Toast.makeText(
-      this,
-      value.toString(),
-      Toast.LENGTH_SHORT
-    ).show()
+//    val previousFragment = intent.extras?.get("Ana").toString()
+//    Toast.makeText(
+//      this,
+//      previousFragment,
+//      Toast.LENGTH_SHORT
+//    ).show()
 
     btn_back.setOnClickListener {
-
-      val data = Intent()
-      data.putExtra("Ana", "Nazad sme")
-      setResult(RESULT_OK, data)
+//      val data = Intent()
+//      data.putExtra("Ana", previousFragment)
+//      setResult(RESULT_OK, data)
       finish()
-
       onBackPressed()
     }
-
   }
 
-  override fun onBackPressed() {
-//    val data = Intent()
-//    data.putExtra("Ana", "Nazad sme")
-//    setResult(RESULT_OK, data)
-//    finish()
-    super.onBackPressed()
-  }
+//  override fun onBackPressed() {
+//
+//    super.onBackPressed()
+//  }
+
 }
