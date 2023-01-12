@@ -55,7 +55,6 @@
           android:text="Map view"
           android:textAlignment="textStart"
           android:textColor="@drawable/custom_icon"
-
           android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
@@ -73,7 +72,6 @@
           android:textAlignment="textStart"
           android:textColor="@drawable/custom_icon"
           android:onClick="onRadioButtonClicked"/>
-
 
       </RadioGroup>
     </LinearLayout>

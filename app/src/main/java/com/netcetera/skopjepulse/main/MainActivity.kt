@@ -1,5 +1,4 @@
 package com.netcetera.skopjepulse.main
-
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -59,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_main)
 
-    //mock read from SharedPreferences
     SELECTED_FRAGMENT = "map"
 
     btn_menu.setOnClickListener {
@@ -137,7 +135,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     pulseAppbarLogo.setOnClickListener {
-     refreshMap()
+      if (SELECTED_FRAGMENT == "map"){
+        refreshMap()
+      }
     }
 
   }
@@ -167,6 +167,13 @@ class MainActivity : AppCompatActivity() {
       MapFragment.newInstance(activeCity),
       activeCity.name,
     ).commit()
+  }
+
+  private fun refreshDashboard() {
+    supportFragmentManager.beginTransaction().apply {
+      replace(R.id.content, dashFragment)
+      commit()
+    }
   }
 
   private fun changeLanguage(localeName: String) {
@@ -201,14 +208,7 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    else if (requestCode == SETTINGS_ACTIVITY_CODE && resultCode == Activity.RESULT_OK) {
-//      val value = data?.extras?.get("Ana")
-//      Toast.makeText(
-//        this,
-//        value.toString(),
-//        Toast.LENGTH_SHORT
-//      ).show()
-    }
+    else if (requestCode == SETTINGS_ACTIVITY_CODE && resultCode == Activity.RESULT_OK) {}
     super.onActivityResult(requestCode, resultCode, data)
   }
 
@@ -221,30 +221,32 @@ class MainActivity : AppCompatActivity() {
     if (view is RadioButton && view.isChecked) {
       when (view.id) {
         R.id.dashboardView -> {
-          SELECTED_FRAGMENT = "dashboard"
           supportFragmentManager.beginTransaction().apply {
             replace(R.id.content, dashFragment)
             commit()
           }
-          popupWindow.dismiss()
+          setDismiss("dashboard")
         }
         R.id.mapView -> {
-          SELECTED_FRAGMENT = "map"
           val existingMapFragment =
             supportFragmentManager.findFragmentByTag(mainViewModel.activeCity.value!!.name) as? MapFragment
           if (existingMapFragment == null) {
             refreshMap()
           }
-          popupWindow.dismiss()
+          setDismiss("map")
         }
         R.id.settingsView -> {
           val intent = Intent(this, SettingsActivity::class.java)
-//          intent.putExtra("Ana", SELECTED_FRAGMENT)
           startActivityForResult(intent, SETTINGS_ACTIVITY_CODE)
-          popupWindow.dismiss()
+          setDismiss("")
         }
       }
     }
+  }
+
+  private fun setDismiss(text: String) {
+    if (text.isNotEmpty()) SELECTED_FRAGMENT = text
+    popupWindow.dismiss()
   }
 
 }

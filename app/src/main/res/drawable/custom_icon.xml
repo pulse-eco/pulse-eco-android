@@ -3,6 +3,7 @@
   <item android:state_checked="true"
     android:color="@color/white"
     android:drawable="@drawable/ic_check_24"
+    
     />
 
   <item android:state_checked="false"
