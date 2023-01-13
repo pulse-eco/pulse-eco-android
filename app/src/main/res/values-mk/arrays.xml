@@ -1,0 +1,9 @@
+<resources>
+  <string-array name="pref_remind_me_to_take_a_break">
+    <item>1 саати</item>
+    <item>2 саати</item>
+    <item>3 саати</item>
+    <item>5 саати</item>
+    <item>10 саати</item>
+  </string-array>
+</resources>

@@ -5,6 +5,7 @@ plugins {
   id(Plugins.kotlinKapt)
   id(Plugins.fabric)
   id(Plugins.trema)
+  id("org.jetbrains.kotlin.android")
 }
 
 android {
