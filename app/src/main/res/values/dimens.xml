@@ -80,6 +80,16 @@
   <dimen name="calendar_month_year_buttons_height">70dp</dimen>
   <dimen name="calendar_day_of_week_right_padding">6dp</dimen>
 
-  <dimen name="settings_back_arrow">18dp</dimen>
+  <dimen name="menu_border_radius">10dp</dimen>
+  <dimen name="menu_choice_padding_top_bottom">12dp</dimen>
+  <dimen name="menu_choice_padding_start_end">16dp</dimen>
+
+  <dimen name="settings_back_arrow">16dp</dimen>
+  <dimen name="settings_activity_name">18sp</dimen>
+  <dimen name="settings_toolbar_back_arrow_margin_start">16dp</dimen>
+  <dimen name="settings_toolbar_back_navigation_padding">8dp</dimen>
+  <dimen name="settings_toolbar_margin_start">8dp</dimen>
+  <dimen name="settings_pulse_logo_margin_top">16dp</dimen>
+  <dimen name="settings_pulse_logo_margin_bottom">16dp</dimen>
 
 </resources>

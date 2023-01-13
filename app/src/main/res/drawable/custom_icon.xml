@@ -2,12 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:state_checked="true"
     android:color="@color/white"
-    android:drawable="@drawable/ic_check_24"
-    
-    />
+    android:drawable="@drawable/ic_check_24"/>
 
   <item android:state_checked="false"
     android:color="@color/pulse_primary_text_1"
-    android:drawable="@color/white"
-    />
+    android:drawable="@color/white"/>
 </selector>
