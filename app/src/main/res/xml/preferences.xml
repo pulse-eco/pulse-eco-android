@@ -5,10 +5,17 @@
     <ListPreference
       android:defaultValue="en"
       android:dialogTitle="Languages"
-      android:entries="@array/pref_remind_me_to_take_a_break"
-      android:entryValues="@array/abv"
+      android:entries="@array/language_picker"
+      android:entryValues="@array/lang_value"
+      android:key="123"
       android:summary="Change language"
       android:title="Language"/>
-  </PreferenceCategory>
 
+    <Preference
+      android:key="about"
+      android:title="About">
+      <intent android:action="android.intent.action.SHOW_APP_INFO"/>
+    </Preference>
+
+  </PreferenceCategory>
 </PreferenceScreen>

@@ -1,17 +1,19 @@
 <resources>
-  <string-array name="pref_remind_me_to_take_a_break">
-    <item>1 hours</item>
-    <item>2 hours</item>
-    <item>3 hours</item>
-    <item>5 hours</item>
-    <item>10 hours</item>
+  <string-array name="language_picker">
+    <item>Македонски</item>
+    <item>English</item>
+    <item>Deutsch</item>
+    <item>Română</item>
   </string-array>
 
-  <string-array name="abv">
-    <item>1 hours</item>
-    <item>2 hours</item>
-    <item>3 hours</item>
-    <item>5 hours</item>
-    <item>10 hours</item>
+  <string-array name="lang_value">
+    <item>mk</item>
+    <item>en</item>
+    <item>de</item>
+    <item>ro</item>
   </string-array>
+
+  <string name="aboutText">
+    <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rutrum gravida turpis vitae finibus. Phasellus lobortis nec enim sit amet vulputate. Nam elit risus, laoreet eu faucibus quis, blandit sit amet velit. Mauris tristique sapien ac consectetur scelerisque. Quisque commodo mollis turpis, et congue justo vehicula eu. Morbi metus magna, sagittis ut elementum et, aliquet a magna. Morbi venenatis urna quis blandit tristique. In nec pharetra felis, et gravida massa. Proin sit amet erat in purus egestas porttitor.</i>
+  </string>
 </resources>
