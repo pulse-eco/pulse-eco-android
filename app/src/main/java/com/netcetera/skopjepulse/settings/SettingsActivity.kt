@@ -3,8 +3,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.main.MainActivity
 import com.netcetera.skopjepulse.utils.Internationalisation
+import kotlinx.android.synthetic.main.activity_settings.view.*
 import kotlinx.android.synthetic.main.activity_settings_toolbar.*
+import kotlinx.android.synthetic.main.view_picker_dilog.*
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -26,5 +29,5 @@ class SettingsActivity : AppCompatActivity() {
       fragmentManager.beginTransaction().add(R.id.idFrameLayout, SettingsFragment()).commit()
     }
   }
-
 }
+

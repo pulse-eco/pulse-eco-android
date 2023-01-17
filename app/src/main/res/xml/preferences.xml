@@ -11,11 +11,12 @@
       android:summary="Change language"
       android:title="Language"/>
 
-    <Preference
-      android:key="about"
-      android:title="About">
-      <intent android:action="android.intent.action.SHOW_APP_INFO"/>
-    </Preference>
+    <Preference android:key="dialog_preference"
+      android:title="About pulse.eco"/>
+
+
+    <Preference android:key="dialog_preference"
+      android:title="Used libraries"/>
 
   </PreferenceCategory>
 </PreferenceScreen>
