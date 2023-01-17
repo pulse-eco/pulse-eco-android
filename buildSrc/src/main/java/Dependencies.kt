@@ -7,11 +7,11 @@ object Libs {
     const val androidXAnnotations = "1.1.0"
     const val androidMaterial = "1.2.1"
     const val retrofit = "2.9.0"
-    const val moshi = "1.11.0"
+    const val moshi = "1.12.0"
     const val okhttpLogging = "4.9.0"
     const val anko = "0.10.8"
     const val playServicesMaps = "17.0.0"
-    const val lottie = "3.5.0"
+    const val lottie = "4.2.2"
     const val activityKtx = "1.2.0-rc01"
     const val koin = "2.2.2"
     const val mpaAndroidChart = "v3.1.0"
@@ -72,14 +72,14 @@ object Libs {
 
   //Compose
   object Compose {
-    const val UI = "androidx.compose.ui:ui:${Versions.COMPOSE}"
-    const val RUNTIME = "androidx.compose.runtime:runtime:${Versions.COMPOSE}"
-    //  const val MATERIAL_2 = "androidx.compose.material:material:${Versions.COMPOSE}"
-    const val MATERIAL_3 = "androidx.compose.material3:material3:${Versions.COMPOSE_MD3}"
-    const val UI_TOOLING = "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE}"
-    const val ICONS_EXTENDED = "androidx.compose.material:material-icons-extended:${Versions.COMPOSE}"
-    const val ANIMATION = "androidx.compose.animation:animation:${Versions.COMPOSE}"
-    const val ANIMATION_GRAPHICS = "androidx.compose.animation:animation-graphics:${Versions.COMPOSE}"
+//    const val UI = "androidx.compose.ui:ui:${Versions.COMPOSE}"
+//    const val RUNTIME = "androidx.compose.runtime:runtime:${Versions.COMPOSE}"
+//    //  const val MATERIAL_2 = "androidx.compose.material:material:${Versions.COMPOSE}"
+//    const val MATERIAL_3 = "androidx.compose.material3:material3:${Versions.COMPOSE_MD3}"
+//    const val UI_TOOLING = "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE}"
+//    const val ICONS_EXTENDED = "androidx.compose.material:material-icons-extended:${Versions.COMPOSE}"
+//    const val ANIMATION = "androidx.compose.animation:animation:${Versions.COMPOSE}"
+//    const val ANIMATION_GRAPHICS = "androidx.compose.animation:animation-graphics:${Versions.COMPOSE}"
   }
 
 }

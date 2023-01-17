@@ -172,7 +172,7 @@ class CitySelectViewModel(
         if (locationToSortBy == null) {
           cities.data?.sortedWith(City.macedoniaFirstComparator())
         } else {
-          cities.data?.sortedBy { city -> city.location.distanceTo(location.data) }
+          cities.data?.sortedBy { city -> location.data?.let { city.location.distanceTo(it) } }
         } ?: emptyList()
       }
     }

@@ -1,5 +1,5 @@
 object ProjectProperties {
-  const val compileSdkVersion = 32
+  const val compileSdkVersion = 33
   const val targetSdkVersion = compileSdkVersion
   const val minimumSdkVersion = 24
 }
