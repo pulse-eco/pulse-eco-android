@@ -15,7 +15,6 @@ import com.netcetera.skopjepulse.base.data.Resource.Status.ERROR
 import com.netcetera.skopjepulse.base.data.Resource.Status.IDLE
 import com.netcetera.skopjepulse.base.data.Resource.Status.LOADING
 import com.netcetera.skopjepulse.base.data.Resource.Status.SUCCESS
-import com.squareup.leakcanary.RefWatcher
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,7 +25,7 @@ import java.util.HashSet
  */
 @KoinApiExtension
 abstract class BaseViewModel : ViewModel(), KoinComponent {
-  private val refWatcher by inject<RefWatcher>()
+
   /**
    * Instance of Application [Context] that the usage of it shall be avoided.
    * Keeping it has no risk, since it is the lifecycle of the application itself.
@@ -82,11 +81,6 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
    * @param forceRefresh true if should ignore any caching or timestamping logic.
    */
   abstract fun refreshData(forceRefresh: Boolean = true)
-
-  override fun onCleared() {
-    super.onCleared()
-    refWatcher.watch(this)
-  }
 }
 
 /**

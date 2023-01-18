@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
@@ -18,17 +17,14 @@ import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
 import com.netcetera.skopjepulse.settings.SettingsActivity
 import com.netcetera.skopjepulse.utils.Internationalisation
-import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import kotlinx.android.synthetic.main.view_picker_dilog.view.*
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
-  private val refWatcher: RefWatcher by inject()
   private val mainViewModel: MainViewModel by viewModel()
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345
@@ -189,11 +185,6 @@ class MainActivity : AppCompatActivity() {
   override fun onResume() {
     super.onResume()
     mainViewModel.refreshData(false)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    refWatcher.watch(this)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

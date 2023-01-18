@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory android:title="Settings">
+  <PreferenceCategory android:title="Language">
     <ListPreference
       android:defaultValue="en"
       android:dialogTitle="Languages"
@@ -11,12 +11,20 @@
       android:summary="Change language"
       android:title="Language"/>
 
-    <Preference android:key="dialog_preference"
-      android:title="About pulse.eco"/>
-
-
-    <Preference android:key="dialog_preference"
-      android:title="Used libraries"/>
-
   </PreferenceCategory>
+
+  <PreferenceCategory android:title="About">
+    <Preference android:key="dialog_preference"
+      android:title="About pulse.eco"
+      android:fragment="com.netcetera.skopjepulse.settings.AboutTextFragment"
+      />
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="Libraries">
+    <Preference android:key="223"
+      android:title="Used libraries"
+      />
+  </PreferenceCategory>
+
+
 </PreferenceScreen>

@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
-import com.squareup.leakcanary.RefWatcher
 import kotlinx.android.synthetic.main.simple_error_layout.*
-import org.koin.android.ext.android.inject
+
 
 abstract class BaseFragment<out T : BaseViewModel> : Fragment() {
-  private val refWatcher : RefWatcher by inject()
+
   abstract val viewModel: T
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -24,10 +23,5 @@ abstract class BaseFragment<out T : BaseViewModel> : Fragment() {
         }
       }
     }
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    refWatcher.watch(this)
   }
 }

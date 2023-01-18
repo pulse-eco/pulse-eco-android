@@ -1,12 +1,9 @@
 package com.netcetera.skopjepulse.settings
 
-import android.content.Context
-import android.preference.PreferenceManager
+import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.netcetera.skopjepulse.R
 
 
 class AboutTextFragment : Fragment() {
-
-//  var preferences = PreferenceManager.getDefaultSharedPreferences(Context)
-
   }

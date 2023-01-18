@@ -22,6 +22,7 @@
           android:background="@drawable/custom_background"
           android:button="@drawable/custom_icon"
           android:layoutDirection="rtl"
+          android:checked="true"
           android:onClick="onRadioButtonClicked"
           android:paddingBottom="@dimen/menu_choice_padding_top_bottom"
           android:paddingEnd="@dimen/menu_choice_padding_start_end"

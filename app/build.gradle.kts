@@ -3,7 +3,7 @@ plugins {
   id(Plugins.kotlinAndroid)
   id(Plugins.kotlinAndroidExtensions)
   id(Plugins.kotlinKapt)
-  id(Plugins.fabric)
+ // id(Plugins.fabric)
   id(Plugins.trema)
   id("org.jetbrains.kotlin.android")
 }
@@ -43,7 +43,7 @@ android {
       // For AGP 4.1+
       // isCoreLibraryDesugaringEnabled = true
       // For AGP 4.0
-      coreLibraryDesugaringEnabled = true
+   //   coreLibraryDesugaringEnabled = true
       sourceCompatibility = JavaVersion.VERSION_1_8
       targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -68,8 +68,8 @@ android {
     implementation(Libs.anko)
     implementation(Libs.googleMaps)
     implementation(Libs.playServicesLocation)
-    implementation(Libs.firebaseAnalytics)
-    implementation(Libs.crashlytics)
+    //implementation(Libs.firebaseAnalytics)
+    //implementation(Libs.crashlytics)
     implementation(Libs.mpaAndroidChart)
     implementation(Libs.lottie)
     implementation(Libs.likeButton)
@@ -87,9 +87,9 @@ android {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
 
-    debugImplementation(Libs.leakcanary)
-    debugImplementation(Libs.leakcanaryFragment)
-    releaseImplementation(Libs.leakcanaryNoOp)
+//    debugImplementation(Libs.leakcanary)
+//    debugImplementation(Libs.leakcanaryFragment)
+//    releaseImplementation(Libs.leakcanaryNoOp)
 
     kapt(Libs.lifecycleCompiler)
     kapt(Libs.moshiCodegen)
@@ -106,3 +106,6 @@ trema {
 
 
 apply(plugin = "com.google.gms.google-services")
+dependencies {
+  implementation("androidx.preference:preference-ktx:1.2.0")
+}

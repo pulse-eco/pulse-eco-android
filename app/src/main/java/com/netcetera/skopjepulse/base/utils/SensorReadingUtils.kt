@@ -5,7 +5,7 @@ import java.util.*
 
 fun List<SensorReading>.lastReading(maxStaleMinutes : Int = 120) : SensorReading? {
   val maxStaleDate = Calendar.getInstance().apply { add(Calendar.MINUTE, -maxStaleMinutes) }.time
-  return maxBy { it.stamp }?.takeIf { it.stamp.after(maxStaleDate) }
+  return maxByOrNull { it.stamp }?.takeIf { it.stamp.after(maxStaleDate) }
 }
 
 fun SensorReading.getMonthAndDayFromStamp(): String {

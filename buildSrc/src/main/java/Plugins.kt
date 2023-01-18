@@ -1,11 +1,11 @@
 object ProjectVersions {
-  const val androidGradlePlugin = "4.0.0"
+  const val androidGradlePlugin = "4.2.2"
   const val googlePlayServices = "4.3.2"
-  const val kotlin = "1.4.21"
+  const val kotlin = "1.5.32"
   const val trema = "2.1.9"
 
   // Crashlytics
-  const val fabric = "1.31.2"
+  //const val fabric = "1.31.2"
 }
 
 object BuildPlugins {
@@ -15,7 +15,7 @@ object BuildPlugins {
   const val tremaGradlePlugin = "com.netcetera.android.gradle:trema-gradle-plugin:${ProjectVersions.trema}"
 
   // Crashlytics
-  const val fabricGradlePlugin = "io.fabric.tools:gradle:${ProjectVersions.fabric}"
+ // const val fabricGradlePlugin = "io.fabric.tools:gradle:${ProjectVersions.fabric}"
 }
 
 object Plugins {
@@ -26,5 +26,5 @@ object Plugins {
   const val trema = "com.netcetera.trema"
 
   // Crashlytics
-  const val fabric = "io.fabric"
+ // const val fabric = "io.fabric"
 }

@@ -34,8 +34,8 @@ data class City(
   @IgnoredOnParcel val cityBounds: LatLngBounds by lazy {
     cityBorderPoints.run {
       LatLngBounds(
-        LatLng(minBy { it.latitude }!!.latitude, minBy { it.longitude }!!.longitude),
-        LatLng(maxBy { it.latitude }!!.latitude, maxBy { it.longitude }!!.longitude)
+        LatLng(minByOrNull { it.latitude }!!.latitude, minByOrNull { it.longitude }!!.longitude),
+        LatLng(maxByOrNull { it.latitude }!!.latitude, maxByOrNull { it.longitude }!!.longitude)
       )
     }
   }

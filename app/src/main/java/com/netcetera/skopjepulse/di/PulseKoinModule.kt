@@ -16,14 +16,13 @@ import com.netcetera.skopjepulse.countryCitySelector.CountryCityViewModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.preferences.MapPreferencesStorage
-import com.squareup.leakcanary.RefWatcher
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val appModule = module {
-  single { RefWatcher.DISABLED }
+
 
   single { baseMoshiBuilder().build() }
   single { createPulseApiService(androidApplication(), get()) }

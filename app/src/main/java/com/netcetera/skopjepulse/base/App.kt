@@ -6,13 +6,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import androidx.core.content.PermissionChecker
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.netcetera.skopjepulse.BuildConfig
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.di.appModule
-import com.squareup.leakcanary.LeakCanary
-import io.fabric.sdk.android.Fabric
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -22,15 +18,16 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return
-    }
+
+//    if (LeakCanary.isInAnalyzerProcess(this)) {
+//      // This process is dedicated to LeakCanary for heap analysis.
+//      // You should not init your app in this process.
+//      return
+//    }
 
     setupKoin()
     setupTimber()
-    setupCrashlytics()
+//    setupCrashlytics()
     setupLocale()
   }
 
@@ -57,15 +54,15 @@ class App : Application() {
     }
   }
 
-  private fun setupCrashlytics() {
-    Fabric.with(this,
-        Crashlytics.Builder()
-            .core(CrashlyticsCore.Builder()
-                .disabled(BuildConfig.DEBUG)
-                .build())
-            .build()
-    )
-  }
+//  private fun setupCrashlytics() {
+//    Fabric.with(this,
+//        Crashlytics.Builder()
+//            .core(CrashlyticsCore.Builder()
+//                .disabled(BuildConfig.DEBUG)
+//                .build())
+//            .build()
+//    )
+//  }
 
 }
 
