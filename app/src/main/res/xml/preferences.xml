@@ -24,6 +24,10 @@
     <Preference android:key="223"
       android:title="Used libraries"
       />
+
+    <Preference android:key="223"
+      android:title="Disclaimer"
+      />
   </PreferenceCategory>
 
 
