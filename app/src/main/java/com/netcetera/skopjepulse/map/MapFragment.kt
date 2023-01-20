@@ -161,12 +161,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setDaysNames()
 
       viewModel.overallBannerData.observe(viewLifecycleOwner, overallBanner)
-      setMapValuesToday()
 
+      setMapValuesToday()
 
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
         setValueForAverageDailyData(weeklyAverageDataModel)
       }
+
       viewModel.averageDataGivenRange.value?.let { weeklyAverageDataModel ->
         setValueForSevenDaysRange(weeklyAverageDataModel.data, overAllData?.last(), sensorType)
       }
@@ -201,10 +202,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setValueForAverageDailyData(weeklyAvg)
       setValueForSevenDaysRange(weeklyAvg.data, overAllData?.last(), sensorType)
 
-      if (overAllData?.last()?.values?.get(sensorType) != null && overAllData?.last()?.values?.get(
-          sensorType
-        ) != "N/A"
-      ) {
+      if (overAllData?.last()?.values?.get(sensorType) != null && overAllData?.last()?.values?.get(sensorType) != "N/A") {
         val overallDataValue = overAllData?.last()?.values?.get(sensorType)?.toDouble()
         val band = overallDataValue?.let { value -> getBand(value.toInt()) }
         bandValueOverallData = band?.legendColor
@@ -415,6 +413,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         previousPolygons.clear()
         mapPolygons.mapTo(previousPolygons) { googleMap.addPolygon(it) }
       }
+
       googleMap.lifecycleAwareOnMapClickListener(viewLifecycleOwner) {
         viewModel.deselectSensor()
       }
@@ -861,7 +860,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       viewModel.getSensorsValuesTypeRaw(mesType).observe(viewLifecycleOwner) {
         val bannerData = viewModel.createAverageOverallBannerData(HistoryForecastAdapter.selectedSensorReading!!, dataDef)
         setValuesForOverallBannerData(bannerData.title, bannerData.backgroundColor, bannerData.value, bannerData.valueUnit, bannerData.description, bannerData.legend)
-          if (formatter.format(HistoryForecastAdapter.SELECTED_DATE) == formatter.format(today)) {
+          if (formatter.format(date) == formatter.format(today)) {
           setMapValuesToday()
         } else {
           setMapValuesSensorValuesDaysRange()

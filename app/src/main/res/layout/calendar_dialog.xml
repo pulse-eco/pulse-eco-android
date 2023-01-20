@@ -67,7 +67,7 @@
     <TableRow android:id="@+id/daysNameHeader">
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="0"
         android:layout_gravity="center"
         android:text="M"
@@ -75,7 +75,7 @@
         android:textAlignment="center" />
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="1"
         android:layout_gravity="center"
         android:text="T"
@@ -83,7 +83,7 @@
         android:textAlignment="center" />
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="2"
         android:layout_gravity="center"
         android:text="W"
@@ -91,7 +91,7 @@
         android:textAlignment="center" />
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="3"
         android:layout_gravity="center"
         android:text="T"
@@ -99,7 +99,7 @@
         android:textAlignment="center" />
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="4"
         android:layout_gravity="center"
         android:text="F"
@@ -107,7 +107,7 @@
         android:textAlignment="center" />
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="5"
         android:layout_gravity="center"
         android:text="S"
@@ -115,7 +115,7 @@
         android:textAlignment="center" />
 
       <TextView
-        android:layout_width="5dp"
+        android:layout_width="4dp"
         android:layout_column="6"
         android:layout_gravity="center"
         android:text="S"

@@ -35,7 +35,7 @@ class HistoryForecastAdapter(
 
   var selectedPosition = -1
   var onItemClickExplore: ((String) -> Unit)? = null
-  var onItemClick: ((Date?) -> Unit)? = null
+  var onItemClick: ((Date) -> Unit)? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
     val context = parent.context

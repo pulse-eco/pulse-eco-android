@@ -6,6 +6,8 @@
   android:layout_width="36dp"
   android:layout_height="36dp"
   android:layout_marginTop="@dimen/calendar_border_half_margin"
+  android:layout_marginStart="6dp"
+  android:layout_marginEnd="3dp"
   android:layout_gravity="center"
   tools:background="@drawable/calendar_circle">
 

@@ -33,9 +33,7 @@ class CalendarAdapter(
     private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
     var DATE_INPUT_TODAY: LocalDate = LocalDate.parse("01/${LocalDate.now().monthValue}/${LocalDate.now().year}", formatter)
     var DATE_INPUT: LocalDate? = null
-    var DATE_CLICKED: String = "${LocalDate.now()}"
   }
-
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarAdapter.ViewHolder {
     val view = LayoutInflater.from(context).inflate(R.layout.calendar_slot, parent, false)
@@ -63,21 +61,20 @@ class CalendarAdapter(
     val todayDate = today.dayOfMonth
     @SuppressLint("ResourceType")
     fun bind() {
-      val newList = mutableListOf<CalendarValuesDataModel>()
-      for (i in 0 until items[adapterPosition].startDayOfMonth)
-      {
-        newList.add(CalendarValuesDataModel(null,null))
+      val combinationList = mutableListOf<CalendarValuesDataModel>()
+      for (i in 0 until items[adapterPosition].startDayOfMonth) {
+        combinationList.add(CalendarValuesDataModel(null,null))
       }
       if (values != null) {
         for (element in values) {
-          newList.add(element)
+          combinationList.add(element)
         }
       }
-      newList.toList()
+      combinationList.toList()
+
       if (adapterPosition > items[adapterPosition].startDayOfMonth || adapterPosition == items[adapterPosition].startDayOfMonth) {
         slotContainer.setOnClickListener {
           val date = "${items[adapterPosition].day}/${dateMonthValue}/$dateYear"
-          DATE_CLICKED = date
           onItemClick?.invoke(date)
         }
 
@@ -103,21 +100,24 @@ class CalendarAdapter(
 
           if (items[adapterPosition].day == todayDate) {
 
-            if(todayValue!=null){
+            if (todayValue != null) {
               slotContainer.setBackgroundColor(todayValue)
               slotContainer.setBackgroundResource(0)
               dayOfMonth.setTextColor(Color.WHITE)
-              dayOfMonth.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(todayValue, BlendModeCompat.SRC_ATOP)
+              dayOfMonth.background.colorFilter =
+                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                  todayValue,
+                  BlendModeCompat.SRC_ATOP
+                )
             }
           }
-
-          }
+        }
 
         val systemTimeZone: ZoneId = ZoneId.systemDefault()
-          for (i in newList.indices) {
-            if (adapterPosition == i){
-            val color = newList[adapterPosition].sensorValueColor
-            val dom = newList[adapterPosition].averageWeeklyDataModel?.stamp
+        for (i in combinationList.indices) {
+          if (adapterPosition == i) {
+            val color = combinationList[adapterPosition].sensorValueColor
+            val dom = combinationList[adapterPosition].averageWeeklyDataModel?.stamp
             val stamp = dom?.toInstant()?.atZone(systemTimeZone)
             val stampDay = stamp?.dayOfMonth
             val stampMonth = stamp?.month?.name
@@ -126,7 +126,6 @@ class CalendarAdapter(
             if (stampMonth == dateMonth && stampYear == dateYear) {
               slotContainer.setOnClickListener {
                 val date = "${items[adapterPosition].day}/${dateMonthValue}/$dateYear"
-                DATE_CLICKED = date
                 onItemClick?.invoke(date)
               }
               if (stampDay == domInputs) {
