@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.PulseLoadingIndicator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
+import com.netcetera.skopjepulse.base.data.Resource
 import com.netcetera.skopjepulse.base.model.*
 import com.netcetera.skopjepulse.extensions.*
 import com.netcetera.skopjepulse.favouritesensors.showFavouriteSensorsPicker
@@ -139,10 +141,13 @@ class MapFragment : BaseFragment<MapViewModel>() {
     // Declarations and interactions
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
 
+//    mainViewModel.overall(this.city.name).observe(viewLifecycleOwner) { t -> overAllData = t?.data }
     mainViewModel.overall(this.city.name)
-      .observe(
-        viewLifecycleOwner
-      ) { t -> overAllData = t?.data }
+      .observe(viewLifecycleOwner, object : Observer<Resource<List<CityOverall>>> {
+        override fun onChanged(t: Resource<List<CityOverall>>?) {
+          overAllData = t?.data
+        }
+      })
 
     /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) { itMeasurement ->
@@ -607,9 +612,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
     viewModel.getAvgDataMonthPreviousMonth(sensorId = null, sensorType, fromDate)
       .observe(viewLifecycleOwner) {
-//        Log.d("VALUE", it.data.toString())
-        Log.d("VALUE", it.data.toString())
-
         val resMonths = mutableListOf<CalendarValuesDataModel>()
         val res = it?.data
         if (!res.isNullOrEmpty()) {

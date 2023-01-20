@@ -3,7 +3,6 @@ plugins {
   id(Plugins.kotlinAndroid)
   id(Plugins.kotlinAndroidExtensions)
   id(Plugins.kotlinKapt)
-//  id(Plugins.fabric)
   id(Plugins.trema)
 }
 
@@ -39,10 +38,6 @@ android {
       manifestPlaceholders["googleMapsApiKey"] = ProjectSecrets.googleMapsDebugApiKey
     }
     compileOptions {
-      // For AGP 4.1+
-//       isCoreLibraryDesugaringEnabled = true
-      // For AGP 4.0
-//      coreLibraryDesugaringEnabled = true
       sourceCompatibility = JavaVersion.VERSION_1_8
       targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -67,8 +62,6 @@ android {
     implementation(Libs.anko)
     implementation(Libs.googleMaps)
     implementation(Libs.playServicesLocation)
-//    implementation(Libs.firebaseAnalytics)
-//    implementation(Libs.crashlytics)
     implementation(Libs.mpaAndroidChart)
     implementation(Libs.lottie)
     implementation(Libs.likeButton)
@@ -81,23 +74,8 @@ android {
     implementation(Libs.okHttpLogging)
     implementation(Libs.swipeRefreshLayout)
 
-//    implementation (Libs.Compose.UI)
-//    implementation (Libs.Compose.UI_TOOLING)
-//    implementation (Libs.Compose.ANIMATION)
-//    implementation (Libs.Compose.ANIMATION_GRAPHICS)
-//    implementation (Libs.Compose.RUNTIME)
-//    implementation (Libs.Compose.MATERIAL_3)
-//    implementation (Libs.Compose.ICONS_EXTENDED)
-
     implementation(Libs.gson)
-    //implementation(Libs.desugar)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
-
-
-//    debugImplementation(Libs.leakcanary)
-//    debugImplementation(Libs.leakcanaryFragment)
-//    releaseImplementation(Libs.leakcanaryNoOp)
-
     kapt(Libs.lifecycleCompiler)
     kapt(Libs.moshiCodegen)
     }

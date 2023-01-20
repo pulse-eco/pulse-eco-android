@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.countryCitySelector.CountryCitySelectorActivity
+import com.netcetera.skopjepulse.extensions.toast
 import com.netcetera.skopjepulse.main.MainActivity.Companion.NEW_CITY_REQUEST_CODE
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.utils.ui.SwipeHelper
@@ -156,11 +156,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
         override fun onClick() {
           val historyCityToRemoveFromSharedPreferences = historyCitySelectAdapter.del(position)
           viewModel.deleteCityOnSwipe(historyCityToRemoveFromSharedPreferences)
-          Toast.makeText(
-            activity,
-            resources.getString(R.string.msg_removed),
-            Toast.LENGTH_SHORT
-          ).show()
+          activity?.toast(R.string.msg_removed)
         }
       })
   }
@@ -172,11 +168,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
           val currentlyCityToRemoveFromSharedPreferences = currentlyCitySelectAdapter.del(position)
           viewModel.deleteCityOnSwipe(currentlyCityToRemoveFromSharedPreferences)
           mainViewModel.showForCity(null)
-          Toast.makeText(
-            activity,
-            resources.getString(R.string.msg_removed),
-            Toast.LENGTH_SHORT
-          ).show()
+          activity?.toast(R.string.msg_removed)
         }
       })
   }
@@ -199,6 +191,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     historyCitiesView.visibility = if (historyList.isEmpty()) View.GONE else View.VISIBLE
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onRequestPermissionsResult(
     requestCode: Int, permissions: Array<out String>,
     grantResults: IntArray

@@ -7,7 +7,7 @@ buildscript {
     jcenter()
 
     // Crashlytics
-    maven("https://maven.fabric.io/public")
+//    maven("https://maven.fabric.io/public")
 
     maven ("https://dl.bintray.com/kotlin/kotlin-eap")
 

@@ -3,9 +3,6 @@ object ProjectVersions {
   const val googlePlayServices = "4.3.2"
   const val kotlin = "1.5.32"
   const val trema = "2.1.9"
-
-  // Crashlytics
-//  const val fabric = "1.31.2"
 }
 
 object BuildPlugins {
@@ -13,9 +10,6 @@ object BuildPlugins {
   const val googlePlayServices = "com.google.gms:google-services:${ProjectVersions.googlePlayServices}"
   const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${ProjectVersions.kotlin}"
   const val tremaGradlePlugin = "com.netcetera.android.gradle:trema-gradle-plugin:${ProjectVersions.trema}"
-
-  // Crashlytics
-//  const val fabricGradlePlugin = "io.fabric.tools:gradle:${ProjectVersions.fabric}"
 }
 
 object Plugins {
@@ -24,7 +18,4 @@ object Plugins {
   const val kotlinAndroidExtensions = "kotlin-android-extensions"
   const val kotlinKapt = "kotlin-kapt"
   const val trema = "com.netcetera.trema"
-
-  // Crashlytics
-//  const val fabric = "io.fabric"
 }

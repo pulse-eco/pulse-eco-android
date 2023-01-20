@@ -212,8 +212,8 @@ class CitySelectViewModel(
 
     citySelectItems = Transformations.map(allCityItems) { it ->
       it.filter { it1 ->
-        selectedCitiesSet.map { it.name.toLowerCase(Locale.ROOT) }
-          .contains(it1.city.name.toLowerCase(Locale.ROOT))
+        selectedCitiesSet.map { it.name.lowercase(Locale.ROOT) }
+          .contains(it1.city.name.lowercase(Locale.ROOT))
       }
     }
 

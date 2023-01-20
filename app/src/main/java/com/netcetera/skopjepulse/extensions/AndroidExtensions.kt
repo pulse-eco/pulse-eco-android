@@ -31,6 +31,7 @@ fun Context.openUrl(url: String) {
 }
 
 const val DEFAULT_FADE_DURATION: Long = 100
+
 fun View.fadeToVisible(duration: Long = DEFAULT_FADE_DURATION) {
   ViewCompat.animate(this)
     .setDuration(duration)
