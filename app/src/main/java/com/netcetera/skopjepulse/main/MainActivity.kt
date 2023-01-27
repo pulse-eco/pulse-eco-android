@@ -15,7 +15,6 @@ import com.netcetera.skopjepulse.cityselect.CitySelectFragment
 import com.netcetera.skopjepulse.dashboard.DashboardFragment
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.pulseappbar.PulseAppBarView
-import com.netcetera.skopjepulse.settings.AboutTextFragment
 import com.netcetera.skopjepulse.settings.SettingsActivity
 import com.netcetera.skopjepulse.utils.Internationalisation
 import kotlinx.android.synthetic.main.activity_main.*

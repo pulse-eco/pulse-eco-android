@@ -15,7 +15,6 @@ PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     setContentView(R.layout.activity_settings)
 
     btn_back.setOnClickListener {
-      finish()
       onBackPressed()
     }
 
@@ -23,49 +22,36 @@ PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
       if (savedInstanceState != null) {
         return
       }
-      fragmentManager.beginTransaction().replace(R.id.idFrameLayout, SettingsFragment()).commit()
+
+      val newFragment = SettingsFragment()
+      supportFragmentManager.beginTransaction()
+        .replace(R.id.idFrameLayout, newFragment)
+        .commit()
     }
   }
 
   override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-    // Instantiate the new Fragment
-    val args = pref.extras
-    val fragment = supportFragmentManager.fragmentFactory.instantiate(
-      classLoader,
-      pref.fragment!!)
-    fragment.arguments = args
-    fragment.setTargetFragment(caller, 0)
-    // Replace the existing Fragment with the new Fragment
+
+    val fragment = pref.key
+
+    if(fragment == "dialog_preference"){
     supportFragmentManager.beginTransaction()
-      .replace(R.id.idFrameLayout, fragment)
+      .replace(R.id.idFrameLayout, AboutTextFragment())
       .addToBackStack(null)
       .commit()
+  }   else if(fragment == "library_preference"){
+      supportFragmentManager.beginTransaction()
+        .replace(R.id.idFrameLayout, UsedLibrariesFragment())
+        .addToBackStack(null)
+        .commit()
+  }   else if(fragment == "disclaimer_preference"){
+      supportFragmentManager.beginTransaction()
+        .replace(R.id.idFrameLayout, DisclaimerFragment())
+        .addToBackStack(null)
+        .commit()
+  }
+
     return true
   }
 
-
-//  override fun onPreferenceStartFragment(
-//    caller: PreferenceFragmentCompat,
-//    pref: Preference
-//  ): Boolean {
-//    val args = pref.extras
-//    //val fragment = AboutTextFragment()
-//    val fragment = supportFragmentManager.fragmentFactory.instantiate(
-//      classLoader,
-//      SettingsFragment::javaClass.toString()
-//    )
-//
-//    fragment.arguments = args
-//    fragment.setTargetFragment(caller, 0)
-//
-//    val myPref = pref.key
-//
-//    if (myPref == "dialog_preference") {
-//      supportFragmentManager.beginTransaction()
-//        .replace(R.id.idFrameLayout, fragment)
-//        .addToBackStack(null)
-//        .commit()
-//    }
-//    return true
-//  }
 }

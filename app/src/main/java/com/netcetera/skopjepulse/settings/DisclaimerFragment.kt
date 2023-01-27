@@ -8,16 +8,14 @@ import androidx.preference.PreferenceFragmentCompat
 import com.netcetera.skopjepulse.R
 
 
-class AboutTextFragment : PreferenceFragmentCompat() {
-
-    override fun onCreateView(
+class DisclaimerFragment : PreferenceFragmentCompat() {
+  override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    return inflater.inflate(R.layout.fragment_about_text, container, false)
+    return inflater.inflate(R.layout.fragment_disclaimer, container, false)
   }
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 // TODO:
   }
-
 }

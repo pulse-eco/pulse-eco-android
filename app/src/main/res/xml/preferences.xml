@@ -13,6 +13,7 @@
       android:dialogTitle="Languages"
       android:entries="@array/language_picker"
       android:entryValues="@array/lang_value"
+      android:icon="@drawable/ic_arrow_next"
       />
   </PreferenceCategory>
 
@@ -20,19 +21,49 @@
     <Preference
       android:key="dialog_preference"
       android:title="About pulse.eco"
-      app:fragment="com.netcetera.skopjepulse.settings.AboutTextFragment"
+      app:fragment=".settings.AboutTextFragment"
+      android:icon="@drawable/ic_arrow_next"
       />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="Libraries">
-    <Preference android:key="223"
+    <Preference android:key="library_preference"
       android:title="Used libraries"
+      app:fragment=".settings.UsedLibrariesFragment"
+      android:icon="@drawable/ic_arrow_next"
       />
 
-    <Preference android:key="555"
-      android:title="Disclaimer"
-      />
   </PreferenceCategory>
 
+<PreferenceCategory>
+  <Preference android:key="disclaimer_preference"
+    android:title="Disclaimer"
+    app:fragment=".settings.DisclaimerFragment"
+    android:icon="@drawable/ic_arrow_next"
+    />
+</PreferenceCategory>
 
+  <PreferenceCategory>
+    <Preference
+      android:enabled="false"
+      />
+
+    <Preference
+      android:enabled="false"
+      />
+
+    <Preference
+      android:enabled="false"
+      />
+    <Preference
+      android:enabled="false"
+      />
+  <Preference
+    android:enabled="false"
+    />
+
+    <Preference
+    android:enabled="false"
+    />
+</PreferenceCategory>
 </PreferenceScreen>
