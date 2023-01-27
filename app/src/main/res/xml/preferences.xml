@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory android:title="Language">
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <PreferenceCategory  android:title="Language">
     <ListPreference
+      android:key="123"
+      android:title="Change Language"
+      app:useSimpleSummaryProvider="true"
       android:defaultValue="en"
       android:dialogTitle="Languages"
       android:entries="@array/language_picker"
       android:entryValues="@array/lang_value"
-      android:key="123"
-      android:summary="Change language"
-      android:title="Language"/>
-
+      />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="About">
-    <Preference android:key="dialog_preference"
+    <Preference
+      android:key="dialog_preference"
       android:title="About pulse.eco"
-      android:fragment="com.netcetera.skopjepulse.settings.AboutTextFragment"
+      app:fragment="com.netcetera.skopjepulse.settings.AboutTextFragment"
       />
   </PreferenceCategory>
 
@@ -25,7 +29,7 @@
       android:title="Used libraries"
       />
 
-    <Preference android:key="223"
+    <Preference android:key="555"
       android:title="Disclaimer"
       />
   </PreferenceCategory>

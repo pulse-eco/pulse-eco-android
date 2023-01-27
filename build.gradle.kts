@@ -18,6 +18,7 @@ buildscript {
     classpath(BuildPlugins.tremaGradlePlugin)
     classpath(BuildPlugins.googlePlayServices)
     classpath(BuildPlugins.kotlinGradlePlugin)
+//    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
 
     // Crashlytics
     //classpath(BuildPlugins.fabricGradlePlugin)

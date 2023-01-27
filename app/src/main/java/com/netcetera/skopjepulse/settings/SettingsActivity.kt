@@ -5,17 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.netcetera.skopjepulse.R
-import com.netcetera.skopjepulse.utils.Internationalisation
 import kotlinx.android.synthetic.main.activity_settings_toolbar.*
 
-class SettingsActivity : AppCompatActivity() ,
-  PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+class SettingsActivity : AppCompatActivity(),
+PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_settings)
-    Internationalisation.loadLocale(this)
-
 
     btn_back.setOnClickListener {
       finish()
@@ -26,46 +23,49 @@ class SettingsActivity : AppCompatActivity() ,
       if (savedInstanceState != null) {
         return
       }
-      fragmentManager.beginTransaction().add(R.id.idFrameLayout, SettingsFragment()).commit()
+      fragmentManager.beginTransaction().replace(R.id.idFrameLayout, SettingsFragment()).commit()
     }
   }
 
-  override fun onPreferenceStartFragment(
-    caller: PreferenceFragmentCompat,
-    pref: Preference
-  ): Boolean {
+  override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
+    // Instantiate the new Fragment
     val args = pref.extras
     val fragment = supportFragmentManager.fragmentFactory.instantiate(
       classLoader,
-      pref.fragment!!
-    )
+      pref.fragment!!)
     fragment.arguments = args
     fragment.setTargetFragment(caller, 0)
-
+    // Replace the existing Fragment with the new Fragment
     supportFragmentManager.beginTransaction()
-      .replace(R.id.idFrameLayout, AboutTextFragment())
+      .replace(R.id.idFrameLayout, fragment)
       .addToBackStack(null)
       .commit()
     return true
   }
 
-//  override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-//
+
+//  override fun onPreferenceStartFragment(
+//    caller: PreferenceFragmentCompat,
+//    pref: Preference
+//  ): Boolean {
 //    val args = pref.extras
+//    //val fragment = AboutTextFragment()
 //    val fragment = supportFragmentManager.fragmentFactory.instantiate(
 //      classLoader,
-//      pref.fragment!!
+//      SettingsFragment::javaClass.toString()
 //    )
+//
 //    fragment.arguments = args
 //    fragment.setTargetFragment(caller, 0)
 //
-//    supportFragmentManager.beginTransaction()
-//      .replace(R.id.idFrameLayout, AboutTextFragment())
-//      .addToBackStack(null)
-//      .commit()
+//    val myPref = pref.key
+//
+//    if (myPref == "dialog_preference") {
+//      supportFragmentManager.beginTransaction()
+//        .replace(R.id.idFrameLayout, fragment)
+//        .addToBackStack(null)
+//        .commit()
+//    }
 //    return true
 //  }
-
-
 }
-
