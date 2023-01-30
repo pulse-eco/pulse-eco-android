@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -141,8 +142,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
 
     mainViewModel.overall(this.city.name)
-      .observe(viewLifecycleOwner
-      ) { t -> overAllData = t?.data }
+      .observe(viewLifecycleOwner, object : Observer<Resource<List<CityOverall>>> {
+        override fun onChanged(t: Resource<List<CityOverall>>?) {
+          overAllData = t?.data
+        }
+      })
 
     /* Observe on what Measurement Type to show */
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
