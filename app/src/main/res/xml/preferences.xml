@@ -6,7 +6,7 @@
 
   <PreferenceCategory  android:title="Language">
     <ListPreference
-      android:key="123"
+      android:key="language_preference"
       android:title="Change Language"
       app:useSimpleSummaryProvider="true"
       android:defaultValue="en"
@@ -32,14 +32,12 @@
       app:fragment=".settings.UsedLibrariesFragment"
       android:icon="@drawable/ic_arrow_next"
       />
-
   </PreferenceCategory>
 
 <PreferenceCategory>
   <Preference android:key="disclaimer_preference"
     android:title="Disclaimer"
     app:fragment=".settings.DisclaimerFragment"
-    android:icon="@drawable/ic_arrow_next"
     />
 </PreferenceCategory>
 
