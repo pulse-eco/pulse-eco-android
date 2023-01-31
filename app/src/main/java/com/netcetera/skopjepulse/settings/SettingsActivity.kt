@@ -1,23 +1,16 @@
 package com.netcetera.skopjepulse.settings
-import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import com.netcetera.skopjepulse.R
-import com.netcetera.skopjepulse.main.MainActivity
-import com.netcetera.skopjepulse.main.MainActivity.Companion.popupWindow
 import com.netcetera.skopjepulse.main.MainViewModel
-import com.netcetera.skopjepulse.showConfirmDialog
 import com.netcetera.skopjepulse.utils.Internationalisation
 import kotlinx.android.synthetic.main.activity_settings_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -28,12 +21,19 @@ PreferenceFragmentCompat.OnPreferenceStartFragmentCallback
 //  val languagePreference = sharedPreferences.getString("language_preference", "en")
 
   private val mainViewModel: MainViewModel by viewModel()
+  lateinit var settingsText: TextView
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_settings)
 
+    settingsText = findViewById(R.id.settingsText)
+
     btn_back.setOnClickListener {
+      if(!settingsText.equals("Settings"))
+      {
+        settingsText.setText("Settings")
+      }
       onBackPressed()
     }
 
@@ -52,18 +52,23 @@ PreferenceFragmentCompat.OnPreferenceStartFragmentCallback
   override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
 
     val fragment = pref.key
+//    val toolbar : Toolbar = findViewById(R.id.include)
 
-    if(fragment == "dialog_preference"){
-    supportFragmentManager.beginTransaction()
+    if (fragment == "dialog_preference") {
+      settingsText.setText("About")
+      supportFragmentManager.beginTransaction()
       .replace(R.id.idFrameLayout, AboutTextFragment())
       .addToBackStack(null)
       .commit()
-  }   else if(fragment == "library_preference"){
+
+  }   else if (fragment == "library_preference" ){
+      settingsText.setText("Used Libraries")
       supportFragmentManager.beginTransaction()
         .replace(R.id.idFrameLayout, UsedLibrariesFragment())
         .addToBackStack(null)
         .commit()
   }   else if(fragment == "disclaimer_preference") {
+      settingsText.setText("Disclaimer")
       supportFragmentManager.beginTransaction()
         .replace(R.id.idFrameLayout, DisclaimerFragment())
         .addToBackStack(null)

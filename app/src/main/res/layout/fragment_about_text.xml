@@ -14,6 +14,7 @@
     android:layout_height="match_parent"
     android:text="@string/aboutText"
     android:textSize="15sp"
+    android:layout_marginTop="50dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

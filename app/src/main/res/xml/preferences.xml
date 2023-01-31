@@ -35,10 +35,10 @@
   </PreferenceCategory>
 
 <PreferenceCategory>
-  <Preference android:key="disclaimer_preference"
+  <Preference
+    android:key="disclaimer_preference"
     android:title="Disclaimer"
-    app:fragment=".settings.DisclaimerFragment"
-    />
+    app:fragment=".settings.DisclaimerFragment" />
 </PreferenceCategory>
 
 </PreferenceScreen>
