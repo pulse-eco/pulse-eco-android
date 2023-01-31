@@ -27,8 +27,8 @@
       android:paddingBottom="5dp"
       android:visibility="gone"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
-      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"
+      app:layout_constraintBottom_toBottomOf="@id/settings_pulse_logo"
+      app:layout_constraintTop_toTopOf="@id/settings_pulse_logo"
       tools:text="SKOPJE"
       tools:visibility="visible"/>
 
@@ -46,7 +46,7 @@
       android:visibility="gone"/>
 
     <ImageView
-      android:id="@+id/pulseAppbarLogo"
+      android:id="@+id/settings_pulse_logo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
@@ -75,8 +75,8 @@
       android:paddingTop="5dp"
       android:src="@drawable/ic_view_menu_24"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="@id/pulseAppbarLogo"
-      app:layout_constraintTop_toTopOf="@id/pulseAppbarLogo"
+      app:layout_constraintBottom_toBottomOf="@id/settings_pulse_logo"
+      app:layout_constraintTop_toTopOf="@id/settings_pulse_logo"
       android:contentDescription="view picker"/>
 
     <com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTabBarView

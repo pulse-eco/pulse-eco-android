@@ -15,7 +15,7 @@
     android:orientation="horizontal">
 
     <ImageView
-      android:id="@+id/pulseAppbarLogo"
+      android:id="@+id/settings_pulse_logo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:clickable="true"
@@ -30,7 +30,7 @@
       app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-      android:id="@+id/btn_back"
+      android:id="@+id/settings_back_button"
       android:layout_width="@dimen/settings_back_arrow"
       android:layout_height="@dimen/settings_back_arrow"
       android:background="@drawable/ic_left_arrow"
@@ -38,11 +38,11 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@id/settingsText"
+      app:layout_constraintEnd_toStartOf="@id/settings_text_view_name"
       android:layout_marginStart="16dp" />
 
     <TextView
-      android:id="@+id/settingsText"
+      android:id="@+id/settings_text_view_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fontFamily="@font/sf_pro_display"
@@ -53,7 +53,7 @@
       android:textSize="18sp"
       android:layout_marginStart="16dp"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toEndOf="@id/btn_back"
+      app:layout_constraintStart_toEndOf="@id/settings_back_button"
       app:layout_constraintTop_toTopOf="parent"
       tools:targetApi="p" />
 

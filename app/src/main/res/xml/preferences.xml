@@ -19,7 +19,7 @@
 
   <PreferenceCategory android:title="About">
     <Preference
-      android:key="dialog_preference"
+      android:key="preference_about"
       android:title="About pulse.eco"
       app:fragment=".settings.AboutTextFragment"
       android:icon="@drawable/ic_arrow_next"
@@ -27,16 +27,15 @@
   </PreferenceCategory>
 
   <PreferenceCategory android:title="Libraries">
-    <Preference android:key="library_preference"
+    <Preference android:key="preference_libraries"
       android:title="Used libraries"
       app:fragment=".settings.UsedLibrariesFragment"
-      android:icon="@drawable/ic_arrow_next"
-      />
+      android:icon="@drawable/ic_arrow_next" />
   </PreferenceCategory>
 
 <PreferenceCategory>
   <Preference
-    android:key="disclaimer_preference"
+    android:key="preference_disclaimer"
     android:title="Disclaimer"
     app:fragment=".settings.DisclaimerFragment" />
 </PreferenceCategory>

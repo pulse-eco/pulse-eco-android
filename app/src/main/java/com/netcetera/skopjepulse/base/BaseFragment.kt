@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import kotlinx.android.synthetic.main.simple_error_layout.*
 
-
 abstract class BaseFragment<out T : BaseViewModel> : Fragment() {
 
   abstract val viewModel: T
