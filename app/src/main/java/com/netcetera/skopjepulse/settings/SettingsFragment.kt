@@ -11,6 +11,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     (activity as AppCompatActivity).supportActionBar?.setTitle("Settings")
     setPreferencesFromResource(R.xml.preferences, rootKey)
+
   }
 
 }

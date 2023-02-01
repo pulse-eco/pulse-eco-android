@@ -13,7 +13,7 @@
       android:dialogTitle="Languages"
       android:entries="@array/language_picker"
       android:entryValues="@array/lang_value"
-      android:icon="@drawable/ic_arrow_next"
+      android:widgetLayout="@layout/preference_layout"
       />
   </PreferenceCategory>
 
@@ -22,7 +22,7 @@
       android:key="preference_about"
       android:title="About pulse.eco"
       app:fragment=".settings.AboutTextFragment"
-      android:icon="@drawable/ic_arrow_next"
+      android:widgetLayout="@layout/preference_layout"
       />
   </PreferenceCategory>
 
@@ -30,14 +30,16 @@
     <Preference android:key="preference_libraries"
       android:title="Used libraries"
       app:fragment=".settings.UsedLibrariesFragment"
-      android:icon="@drawable/ic_arrow_next" />
+      android:widgetLayout="@layout/preference_layout" />
   </PreferenceCategory>
 
 <PreferenceCategory>
   <Preference
     android:key="preference_disclaimer"
-    android:title="Disclaimer"
-    app:fragment=".settings.DisclaimerFragment" />
+    android:title="@string/disclaimer"
+    app:fragment=".settings.DisclaimerFragment"
+    android:widgetLayout="@layout/preference_layout"
+    android:icon="@drawable/ic_baseline_warning_amber_24"/>
 </PreferenceCategory>
 
 </PreferenceScreen>
