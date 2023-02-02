@@ -1,4 +1,5 @@
 package com.netcetera.skopjepulse.settings
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -7,13 +8,14 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.main.MainActivity
-import com.netcetera.skopjepulse.main.MainActivity.Companion.popupWindow
+//import com.netcetera.skopjepulse.main.MainActivity.Companion.popupWindow
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.showConfirmDialog
@@ -30,8 +32,14 @@ class SettingsActivity : AppCompatActivity(),
   private val mainViewModel: MainViewModel by viewModel()
   lateinit var settingsText: TextView
 
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    PreferenceManager.getDefaultSharedPreferences(this)
+      .registerOnSharedPreferenceChangeListener(this)
+
+//    Internationalisation.loadLocale(this)
+//    Internationalisation.loadLocale(applicationContext)
     setContentView(R.layout.activity_settings)
     settingsText = findViewById(R.id.settings_text_view_name)
     settingsText.text = "Settings"
@@ -53,12 +61,15 @@ class SettingsActivity : AppCompatActivity(),
     }
 
 
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-    val language = sharedPreferences.getString("language_preference", "")
-
-    if (language != null && language.isNotEmpty()) {
-      changeLanguage(language)
-    }
+//    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+//    val language = sharedPreferences.getString("language_preference", "")
+//
+//    if (language != null && language.isNotEmpty()) {
+//      popupWindow.dismiss()
+//      showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+//        changeLanguage(language)
+//      }
+//    }
 
   }
 
@@ -66,6 +77,12 @@ class SettingsActivity : AppCompatActivity(),
   override fun onBackPressed() {
     super.getOnBackPressedDispatcher().onBackPressed()
     changeToolbarText()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    PreferenceManager.getDefaultSharedPreferences(this)
+      .unregisterOnSharedPreferenceChangeListener(this)
   }
 
   private fun changeToolbarText() {
@@ -115,49 +132,72 @@ class SettingsActivity : AppCompatActivity(),
     }
   }
 
+
+//  val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+//  val language = sharedPreferences.getString("language_preference", "")
+//
+//  if (language != null && language.isNotEmpty()) {
+//    popupWindow.dismiss()
+//    showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+//      changeLanguage(language)
+//    }
+//  }
+
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    when (key) {
+      "language_preference" -> {
+        val lan = sharedPreferences?.getString("language_preference", "")
+        if (lan != null && lan.isNotEmpty()) {
+          showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+            changeLanguage(lan)
+          }
+        }
+      }
+    }
+  }
+
 
 //    if (key == "language_preference") {
-////      val language = sharedPreferences?.getString("language_preference", "")
+
+
+//
 //      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 //      val language = sharedPreferences.getString("language_preference", "")
 //
-//      if (language == "en") {
-//        changeLanguage(language!!)
-//      } else if (language == "mk")
-//      {
-//        changeLanguage(language!!)
+//
+//      if (language != null && language.isNotEmpty()) {
+//        popupWindow.dismiss()
+//        showConfirmDialog(this, getString(R.string.change_language_message_android)) {
+//          changeLanguage(language)
+//        }
 //      }
 
+//
+//      if (language == "en") {
+//        changeLanguage(language!!)
+//      } else if (language == "mk") {
+//        changeLanguage(language!!)
+//      }
+//
 //      popupWindow.dismiss()
 //      showConfirmDialog(this, getString(R.string.change_language_message_android)) {
 //        changeLanguage(language!!)
 //      }
-//
 //    }
 //
-  }
-
-//  private fun changeLanguage(localeName: String) {
-//    Internationalisation.setLocale(this, localeName)
-//    Internationalisation.setLocale(applicationContext, localeName)
-//    mainViewModel.reloadDDPData()
-//
-//    val intent = Intent(this, MainActivity::class.java)
-//    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-//    this.startActivity(intent)
-//  }
-//
-
-  private fun changeLanguage(localeName: String) {
-    Internationalisation.setLocale(this, localeName)
-//    Internationalisation.setLocale(applicationContext, localeName)
-    mainViewModel.reloadDDPData()
+// }
 
 
-    val intent = Intent(this, MainActivity::class.java)
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-  }
+    private fun changeLanguage(localeName: String) {
+      Internationalisation.setLocale(this, localeName)
+      Internationalisation.setLocale(applicationContext, localeName)
+      mainViewModel.reloadDDPData()
+
+      val intent = Intent(this, MainActivity::class.java)
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+//    finish()
+      this.startActivity(intent)
+    }
 //  private fun changeLanguage(lang: String) {
 //    val locale = Locale(lang)
 //    Locale.setDefault(locale)
@@ -167,7 +207,7 @@ class SettingsActivity : AppCompatActivity(),
 //
 //    recreate()
 //  }
-}
+  }
 
 
 
