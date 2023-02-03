@@ -6,6 +6,7 @@
   <dimen name="component_inner_spacing">10dp</dimen>
   <dimen name="component_top_spacing">15dp</dimen>
   <dimen name="drawer_inactive_peek_height">35dp</dimen>
+  <dimen name="toolbar_app_logo_margin_top_bottom">16dp</dimen>
 
   <dimen name="city_select_search_margin">25dp</dimen>
   <dimen name="city_select_recyclerView_marginTop">5dp</dimen>
@@ -84,7 +85,10 @@
   <dimen name="menu_choice_padding_top_bottom">12dp</dimen>
   <dimen name="menu_choice_padding_start_end">16dp</dimen>
 
-  <dimen name="settings_back_arrow">16dp</dimen>
+  <dimen name="settings_toolbar_app_logo_margin_top_bottom">@dimen/toolbar_app_logo_margin_top_bottom</dimen>
+  <dimen name="settings_back_arrow">20dp</dimen>
+  <dimen name="settings_back_arrow_padding">4dp</dimen>
+  <dimen name="settings_back_arrow_margin_start">16dp</dimen>
   <dimen name="settings_activity_name">18sp</dimen>
   <dimen name="settings_toolbar_back_arrow_margin_start">16dp</dimen>
   <dimen name="settings_toolbar_back_navigation_padding">8dp</dimen>
@@ -92,4 +96,5 @@
   <dimen name="settings_pulse_logo_margin_top">16dp</dimen>
   <dimen name="settings_pulse_logo_margin_bottom">16dp</dimen>
 
+  <dimen name="preference_layout_padding_start_end">15sp</dimen>
 </resources>

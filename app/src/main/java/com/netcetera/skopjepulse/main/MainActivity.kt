@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    settings_pulse_logo.setOnClickListener {
+    pulseAppbarLogo.setOnClickListener {
       if (SELECTED_FRAGMENT == "map"){
         refreshMap()
       }

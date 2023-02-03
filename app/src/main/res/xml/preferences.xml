@@ -1,45 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <PreferenceCategory  android:title="Language">
+  <PreferenceCategory android:title="Language">
     <ListPreference
-      android:key="language_preference"
-      android:title="Change Language"
-      app:useSimpleSummaryProvider="true"
       android:defaultValue="en"
       android:dialogTitle="Languages"
       android:entries="@array/language_picker"
       android:entryValues="@array/lang_value"
+      android:key="language_preference"
+      android:title="Change Language"
       android:widgetLayout="@layout/preference_layout"
-      />
+      app:useSimpleSummaryProvider="true" />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="About">
     <Preference
       android:key="preference_about"
       android:title="About pulse.eco"
-      app:fragment=".settings.AboutTextFragment"
       android:widgetLayout="@layout/preference_layout"
-      />
+      app:fragment=".settings.AboutTextFragment" />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="Libraries">
-    <Preference android:key="preference_libraries"
+    <Preference
+      android:key="preference_libraries"
       android:title="Used libraries"
-      app:fragment=".settings.UsedLibrariesFragment"
-      android:widgetLayout="@layout/preference_layout" />
+      android:widgetLayout="@layout/preference_layout"
+      app:fragment=".settings.UsedLibrariesFragment" />
   </PreferenceCategory>
 
-<PreferenceCategory>
-  <Preference
-    android:key="preference_disclaimer"
-    android:title="@string/disclaimer"
-    app:fragment=".settings.DisclaimerFragment"
-    android:widgetLayout="@layout/preference_layout"
-    android:icon="@drawable/ic_baseline_warning_amber_24"/>
-</PreferenceCategory>
+  <PreferenceCategory>
+    <Preference
+      android:icon="@drawable/ic_baseline_warning_amber_24"
+      android:key="preference_disclaimer"
+      android:title="@string/disclaimer"
+      android:widgetLayout="@layout/preference_layout"
+      app:fragment=".settings.DisclaimerFragment" />
+  </PreferenceCategory>
 
 </PreferenceScreen>

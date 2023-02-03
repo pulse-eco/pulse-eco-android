@@ -10,6 +10,8 @@
     android:src="@drawable/ic_arrow_next"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:paddingRight="15sp"/>
+    android:paddingStart="@dimen/preference_layout_padding_start_end"
+    android:paddingEnd="@dimen/preference_layout_padding_start_end"
+    android:contentDescription="TODO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

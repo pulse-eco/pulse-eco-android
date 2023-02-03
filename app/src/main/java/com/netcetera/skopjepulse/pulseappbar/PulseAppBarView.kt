@@ -12,7 +12,7 @@ class PulseAppBarView(private val pulseAppBarView: View) {
   private var refreshRequestedListener: (() -> Unit)? = null
 
   init {
-    pulseAppBarView.settings_pulse_logo.setOnClickListener { refreshRequestedListener?.invoke() }
+    pulseAppBarView.pulseAppbarLogo.setOnClickListener { refreshRequestedListener?.invoke() }
     pulseAppBarView.townLabel.setOnClickListener { selectedCityListener?.invoke() }
   }
 
