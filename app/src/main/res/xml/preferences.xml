@@ -31,11 +31,11 @@
       app:fragment=".settings.UsedLibrariesFragment" />
   </PreferenceCategory>
 
-  <PreferenceCategory>
+  <PreferenceCategory android:title="@string/disclaimer">
     <Preference
-      android:icon="@drawable/ic_baseline_warning_amber_24"
+      android:title="@string/disclaimer_message"
+      app:singleLineTitle="true"
       android:key="preference_disclaimer"
-      android:title="@string/disclaimer"
       android:widgetLayout="@layout/preference_layout"
       app:fragment=".settings.DisclaimerFragment" />
   </PreferenceCategory>
