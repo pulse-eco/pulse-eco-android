@@ -3,41 +3,41 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <PreferenceCategory android:title="Language">
+  <PreferenceCategory android:title="@string/settings_option_title_language">
     <ListPreference
       android:defaultValue="en"
       android:dialogTitle="Languages"
       android:entries="@array/language_picker"
       android:entryValues="@array/lang_value"
       android:key="language_preference"
-      android:title="Change Language"
+      android:title="@string/settings_option_sub_title_language"
       android:widgetLayout="@layout/preference_layout"
       app:useSimpleSummaryProvider="true" />
   </PreferenceCategory>
 
-  <PreferenceCategory android:title="About">
+  <PreferenceCategory android:title="@string/settings_option_title_about">
     <Preference
       android:key="preference_about"
-      android:title="About pulse.eco"
+      android:title="@string/settings_option_sub_title_about"
       android:widgetLayout="@layout/preference_layout"
       app:fragment=".settings.AboutTextFragment" />
   </PreferenceCategory>
 
-  <PreferenceCategory android:title="Libraries">
+  <PreferenceCategory android:title="@string/settings_option_title_libraries">
     <Preference
       android:key="preference_libraries"
-      android:title="Used libraries"
+      android:title="@string/settings_option_sub_title_libraries"
       android:widgetLayout="@layout/preference_layout"
       app:fragment=".settings.UsedLibrariesFragment" />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/disclaimer">
     <Preference
-      android:title="@string/disclaimer_message"
-      app:singleLineTitle="true"
       android:key="preference_disclaimer"
+      android:title="@string/disclaimer_message"
       android:widgetLayout="@layout/preference_layout"
-      app:fragment=".settings.DisclaimerFragment" />
+      app:fragment=".settings.DisclaimerFragment"
+      app:singleLineTitle="true" />
   </PreferenceCategory>
 
 </PreferenceScreen>

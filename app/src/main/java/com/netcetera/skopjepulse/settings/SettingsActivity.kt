@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity(),
       .registerOnSharedPreferenceChangeListener(this)
 
     settingsText = findViewById(R.id.settings_text_view_name)
-    settingsText.text = "Settings"
+    settingsText.text = getString(R.string.settings_view)
 
     settings_back_button.setOnClickListener {
       onBackPressedDispatcher.onBackPressed()
@@ -44,7 +44,6 @@ class SettingsActivity : AppCompatActivity(),
       if (savedInstanceState != null) {
         return
       }
-
       startFragment(SettingsFragment(), true)
     }
   }
@@ -62,8 +61,9 @@ class SettingsActivity : AppCompatActivity(),
   }
 
   private fun changeToolbarText() {
-    if (!settingsText.equals("Settings")) {
-      settingsText.text = "Settings"
+    val defaultName = getString(R.string.settings_view)
+    if (!settingsText.equals(defaultName)) {
+      settingsText.text = defaultName
     }
   }
 
@@ -73,7 +73,7 @@ class SettingsActivity : AppCompatActivity(),
   ): Boolean {
     when (pref.key) {
       "preference_about" -> {
-        startFragment(AboutTextFragment(), false)
+        startFragment(AboutTextFragment(),false)
       }
       "preference_libraries" -> {
         startFragment(UsedLibrariesFragment(), false)
@@ -90,7 +90,8 @@ class SettingsActivity : AppCompatActivity(),
     preferenceFragmentCompat: PreferenceFragmentCompat,
     addToBackStack: Boolean
   ) {
-    val fragment = supportFragmentManager.beginTransaction()
+    val fragment = supportFragmentManager
+      .beginTransaction()
       .replace(R.id.idFrameLayout, preferenceFragmentCompat)
     if (!addToBackStack) {
       fragment.addToBackStack(null)
@@ -98,7 +99,6 @@ class SettingsActivity : AppCompatActivity(),
       fragment.commit()
   }
 
-  //These should be added to the translations.trm sub-module
   private fun setToolbarName(name: String) {
     when (name) {
       "preference_about" -> {

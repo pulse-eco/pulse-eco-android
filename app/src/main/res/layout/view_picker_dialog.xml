@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+
+  <androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/components_corner_radius"
+    app:cardCornerRadius="@dimen/menu_border_radius">
+
+    <RadioGroup
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <RadioButton
+        android:id="@+id/dashboardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/custom_background"
+        android:button="@drawable/custom_icon"
+        android:checked="true"
+        android:layoutDirection="rtl"
+        android:onClick="onRadioButtonClicked"
+        android:paddingBottom="@dimen/menu_choice_padding_top_bottom"
+        android:paddingEnd="@dimen/menu_choice_padding_start_end"
+        android:paddingStart="@dimen/menu_choice_padding_start_end"
+        android:paddingTop="@dimen/menu_choice_padding_top_bottom"
+        android:text="@string/dashboard_view"
+        android:textAlignment="textStart"
+        android:textColor="@drawable/custom_icon" />
+
+      <RadioButton
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/custom_background"
+        android:button="@drawable/custom_icon"
+        android:layoutDirection="rtl"
+        android:onClick="onRadioButtonClicked"
+        android:paddingBottom="@dimen/menu_choice_padding_top_bottom"
+        android:paddingEnd="@dimen/menu_choice_padding_start_end"
+        android:paddingStart="@dimen/menu_choice_padding_start_end"
+        android:paddingTop="@dimen/menu_choice_padding_top_bottom"
+        android:text="@string/map_view"
+        android:textAlignment="textStart"
+        android:textColor="@drawable/custom_icon" />
+
+      <RadioButton
+        android:id="@+id/settingsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/custom_background"
+        android:button="@drawable/custom_icon"
+        android:layoutDirection="rtl"
+        android:onClick="onRadioButtonClicked"
+        android:paddingBottom="@dimen/menu_choice_padding_top_bottom"
+        android:paddingEnd="@dimen/menu_choice_padding_start_end"
+        android:paddingStart="@dimen/menu_choice_padding_start_end"
+        android:paddingTop="@dimen/menu_choice_padding_top_bottom"
+        android:text="@string/settings_view"
+        android:textAlignment="textStart"
+        android:textColor="@drawable/custom_icon" />
+
+    </RadioGroup>
+  </androidx.cardview.widget.CardView>
+</FrameLayout>

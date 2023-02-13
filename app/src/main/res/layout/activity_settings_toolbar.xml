@@ -51,13 +51,11 @@
       android:fontFamily="@font/sf_pro_display"
       android:gravity="center_vertical"
       android:textColor="@color/black"
-      android:textFontWeight="500"
-      android:textSize="15sp"
-      android:layout_marginStart="16dp"
+      android:textSize="@dimen/settings_activity_name"
+      android:layout_marginStart="@dimen/settings_back_arrow_margin_start"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toEndOf="@id/settings_back_button"
       app:layout_constraintTop_toTopOf="parent"
-      tools:targetApi="p"
       tools:text="Settings"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>

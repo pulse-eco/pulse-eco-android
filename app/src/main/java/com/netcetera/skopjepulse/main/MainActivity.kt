@@ -20,7 +20,7 @@ import com.netcetera.skopjepulse.utils.Internationalisation
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
-import kotlinx.android.synthetic.main.view_picker_dilog.view.*
+import kotlinx.android.synthetic.main.view_picker_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     btn_menu.setOnClickListener {
      val  pickerView =
-        LayoutInflater.from(this).inflate(R.layout.view_picker_dilog, null) as ViewGroup
+        LayoutInflater.from(this).inflate(R.layout.view_picker_dialog, null) as ViewGroup
 
       popupWindow = PopupWindow(
         pickerView,
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == NEW_CITY_REQUEST_CODE) {
-      if (resultCode == Activity.RESULT_OK) {
+      if (resultCode == RESULT_OK) {
         if (data != null) {
           val result = data.getStringExtra(NEW_CITY_NAME_RESULT)
           if (result != null) {
@@ -199,7 +199,7 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    else if (requestCode == SETTINGS_ACTIVITY_CODE && resultCode == Activity.RESULT_OK) {}
+    else if (requestCode == SETTINGS_ACTIVITY_CODE && resultCode == RESULT_OK) {}
     super.onActivityResult(requestCode, resultCode, data)
   }
 

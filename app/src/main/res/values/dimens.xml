@@ -90,6 +90,7 @@
   <dimen name="settings_back_arrow_padding">4dp</dimen>
   <dimen name="settings_back_arrow_margin_start">16dp</dimen>
   <dimen name="settings_activity_name">18sp</dimen>
+  <dimen name="settings_activity_name_margin_start">@dimen/settings_back_arrow_margin_start</dimen>
   <dimen name="settings_toolbar_back_arrow_margin_start">16dp</dimen>
   <dimen name="settings_toolbar_back_navigation_padding">8dp</dimen>
   <dimen name="settings_toolbar_margin_start">8dp</dimen>
