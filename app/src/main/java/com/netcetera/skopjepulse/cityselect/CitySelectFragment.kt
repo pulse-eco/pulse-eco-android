@@ -106,27 +106,27 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       }
     }
 
-    viewModel.citySelectItems.observe(viewLifecycleOwner) {
-      handleCityLists(it)
-    }
+      viewModel.citySelectItems.observe(viewLifecycleOwner) {
+        handleCityLists(it)
+      }
 
-    /* Observe on what Measurement Type to show */
-    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
-      viewModel.showDataForMeasurementType(it)
-    }
+      /* Observe on what Measurement Type to show */
+      mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
+        viewModel.showDataForMeasurementType(it)
+      }
 
-    historySelectRecyclerView.addItemDecoration(
-      DividerItemDecoration(
-        historySelectRecyclerView.context,
-        DividerItemDecoration.VERTICAL
-      )
-    )
-    currentlyCityRecyclerView.addItemDecoration(
-      DividerItemDecoration(
-        currentlyCityRecyclerView.context,
-        DividerItemDecoration.VERTICAL
-      )
-    )
+//    historySelectRecyclerView.addItemDecoration(
+//      DividerItemDecoration(
+//        historySelectRecyclerView.context,
+//        DividerItemDecoration.VERTICAL
+//      )
+//    )
+//    currentlyCityRecyclerView.addItemDecoration(
+//      DividerItemDecoration(
+//        currentlyCityRecyclerView.context,
+//        DividerItemDecoration.VERTICAL
+//      )
+//    )
 
     val historyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(historySelectRecyclerView) {
       override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
@@ -137,18 +137,20 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       }
     })
 
-    val currentlyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(currentlyCityRecyclerView) {
-      override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
-        val buttons: List<UnderlayButton>
-        val deleteButton = currentlyDeleteButton(position)
-        buttons = listOf(deleteButton)
-        return buttons
-      }
-    })
+      val currentlyItemTouchHelper =
+        ItemTouchHelper(object : SwipeHelper(currentlyCityRecyclerView) {
+          override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+            val buttons: List<UnderlayButton>
+            val deleteButton = currentlyDeleteButton(position)
+            buttons = listOf(deleteButton)
+            return buttons
+          }
+        })
 
     historyItemTouchHelper.attachToRecyclerView(historySelectRecyclerView)
-    currentlyItemTouchHelper.attachToRecyclerView(currentlyCityRecyclerView)
-  }
+      currentlyItemTouchHelper.attachToRecyclerView(currentlyCityRecyclerView)
+    }
+
 
   private fun historyDeleteButton(position: Int): SwipeHelper.UnderlayButton {
     return SwipeHelper.UnderlayButton(requireContext(), "Delete", 14.0f, R.color.red_delete_button,

@@ -172,16 +172,6 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun changeLanguage(localeName: String) {
-    Internationalisation.setLocale(this, localeName)
-    Internationalisation.setLocale(applicationContext, localeName)
-    mainViewModel.reloadDDPData()
-
-    val intent = Intent(this, MainActivity::class.java)
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-    this.startActivity(intent)
-  }
-
   override fun onResume() {
     super.onResume()
     mainViewModel.refreshData(false)
