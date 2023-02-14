@@ -18,4 +18,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
+  <include layout="@layout/city_select_item_layout"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,4 +5,5 @@ import com.netcetera.skopjepulse.R
 
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
+
 }
