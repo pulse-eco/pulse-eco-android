@@ -11,8 +11,7 @@
 
   <include
     android:id="@+id/include"
-    layout="@layout/city_select_item_layout"
-    />
+    layout="@layout/city_select_item_layout" />
 
 
   <androidx.cardview.widget.CardView

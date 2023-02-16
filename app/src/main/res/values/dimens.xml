@@ -33,12 +33,19 @@
   <dimen name="country_item_margin_top">5dp</dimen>
   <dimen name="city_item_margin">1dp</dimen>
   <dimen name="city_item_padding">12dp</dimen>
-  <dimen name="city_item_text_size">18sp</dimen>
+  <dimen name="city_item_text_size">24sp</dimen>
   <dimen name="city_selector_margin">0dp</dimen>
   <dimen name="country_item_padding_horizontal">20dp</dimen>
   <dimen name="city_item_padding_horizontal">20dp</dimen>
   <dimen name="country_item_padding_start">2dp</dimen>
   <dimen name="city_select_card_view_margin">20dp</dimen>
+  <dimen name="city_select_margins">10dp</dimen>
+  <dimen name="city_select_layout_margins">20dp</dimen>
+  <dimen name="city_select_width">72dp</dimen>
+  <dimen name="city_select_height">72dp</dimen>
+  <dimen name="city_measure_value_size">26sp</dimen>
+  <dimen name="measure_label_size">12sp</dimen>
+
 
   <dimen name="country_city_selector_back_btn_size">22dp</dimen>
   <dimen name="country_city_selector_back_btn_margin_right">20dp</dimen>
@@ -85,7 +92,9 @@
   <dimen name="menu_choice_padding_top_bottom">12dp</dimen>
   <dimen name="menu_choice_padding_start_end">16dp</dimen>
 
-  <dimen name="settings_toolbar_app_logo_margin_top_bottom">@dimen/toolbar_app_logo_margin_top_bottom</dimen>
+  <dimen name="settings_toolbar_app_logo_margin_top_bottom">
+    @dimen/toolbar_app_logo_margin_top_bottom
+  </dimen>
   <dimen name="settings_back_arrow">20dp</dimen>
   <dimen name="settings_back_arrow_padding">4dp</dimen>
   <dimen name="settings_back_arrow_margin_start">16dp</dimen>
@@ -98,4 +107,12 @@
   <dimen name="settings_pulse_logo_margin_bottom">16dp</dimen>
 
   <dimen name="preference_layout_padding_start_end">15sp</dimen>
+
+  <dimen name="daily_average_vertical_margins">20dp</dimen>
+  <dimen name="daily_average_horizontal_margins">10dp</dimen>
+  <dimen name="daily_average_title_text_size">14sp</dimen>
+  <dimen name="daily_average_value_text_size">18sp</dimen>
+  <dimen name="daily_average_value_margin_top">5dp</dimen>
+  <dimen name="daily_average_label">10dp</dimen>
+
 </resources>

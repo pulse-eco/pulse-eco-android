@@ -25,24 +25,23 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp">
+    android:layout_marginTop="@dimen/city_select_margins"
+    android:layout_marginBottom="@dimen/city_select_margins">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@color/city_select_item_overlay"
-      >
+      android:background="@color/city_select_item_overlay">
 
       <TextView
         android:id="@+id/citySelectCityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/city_select_layout_margins"
+        android:layout_marginTop="@dimen/city_select_layout_margins"
         android:fontFamily="sans-serif-medium"
         android:textColor="@color/city_select_label_text_color"
-        android:textSize="24sp"
+        android:textSize="@dimen/city_item_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="Skopje"
@@ -54,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:textColor="@color/transparent_black"
-        android:textSize="18sp"
+        android:textSize="@dimen/country_item_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/citySelectCityLabel"
         android:text="Macedonia"
@@ -62,27 +61,27 @@
 
       <TextView
         android:id="@+id/citySelectOverallStatus"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginBottom="@dimen/city_select_layout_margins"
+        android:layout_marginEnd="@dimen/components_between_spacing"
         android:layout_marginTop="@dimen/components_between_spacing"
-        android:ellipsize="end"
         android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/city_select_label_text_color"
-        android:textSize="14sp"
+        android:textSize="@dimen/country_city_selector_small_country_font_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/citySelectMeasureContainer"
+        app:layout_constraintStart_toStartOf="@id/citySelectCountryLabel"
         app:layout_constraintTop_toBottomOf="@id/citySelectCountryLabel"
         android:text="Good Air Quality!"
         tools:text="Good Air Quality!" />
 
       <androidx.cardview.widget.CardView
         android:id="@+id/citySelectMeasureContainer"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginEnd="20dp"
+        android:layout_width="@dimen/city_select_width"
+        android:layout_height="@dimen/city_select_height"
+        android:layout_marginEnd="@dimen/city_select_layout_margins"
         app:cardBackgroundColor="@android:color/holo_green_light"
         app:cardCornerRadius="@dimen/components_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -109,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/city_select_measure_text_color"
-            android:textSize="26sp"
+            android:textSize="@dimen/city_measure_value_size"
             android:text="22"
             tools:text="22" />
 
@@ -118,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/city_select_measure_text_color"
-            android:textSize="12sp"
+            android:textSize="@dimen/measure_label_size"
             android:text="ug/m3"
             tools:text="ug/m3" />
 
