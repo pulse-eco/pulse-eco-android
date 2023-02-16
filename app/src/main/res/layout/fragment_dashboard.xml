@@ -33,13 +33,45 @@
       android:background="@color/city_select_item_overlay">
 
       <include
-        layout="@layout/daily_average"
+        layout="@layout/weekly_average"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="20dp" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.cardview.widget.CardView>
+
+  <androidx.cardview.widget.CardView
+    android:id="@+id/graphCard"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="0.9"
+    android:layout_marginTop="30dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginLeft="15dp"
+    app:cardCornerRadius="@dimen/components_corner_radius"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/city_select_item_overlay">
+
+      <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/dashboardGraph"
+        android:layout_width="match_parent"
+        android:layout_height="219dp"
+android:layout_marginRight="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

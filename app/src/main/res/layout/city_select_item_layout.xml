@@ -25,7 +25,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:layout_marginTop="@dimen/city_select_margins"
+    android:layout_marginTop="@dimen/city_select_layout_margins"
     android:layout_marginBottom="@dimen/city_select_margins">
 
     <androidx.constraintlayout.widget.ConstraintLayout
