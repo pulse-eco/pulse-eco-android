@@ -1,5 +1,5 @@
 package com.netcetera.skopjepulse.main
- import android.app.Activity
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -202,11 +202,23 @@ class MainActivity : AppCompatActivity() {
     if (view is RadioButton && view.isChecked) {
       when (view.id) {
         R.id.dashboardView -> {
-          supportFragmentManager.beginTransaction().apply {
-            replace(R.id.content, dashFragment)
-            commit()
-          }
+//          supportFragmentManager.beginTransaction().apply {
+//            replace(R.id.content, dashFragment)
+//            commit()
+//          }
+          val activeCity = mainViewModel.activeCity.value!!
+          supportFragmentManager.beginTransaction().replace(
+            R.id.content,
+            DashboardFragment.newInstance(activeCity),
+            activeCity.name,
+          ).commit()
           setDismiss("dashboard")
+//          val activeCity = mainViewModel.activeCity.value!!
+//          supportFragmentManager.beginTransaction().replace(
+//            R.id.content,
+//            MapFragment.newInstance(activeCity),
+//            activeCity.name,
+//          ).commit()
         }
         R.id.mapView -> {
           val existingMapFragment =
