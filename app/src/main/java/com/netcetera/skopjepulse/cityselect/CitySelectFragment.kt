@@ -80,7 +80,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     }
 
     mainViewModel.activeCity.observe(viewLifecycleOwner) {
-      handleCityLists(viewModel.citySelectItems.value)
+       handleCityLists(viewModel.citySelectItems.value)
     }
 
     history.observe(viewLifecycleOwner, historyCitySelectAdapter)
@@ -114,19 +114,6 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
       mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
         viewModel.showDataForMeasurementType(it)
       }
-
-//    historySelectRecyclerView.addItemDecoration(
-//      DividerItemDecoration(
-//        historySelectRecyclerView.context,
-//        DividerItemDecoration.VERTICAL
-//      )
-//    )
-//    currentlyCityRecyclerView.addItemDecoration(
-//      DividerItemDecoration(
-//        currentlyCityRecyclerView.context,
-//        DividerItemDecoration.VERTICAL
-//      )
-//    )
 
     val historyItemTouchHelper = ItemTouchHelper(object : SwipeHelper(historySelectRecyclerView) {
       override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {

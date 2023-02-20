@@ -44,7 +44,6 @@
         android:textSize="@dimen/city_item_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Skopje"
         tools:text="Skopje" />
 
       <TextView
@@ -56,7 +55,6 @@
         android:textSize="@dimen/country_item_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/citySelectCityLabel"
-        android:text="Macedonia"
         tools:text="Macedonia" />
 
       <TextView
@@ -74,7 +72,6 @@
         app:layout_constraintEnd_toStartOf="@id/citySelectMeasureContainer"
         app:layout_constraintStart_toStartOf="@id/citySelectCountryLabel"
         app:layout_constraintTop_toBottomOf="@id/citySelectCountryLabel"
-        android:text="Good Air Quality!"
         tools:text="Good Air Quality!" />
 
       <androidx.cardview.widget.CardView

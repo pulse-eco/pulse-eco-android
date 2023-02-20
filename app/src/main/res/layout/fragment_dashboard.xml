@@ -13,7 +13,6 @@
     android:id="@+id/include"
     layout="@layout/city_select_item_layout" />
 
-
   <androidx.cardview.widget.CardView
     android:id="@+id/cardView"
     android:layout_width="0dp"

@@ -7,21 +7,28 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.netcetera.skopjepulse.R
+import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.City
+import com.netcetera.skopjepulse.cityselect.CitySelectItem
+import com.netcetera.skopjepulse.cityselect.CitySelectListener
 import com.netcetera.skopjepulse.cityselect.CurrentlyCitySelectAdapter
 import com.netcetera.skopjepulse.map.GraphView
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
 import kotlinx.android.synthetic.main.city_select_fragment_layout.*
+import kotlinx.android.synthetic.main.city_select_item_layout.*
+import kotlinx.android.synthetic.main.city_select_item_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment<MapViewModel>() {
 
-  val viewModel: MapViewModel by viewModel { parametersOf(city) }
+  override val viewModel: MapViewModel by viewModel { parametersOf(city) }
   //  lateinit var lineChart : LineChart
   val city: City by lazy { requireArguments().getParcelable("city")!! }
+  var citySelectItem: CitySelectItem? = null
 
   private val graphView: GraphView by lazy {
     GraphView(dashboardGraph)
@@ -39,13 +46,18 @@ class DashboardFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    currentlyCityRecyclerView
+//    currentlyCityRecyclerView
+//    citySelectCityLabel = city.name
     return inflater.inflate(R.layout.fragment_dashboard, container, false)
+
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.graphData.observe(viewLifecycleOwner) { showGraphData(it) }
+    citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
+    citySelectCountryLabel.text = city.countryName
+    citySelectOverallStatus.text = citySelectItem?.measurementDescription
+
   }
 
   private fun showGraphData(it: GraphModel?) {
