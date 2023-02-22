@@ -219,6 +219,6 @@ class CitySelectViewModel(
     loadingResources.addResource(pulseRepository.citiesOverall.toLoadingLiveDataResource())
     errorResources.addResource(pulseRepository.citiesOverall.toErrorLiveDataResource())
     errorResources.addResource(locationProvider.currentLocation.toErrorLiveDataResource())
-  }
+  }companion object
 
 }

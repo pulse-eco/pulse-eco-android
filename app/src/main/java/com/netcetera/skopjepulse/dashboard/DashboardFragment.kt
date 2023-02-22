@@ -5,30 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.cityselect.CitySelectItem
-import com.netcetera.skopjepulse.cityselect.CitySelectListener
-import com.netcetera.skopjepulse.cityselect.CurrentlyCitySelectAdapter
+import com.netcetera.skopjepulse.cityselect.CitySelectViewModel
+import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
-import kotlinx.android.synthetic.main.city_select_fragment_layout.*
 import kotlinx.android.synthetic.main.city_select_item_layout.*
-import kotlinx.android.synthetic.main.city_select_item_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class DashboardFragment : BaseFragment<MapViewModel>() {
-
-  override val viewModel: MapViewModel by viewModel { parametersOf(city) }
+class DashboardFragment : BaseFragment<CitySelectViewModel>() {
+//Go smeniv <MapViewModel>
+//  override val viewModel: CitySelectViewModel by viewModel()
+  override val viewModel: CitySelectViewModel by viewModel { parametersOf(city) }
+  private val mainViewModel: MainViewModel by sharedViewModel()
   //  lateinit var lineChart : LineChart
-  val city: City by lazy { requireArguments().getParcelable("city")!! }
-  var citySelectItem: CitySelectItem? = null
+  val city: City by lazy { requireArguments().getParcelable("city")!! } //object property
+//  var citySelectItem: CitySelectItem? = null
 
   private val graphView: GraphView by lazy {
     GraphView(dashboardGraph)
@@ -46,8 +46,13 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-//    currentlyCityRecyclerView
-//    citySelectCityLabel = city.name
+
+//NEW
+    mainViewModel.activeCity.observe(viewLifecycleOwner) {
+//      val citySelectItem = this.mainViewModel
+     val c = CitySelectViewModel.handleCityLists(viewModel.citySelectItems.value)
+//      citySelectOverallStatus.text =
+    }
     return inflater.inflate(R.layout.fragment_dashboard, container, false)
 
   }
@@ -56,8 +61,8 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     super.onViewCreated(view, savedInstanceState)
     citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
     citySelectCountryLabel.text = city.countryName
-    citySelectOverallStatus.text = citySelectItem?.measurementDescription
-
+//    citySelectOverallStatus.text = city
+//    val band = getBand(res[i].value.toInt())
   }
 
   private fun showGraphData(it: GraphModel?) {
@@ -156,5 +161,9 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
 //    lineChart.invalidate()
 //  }
 
+
+}
+
+private fun CitySelectViewModel.Companion.handleCityLists(value: List<CitySelectItem>?) {
 
 }

@@ -175,7 +175,7 @@ class CitySelectFragment : BaseFragment<CitySelectViewModel>() {
     viewModel.getSelectedCities()
   }
 
-  private fun handleCityLists(allSelectedCities: List<CitySelectItem>?) {
+    fun handleCityLists(allSelectedCities: List<CitySelectItem>?) {
     val activeCity = mainViewModel.activeCity.value
     val citySelectedItems = allSelectedCities ?: listOf()
     val selectedList =
