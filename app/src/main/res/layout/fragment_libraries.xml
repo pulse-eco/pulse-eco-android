@@ -5,10 +5,10 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/settings_background_dark_color"
-  tools:context=".settings.DisclaimerFragment">
+  tools:context=".settings.UsedLibrariesFragment">
 
   <TextView
-    android:id="@+id/disclaimerText"
+    android:id="@+id/userLibrariesText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -16,7 +16,7 @@
     android:paddingEnd="@dimen/settings_disclaimer_text_body_padding_start_end"
     android:paddingStart="@dimen/settings_disclaimer_text_body_padding_start_end"
     android:paddingTop="@dimen/settings_disclaimer_text_body_padding_top_bottom"
-    android:text="@string/disclaimer_message"
+    android:text="Implementation of library that runtime generates USED LIBRARIES"
     android:textSize="@dimen/settings_disclaimer_body_text_size"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

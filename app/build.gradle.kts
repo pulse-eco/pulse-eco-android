@@ -3,7 +3,6 @@ plugins {
   id(Plugins.kotlinAndroid)
   id(Plugins.kotlinAndroidExtensions)
   id(Plugins.kotlinKapt)
- // id(Plugins.fabric)
   id(Plugins.trema)
   id("org.jetbrains.kotlin.android")
 }
@@ -41,7 +40,7 @@ android {
     }
     compileOptions {
       // For AGP 4.1+
-      // isCoreLibraryDesugaringEnabled = true
+       isCoreLibraryDesugaringEnabled = true
       // For AGP 4.0
    //   coreLibraryDesugaringEnabled = true
       sourceCompatibility = JavaVersion.VERSION_1_8
@@ -68,8 +67,6 @@ android {
     implementation(Libs.anko)
     implementation(Libs.googleMaps)
     implementation(Libs.playServicesLocation)
-    //implementation(Libs.firebaseAnalytics)
-    //implementation(Libs.crashlytics)
     implementation(Libs.mpaAndroidChart)
     implementation(Libs.lottie)
     implementation(Libs.likeButton)
@@ -83,13 +80,7 @@ android {
     implementation(Libs.swipeRefreshLayout)
 
     implementation(Libs.gson)
-    //implementation(Libs.desugar)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
-
-
-//    debugImplementation(Libs.leakcanary)
-//    debugImplementation(Libs.leakcanaryFragment)
-//    releaseImplementation(Libs.leakcanaryNoOp)
 
     kapt(Libs.lifecycleCompiler)
     kapt(Libs.moshiCodegen)
@@ -109,9 +100,3 @@ apply(plugin = "com.google.gms.google-services")
 dependencies {
   implementation("androidx.preference:preference-ktx:1.2.0")
 }
-//dependencies {
-//  implementation("androidx.preference:preference-ktx:1.2.0")
-////  implementation("androidx.appcompat:appcompat:1.6.0")
-////  implementation("com.google.android.material:material:1.4.0")
-////  implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-//}

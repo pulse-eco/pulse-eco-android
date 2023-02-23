@@ -85,6 +85,7 @@
   <dimen name="menu_choice_padding_top_bottom">12dp</dimen>
   <dimen name="menu_choice_padding_start_end">16dp</dimen>
 
+  <!-- Settings -->
   <dimen name="settings_toolbar_app_logo_margin_top_bottom">@dimen/toolbar_app_logo_margin_top_bottom</dimen>
   <dimen name="settings_back_arrow">20dp</dimen>
   <dimen name="settings_back_arrow_padding">4dp</dimen>
@@ -98,4 +99,13 @@
   <dimen name="settings_pulse_logo_margin_bottom">16dp</dimen>
 
   <dimen name="preference_layout_padding_start_end">15sp</dimen>
+
+  <dimen name="settings_about_body_text_size">18sp</dimen>
+  <dimen name="settings_about_text_body_padding_start_end">12dp</dimen>
+  <dimen name="settings_about_text_body_padding_top_bottom">18dp</dimen>
+
+  <dimen name="settings_disclaimer_body_text_size">18sp</dimen>
+  <dimen name="settings_disclaimer_text_body_padding_start_end">12dp</dimen>
+  <dimen name="settings_disclaimer_text_body_padding_top_bottom">18dp</dimen>
+
 </resources>

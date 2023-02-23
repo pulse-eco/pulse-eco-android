@@ -13,7 +13,4 @@
     <item>ro</item>
   </string-array>
 
-  <string name="aboutText">
-    <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rutrum gravida turpis vitae finibus. Phasellus lobortis nec enim sit amet vulputate. Nam elit risus, laoreet eu faucibus quis, blandit sit amet velit. Mauris tristique sapien ac consectetur scelerisque. Quisque commodo mollis turpis, et congue justo vehicula eu. Morbi metus magna, sagittis ut elementum et, aliquet a magna. Morbi venenatis urna quis blandit tristique. In nec pharetra felis, et gravida massa. Proin sit amet erat in purus egestas porttitor.</i>
-  </string>
 </resources>
