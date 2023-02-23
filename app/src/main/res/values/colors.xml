@@ -87,4 +87,8 @@
   <color name="calendar_cancel_button">@color/black_disabled</color>
   <color name="calendar_ok_button">@color/colorPrimary</color>
 
+
+  <!-- Settings colors -->
+  <color name="settings_background_dark_color">@color/gray</color>
+
 </resources>

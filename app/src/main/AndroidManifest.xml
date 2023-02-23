@@ -28,11 +28,7 @@
       android:screenOrientation="portrait" />
     <activity
       android:name=".settings.SettingsActivity"
-      android:exported="false"
-      android:screenOrientation="portrait" />
-
-    <activity
-      android:name=".settings.AboutTextActivity"
+      android:theme="@style/PreferenceTheme"
       android:exported="false"
       android:screenOrientation="portrait" />
 

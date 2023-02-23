@@ -7,11 +7,11 @@
   <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:contentDescription="TODO"
+    android:paddingEnd="@dimen/preference_layout_padding_start_end"
+    android:paddingStart="@dimen/preference_layout_padding_start_end"
     android:src="@drawable/ic_arrow_next"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:paddingStart="@dimen/preference_layout_padding_start_end"
-    android:paddingEnd="@dimen/preference_layout_padding_start_end"
-    android:contentDescription="TODO" />
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

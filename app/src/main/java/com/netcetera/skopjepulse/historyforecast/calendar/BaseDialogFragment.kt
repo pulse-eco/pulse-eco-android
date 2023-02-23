@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.DialogFragment
 import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import kotlinx.android.synthetic.main.simple_error_layout.*
-import org.koin.android.ext.android.inject
 
 abstract class BaseDialogFragment<out T : BaseViewModel> : DialogFragment() {
   abstract val viewModel: T

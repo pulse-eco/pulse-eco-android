@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/settings_background_dark_color"
+  tools:context=".settings.AboutTextFragment">
+
+  <TextView
+    android:id="@+id/aboutText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingBottom="@dimen/settings_about_text_body_padding_top_bottom"
+    android:paddingEnd="@dimen/settings_about_text_body_padding_start_end"
+    android:paddingStart="@dimen/settings_about_text_body_padding_start_end"
+    android:paddingTop="@dimen/settings_about_text_body_padding_top_bottom"
+    android:text="@string/settings_about_pulse_eco_paragraph"
+    android:textSize="@dimen/settings_about_body_text_size"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

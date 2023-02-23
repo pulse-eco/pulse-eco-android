@@ -23,7 +23,6 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-
   single { baseMoshiBuilder().build() }
   single { createPulseApiService(androidApplication(), get()) }
   factory { (city : City) -> createCityPulseApiService(androidApplication(), get(), city.restUrl) }

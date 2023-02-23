@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.preference.PreferenceFragmentCompat
 import com.netcetera.skopjepulse.R
 
-
 class AboutTextFragment : PreferenceFragmentCompat() {
 
-   override fun onCreateView(
+  override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-      return inflater.inflate(R.layout.fragment_about_text, container, false)
+    return inflater.inflate(R.layout.fragment_about, container, false)
   }
+
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-// TODO:
   }
 
 }
+

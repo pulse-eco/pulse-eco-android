@@ -22,9 +22,11 @@ import kotlinx.android.synthetic.main.pulse_app_bar.*
 import kotlinx.android.synthetic.main.simple_error_layout.errorView
 import kotlinx.android.synthetic.main.view_picker_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinApiExtension
 
 
 class MainActivity : AppCompatActivity() {
+  @OptIn(KoinApiExtension::class)
   private val mainViewModel: MainViewModel by viewModel()
   companion object {
     const val NEW_CITY_REQUEST_CODE = 12345

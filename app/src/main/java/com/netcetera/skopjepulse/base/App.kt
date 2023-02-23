@@ -18,16 +18,8 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
-
-//    if (LeakCanary.isInAnalyzerProcess(this)) {
-//      // This process is dedicated to LeakCanary for heap analysis.
-//      // You should not init your app in this process.
-//      return
-//    }
-
     setupKoin()
     setupTimber()
-//    setupCrashlytics()
     setupLocale()
   }
 
@@ -53,17 +45,6 @@ class App : Application() {
       Timber.plant(Timber.DebugTree())
     }
   }
-
-//  private fun setupCrashlytics() {
-//    Fabric.with(this,
-//        Crashlytics.Builder()
-//            .core(CrashlyticsCore.Builder()
-//                .disabled(BuildConfig.DEBUG)
-//                .build())
-//            .build()
-//    )
-//  }
-
 }
 
 fun Context.isOnline(): Boolean {
