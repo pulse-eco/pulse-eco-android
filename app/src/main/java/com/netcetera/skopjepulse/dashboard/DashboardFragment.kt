@@ -1,37 +1,30 @@
 package com.netcetera.skopjepulse.dashboard
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.cityselect.CitySelectItem
 import com.netcetera.skopjepulse.cityselect.CitySelectViewModel
-import com.netcetera.skopjepulse.main.MainActivity
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
-import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
-import kotlinx.android.synthetic.main.city_select_fragment_layout.*
 import kotlinx.android.synthetic.main.city_select_item_layout.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import org.koin.core.component.KoinApiExtension
 import java.util.*
+
 
 class DashboardFragment : BaseFragment<CitySelectViewModel>() {
 
   override val viewModel: CitySelectViewModel by viewModel()
+  private val mainViewModel: MainViewModel by sharedViewModel()
 
   //  lateinit var lineChart : LineChart
   //object property
@@ -42,7 +35,7 @@ class DashboardFragment : BaseFragment<CitySelectViewModel>() {
   }
 
   companion object {
-//    lateinit var selectedCity: CitySelectItem
+    //    lateinit var selectedCity: CitySelectItem
     var selectedCity: CitySelectItem? = null
     fun newInstance(city: City?) = DashboardFragment().apply {
 //      arguments = bundleOf(
@@ -64,23 +57,26 @@ class DashboardFragment : BaseFragment<CitySelectViewModel>() {
     return inflater.inflate(R.layout.fragment_dashboard, container, false)
   }
 
+  @OptIn(KoinApiExtension::class)
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     //prvo kreiraj lokalna lista, i popolni ja so observe,
     //potoa izmini ja lokalnata lista, i setiraj UI
 
+    viewModel.citySelectItems.observe(viewLifecycleOwner) { citySelectItems ->
+      for (singleCity in citySelectItems) {
+        if (singleCity.city.name == city.name) {
+          citySelectMeasureValue.text = selectedCity?.measurementValue
+          citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
+          citySelectCityLabel.text = selectedCity?.city?.name
+          citySelectCountryLabel.text = city.countryName
+        }
+      }
+    }
 
-//    for (singleCity in citySelectItems) {
-//      if (singleCity.city.name == city.name) {
-        citySelectMeasureValue.text = selectedCity?.measurementValue
-//        citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
-        citySelectCityLabel.text = selectedCity?.city?.name
-//        citySelectCountryLabel.text = city.countryName
-        citySelectCountryLabel.text = "Filip"
+    citySelectCountryLabel.text = mainViewModel.activeCity.value?.name
 
-//      }
-//    }
 
 //          val city = citySelectItem.city
 //          val measurementDescription = citySelectItem.measurementDescription
