@@ -204,16 +204,16 @@ class MainActivity : AppCompatActivity() {
     if (view is RadioButton && view.isChecked) {
       when (view.id) {
         R.id.dashboardView -> {
-//          supportFragmentManager.beginTransaction().apply {
-//            replace(R.id.content, dashFragment)
-//            commit()
-//          }
-          val activeCity = mainViewModel.activeCity.value!!
-          supportFragmentManager.beginTransaction().replace(
-            R.id.content,
-            DashboardFragment.newInstance(activeCity),
-            activeCity.name,
-          ).commit()
+          supportFragmentManager.beginTransaction().apply {
+            replace(R.id.content, dashFragment)
+            commit()
+          }
+//          val activeCity = mainViewModel.activeCity.value!!
+//          supportFragmentManager.beginTransaction().replace(
+//            R.id.content,
+//            DashboardFragment.newInstance(activeCity),
+//            activeCity.name,
+//          ).commit()
           setDismiss("dashboard")
 //          val activeCity = mainViewModel.activeCity.value!!
 //          supportFragmentManager.beginTransaction().replace(

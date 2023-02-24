@@ -1,19 +1,27 @@
 package com.netcetera.skopjepulse.dashboard
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.cityselect.CitySelectItem
 import com.netcetera.skopjepulse.cityselect.CitySelectViewModel
+import com.netcetera.skopjepulse.main.MainActivity
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.GraphModel
+import kotlinx.android.synthetic.main.city_select_fragment_layout.*
 import kotlinx.android.synthetic.main.city_select_item_layout.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -22,22 +30,24 @@ import org.koin.core.parameter.parametersOf
 import java.util.*
 
 class DashboardFragment : BaseFragment<CitySelectViewModel>() {
-//Go smeniv <MapViewModel>
-//  override val viewModel: CitySelectViewModel by viewModel()
-  override val viewModel: CitySelectViewModel by viewModel { parametersOf(city) }
-  private val mainViewModel: MainViewModel by sharedViewModel()
+
+  override val viewModel: CitySelectViewModel by viewModel()
+
   //  lateinit var lineChart : LineChart
-  val city: City by lazy { requireArguments().getParcelable("city")!! } //object property
-//  var citySelectItem: CitySelectItem? = null
+  //object property
+  val city: City by lazy { requireArguments().getParcelable("city")!! }
 
   private val graphView: GraphView by lazy {
     GraphView(dashboardGraph)
   }
-  companion object{
+
+  companion object {
+//    lateinit var selectedCity: CitySelectItem
+    var selectedCity: CitySelectItem? = null
     fun newInstance(city: City?) = DashboardFragment().apply {
-      arguments = bundleOf(
-        "city" to city
-      )
+//      arguments = bundleOf(
+//        "city" to city
+//      )
     }
   }
 
@@ -47,20 +57,42 @@ class DashboardFragment : BaseFragment<CitySelectViewModel>() {
     savedInstanceState: Bundle?
   ): View? {
 
-//NEW
-    mainViewModel.activeCity.observe(viewLifecycleOwner) {
-//      val citySelectItem = this.mainViewModel
-     val c = CitySelectViewModel.handleCityLists(viewModel.citySelectItems.value)
-//      citySelectOverallStatus.text =
+    viewModel.citySelectItems.observe(viewLifecycleOwner) { citySelectItems ->
+      selectedCity = citySelectItems[0]
     }
-    return inflater.inflate(R.layout.fragment_dashboard, container, false)
 
+    return inflater.inflate(R.layout.fragment_dashboard, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
-    citySelectCountryLabel.text = city.countryName
+
+    //prvo kreiraj lokalna lista, i popolni ja so observe,
+    //potoa izmini ja lokalnata lista, i setiraj UI
+
+
+//    for (singleCity in citySelectItems) {
+//      if (singleCity.city.name == city.name) {
+        citySelectMeasureValue.text = selectedCity?.measurementValue
+//        citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
+        citySelectCityLabel.text = selectedCity?.city?.name
+//        citySelectCountryLabel.text = city.countryName
+        citySelectCountryLabel.text = "Filip"
+
+//      }
+//    }
+
+//          val city = citySelectItem.city
+//          val measurementDescription = citySelectItem.measurementDescription
+//          val measurementValue = citySelectItem.measurementValue
+//          val measurementUnit = citySelectItem.measurementUnit
+//          val color = citySelectItem.color
+
+
+    ////NEW
+//    mainViewModel.activeCity.observe(viewLifecycleOwner) {
+//
+//    }
 //    citySelectOverallStatus.text = city
 //    val band = getBand(res[i].value.toInt())
   }
@@ -164,6 +196,4 @@ class DashboardFragment : BaseFragment<CitySelectViewModel>() {
 
 }
 
-private fun CitySelectViewModel.Companion.handleCityLists(value: List<CitySelectItem>?) {
 
-}

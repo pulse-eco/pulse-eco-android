@@ -28,7 +28,8 @@ open class PulseRepository(var apiService: PulseApiService) : BasePulseRepositor
   val cities: LiveData<Resource<Cities>>
     get() = _cities
   val citiesOverall: LiveData<Resource<List<CityOverall>>>
-  val countries: LiveData<Resource<List<Country>>> get() = _countries
+  val countries: LiveData<Resource<List<Country>>>
+    get() = _countries
 
   init {
     citiesOverall = Transformations.switchMap(cities) { cities ->

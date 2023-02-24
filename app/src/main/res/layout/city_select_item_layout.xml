@@ -106,7 +106,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/city_select_measure_text_color"
             android:textSize="@dimen/city_measure_value_size"
-            android:text="22"
             tools:text="22" />
 
           <TextView
