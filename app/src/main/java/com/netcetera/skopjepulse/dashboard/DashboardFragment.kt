@@ -4,44 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
-import com.netcetera.skopjepulse.base.model.City
-import com.netcetera.skopjepulse.cityselect.CitySelectItem
+import com.netcetera.skopjepulse.base.data.Resource
+import com.netcetera.skopjepulse.base.model.CityOverall
 import com.netcetera.skopjepulse.cityselect.CitySelectViewModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
+import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.map.model.GraphModel
 import kotlinx.android.synthetic.main.city_select_item_layout.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.component.KoinApiExtension
-import java.util.*
 
 
 class DashboardFragment : BaseFragment<CitySelectViewModel>() {
 
   override val viewModel: CitySelectViewModel by viewModel()
-  private val mainViewModel: MainViewModel by sharedViewModel()
-
-  //  lateinit var lineChart : LineChart
-  //object property
-  val city: City by lazy { requireArguments().getParcelable("city")!! }
+//  private val mapViewModel: MapViewModel by sharedViewModel()
+  private val mainViewModel: MainViewModel by viewModel()
 
   private val graphView: GraphView by lazy {
     GraphView(dashboardGraph)
   }
 
   companion object {
-    //    lateinit var selectedCity: CitySelectItem
-    var selectedCity: CitySelectItem? = null
-    fun newInstance(city: City?) = DashboardFragment().apply {
-//      arguments = bundleOf(
-//        "city" to city
-//      )
-    }
+    var currentCityOverallData: List<CityOverall>? = null
+    var activeCity: String? = null
+    var activeMeasurement: String? = null
   }
 
   override fun onCreateView(
@@ -50,32 +41,61 @@ class DashboardFragment : BaseFragment<CitySelectViewModel>() {
     savedInstanceState: Bundle?
   ): View? {
 
-    viewModel.citySelectItems.observe(viewLifecycleOwner) { citySelectItems ->
-      selectedCity = citySelectItems[0]
-    }
+//    activeCity = requireArguments().getString("activeCity")
+//    activeMeasurement = requireArguments().getString("measurement")
 
     return inflater.inflate(R.layout.fragment_dashboard, container, false)
   }
 
-  @OptIn(KoinApiExtension::class)
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    activeCity = mainViewModel.activeCity.value?.name
 
-    //prvo kreiraj lokalna lista, i popolni ja so observe,
-    //potoa izmini ja lokalnata lista, i setiraj UI
-
-    viewModel.citySelectItems.observe(viewLifecycleOwner) { citySelectItems ->
-      for (singleCity in citySelectItems) {
-        if (singleCity.city.name == city.name) {
-          citySelectMeasureValue.text = selectedCity?.measurementValue
-          citySelectCityLabel.text = city.name.capitalize(Locale.ROOT)
-          citySelectCityLabel.text = selectedCity?.city?.name
-          citySelectCountryLabel.text = city.countryName
-        }
-      }
+    mainViewModel.getMeasurementDataForCurrentCity(mainViewModel.activeCity.value!!.name).observe(viewLifecycleOwner) { t ->
+      currentCityOverallData = t?.data
+      citySelectCityLabel.text = currentCityOverallData?.get(0)?.cityName
+//      citySelectMeasureValue.text = currentCityOverallData?.get(0)?.values
     }
 
-    citySelectCountryLabel.text = mainViewModel.activeCity.value?.name
+
+
+//    val until = LocalDate.now()
+//    val from = until.minusDays(1)
+//    mapViewModel.getAvgDataRangeGiven(activeCity, activeMeasurement, from, until).observe(viewLifecycleOwner) {
+//
+//    }
+
+
+
+
+
+
+//    etDateButtonsList(dataModel: List<SensorReading>, todayButtonData: CityOverall?, mesType: MeasurementType):
+//
+//      for (i in 1 until dataModel.size) {
+//        val band = getBand(dataModel[i].value.toInt())
+//        list.add(HistoryForecastDataModel(dataModel[i], band, HistoryForecastAdapter.VIEW_TYPE_DATE))
+//      }
+//
+//      if (todayButtonData?.values?.get(sensorType) != null && todayButtonData.values[sensorType]!! != "N/A") {
+//        data = todayButtonData.values[sensorType]?.toDouble()!!
+//      }
+//
+//      todayButtonData?.values?.get(sensorType)?.let {
+//        val sensorReadingFromOverall =
+//          SensorReading(todayButtonData.cityName, todayDate, mesType, "", data)
+//        val bandToday = getBand(sensorReadingFromOverall.value.toInt())
+//        list.add(
+//          HistoryForecastDataModel(
+//            sensorReadingFromOverall,
+//            bandToday,
+//            HistoryForecastAdapter.VIEW_TYPE_DATE
+//          )
+//        )
+//      }
+//      }
+
+//    citySelectCountryLabel.text = mainViewModel.activeCity.value?.name
 
 
 //          val city = citySelectItem.city

@@ -112,7 +112,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     var newMonth: String? = null
     var newYear: String? = null
 
-    var overAllData: List<CityOverall>? = null
+    var currentCityOverallData: List<CityOverall>? = null
     var calendarValuesResult: List<CalendarValuesDataModel> = listOf()
     var monthAvgByYearValues: List<CalendarValuesDataModel> = listOf()
     var bandValueOverallData: Int? = null
@@ -141,10 +141,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
     // Declarations and interactions
     mapMarkersController = MapMarkersController(map) { viewModel.selectSensor(it) }
 
-    mainViewModel.overall(this.city.name)
+    mainViewModel.getMeasurementDataForCurrentCity(this.city.name)
       .observe(viewLifecycleOwner, object : Observer<Resource<List<CityOverall>>> {
         override fun onChanged(t: Resource<List<CityOverall>>?) {
-          overAllData = t?.data
+          currentCityOverallData = t?.data
         }
       })
 
@@ -160,10 +160,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
       setMapValuesToday()
 
       viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
-        setValueForAverageDailyData(weeklyAverageDataModel)
+        setSlidingPanelDailyDataValues(weeklyAverageDataModel)
       }
       viewModel.averageDataGivenRange.value?.let { weeklyAverageDataModel ->
-        setValueForSevenDaysRange(weeklyAverageDataModel.data, overAllData?.last(), sensorType)
+        setValueForSevenDaysRange(weeklyAverageDataModel.data, currentCityOverallData?.last(), sensorType)
       }
 
       val resMonths = mutableListOf<CalendarValuesDataModel>()
@@ -188,18 +188,18 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     viewModel.averageWeeklyData.observe(viewLifecycleOwner) { weeklyAvg ->
-      setValueForAverageDailyData(weeklyAvg)
+      setSlidingPanelDailyDataValues(weeklyAvg)
     }
 
     viewModel.averageDataGivenRange.observe(viewLifecycleOwner) { weeklyAvg ->
-      setValueForAverageDailyData(weeklyAvg)
-      setValueForSevenDaysRange(weeklyAvg.data, overAllData?.last(), sensorType)
+      setSlidingPanelDailyDataValues(weeklyAvg)
+      setValueForSevenDaysRange(weeklyAvg.data, currentCityOverallData?.last(), sensorType)
 
-      if (overAllData?.last()?.values?.get(sensorType) != null && overAllData?.last()?.values?.get(
+      if (currentCityOverallData?.last()?.values?.get(sensorType) != null && currentCityOverallData?.last()?.values?.get(
           sensorType
         ) != "N/A"
       ) {
-        val overallDataValue = overAllData?.last()?.values?.get(sensorType)?.toDouble()
+        val overallDataValue = currentCityOverallData?.last()?.values?.get(sensorType)?.toDouble()
         val band = overallDataValue?.let { value -> getBand(value.toInt()) }
         bandValueOverallData = band?.legendColor
       } else {
@@ -303,7 +303,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
           displayUnit()
           setDaysNames()
           viewModel.averageWeeklyData.value?.let {
-            setValueForAverageDailyData(it)
+            setSlidingPanelDailyDataValues(it)
           }
         })
     )
@@ -326,7 +326,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     viewModel.selectedSensor.observe(viewLifecycleOwner) {
-      setValueForAverageDailyData(viewModel.averageWeeklyData.value)
+      setSlidingPanelDailyDataValues(viewModel.averageWeeklyData.value)
       setDaysNames()
     }
 
@@ -472,7 +472,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
       fromDate = toDate.minusDays(8)
       viewModel.getAvgDataRangeGiven(sensorId = null, sensorType, fromDate, toDate)
         .observe(viewLifecycleOwner) {
-          setValueForSevenDaysRange(it.data!!, overAllData?.last(), sensorType)
+          setValueForSevenDaysRange(it.data!!, currentCityOverallData?.last(), sensorType)
         }
       alertDialog.dismiss()
     }
@@ -889,7 +889,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     return list
   }
 
-  private fun setValueForAverageDailyData(dataModel: AverageWeeklyDataModel?) {
+  private fun setSlidingPanelDailyDataValues(dataModel: AverageWeeklyDataModel?) {
     val listWeeklyAverageValues = getBoundValues()
     val listWeeklyAverageColors = getBoundColors()
     setInitialDataToNotAvailable(listWeeklyAverageValues, listWeeklyAverageColors)
@@ -1083,8 +1083,5 @@ class MapFragment : BaseFragment<MapViewModel>() {
     super.onStop()
   }
 }
-
-
-
 
 data class MeasurementOverviewModel(val measurement: Double, val dataDefinition: DataDefinition)

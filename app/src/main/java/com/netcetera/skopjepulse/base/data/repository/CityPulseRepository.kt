@@ -46,11 +46,12 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     currentReadings = sensors.resourceCombine(_current) { sensors, readings ->
       sensors.map { sensor ->
         CurrentSensorReading(
-            sensor,
-            readings
-                .filter { reading -> sensor.id == reading.sensorId }
-                .map { reading -> reading.type to reading }
-                .toMap())
+          sensor,
+          readings
+            .filter { reading -> sensor.id == reading.sensorId }
+            .map { reading -> reading.type to reading }
+            .toMap()
+        )
       }
     }
 

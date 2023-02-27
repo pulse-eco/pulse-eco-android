@@ -44,12 +44,13 @@ import kotlin.math.roundToInt
  */
 
 class MapViewModel(
-    city: City,
-    private val dataDefinitionProvider: DataDefinitionProvider,
-    favouriteSensorsStorage: FavouriteSensorsStorage,
-    private val mapPreferencesStorage: MapPreferencesStorage,
-    private val cityPulseRepository: CityPulseRepository) :
-    PulseViewModel(cityPulseRepository, favouriteSensorsStorage) {
+  city: City,
+  private val dataDefinitionProvider: DataDefinitionProvider,
+  favouriteSensorsStorage: FavouriteSensorsStorage,
+  private val mapPreferencesStorage: MapPreferencesStorage,
+  private val cityPulseRepository: CityPulseRepository
+) :
+  PulseViewModel(cityPulseRepository, favouriteSensorsStorage) {
 
   private val selectedMeasurementType = MutableLiveData<MeasurementType>()
   val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
@@ -71,7 +72,7 @@ class MapViewModel(
   val favouriteSensorsPicking: LiveData<Pair<Sensors, Sensors>>
   val preferences = mapPreferencesStorage.preferences
   val mapPolygons: LiveData<List<PolygonOptions>>
-  val  mapPolygonsSensorReadingDaysRange: LiveData<List<PolygonOptions>>
+  val mapPolygonsSensorReadingDaysRange: LiveData<List<PolygonOptions>>
   val bottomSheetPeek: LiveData<BottomSheetPeekViewModel>
 
   private val _isSpecificSensorSelected = MutableLiveData<Boolean>()
@@ -82,6 +83,8 @@ class MapViewModel(
   var averageDataMonthDays: LiveData<AverageWeeklyDataModel>
   var averageDataGivenRange: LiveData<AverageWeeklyDataModel>
   var averageMonthDataByYear: LiveData<AverageWeeklyDataModel>
+
+//  var currentReadingsCity: LiveData<AverageWeeklyDataModel>
 
 
   init {
@@ -98,6 +101,8 @@ class MapViewModel(
           })
       }
     }
+
+//    currentReadingsCity = currentReadings
 
     val sensorReadingsDaysRange = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.sensorReadings) { current ->

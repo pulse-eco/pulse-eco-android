@@ -36,6 +36,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var popupWindow: PopupWindow
 
     val dashFragment = DashboardFragment()
+
+    var measurementTypeForDash = ""
+    var activeCityForDash = ""
   }
 
   private val citySelectFragment: CitySelectFragment by lazy {
@@ -84,9 +87,15 @@ class MainActivity : AppCompatActivity() {
     mainViewModel.measurementTypeTabs.observe(this) {
       measurementTypeTabBarView.availableMeasurementTypes = it ?: emptyList()
     }
+
     measurementTypeTabBarView.selectedMeasurementType.observe(this) {
       mainViewModel.showForMeasurement(it)
     }
+
+//    mainViewModel.activeMeasurementType.observe(this) {
+//      measurementTypeForDash = it
+//    }
+
 
     appBarView.onCitySelectRequest {
       pulseCityPicker.setImageResource(R.drawable.ic_arrow_drop_up_24)
@@ -204,6 +213,10 @@ class MainActivity : AppCompatActivity() {
     if (view is RadioButton && view.isChecked) {
       when (view.id) {
         R.id.dashboardView -> {
+          val bundle = Bundle()
+          bundle.putString("activeCity", activeCityForDash);
+          bundle.putString("measurement", measurementTypeForDash);
+          dashFragment.arguments = bundle
           supportFragmentManager.beginTransaction().apply {
             replace(R.id.content, dashFragment)
             commit()

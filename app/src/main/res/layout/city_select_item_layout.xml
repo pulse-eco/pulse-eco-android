@@ -4,8 +4,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginTop="10dp"
-  android:layout_marginBottom="10dp"
   android:background="@color/city_select_item_overlay"
   android:orientation="horizontal"
   android:weightSum="1">
@@ -13,20 +11,20 @@
   <View
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:layout_weight="0.05"/>
+    android:layout_weight="0.05" />
 
   <androidx.cardview.widget.CardView
     android:id="@+id/cardView"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/city_select_margins"
+    android:layout_marginTop="@dimen/city_select_layout_margins"
     android:layout_weight="0.9"
     app:cardCornerRadius="@dimen/components_corner_radius"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:layout_marginTop="@dimen/city_select_layout_margins"
-    android:layout_marginBottom="@dimen/city_select_margins">
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
@@ -64,8 +62,8 @@
         android:layout_marginBottom="@dimen/city_select_layout_margins"
         android:layout_marginEnd="@dimen/components_between_spacing"
         android:layout_marginTop="@dimen/components_between_spacing"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="@color/city_select_label_text_color"
         android:textSize="@dimen/country_city_selector_small_country_font_size"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -112,9 +110,9 @@
             android:id="@+id/citySelectMeasureLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="ug/m3"
             android:textColor="@color/city_select_measure_text_color"
             android:textSize="@dimen/measure_label_size"
-            android:text="ug/m3"
             tools:text="ug/m3" />
 
         </LinearLayout>

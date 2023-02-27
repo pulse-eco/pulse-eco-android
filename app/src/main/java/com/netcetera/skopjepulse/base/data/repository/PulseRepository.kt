@@ -98,7 +98,7 @@ open class PulseRepository(var apiService: PulseApiService) : BasePulseRepositor
 
   fun loadCitiesOverall(cities: List<City>? = this.cities.value?.data) {
     _citiesOverall.value = Resource.loading(citiesOverall.value?.data)
-    apiService.citiesOverall(cities!!.map { it.name })
+    apiService.getOverall(cities!!.map { it.name })
       .enqueue(object : Callback<List<CityOverall>?> {
         override fun onResponse(
           call: Call<List<CityOverall>?>,
@@ -118,9 +118,9 @@ open class PulseRepository(var apiService: PulseApiService) : BasePulseRepositor
       })
   }
 
-  fun getDataCitiesOverall(cities: List<String>): LiveData<Resource<List<CityOverall>>> {
+  fun getOverallData(cities: List<String>): LiveData<Resource<List<CityOverall>>> {
     _cityOverall.value = Resource.loading(_cityOverall.value?.data)
-    apiService.citiesOverall(cities).enqueue(object : Callback<List<CityOverall>?> {
+    apiService.getOverall(cities).enqueue(object : Callback<List<CityOverall>?> {
       override fun onResponse(
         call: Call<List<CityOverall>?>,
         response: Response<List<CityOverall>?>

@@ -35,9 +35,6 @@ class MainViewModel(
   private val selectableCity = MutableLiveData<City?>()
 
   private val selectableMeasurementType: MutableLiveData<MeasurementType>
-
-  val sameCity: LiveData<City?>
-
   /**
    * The [MeasurementType] that data shall be shown for.
    */
@@ -58,13 +55,6 @@ class MainViewModel(
         addSource(selectableCity) {
           value = it
           cityStorage.cityId = it?.name ?: ""
-        }
-      }
-    )
-    sameCity = Transformations.distinctUntilChanged(
-      MediatorLiveData<City>().apply {
-        addSource(pulseRepository.cities) { cities ->
-          value = cities.data?.firstOrNull { it.name == cityStorage.cityId }
         }
       }
     )
@@ -132,8 +122,8 @@ class MainViewModel(
     }
   }
 
-  fun overall(city: String): LiveData<Resource<List<CityOverall>>> {
-    return pulseRepository.getDataCitiesOverall(listOf(city))
+  fun getMeasurementDataForCurrentCity(city: String): LiveData<Resource<List<CityOverall>>> {
+    return pulseRepository.getOverallData(listOf(city))
   }
 
 }

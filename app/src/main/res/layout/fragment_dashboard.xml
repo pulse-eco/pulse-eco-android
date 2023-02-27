@@ -7,8 +7,6 @@
   android:background="@color/white"
   tools:context=".dashboard.DashboardFragment">
 
-
-
   <include
     android:id="@+id/include"
     layout="@layout/city_select_item_layout" />
