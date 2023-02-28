@@ -33,6 +33,7 @@ class MainViewModel(
    */
   val activeCity: LiveData<City?>
   private val selectableCity = MutableLiveData<City?>()
+  var _currentCityMeasurements = MutableLiveData<Resource<List<CityOverall>>>()
 
   private val selectableMeasurementType: MutableLiveData<MeasurementType>
   /**
@@ -123,7 +124,8 @@ class MainViewModel(
   }
 
   fun getMeasurementDataForCurrentCity(city: String): LiveData<Resource<List<CityOverall>>> {
-    return pulseRepository.getOverallData(listOf(city))
+    _currentCityMeasurements = pulseRepository.getOverallData(listOf(city)) as MutableLiveData<Resource<List<CityOverall>>>
+    return _currentCityMeasurements
   }
 
 }
