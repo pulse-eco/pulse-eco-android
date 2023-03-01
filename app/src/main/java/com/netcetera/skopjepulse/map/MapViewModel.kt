@@ -11,6 +11,7 @@ import com.netcetera.skopjepulse.base.data.repository.FavouriteSensorsStorage
 import com.netcetera.skopjepulse.base.data.repository.SensorReadings
 import com.netcetera.skopjepulse.base.data.repository.Sensors
 import com.netcetera.skopjepulse.base.model.*
+import com.netcetera.skopjepulse.base.viewModel.BaseViewModel
 import com.netcetera.skopjepulse.base.viewModel.PulseViewModel
 import com.netcetera.skopjepulse.base.viewModel.toErrorLiveDataResource
 import com.netcetera.skopjepulse.base.viewModel.toLoadingLiveDataResource
@@ -43,7 +44,7 @@ import kotlin.math.roundToInt
  * displaying of data of a single [City].
  */
 
-class MapViewModel(
+class MapViewModel (
   city: City,
   private val dataDefinitionProvider: DataDefinitionProvider,
   favouriteSensorsStorage: FavouriteSensorsStorage,

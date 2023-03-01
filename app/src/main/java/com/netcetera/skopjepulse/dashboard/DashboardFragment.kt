@@ -4,16 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.Band
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.base.model.CityOverall
 import com.netcetera.skopjepulse.base.model.DataDefinition
+import com.netcetera.skopjepulse.base.viewModel.PulseViewModel
 import com.netcetera.skopjepulse.cityselect.CitySelectItem
 import com.netcetera.skopjepulse.cityselect.CitySelectViewModel
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
+import com.netcetera.skopjepulse.map.MapFragment
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.SensorOverviewModel
 import com.netcetera.skopjepulse.pulseappbar.MeasurementTypeTab
@@ -29,14 +32,15 @@ import java.util.*
 class DashboardFragment : BaseFragment<MapViewModel>() {
 
 //  override val viewModel: CitySelectViewModel by viewModel()
-  override val viewModel: MapViewModel by viewModel()
+  override val viewModel: MapViewModel by viewModel { parametersOf(city) }
   private val mainViewModel: MainViewModel by sharedViewModel()
-
-  private val graphView: GraphView by lazy {
-    GraphView(dashboardGraph)
-  }
-
+  val city: City by lazy { requireArguments().getParcelable("city")!! }
   companion object {
+    fun newInstance(city: City?) = DashboardFragment().apply {
+      arguments = bundleOf(
+        "city" to city
+      )
+    }
 
     var activeMeasurement: String? = null
     lateinit var citySelectItem: CitySelectItem
@@ -44,6 +48,9 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     lateinit var dataDef: DataDefinition
   }
 
+  private val graphView: GraphView by lazy {
+    GraphView(dashboardGraph)
+  }
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -75,13 +82,13 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       citySelectMeasureContainer.setCardBackgroundColor(band.legendColor)
       citySelectMeasureLabel.text = band.shortGrade
 
-      citySelectItem = CitySelectItem(
-        city,
-        band.shortGrade,
-        activeMeasurement.toString(),
-        dataDef.unit,
-        band.legendColor
-      )
+//      citySelectItem = CitySelectItem(
+//        city,
+//        band.shortGrade,
+//        activeMeasurement.toString(),
+//        dataDef.unit,
+//        band.legendColor
+//      )
 
     }
 
