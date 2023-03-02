@@ -77,7 +77,7 @@
         android:layout_width="@dimen/city_select_width"
         android:layout_height="@dimen/city_select_height"
         android:layout_marginEnd="@dimen/city_select_layout_margins"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/history_and_forecast_green"
         app:cardCornerRadius="@dimen/components_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

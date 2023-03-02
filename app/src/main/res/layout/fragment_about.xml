@@ -16,7 +16,7 @@
     android:paddingEnd="@dimen/settings_about_text_body_padding_start_end"
     android:paddingStart="@dimen/settings_about_text_body_padding_start_end"
     android:paddingTop="@dimen/settings_about_text_body_padding_top_bottom"
-    android:text="ABOUT"
+    android:text="Pulse.eco is a crowdsourcing platform, which gathers and presents environmental data. Our network of sensor installations and other third-party sources gathers the data and translates them into visual and easy to understand information. You can learn about the pollution, humidity, temperature or noise in your surroundings with just a few clicks. Even better, you can participate in expanding our network and setup your own devices, to enrich the data sourcing."
     android:textSize="@dimen/settings_about_body_text_size"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

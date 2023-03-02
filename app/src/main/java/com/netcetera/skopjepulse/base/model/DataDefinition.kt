@@ -12,14 +12,14 @@ typealias MeasurementType = String
 @Keep
 @JsonClass(generateAdapter = true)
 data class DataDefinition(
-    val id: MeasurementType, //noiseDataDefinition
-    @Json(name = "buttonTitle") val shortTitle: String, //Noise
-    @Json(name = "title") val longTitle: String, //Noise
-    val description: String, //Noise measured
-    val legendMin: Int, //0
-    val legendMax: Int, //160
-    val unit: String, //units
-    val bands: List<Band>
+  var id: MeasurementType, //noiseDataDefinition
+  @Json(name = "buttonTitle") val shortTitle: String, //Noise
+  @Json(name = "title") val longTitle: String, //Noise
+  val description: String, //Noise measured
+  val legendMin: Int, //0
+  val legendMax: Int, //160
+  val unit: String, //units
+  val bands: List<Band>
 ) {
   @Transient
   private val minBand: Band = bands.minByOrNull { it.from }!!

@@ -30,7 +30,7 @@
       android:background="@color/city_select_item_overlay">
 
       <include
-        layout="@layout/weekly_average"
+        layout="@layout/weekly_dashboard_average"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="20dp" />
 

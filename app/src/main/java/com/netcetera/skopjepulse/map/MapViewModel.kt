@@ -53,7 +53,8 @@ class MapViewModel (
 ) :
   PulseViewModel(cityPulseRepository, favouriteSensorsStorage) {
 
-  private val selectedMeasurementType = MutableLiveData<MeasurementType>()
+//  private val selectedMeasurementType = MutableLiveData<MeasurementType>()
+  val selectedMeasurementType = MutableLiveData<MeasurementType>()
   val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
   var dataDefinitionDataPublicHelper :LiveData<DataDefinition>
 
