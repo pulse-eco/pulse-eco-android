@@ -35,7 +35,7 @@
       tools:text="10"/>
 
     <TextView
-      android:id="@+id/dashboardMeasureLabel"
+      android:id="@+id/tvFiveDaysAgoUnit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
@@ -70,6 +70,7 @@
       tools:text="15"/>
 
     <TextView
+      android:id="@+id/tvFourDaysAgoUnit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
@@ -104,6 +105,7 @@
       tools:text="20" />
 
     <TextView
+      android:id="@+id/tvThreeDaysAgoUnit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
@@ -138,6 +140,7 @@
       tools:text="25"/>
 
     <TextView
+      android:id="@+id/tvTwoDaysAgoUnit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
@@ -172,6 +175,7 @@
       tools:text="30" />
 
     <TextView
+      android:id="@+id/tvOneDayAgoValueUnit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"

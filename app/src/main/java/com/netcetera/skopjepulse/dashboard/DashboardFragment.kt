@@ -11,7 +11,6 @@ import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.BaseFragment
 import com.netcetera.skopjepulse.base.model.*
-import com.netcetera.skopjepulse.cityselect.CitySelectItem
 import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
 import com.netcetera.skopjepulse.map.MapViewModel
@@ -40,11 +39,10 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     }
     lateinit var currentCityMeasurements: List<CityOverall>
     var activeMeasurement: String? = null
-    lateinit var citySelectItem: CitySelectItem
-    lateinit var sensorType: MeasurementType
   }
 
   lateinit var dataDef: DataDefinition
+  lateinit var setVal : AverageWeeklyDataModel
 
   private val graphView: GraphView by lazy {
     GraphView(dashboardGraph)
@@ -66,6 +64,7 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       dataDef = it
     }
 
+
     //value
     currentCityMeasurements = mainViewModel._currentCityMeasurements.value?.data!!
 //    setMeasurementValue()
@@ -75,20 +74,19 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       activeMeasurement = newMeasurement
       setValuesForMeasurement()
       setDaysNames()
+      displayUnit()
+      viewModel.averageWeeklyData.value.let { averageWeeklyDataModel ->
+        setSlidingPanelDailyDataValues(averageWeeklyDataModel)
+      }
+      viewModel.averageWeeklyData.observe(viewLifecycleOwner){
+        setVal = it
+        setSlidingPanelDailyDataValues(setVal)
+      }
     }
 
     mainViewModel.activeCity.observe(viewLifecycleOwner) { city ->
       setLocationInfo()
     }
-
-    //SECOND ELEMENT
-
-//    mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) {
-//      sensorType = it
-//      viewModel.averageWeeklyData.value?.let { weeklyAverageDataModel ->
-//        setSlidingPanelDailyDataValues(weeklyAverageDataModel)
-//      }
-//    }
   }
 
   private fun setLocationInfo() {
@@ -123,8 +121,8 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
           Locale(getLanguage(context.toString()))
         )
         val dateOfSensorToString = format.format(sensorReading.stamp)
-        cal.add(Calendar.DATE, -7)
-        for (i in 0..6) {
+        cal.add(Calendar.DATE, -5)
+        for (i in 0..4) {
           val iteratingDate = format.format(cal.time)
           if (dateOfSensorToString == iteratingDate) {
             listWeeklyAverageValues[i].text = sensorReading.value.toInt().toString()
@@ -145,6 +143,13 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     }
   }
 
+  private fun displayUnit() {
+    val listOfUnits = getBoundUnits()
+    listOfUnits.forEach {
+      it.text = dataDef.unit
+    }
+  }
+
   private fun getBoundsDays(): List<TextView> {
     return listOf(
       tvOneDayAgoName, tvTwoDaysAgoName, tvThreeDaysAgoName, tvFourDaysAgoName, tvFiveDaysAgoName
@@ -153,11 +158,21 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
 
   private fun getBoundValues(): List<TextView> {
     return listOf(
-      tvOneDayAgoValue,
-      tvTwoDaysAgoValue,
-      tvThreeDaysAgoValue,
+      tvFiveDaysAgoValue,
       tvFourDaysAgoValue,
-      tvFiveDaysAgoValue
+      tvThreeDaysAgoValue,
+      tvTwoDaysAgoValue,
+      tvOneDayAgoValue
+    )
+  }
+
+  private fun getBoundUnits(): List<TextView> {
+    return listOf(
+      tvFiveDaysAgoUnit,
+      tvFourDaysAgoUnit,
+      tvThreeDaysAgoUnit,
+      tvTwoDaysAgoUnit,
+      tvOneDayAgoValueUnit
     )
   }
 }
