@@ -11,7 +11,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.netcetera.skopjepulse.R
 import com.netcetera.skopjepulse.base.model.City
 import com.netcetera.skopjepulse.extensions.updateForCity
-import kotlinx.android.synthetic.main.city_select_item_layout.view.*
+import kotlinx.android.synthetic.main.single_city_layout.view.*
 
 typealias CitySelectListener = (city: City) -> Unit
 
@@ -47,7 +47,7 @@ class CurrentlyCitySelectAdapter : RecyclerView.Adapter<CitySelectItemViewHolder
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitySelectItemViewHolder {
     val view =
-      LayoutInflater.from(parent.context).inflate(R.layout.city_select_item_layout, parent, false)
+      LayoutInflater.from(parent.context).inflate(R.layout.single_city_layout, parent, false)
     return CitySelectItemViewHolder(view) { city -> citySelectListener?.invoke(city) }
   }
 
@@ -83,18 +83,18 @@ class CitySelectItemViewHolder(view: View, citySelectListener: CitySelectListene
   private fun internalDisplayItem() {
     val citySelectItem = this.citySelectItem
     if (citySelectItem != null) {
-      itemView.citySelectMeasureValue.visibility = View.VISIBLE
-      itemView.citySelectMeasureLabel.visibility = View.VISIBLE
+      itemView.textViewMeasurementValue.visibility = View.VISIBLE
+      itemView.textViewMeasurementUnit.visibility = View.VISIBLE
       itemView.imageNoDataAvailable.visibility = View.GONE
-      itemView.citySelectMeasureContainer.setCardBackgroundColor(citySelectItem.color)
-      itemView.citySelectCityLabel.text = citySelectItem.city.displayName
-      itemView.citySelectCountryLabel.text = citySelectItem.city.countryName
-      itemView.citySelectOverallStatus.text = citySelectItem.measurementDescription
-      itemView.citySelectMeasureValue.text = citySelectItem.measurementValue
-      itemView.citySelectMeasureLabel.text = citySelectItem.measurementUnit
+      itemView.cardViewMeasurementColor.setCardBackgroundColor(citySelectItem.color)
+      itemView.textViewCityName.text = citySelectItem.city.displayName
+      itemView.textViewCountryName.text = citySelectItem.city.countryName
+      itemView.textViewShortGrade.text = citySelectItem.measurementDescription
+      itemView.textViewMeasurementValue.text = citySelectItem.measurementValue
+      itemView.textViewMeasurementUnit.text = citySelectItem.measurementUnit
       if (citySelectItem.measurementValue == "N/A") {
-        itemView.citySelectMeasureValue.visibility = View.GONE
-        itemView.citySelectMeasureLabel.visibility = View.GONE
+        itemView.textViewMeasurementValue.visibility = View.GONE
+        itemView.textViewMeasurementUnit.visibility = View.GONE
         itemView.imageNoDataAvailable.visibility = View.VISIBLE
       }
       internalDisplayItemMap()

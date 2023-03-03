@@ -53,7 +53,6 @@ class MapViewModel (
 ) :
   PulseViewModel(cityPulseRepository, favouriteSensorsStorage) {
 
-//  private val selectedMeasurementType = MutableLiveData<MeasurementType>()
   val selectedMeasurementType = MutableLiveData<MeasurementType>()
   val selectedSensor = MutableLiveData<Sensor?>().apply { value = null }
   var dataDefinitionDataPublicHelper :LiveData<DataDefinition>
@@ -86,9 +85,6 @@ class MapViewModel (
   var averageDataGivenRange: LiveData<AverageWeeklyDataModel>
   var averageMonthDataByYear: LiveData<AverageWeeklyDataModel>
 
-//  var currentReadingsCity: LiveData<AverageWeeklyDataModel>
-
-
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
       dataDefinitionProvider[it]
@@ -103,8 +99,6 @@ class MapViewModel (
           })
       }
     }
-
-//    currentReadingsCity = currentReadings
 
     val sensorReadingsDaysRange = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
       Transformations.map(cityPulseRepository.sensorReadings) { current ->
@@ -142,7 +136,8 @@ class MapViewModel (
     )
 
     overallBannerData = Transformations.map(currentReadings) { (dataDefinition, measurements) ->
-      measurements.map { (_, reading) -> reading.value }.average().takeUnless { it.isNaN() }
+      measurements.map { (_, reading) -> reading.value }
+        .average().takeUnless { it.isNaN() }
         ?.roundToInt()?.let {
         val valueBand = dataDefinition.findBandByValue(it)
         OverallBannerData(

@@ -8,13 +8,12 @@
   android:orientation="horizontal"
   android:weightSum="1">
 
-  <View
-    android:layout_width="0dp"
+  <View android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="0.05" />
 
   <androidx.cardview.widget.CardView
-    android:id="@+id/cardView"
+    android:id="@+id/cardViewCityCurrentData"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/city_select_margins"
@@ -32,7 +31,7 @@
       android:background="@color/city_select_item_overlay">
 
       <TextView
-        android:id="@+id/citySelectCityLabel"
+        android:id="@+id/textViewCityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/city_select_layout_margins"
@@ -45,18 +44,18 @@
         tools:text="Skopje" />
 
       <TextView
-        android:id="@+id/citySelectCountryLabel"
+        android:id="@+id/textViewCountryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:textColor="@color/transparent_black"
         android:textSize="@dimen/country_item_text_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/citySelectCityLabel"
+        app:layout_constraintTop_toBottomOf="@id/textViewCityName"
         tools:text="Macedonia" />
 
       <TextView
-        android:id="@+id/citySelectOverallStatus"
+        android:id="@+id/textViewShortGrade"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/city_select_layout_margins"
@@ -67,13 +66,13 @@
         android:textColor="@color/city_select_label_text_color"
         android:textSize="@dimen/country_city_selector_small_country_font_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/citySelectMeasureContainer"
-        app:layout_constraintStart_toStartOf="@id/citySelectCountryLabel"
-        app:layout_constraintTop_toBottomOf="@id/citySelectCountryLabel"
+        app:layout_constraintEnd_toStartOf="@id/cardViewMeasurementColor"
+        app:layout_constraintStart_toStartOf="@id/textViewCountryName"
+        app:layout_constraintTop_toBottomOf="@id/textViewCountryName"
         tools:text="Good Air Quality!" />
 
       <androidx.cardview.widget.CardView
-        android:id="@+id/citySelectMeasureContainer"
+        android:id="@+id/cardViewMeasurementColor"
         android:layout_width="@dimen/city_select_width"
         android:layout_height="@dimen/city_select_height"
         android:layout_marginEnd="@dimen/city_select_layout_margins"
@@ -100,7 +99,7 @@
             android:visibility="gone" />
 
           <TextView
-            android:id="@+id/citySelectMeasureValue"
+            android:id="@+id/textViewMeasurementValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/city_select_measure_text_color"
@@ -109,7 +108,7 @@
             tools:text="22" />
 
           <TextView
-            android:id="@+id/citySelectMeasureLabel"
+            android:id="@+id/textViewMeasurementUnit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/city_select_measure_text_color"

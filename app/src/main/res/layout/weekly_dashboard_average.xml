@@ -1,40 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  xmlns:tools="http://schemas.android.com/tools"
   android:orientation="horizontal"
   android:gravity="center"
   android:background="@color/white">
+
   <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginRight="@dimen/daily_average_horizontal_margins"
+    android:layout_marginStart="@dimen/daily_average_horizontal_margins"
     android:layout_marginTop="@dimen/daily_average_vertical_margins"
     android:layout_marginBottom="@dimen/daily_average_vertical_margins"
-    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
+    android:layout_marginEnd="@dimen/daily_average_vertical_margins">
 
     <TextView
-      android:id="@+id/fiveDaysAgo"
+      android:id="@+id/tvFiveDaysAgoName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Day"
-      android:text="Day"/>
+      tools:text="Mon"/>
 
     <TextView
-      android:id="@+id/valFiveDaysAgo"
+      android:id="@+id/tvFiveDaysAgoValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_value_text_size"
       android:layout_marginTop="5dp"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="18"
-      android:text="18" />
+      tools:text="10"/>
 
     <TextView
       android:id="@+id/dashboardMeasureLabel"
@@ -42,9 +40,7 @@
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"
-      android:text="ug/m3"
-      />
+      tools:text="ug/m3"/>
 
   </LinearLayout>
 
@@ -56,70 +52,29 @@
     android:layout_marginLeft="@dimen/daily_average_vertical_margins">
 
     <TextView
-      android:id="@+id/fourDaysAgo"
+      android:id="@+id/tvFourDaysAgoName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Day"
-      android:text="Day"/>
-
+      tools:text="Tue"/>
 
     <TextView
-      android:id="@+id/valFourDaysAgo"
+      android:id="@+id/tvFourDaysAgoValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_value_text_size"
       android:layout_marginTop="@dimen/daily_average_value_margin_top"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="21"
-      android:text="21" />
+      tools:text="15"/>
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"
-      android:text="ug/m3"
-      />
-  </LinearLayout>
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginRight="@dimen/daily_average_vertical_margins"
-    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
-
-    <TextView
-      android:id="@+id/threeDaysAgo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Day"
-      android:text="Day" />
-
-    <TextView
-      android:id="@+id/valThreeDaysAgo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_value_text_size"
-      android:layout_marginTop="@dimen/daily_average_value_margin_top"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="21"
-      android:text="21" />
-
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/daily_average_label"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"
-      android:text="ug/m3"
-      />
+      tools:text="ug/m3" />
 
   </LinearLayout>
 
@@ -131,33 +86,29 @@
     android:layout_marginLeft="@dimen/daily_average_vertical_margins">
 
     <TextView
-      android:id="@+id/twoDaysAgo"
+      android:id="@+id/tvThreeDaysAgoName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Day"
-      android:text="Day"/>
+      tools:text="Wed" />
 
     <TextView
-      android:id="@+id/valTwoDaysAgo"
+      android:id="@+id/tvThreeDaysAgoValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_value_text_size"
       android:layout_marginTop="@dimen/daily_average_value_margin_top"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="29"
-      android:text="29" />
+      tools:text="20" />
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"
-      android:text="ug/m3"
-      />
+      tools:text="ug/m3" />
 
   </LinearLayout>
 
@@ -169,34 +120,63 @@
     android:layout_marginLeft="@dimen/daily_average_vertical_margins">
 
     <TextView
-      android:id="@+id/yesterday"
+      android:id="@+id/tvTwoDaysAgoName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Day"
-      android:text="Day"/>
+      tools:text="Thr"/>
 
     <TextView
-      android:id="@+id/valYesterday"
+      android:id="@+id/tvTwoDaysAgoValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="@dimen/daily_average_value_text_size"
       android:layout_marginTop="@dimen/daily_average_value_margin_top"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="36"
-      android:text="36" />
+      tools:text="25"/>
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/daily_average_label"
       android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"
-      android:text="ug/m3"
-      />
+      tools:text="ug/m3"/>
 
   </LinearLayout>
 
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginRight="@dimen/daily_average_vertical_margins"
+    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
+
+    <TextView
+      android:id="@+id/tvOneDayAgoName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="@dimen/daily_average_title_text_size"
+      tools:text="Fri"/>
+
+    <TextView
+      android:id="@+id/tvOneDayAgoValue"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textSize="@dimen/daily_average_value_text_size"
+      android:layout_marginTop="@dimen/daily_average_value_margin_top"
+      android:textColor="@color/history_and_forecast_green"
+      tools:text="30" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="@dimen/daily_average_label"
+      android:textColor="@color/history_and_forecast_green"
+      tools:text="ug/m3" />
+
+  </LinearLayout>
 </LinearLayout>
