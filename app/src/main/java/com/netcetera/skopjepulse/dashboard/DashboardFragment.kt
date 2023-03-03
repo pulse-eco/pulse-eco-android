@@ -15,6 +15,7 @@ import com.netcetera.skopjepulse.main.MainViewModel
 import com.netcetera.skopjepulse.map.GraphView
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
+import com.netcetera.skopjepulse.map.model.GraphModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.single_city_layout.*
 import kotlinx.android.synthetic.main.weekly_dashboard_average.*
@@ -43,6 +44,7 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
 
   lateinit var dataDef: DataDefinition
   lateinit var setVal : AverageWeeklyDataModel
+
 
   private val graphView: GraphView by lazy {
     GraphView(dashboardGraph)
@@ -87,6 +89,8 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     mainViewModel.activeCity.observe(viewLifecycleOwner) { city ->
       setLocationInfo()
     }
+
+
   }
 
   private fun setLocationInfo() {
@@ -100,6 +104,14 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
         if(this::dataDef.isInitialized) {
           val band = getBand(measurement.value.toInt())
           cardViewMeasurementColor.setCardBackgroundColor(band.legendColor)
+
+          getBoundValues().forEach {
+            it.setTextColor(band.legendColor)}
+          getBoundUnits().forEach {
+            it.setTextColor(band.legendColor)
+          }
+
+
           textViewShortGrade.text = band.shortGrade
           textViewMeasurementUnit.text = dataDef.unit
         }
@@ -175,5 +187,6 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       tvOneDayAgoValueUnit
     )
   }
+
 }
 

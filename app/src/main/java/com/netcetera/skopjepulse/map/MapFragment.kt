@@ -245,7 +245,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
     viewModel.bottomSheetPeek.observe(viewLifecycleOwner) { peekViewModel ->
       displayPeekContent(peekViewModel)
     }
-    viewModel.graphData.observe(viewLifecycleOwner) { showGraphData(it) }
+    viewModel.graphData.observe(viewLifecycleOwner) {
+      showGraphData(it)
+    }
     viewModel.showNoSensorsFavourited.observe(viewLifecycleOwner) {
       bottomSheetNoSensorsContainer.visibility = if (it == true) View.VISIBLE else View.GONE
     }

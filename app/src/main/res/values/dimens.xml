@@ -28,12 +28,12 @@
   <dimen name="has_sensors_selected_margin_bottom">18dp</dimen>
   <dimen name="country_item_padding_top">15dp</dimen>
   <dimen name="country_item_padding_bottom">8dp</dimen>
-  <dimen name="country_item_text_size">16sp</dimen>
+  <dimen name="country_item_text_size">14sp</dimen>
   <dimen name="country_item_margin">1dp</dimen>
   <dimen name="country_item_margin_top">5dp</dimen>
   <dimen name="city_item_margin">1dp</dimen>
   <dimen name="city_item_padding">12dp</dimen>
-  <dimen name="city_item_text_size">24sp</dimen>
+  <dimen name="city_item_text_size">22sp</dimen>
   <dimen name="city_selector_margin">0dp</dimen>
   <dimen name="country_item_padding_horizontal">20dp</dimen>
   <dimen name="city_item_padding_horizontal">20dp</dimen>
@@ -43,7 +43,7 @@
   <dimen name="city_select_layout_margins">20dp</dimen>
   <dimen name="city_select_width">72dp</dimen>
   <dimen name="city_select_height">72dp</dimen>
-  <dimen name="city_measure_value_size">26sp</dimen>
+  <dimen name="city_measure_value_size">22sp</dimen>
   <dimen name="measure_label_size">12sp</dimen>
 
 
@@ -51,7 +51,7 @@
   <dimen name="country_city_selector_back_btn_margin_right">20dp</dimen>
   <dimen name="country_city_selector_location_margin_right">30dp</dimen>
   <dimen name="country_city_selector_city_font_size">23sp</dimen>
-  <dimen name="country_city_selector_small_country_font_size">14sp</dimen>
+  <dimen name="country_city_selector_small_country_font_size">12sp</dimen>
 
   <dimen name="average_weekly_data_view_margin">20dp</dimen>
   <dimen name="rectangle_for_weekly_data_view_width">45dp</dimen>
@@ -110,7 +110,7 @@
   <dimen name="daily_average_vertical_margins">20dp</dimen>
   <dimen name="daily_average_horizontal_margins">10dp</dimen>
   <dimen name="daily_average_title_text_size">14sp</dimen>
-  <dimen name="daily_average_value_text_size">18sp</dimen>
+  <dimen name="daily_average_value_text_size">16sp</dimen>
   <dimen name="daily_average_value_margin_top">5dp</dimen>
   <dimen name="daily_average_label">10dp</dimen>
 

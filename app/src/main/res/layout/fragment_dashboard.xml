@@ -9,7 +9,9 @@
 
   <include
     android:id="@+id/include"
-    layout="@layout/single_city_layout" />
+    layout="@layout/single_city_layout"
+    tools:layout_editor_absoluteX="-37dp"
+    tools:layout_editor_absoluteY="-2dp" />
 
   <androidx.cardview.widget.CardView
     android:id="@+id/cardViewCityCurrentData"
