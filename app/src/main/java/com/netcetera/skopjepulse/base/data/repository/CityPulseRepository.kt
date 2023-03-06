@@ -2,6 +2,7 @@ package com.netcetera.skopjepulse.base.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.airbnb.lottie.L
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.Constants.Companion.DAY_IN_MILLISECONDS
 import com.netcetera.skopjepulse.base.data.Resource
@@ -41,8 +42,11 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   val currentReadings : LiveData<Resource<List<CurrentSensorReading>>>
   val historicalReadings : LiveData<Resource<List<HistoricalSensorReadings>>>
   val sensorReadings : LiveData<Resource<List<CurrentSensorReading>>>
+  val halfDay : LiveData<Resource<List<SensorReadingsHalfDay>>>
+
 
   init {
+
     currentReadings = sensors.resourceCombine(_current) { sensors, readings ->
       sensors.map { sensor ->
         CurrentSensorReading(
@@ -80,16 +84,33 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
     }
 
 
+  halfDay = sensors.resourceCombine(_data24) { sensors, readings ->
+    sensors.map { sensor ->
+      val sensorReadingsHalfDay = readings.filter {
+        it.type.equals(sensor.type)
+      }
+      SensorReadingsHalfDay(
+        sensorReadingsHalfDay.groupBy {
+         it.stamp.time.toString()
+        }
+        )
+    }
+  }
+
     historicalReadings = sensors.resourceCombine(_data24) { sensors, readings ->
       sensors.map { sensor ->
         val sensorReadings = readings.filter { it.sensorId == sensor.id }
         HistoricalSensorReadings(
-            sensor,
-            sensorReadings.groupBy { it.type }
+          sensor,
+          sensorReadings.groupBy { it.type }
         )
       }
     }
   }
+
+
+
+
 
   /**
    * Request refresh of the [CityPulseRepository.sensors] resource.
@@ -317,3 +338,6 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)
 data class HistoricalSensorReadings(val sensor: Sensor, val readings: Map<MeasurementType, List<SensorReading>>)
+data class SensorReadingsHalfDay(val readings: Map<MeasurementType, List<SensorReading>>)
+
+//hour, value

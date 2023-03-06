@@ -106,13 +106,6 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
           val band = getBand(measurement.value.toInt())
           cardViewMeasurementColor.setCardBackgroundColor(band.legendColor)
 
-//          getBoundValues().forEach {
-//            it.setTextColor(band.legendColor)}
-//          getBoundUnits().forEach {
-//            it.setTextColor(band.legendColor)
-//          }
-
-
           textViewShortGrade.text = band.shortGrade
           textViewMeasurementUnit.text = dataDef.unit
         }
