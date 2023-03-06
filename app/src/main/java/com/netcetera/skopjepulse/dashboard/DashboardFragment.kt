@@ -77,6 +77,7 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       setValuesForMeasurement()
       setDaysNames()
       displayUnit()
+
       viewModel.averageWeeklyData.value.let { averageWeeklyDataModel ->
         setSlidingPanelDailyDataValues(averageWeeklyDataModel)
       }
@@ -105,11 +106,11 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
           val band = getBand(measurement.value.toInt())
           cardViewMeasurementColor.setCardBackgroundColor(band.legendColor)
 
-          getBoundValues().forEach {
-            it.setTextColor(band.legendColor)}
-          getBoundUnits().forEach {
-            it.setTextColor(band.legendColor)
-          }
+//          getBoundValues().forEach {
+//            it.setTextColor(band.legendColor)}
+//          getBoundUnits().forEach {
+//            it.setTextColor(band.legendColor)
+//          }
 
 
           textViewShortGrade.text = band.shortGrade
@@ -125,6 +126,8 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
 
   private fun setSlidingPanelDailyDataValues(dataModel: AverageWeeklyDataModel?) {
     val listWeeklyAverageValues = getBoundValues()
+    val listWeeklyAverageUnit = getBoundUnits()
+
     dataModel?.data?.let { readings ->
       readings.forEach { sensorReading ->
         val cal = Calendar.getInstance()
@@ -132,12 +135,16 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
           Constants.MONTH_DAY_YEAR_DATE_FORMAT,
           Locale(getLanguage(context.toString()))
         )
+        val band = getBand(sensorReading.value.toInt())
+//        cardViewMeasurementColor.setCardBackgroundColor(band.legendColor)
         val dateOfSensorToString = format.format(sensorReading.stamp)
         cal.add(Calendar.DATE, -5)
         for (i in 0..4) {
           val iteratingDate = format.format(cal.time)
           if (dateOfSensorToString == iteratingDate) {
+            listWeeklyAverageValues[i].setTextColor(band.legendColor)
             listWeeklyAverageValues[i].text = sensorReading.value.toInt().toString()
+            listWeeklyAverageUnit[i].setTextColor(band.legendColor)
           }
           cal.add(Calendar.DATE, 1)
         }
