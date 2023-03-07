@@ -16,6 +16,7 @@ import com.netcetera.skopjepulse.map.GraphView
 import com.netcetera.skopjepulse.map.MapViewModel
 import com.netcetera.skopjepulse.map.model.AverageWeeklyDataModel
 import com.netcetera.skopjepulse.map.model.GraphModel
+import kotlinx.android.synthetic.main.bottom_sheet_content_layout.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.single_city_layout.*
 import kotlinx.android.synthetic.main.weekly_dashboard_average.*
@@ -32,6 +33,13 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
   private val mainViewModel: MainViewModel by sharedViewModel()
   val city: City by lazy { requireArguments().getParcelable("city")!! }
 
+  lateinit var dataDef: DataDefinition
+  lateinit var setVal : AverageWeeklyDataModel
+
+  private val graphView: GraphView by lazy {
+    GraphView(dashboardGraph)
+  }
+
   companion object {
     fun newInstance(city: City?) = DashboardFragment().apply {
       arguments = bundleOf(
@@ -40,14 +48,6 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
     }
     lateinit var currentCityMeasurements: List<CityOverall>
     var activeMeasurement: String? = null
-  }
-
-  lateinit var dataDef: DataDefinition
-  lateinit var setVal : AverageWeeklyDataModel
-
-
-  private val graphView: GraphView by lazy {
-    GraphView(dashboardGraph)
   }
 
   override fun onCreateView(
@@ -66,10 +66,11 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       dataDef = it
     }
 
+    viewModel.graphData12.observe(viewLifecycleOwner) {
+      showGraphData(it)
+    }
 
-    //value
     currentCityMeasurements = mainViewModel._currentCityMeasurements.value?.data!!
-//    setMeasurementValue()
 
     mainViewModel.activeMeasurementType.observe(viewLifecycleOwner) { newMeasurement ->
       viewModel.showDataForMeasurementType(newMeasurement)
@@ -186,6 +187,14 @@ class DashboardFragment : BaseFragment<MapViewModel>() {
       tvTwoDaysAgoUnit,
       tvOneDayAgoValueUnit
     )
+  }
+
+  private fun showGraphData(it: GraphModel?) {
+    if (it != null) {
+      graphView.setGraphModel(it)
+    } else {
+      graphView.clearGraph()
+    }
   }
 
 }

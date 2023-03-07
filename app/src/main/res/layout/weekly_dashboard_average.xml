@@ -1,186 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:background="@color/city_select_item_overlay"
   android:orientation="horizontal"
-  android:gravity="center"
-  android:background="@color/white">
+  android:weightSum="1">
 
-  <LinearLayout
-    android:layout_width="wrap_content"
+  <View
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0.05" />
+
+  <androidx.cardview.widget.CardView
+    android:id="@+id/cardViewDataPreviousDays"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginStart="@dimen/daily_average_horizontal_margins"
-    android:layout_marginTop="@dimen/daily_average_vertical_margins"
-    android:layout_marginBottom="@dimen/daily_average_vertical_margins"
-    android:layout_marginEnd="@dimen/daily_average_vertical_margins">
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_weight="0.9"
+    app:cardCornerRadius="@dimen/components_corner_radius"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-      android:id="@+id/tvFiveDaysAgoName"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Mon"/>
+      android:background="@color/white"
+      android:baselineAligned="false"
+      android:gravity="center"
+      android:orientation="horizontal"
+      android:weightSum="5">
 
-    <TextView
-      android:id="@+id/tvFiveDaysAgoValue"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_value_text_size"
-      android:layout_marginTop="5dp"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="10"/>
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/daily_average_vertical_margins"
+        android:layout_marginTop="@dimen/daily_average_vertical_margins"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/tvFiveDaysAgoUnit"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/daily_average_label"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"/>
+        <TextView
+          android:id="@+id/tvFiveDaysAgoName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="@dimen/daily_average_title_text_size"
+          tools:text="Mon" />
 
-  </LinearLayout>
+        <TextView
+          android:id="@+id/tvFiveDaysAgoValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="5dp"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_value_text_size"
+          tools:text="10" />
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginRight="@dimen/daily_average_vertical_margins"
-    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
+        <TextView
+          android:id="@+id/tvFiveDaysAgoUnit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_label"
+          tools:text="ug/m3" />
 
-    <TextView
-      android:id="@+id/tvFourDaysAgoName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Tue"/>
+      </LinearLayout>
 
-    <TextView
-      android:id="@+id/tvFourDaysAgoValue"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_value_text_size"
-      android:layout_marginTop="@dimen/daily_average_value_margin_top"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="15"/>
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/daily_average_vertical_margins"
+        android:layout_marginTop="@dimen/daily_average_vertical_margins"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/tvFourDaysAgoUnit"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/daily_average_label"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3" />
+        <TextView
+          android:id="@+id/tvFourDaysAgoName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="@dimen/daily_average_title_text_size"
+          tools:text="Tue" />
 
-  </LinearLayout>
+        <TextView
+          android:id="@+id/tvFourDaysAgoValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/daily_average_value_margin_top"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_value_text_size"
+          tools:text="15" />
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginRight="@dimen/daily_average_vertical_margins"
-    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
+        <TextView
+          android:id="@+id/tvFourDaysAgoUnit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_label"
+          tools:text="ug/m3" />
 
-    <TextView
-      android:id="@+id/tvThreeDaysAgoName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Wed" />
+      </LinearLayout>
 
-    <TextView
-      android:id="@+id/tvThreeDaysAgoValue"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_value_text_size"
-      android:layout_marginTop="@dimen/daily_average_value_margin_top"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="20" />
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/daily_average_vertical_margins"
+        android:layout_marginTop="@dimen/daily_average_vertical_margins"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/tvThreeDaysAgoUnit"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/daily_average_label"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3" />
+        <TextView
+          android:id="@+id/tvThreeDaysAgoName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="@dimen/daily_average_title_text_size"
+          tools:text="Wed" />
 
-  </LinearLayout>
+        <TextView
+          android:id="@+id/tvThreeDaysAgoValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/daily_average_value_margin_top"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_value_text_size"
+          tools:text="20" />
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginRight="@dimen/daily_average_vertical_margins"
-    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
+        <TextView
+          android:id="@+id/tvThreeDaysAgoUnit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_label"
+          tools:text="ug/m3" />
 
-    <TextView
-      android:id="@+id/tvTwoDaysAgoName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Thr"/>
+      </LinearLayout>
 
-    <TextView
-      android:id="@+id/tvTwoDaysAgoValue"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_value_text_size"
-      android:layout_marginTop="@dimen/daily_average_value_margin_top"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="25"/>
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/daily_average_vertical_margins"
+        android:layout_marginTop="@dimen/daily_average_vertical_margins"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/tvTwoDaysAgoUnit"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/daily_average_label"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3"/>
+        <TextView
+          android:id="@+id/tvTwoDaysAgoName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="@dimen/daily_average_title_text_size"
+          tools:text="Thr" />
 
-  </LinearLayout>
+        <TextView
+          android:id="@+id/tvTwoDaysAgoValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/daily_average_value_margin_top"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_value_text_size"
+          tools:text="25" />
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginRight="@dimen/daily_average_vertical_margins"
-    android:layout_marginLeft="@dimen/daily_average_vertical_margins">
+        <TextView
+          android:id="@+id/tvTwoDaysAgoUnit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_label"
+          tools:text="ug/m3" />
 
-    <TextView
-      android:id="@+id/tvOneDayAgoName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_title_text_size"
-      tools:text="Fri"/>
+      </LinearLayout>
 
-    <TextView
-      android:id="@+id/tvOneDayAgoValue"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:textSize="@dimen/daily_average_value_text_size"
-      android:layout_marginTop="@dimen/daily_average_value_margin_top"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="30" />
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/daily_average_vertical_margins"
+        android:layout_marginTop="@dimen/daily_average_vertical_margins"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/tvOneDayAgoValueUnit"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/daily_average_label"
-      android:textColor="@color/history_and_forecast_green"
-      tools:text="ug/m3" />
+        <TextView
+          android:id="@+id/tvOneDayAgoName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="@dimen/daily_average_title_text_size"
+          tools:text="Fri" />
 
-  </LinearLayout>
+        <TextView
+          android:id="@+id/tvOneDayAgoValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/daily_average_value_margin_top"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_value_text_size"
+          tools:text="30" />
+
+        <TextView
+          android:id="@+id/tvOneDayAgoValueUnit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/history_and_forecast_green"
+          android:textSize="@dimen/daily_average_label"
+          tools:text="ug/m3" />
+
+      </LinearLayout>
+    </LinearLayout>
+
+
+  </androidx.cardview.widget.CardView>
+
 </LinearLayout>

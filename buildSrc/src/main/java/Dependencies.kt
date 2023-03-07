@@ -3,7 +3,7 @@ object Libs {
     const val androidX = "1.2.0"
     const val androidXRecyclerView = "1.1.0"
     const val andoridXLifecycle = "2.2.0"
-    const val androidXConstraint = "2.0.4"
+    const val androidXConstraint = "2.1.4"
     const val androidXAnnotations = "1.1.0"
     const val androidMaterial = "1.2.1"
     const val retrofit = "2.9.0"

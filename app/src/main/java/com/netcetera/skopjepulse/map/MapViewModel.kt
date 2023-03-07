@@ -85,6 +85,9 @@ class MapViewModel (
   var averageDataGivenRange: LiveData<AverageWeeklyDataModel>
   var averageMonthDataByYear: LiveData<AverageWeeklyDataModel>
 
+  val graphData12: LiveData<GraphModel>
+
+
   init {
     val dataDefinitionData = Transformations.switchMap(selectedMeasurementType) {
       dataDefinitionProvider[it]
@@ -204,6 +207,20 @@ class MapViewModel (
       }
     }
 
+    //should be selectedMeasurementType
+    graphData12 = Transformations.switchMap(selectedSensor) { selectedMeasurement ->
+      if (selectedMeasurement == null) {
+        return@switchMap Transformations.map(
+          measurementsForFavouriteSensors) { (dataDefinition, data) ->
+          createGraphModel(dataDefinition, data)
+        }
+      } else {
+        return@switchMap Transformations.map(historicalSensorReadings) { (dataDefinition, data) ->
+          return@map createGraphModel(dataDefinition, data.filter { it.key == selectedMeasurement })
+        }
+      }
+    }
+
     averageWeeklyData = Transformations.switchMap(selectedMeasurementType) { measurementType ->
       Transformations.switchMap(selectedSensor) { sensor ->
         val averageLiveData = cityPulseRepository.getAverageWeeklyData(sensor?.id, measurementType)
@@ -251,6 +268,19 @@ class MapViewModel (
         }
       }
     }
+
+//    val historicalSensorReadings = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+//      Transformations.map(cityPulseRepository.historicalReadings) { sensorReadings ->
+//        dataDefinition to (sensorReadings.data?.associate {
+//          (it.sensor to (it.readings[dataDefinition.id] ?: emptyList()))
+//        } ?: emptyMap())
+//      }
+//    }
+
+//    data12 = Transformations.switchMap(dataDefinitionData) { dataDefinition ->
+//
+//    }
+
 
     showNoSensorsFavourited = Transformations.switchMap(selectedSensor) { selectedSensor ->
       if (selectedSensor == null) {
@@ -412,7 +442,7 @@ class MapViewModel (
       val measurementsForType = sensorReadings.filter { dataDefinition.id == it.type }
       return@map GraphSeries(
           measurementsForType.map { Pair(it.stamp.time, it.value) },
-          sensor.description.toUpperCase(Locale.getDefault()),
+          sensor.description.uppercase(Locale.getDefault()),
           colorIterator.nextInt())
     }.filter { it.measurements.isNotEmpty() }
     return GraphModel(graphBands, graphDataSet)

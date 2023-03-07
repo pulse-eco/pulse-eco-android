@@ -10,6 +10,7 @@ import com.netcetera.skopjepulse.base.data.api.CityPulseApiService
 import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.netcetera.skopjepulse.base.model.Sensor
 import com.netcetera.skopjepulse.base.model.SensorReading
+import com.netcetera.skopjepulse.extensions.combine
 import com.netcetera.skopjepulse.extensions.resourceCombine
 import com.netcetera.skopjepulse.historyforecast.HistoryForecastAdapter
 import retrofit2.Call
@@ -39,10 +40,13 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
   val sensors: LiveData<Resource<Sensors>>
     get() = _sensors
 
+  val data24: LiveData<Resource<SensorReadings>>
+    get() = _data24
+
   val currentReadings : LiveData<Resource<List<CurrentSensorReading>>>
   val historicalReadings : LiveData<Resource<List<HistoricalSensorReadings>>>
   val sensorReadings : LiveData<Resource<List<CurrentSensorReading>>>
-  val halfDay : LiveData<Resource<List<SensorReadingsHalfDay>>>
+//  val halfDay : LiveData<Resource<List<SensorReadingsHalfDay>>>
 
 
   init {
@@ -83,19 +87,18 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
       }
     }
 
-
-  halfDay = sensors.resourceCombine(_data24) { sensors, readings ->
-    sensors.map { sensor ->
-      val sensorReadingsHalfDay = readings.filter {
-        it.type.equals(sensor.type)
-      }
-      SensorReadingsHalfDay(
-        sensorReadingsHalfDay.groupBy {
-         it.stamp.time.toString()
-        }
-        )
-    }
-  }
+//    halfDay = sensors.resourceCombine(_data24) { sensors, readings ->
+//      sensors.map { sensor ->
+//        val sensorReadingsHalfDay = readings.filter {
+//          it.type.equals(sensor.type)
+//        }
+//        SensorReadingsHalfDay(
+//          sensorReadingsHalfDay.groupBy {
+//            it.stamp.time.toString()
+//          }
+//        )
+//      }
+//    }
 
     historicalReadings = sensors.resourceCombine(_data24) { sensors, readings ->
       sensors.map { sensor ->
@@ -106,10 +109,11 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
         )
       }
     }
+
+//    halfHistoricalReadings =
+
+
   }
-
-
-
 
 
   /**
@@ -338,6 +342,9 @@ class CityPulseRepository(private val apiService : CityPulseApiService) : BasePu
 
 data class CurrentSensorReading(val sensor: Sensor, val readings : Map<MeasurementType, SensorReading>)
 data class HistoricalSensorReadings(val sensor: Sensor, val readings: Map<MeasurementType, List<SensorReading>>)
+
+//data class MeasurementAveragesCity(val measurementType: MeasurementType, val hours: List<>)
+
 data class SensorReadingsHalfDay(val readings: Map<MeasurementType, List<SensorReading>>)
 
 //hour, value
