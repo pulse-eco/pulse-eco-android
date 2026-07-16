@@ -1,17 +1,9 @@
-//// Top-level build file where you can add configuration options common to all sub-projects/modules.
-//
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
   repositories {
     google()
     mavenCentral()
-    jcenter()
-
-    // Crashlytics
-    maven("https://maven.fabric.io/public")
-
-    maven ("https://dl.bintray.com/kotlin/kotlin-eap")
-
-    maven("./localm2repository")
+    maven { url = uri("$rootDir/localm2repository") }
   }
   dependencies {
     classpath(BuildPlugins.androidGradlePlugin)
@@ -20,19 +12,19 @@ buildscript {
     classpath(BuildPlugins.kotlinGradlePlugin)
 
     // Crashlytics
-    classpath(BuildPlugins.fabricGradlePlugin)
+    classpath(BuildPlugins.firebaseCrashlyticsGradlePlugin)
   }
-  allprojects {
-    repositories {
-      google()
-      mavenCentral()
-      jcenter()
-      maven("https://jitpack.io")
-      maven ("https://dl.bintray.com/kotlin/kotlin-eap")
-    }
-  }
+}
 
-  task<Delete>("clean") {
-    delete(rootProject.buildDir)
+allprojects {
+  repositories {
+    google()
+    mavenCentral()
+    maven("https://jitpack.io")
+    maven { url = uri("$rootDir/localm2repository") }
   }
+}
+
+tasks.register<Delete>("clean") {
+  delete(rootProject.buildDir)
 }

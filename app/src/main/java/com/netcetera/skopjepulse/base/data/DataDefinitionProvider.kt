@@ -12,7 +12,7 @@ import com.netcetera.skopjepulse.base.model.MeasurementType
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.jetbrains.anko.defaultSharedPreferences
+import com.netcetera.skopjepulse.base.defaultSharedPreferences
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

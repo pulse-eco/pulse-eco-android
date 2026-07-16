@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.jetbrains.anko.defaultSharedPreferences
+import com.netcetera.skopjepulse.base.defaultSharedPreferences
 
 private const val PREFERENCES_KEY = "map-layer-picker-preferences"
 private const val PREFERENCES_KEY_MAP_TYPE = "$PREFERENCES_KEY-map-type"

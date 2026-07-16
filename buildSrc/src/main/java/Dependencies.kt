@@ -7,9 +7,8 @@ object Libs {
     const val androidXAnnotations = "1.1.0"
     const val androidMaterial = "1.2.1"
     const val retrofit = "2.9.0"
-    const val moshi = "1.11.0"
+    const val moshi = "1.14.0"
     const val okhttpLogging = "4.9.0"
-    const val anko = "0.10.8"
     const val playServicesMaps = "17.0.0"
     const val lottie = "3.5.0"
     const val activityKtx = "1.2.0-rc01"
@@ -23,9 +22,8 @@ object Libs {
     const val swipeRefreshLayout = "1.1.0"
     const val desugaring = "1.1.5"
 
-    // Crashlytics
-    const val playServicesFirebaseAnalytics = "18.0.0"
-    const val crashlytics = "2.10.1"
+    // Firebase / Crashlytics
+    const val firebaseBom = "31.2.3"
   }
 
   const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:${ProjectVersions.kotlin}"
@@ -42,7 +40,6 @@ object Libs {
   const val moshi = "com.squareup.moshi:moshi:${Versions.moshi}"
   const val moshiAdapter = "com.squareup.moshi:moshi-adapters:${Versions.moshi}"
   const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
-  const val anko = "org.jetbrains.anko:anko-commons:${Versions.anko}"
   const val googleMaps = "com.google.android.gms:play-services-maps:${Versions.playServicesMaps}"
   const val playServicesLocation = "com.google.android.gms:play-services-location:${Versions.playServicesMaps}"
   const val mpaAndroidChart = "com.github.PhilJay:MPAndroidChart:${Versions.mpaAndroidChart}"
@@ -50,9 +47,9 @@ object Libs {
   const val likeButton = "com.github.jd-alexander:LikeButton:${Versions.likeButton}"
   const val targetTooltip = "it.sephiroth.android.library.targettooltip:target-tooltip-library:${Versions.targetTooltip}"
   const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityKtx}"
-  const val koin = "org.koin:koin-android:${Versions.koin}"
-  const val koinScope = "org.koin:koin-androidx-scope:${Versions.koin}"
-  const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
+  const val koin = "io.insert-koin:koin-android:${Versions.koin}"
+  const val koinScope = "io.insert-koin:koin-androidx-scope:${Versions.koin}"
+  const val koinViewModel = "io.insert-koin:koin-androidx-viewmodel:${Versions.koin}"
   const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
   const val leakcanaryFragment = "com.squareup.leakcanary:leakcanary-support-fragment:${Versions.leakcanary}"
   const val leakcanaryNoOp = "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
@@ -63,7 +60,8 @@ object Libs {
 
   const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
-  // Crashlytics
-  const val firebaseAnalytics = "com.google.firebase:firebase-analytics:${Versions.playServicesFirebaseAnalytics}"
-  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:${Versions.crashlytics}"
+  // Firebase / Crashlytics (versions managed by the Firebase BoM)
+  const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
+  const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+  const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
 }

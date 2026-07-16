@@ -15,7 +15,7 @@ import com.netcetera.skopjepulse.base.XAxisDateValueFormatter
 import com.netcetera.skopjepulse.map.model.GraphBand
 import com.netcetera.skopjepulse.map.model.GraphModel
 import com.netcetera.skopjepulse.map.model.GraphSeries
-import org.jetbrains.anko.withAlpha
+import com.netcetera.skopjepulse.base.withAlpha
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.min

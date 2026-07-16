@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.netcetera.skopjepulse"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -30,6 +31,13 @@
 
     <activity android:name=".countryCitySelector.CountryCitySelectorActivity"
       android:screenOrientation="portrait"/>
+
+    <!-- LeakCanary (debug-only) declares a launcher activity without android:exported;
+         make it explicit so the manifest merger passes on targetSdk 31+. -->
+    <activity
+      android:name="com.squareup.leakcanary.internal.DisplayLeakActivity"
+      android:exported="true"
+      tools:node="merge" />
 
     <meta-data
       android:name="com.google.android.geo.API_KEY"

@@ -3,7 +3,6 @@ plugins {
   id(Plugins.kotlinAndroid)
   id(Plugins.kotlinAndroidExtensions)
   id(Plugins.kotlinKapt)
-  id(Plugins.fabric)
   id(Plugins.trema)
 }
 
@@ -40,9 +39,7 @@ android {
     }
     compileOptions {
       // For AGP 4.1+
-      // isCoreLibraryDesugaringEnabled = true
-      // For AGP 4.0
-      coreLibraryDesugaringEnabled = true
+      isCoreLibraryDesugaringEnabled = true
       sourceCompatibility = JavaVersion.VERSION_1_8
       targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -64,9 +61,9 @@ android {
     implementation(Libs.retrofitConverterMoshi)
     implementation(Libs.moshi)
     implementation(Libs.moshiAdapter)
-    implementation(Libs.anko)
     implementation(Libs.googleMaps)
     implementation(Libs.playServicesLocation)
+    implementation(platform(Libs.firebaseBom))
     implementation(Libs.firebaseAnalytics)
     implementation(Libs.crashlytics)
     implementation(Libs.mpaAndroidChart)
@@ -105,3 +102,4 @@ trema {
 
 
 apply(plugin = "com.google.gms.google-services")
+apply(plugin = Plugins.firebaseCrashlytics)

@@ -6,13 +6,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import androidx.core.content.PermissionChecker
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.netcetera.skopjepulse.BuildConfig
 import com.netcetera.skopjepulse.Constants
 import com.netcetera.skopjepulse.di.appModule
 import com.squareup.leakcanary.LeakCanary
-import io.fabric.sdk.android.Fabric
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -58,13 +56,7 @@ class App : Application() {
   }
 
   private fun setupCrashlytics() {
-    Fabric.with(this,
-        Crashlytics.Builder()
-            .core(CrashlyticsCore.Builder()
-                .disabled(BuildConfig.DEBUG)
-                .build())
-            .build()
-    )
+    FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
   }
 
 }
