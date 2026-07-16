@@ -22,7 +22,7 @@ data class DataDefinition(
     val bands: List<Band>
 ) {
   @Transient
-  private val minBand: Band = bands.minBy { it.from }!!
+  private val minBand: Band = bands.minByOrNull { it.from }!!
 
   fun findBandByValue(value: Double) : Band = findBandByValue(value.roundToInt())
 

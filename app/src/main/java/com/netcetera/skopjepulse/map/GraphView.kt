@@ -128,13 +128,13 @@ private fun LimitLine.applyPulseStyling(graphBand: GraphBand) : LimitLine {
 }
 
 private fun GraphModel.minYAxis() : Float {
-  val minBand = bands.minBy { it.from }!!.from.toFloat()
-  val minReading = data.flatMap { it.measurements }.minBy { it.second }?.second?.toFloat() ?: minBand
+  val minBand = bands.minByOrNull { it.from }!!.from.toFloat()
+  val minReading = data.flatMap { it.measurements }.minByOrNull { it.second }?.second?.toFloat() ?: minBand
   return min(minBand, minReading) * 1.1f
 }
 
 private fun GraphModel.maxYAxis() : Float {
-  val maxBand = bands.maxBy { it.to }!!.from.toFloat()
-  val minReading = data.flatMap { it.measurements }.maxBy { it.second }?.second?.toFloat() ?: maxBand
+  val maxBand = bands.maxByOrNull { it.to }!!.from.toFloat()
+  val minReading = data.flatMap { it.measurements }.maxByOrNull { it.second }?.second?.toFloat() ?: maxBand
   return max(maxBand, minReading) * 1.1f
 }
