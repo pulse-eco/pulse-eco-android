@@ -183,7 +183,7 @@ class MeasurementLegendView : View {
       }
       if (valueOverflow) {
         addListener(object : AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator?) {
+          override fun onAnimationEnd(animation: Animator) {
             mOverflowToggler.start()
           }
         })

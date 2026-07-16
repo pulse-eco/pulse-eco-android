@@ -85,6 +85,7 @@ fun GoogleMap.lifecycleAwareOnMapClickListener(lifecycleOwner: LifecycleOwner, o
                 ON_START -> setOnMapClickListener(onMapClickListener)
                 ON_STOP -> setOnMapClickListener(null)
                 ON_DESTROY -> lifecycleOwner.lifecycle.removeObserver(this)
+                else -> {}
             }
         }
     })

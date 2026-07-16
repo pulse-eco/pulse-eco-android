@@ -15,17 +15,17 @@ fun LottieAnimationView.playIfNotPlaying() {
 fun LottieAnimationView.stopWhenDone(whenDone: () -> Unit) {
   if (isAnimating) {
     addAnimatorListener(object : AnimatorListenerAdapter() {
-      override fun onAnimationRepeat(animation: Animator?) {
+      override fun onAnimationRepeat(animation: Animator) {
         removeAnimatorListener(this)
         cancelAnimation()
         whenDone.invoke()
       }
 
-      override fun onAnimationEnd(animation: Animator?) {
+      override fun onAnimationEnd(animation: Animator) {
         removeAnimatorListener(this)
       }
 
-      override fun onAnimationCancel(animation: Animator?) {
+      override fun onAnimationCancel(animation: Animator) {
         removeAnimatorListener(this)
       }
     })
